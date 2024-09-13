@@ -1,0 +1,171 @@
+syntax = "proto3";
+
+package amm;
+
+import "google/protobuf/empty.proto";
+import "amm.proto";
+
+option go_package = "github.com/PulsaraIO/fs-amm-model;amm";
+
+service AMMService {
+    // Store a single AMM trade (Create or Update an AMM trade) from AMMCreate
+    rpc UpsertTrade(Trade) returns (Trade) {}
+    // Historical trades
+    rpc GetTrades(TradesRequest) returns (Trades) {}
+    // Get a single trade by key
+    rpc GetTrade(TradeRequest) returns (Trade) {}
+    // Count trades for a given period
+    rpc CountTrades(CountTradesRequest) returns (Count) {}
+
+    // Store AMM Pool (create or update)
+    rpc UpsertPool(Pool) returns (google.protobuf.Empty) {}
+    // Get all AMM pools for a specific issuer (A pool is a snapshot in time of the last trade recorded):
+    rpc GetPools(QueryPool) returns (Pools) {}
+    // Get a single pool
+    rpc GetPool(PoolKey) returns (Pool) {}
+    // Get total fees:
+    rpc GetFees(NetworkFilter) returns (Sum) {}
+    rpc GetPoolVolume(NetworkFilter) returns (Sum) {}
+
+    // Currency management
+    rpc UpsertCurrency(Currency) returns (google.protobuf.Empty) {}
+    rpc GetCurrencies(CurrenciesRequest) returns (Currencies) {}
+    // CoinGeckoCache management
+    rpc UpsertCoinGeckoCache(CoinGeckoCache) returns (google.protobuf.Empty) {}
+    rpc GetCoinGeckoCache(QuoteCurrency) returns (CoinGeckoCache) {}
+
+    // Store the account balances
+    rpc UpsertBalances(Balances) returns (google.protobuf.Empty) {}
+    // Historical balances
+    rpc GetBalances(BalancesRequest) returns (Balances) {}
+    // Current account balances for an account
+    rpc GetAccountBalances(BalancesRequest) returns (Balances) {}
+    // Count of stakers per pool, account (in which case this is number of pools the account has a stake in) or for all pools
+    rpc CountStakers(StakersRequest) returns (Count) {}
+    // Sum liquidity for an account
+    rpc SumAccountLiquidity(StakersRequest) returns (Sum) {}
+    // Sum of fees for an account
+    rpc SumAccountFees(StakersRequest) returns (Sum) {}
+
+    // Store the bank data:
+    rpc UpsertBankTXs(BankTXs) returns (google.protobuf.Empty) {}
+    // Get bank data:
+    rpc GetBankTX(BankTXRequest) returns (BankTX) {}
+
+    // Rewards:
+    rpc UpsertReward(Reward) returns (google.protobuf.Empty) {}
+    rpc GetReward(RewardID) returns (Reward) {}
+    rpc GetRewards(RewardsRequest) returns (Rewards) {}
+}
+
+message PriceVolumeRequest {
+    string Pool = 1;
+    string Network = 2;
+    string Period = 3;
+    optional int32 Offset = 4; // Page offset
+    optional bool Backfill = 5;
+    optional int64 From = 6; // Specific retrieval of an interval is required for the ticker style data, for this the from/to is used
+    optional int64 To = 7;
+}
+
+message TradesRequest {
+    string Network = 1;
+    optional string Pool = 2;
+    optional string Account = 3;
+    optional int32 Offset = 4; // Page offset
+    optional int64 From = 5; // Specific retrieval of an interval is required for the ohlc calculation
+    optional int64 To = 6;
+// Retrieve a specific number of trades, combine with To for a specific time period for which to get the trades before
+    optional int32 NumberOfTrades = 7; 
+    optional string AMMID = 8;
+    repeated TradeType TradeType = 9;
+}
+
+message TradeRequest {
+    string Network = 1;
+    string Reference = 2;
+}
+
+message CountTradesRequest {
+    string Network = 1;
+    optional string Pool = 2;
+    optional int64 From = 3;
+    optional TradeType TradeType = 4;
+}
+
+message QueryPool {
+    string Network = 1;
+    optional string Currency = 2;
+    optional string Issuer = 3;
+    optional string Currency2 = 4;
+    optional string Issuer2 = 5;
+    optional int32 Offset = 6; // Page offset
+    repeated string Pools = 7;
+    optional string AMMID = 8;
+    optional Order Order = 9;
+    repeated string AMMAccounts = 10; 
+    optional int64 AfterExecutedAt = 11;
+}
+
+message PoolKey {
+    string Network = 1;
+    string Pool = 2;
+}
+
+// Request a list of Currencies for a network and optionally a currency and/or issuer
+message CurrenciesRequest {
+    string Network = 1;
+    optional string Currency = 2;
+    optional string Issuer = 3;
+    optional int32 Offset = 4; // Page offset
+    optional Order Order = 5;
+    optional int64 DetectedAt = 6;
+    optional bool IsIBC = 7;
+    optional bool IsDisplay = 8;
+}
+
+message NetworkFilter {
+    string Network = 1;
+}
+
+message BalancesRequest {
+    string Network = 1;
+    string Account = 2;
+    repeated string Pools = 3;
+    optional int32 Offset = 4;
+}
+
+message StakersRequest {
+    string Network = 1;
+    optional string Pool = 2;
+    optional string Account = 3;
+}
+
+// The bank TX request can take 2 forms:
+// Straight key retrieval txid, Sequence, network
+// or by a key string + network provided in a message (usually on the trigger topic)
+message BankTXRequest {
+    string Network = 1;
+    optional string Key = 2;
+    optional string TXID = 3;
+    optional int32 Sequence = 4;
+}
+
+// Currencies are only for mainnet so we ignore the network here and pretend it is for any network
+message QuoteCurrency {
+    string Currency = 1;
+    string QuoteCurrency = 2;
+}
+
+message RewardsRequest {
+    string Network = 1;
+    string Account = 2;
+    optional int32 Year = 3;
+    optional string Reference = 4;
+    optional int32 Offset = 5;
+}
+
+message RewardID {
+    string Network = 1;
+    string Reference = 2;
+}

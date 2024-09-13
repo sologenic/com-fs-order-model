@@ -1,0 +1,243 @@
+syntax = "proto3";
+
+package amm;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/PulsaraIO/fs-amm-model;amm";
+
+message Trade {
+    string TXID = 1;
+    string Reference = 2;
+    string Account = 3;
+    int64 LPTokenBalanceVal = 4;
+    int32 LPTokenBalanceExp = 5;
+    int64 LPTokenChangeVal = 6;
+    int32 LPTokenChangeExp = 7;
+
+    // Currency balances and change:
+    string Currency = 8;
+    string Issuer = 9;
+    int64 CurrencyBalanceVal = 10;
+    int32 CurrencyBalanceExp = 11;
+    int64 CurrencyChangeVal = 12;
+    int32 CurrencyChangeExp = 13;
+
+    string Currency2 = 14;
+    string Issuer2 = 15;
+    int64 CurrencyBalanceVal2 = 16;
+    int32 CurrencyBalanceExp2 = 17;
+    int64 CurrencyChangeVal2= 18;
+    int32 CurrencyChangeExp2= 19;
+
+    string Network = 20;
+    bool Confirmed = 21;
+    int64 ExecutedAt = 22;
+    int64 CreatedAt = 23;
+
+    int32 TradingFee = 24;
+
+    string Pool = 25; // Pool notation in ascending order for currency, currency2, issuer and issuer2
+    string AMMAccount = 26;
+
+    TradeType TradeType = 27;
+    string AMMID = 28;
+
+    bool SwapInverted = 29; // Indicates if the currencies as given for the swap are in inverted order
+
+    int32 TransactionCount = 30; // The number of transactions in the trade (default 1). In pool usage this is the sum over a predefined period, used for ordering
+    
+    float USD = 31; // The USD value of the trade, calculated from the USD value of the currencies and the trading fee.
+
+    bool HasAccuracy = 32; // Indicates if the trade has currency accuracy information set
+
+    float FeeUSD = 33; // The USD value of the trading fee, calculated from the USD value of the currencies.
+    bool IsEnriched = 34; // Indicates if the trade enrichment has ran (used to prevent rerun)
+
+    string TradePlatform = 35; // The platform used for the trade (pulsara, etc.)
+
+    float TradeValueUSD = 36; // The USD value of the trade, calculated from the USD value of the currencies and the trading fee.
+}
+
+message RecalculationRequest {
+    string Network = 1;
+    string Pool = 2;
+    int64 TimeStamp = 3; // The timestamp of the creation of the TX triggering the calculation request
+}
+
+message Trades {
+    repeated Trade Trades = 1;
+    optional int32 Offset = 2;
+}
+
+message Count {
+    int32 Count = 1;
+}
+
+message Currencies {
+    repeated Currency Currencies = 1;
+    optional int32 Offset = 2;
+}
+
+message Currency {
+    string Currency = 1;
+    string Issuer = 2;
+    int32 Precision = 3;
+    int64 DetectedAt = 4;
+    string Network = 5;
+    string Symbol = 6;
+    int64 SendCommission = 7;
+    int32 SendCommissionExp = 8;
+    int64 BurnRate = 9;
+    int32 BurnRateExp = 10;
+    int64 InitialAmount = 11;
+    int32 InitialAmountExp = 12;
+    bool IBC = 13; // Indicates if the currency is an IBC (Inter Block Chain?) currency
+    bool SkipDisplay = 14; // Indicates if the currency should be skipped in the display (mainly used to disable 13k+ IBC tokens from being loaded)
+    string Chain = 15; // The chain the currency is on (used for IBC tokens, else you can not distinguish between currencies with the same name)
+    string OriginChain = 16; // The chain the currency is on (The actual chain which the currency originates from, used for IBC tokens)
+    string ChainSupply = 17; // The total supply of the currency on the chain (used for IBC tokens)
+    string Description = 18; // The description of the currency (used for IBC tokens)
+}
+
+message CoinGeckoCache {
+    string Currency = 1;
+    string QuoteCurrency = 2;
+    google.protobuf.Timestamp LastUpdated = 3;
+    int64 PriceVal = 4;
+    int32 PriceExp = 5;
+    string Symbol = 6;
+    string Name = 7;
+}
+
+enum TradeType {
+    NOT_USED_TRADE_TYPE = 0;
+    DEPOSIT = 1;
+    WITHDRAW = 2;
+    SWAP = 3;
+    REWARD = 4;
+    DUAL_REWARD = 5;
+}
+
+enum Order {
+    NOT_USED_ORDER = 0;
+    NEWEST = 1;
+    ALPHABETICAL = 2;
+    ACTIVITY = 3;
+}
+
+message Pool {
+    string TXID = 1;
+    string Reference = 2;
+    string AMMAccount = 3;
+
+    string Currency = 4;
+    string Issuer = 5;
+
+    string Currency2 = 6;
+    string Issuer2 = 7;
+
+    string AMMID = 8; 
+    string DAOID = 9; // Incoming data is filtered on dao and the ID is kept here for reference and multi dao support
+
+    string Network = 10;
+    int64 CreatedAt = 11;
+    int64 UpdatedAt = 12;
+
+    string Pool = 13; // Pool notation in ascending order for currency, currency2, issuer and issuer2
+
+    // Pool balances and last change
+    int64 CurrencyBalanceVal = 14;
+    int32 CurrencyBalanceExp = 15;
+
+    int64 CurrencyBalanceVal2 = 18;
+    int32 CurrencyBalanceExp2 = 19;
+
+    string Symbol = 22;
+    string Symbol2 = 23;
+    int32 CurrencyPrecision = 24;
+    int32 CurrencyPrecision2 = 25;
+    bool IsAccurate = 26; // Indicates if the pool has currency accuracy information set and the precision was applied earlier in the process
+
+    string LPTokenAddress = 27;
+
+    float VolumeUSD = 28; // The USD value of the pool, calculated from the USD value of the currencies.
+    float FeeUSD = 29; // Total collected sum of trading fees in USD
+}
+
+message Pools {
+    repeated Pool Pools = 1;
+    optional int32 Offset = 2;
+}
+
+message Sum {
+    float Sum = 1;
+}
+
+message Balance {
+    string Network = 1;
+    string Account = 2;
+    int64 CurrencyBalanceVal = 3;
+    int32 CurrencyBalanceExp = 4;
+    int64 TimestampForDate = 5; // The timestamp this value was detected from the ledger => This is also the day it will be registered for in the database when the timestamp is larger then the previous registered timestamp
+    float FeeUSD = 6; // The USD value of this account of the trading fee, calculated from the USD value of the currencies.
+    string Pool = 7; // Pool notation in ascending order for currency, currency2, issuer and issuer2
+    int64 CurrencyBalanceVal2 = 8;
+    int32 CurrencyBalanceExp2 = 9;
+    float VolumeUSD = 10; // The USD value of the pool as point in time value
+}
+
+message Balances {
+    repeated Balance Balances = 1;
+    optional int32 Offset = 2;
+}
+
+// Keep track of send transactions between accounts
+message BankTX {
+    string Network = 1;
+    string AccountSender = 2;
+    string AccountReceiver = 3;
+    string Currency = 4;
+    string Issuer = 5;
+    int64 AmountVal = 6;
+    int32 AmountExp = 7;
+    string TXID = 8;
+    int32 Sequence = 9; // Integer of the location of the receiver and the receiver amount in the sender transaction
+    string TradePlatform = 10; // The platform used for the trade (pulsara, etc.)
+    float VolumeUSD = 11; // The USD value of the bank transaction, calculated from the USD value of the currencies.
+    int64 CreatedAt = 12;
+    int64 UpdatedAt = 13;
+    int64 DetectedAt =14;
+    int64 TXFee = 15;
+    bool IsEnriched = 16; // Indicates if the bank transaction enrichment has ran (used to prevent rerun)
+}
+
+message BankTXs {
+    repeated BankTX BankTXs = 1;
+}
+
+message Rewards {
+    repeated Reward Rewards = 1;
+    optional int32 Offset = 2;
+    optional double TotalVolumeUSD = 3; // The total USD value of the rewards
+}
+
+message Reward {
+    string Network = 1;
+    string Account = 2;
+    string Currency = 3;
+    string Issuer = 4;
+    int64 AmountVal = 5;
+    int32 AmountExp = 6;
+    string TXID = 7;
+    string Reference = 8;
+    int64 CreatedAt = 9;
+    int32 Year = 10; // Helper field to group rewards by year
+    int64 UpdatedAt = 11;
+    int64 DetectedAt = 12;
+    float VolumeUSD = 13; // The USD value of the reward, calculated from the USD value of the currencies.
+    bool IsEnriched = 14; // Indicates if the currency has been set, and USD value been added (if possible)
+    int32 TradingFee = 15;
+    TradeType TradeType = 16;
+    string AMMID = 17;
+}
