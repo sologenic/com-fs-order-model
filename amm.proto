@@ -1,10 +1,49 @@
 syntax = "proto3";
 
-package amm;
+package transaction;
 
 import "google/protobuf/timestamp.proto";
 
-option go_package = "github.com/PulsaraIO/fs-amm-model;amm";
+option go_package = "github.com/sologenic/com-fs-transaction-model;transaction";
+
+message Order {
+    // Key Combination: 
+    string TXID = 1;
+    string Network = 20;
+    string SmartContractAddr = 2;
+    string Wallet = 3;
+    
+    string OrderID = 2;
+    string Sender = 3;
+    string AssetKey = 5;
+    string Denom = 6;
+    int64 Amount = 7;
+    int32 AmountExp = 8;
+
+
+    // Currency balances and change:
+    string Currency = 8;
+    string Issuer = 9;
+    int64 CurrencyBalanceVal = 10;
+    int32 CurrencyBalanceExp = 11;
+    int64 CurrencyChangeVal = 12;
+    int32 CurrencyChangeExp = 13;
+
+    bool Confirmed = 21;
+    int64 ExecutedAt = 22;
+    int64 CreatedAt = 23;
+
+    int32 TradingFee = 24;
+
+    TradeType TradeType = 27;
+    float USD = 31; // The USD value of the trade, calculated from the USD value of the currencies and the trading fee.
+    float FeeUSD = 33; // The USD value of the trading fee, calculated from the USD value of the currencies.
+    bool IsEnriched = 34; // Indicates if the trade enrichment has ran (used to prevent rerun)
+
+
+    float TradeValueUSD = 36; // The USD value of the trade, calculated from the USD value of the currencies and the trading fee.
+}
+
 
 message Trade {
     string TXID = 1;
