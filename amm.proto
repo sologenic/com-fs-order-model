@@ -6,6 +6,114 @@ import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/sologenic/com-fs-transaction-model;transaction";
 
+message Transaction {
+    string TXID = 1;
+    int64 Height = 2;
+    string Network = 3;
+    int64 CreatedAt = 4;
+    int64 UpdatedAt = 5;
+    int64 DetectedAt = 6;
+    string AssetKey = 7;
+
+    string SmartContractAddr = 8;
+    Action Action = 9;
+    string Sender = 10;
+
+    // Order Details
+    // TODO: should we wrap this in a Order message?
+    uint64 OrderID = 11;
+    string Creator = 12;
+    string Denom = 13;
+    int64 Amount = 14;
+    int32 AmountExp = 15;
+    Instruction Instruction = 16;
+    optional Hold Hold = 17;
+    Coin FundsSent = 18;
+    OrderType OrderType = 19;
+    OrderState OrderState = 20;
+    optional PaymentState PaymentState = 21;
+    optional int64 AmountExecuted = 22;
+    optional int32 AmountExecutedExp = 23;
+    optional int64 UsedFundsAmount = 24;
+    optional int32 UsedFundsAmountExp = 25;
+    optional int64 Costs = 26;
+    optional int32 CostsExp = 27;
+
+    // Attenstation Details (optional)
+    optional Attestation Attestation = 28;
+}
+
+enum Action {
+    NOT_USED_ACTION = 0;
+    PURCHASE = 1;
+    SELL = 2;
+    REQUEST_ORDER_CANCEL = 3;
+    EXECUTE_ORDER = 4;
+    PAY_ORDER = 5;
+    REQUEST_REATTESTATION = 6;
+}
+
+message Instruction {
+    string limit_price = 1;
+    string limit_price_exp = 2;
+    string options = 3; // Base64 encoded JSON string
+}
+
+message Hold {
+    string Denom = 1;
+    int64 Amount = 2;
+    int32 AmountExp = 3;
+}
+
+message Coin {
+    string Denom = 1;
+    int64 Amount = 2;
+}
+
+enum OrderType {
+    NOT_USED_ORDER_TYPE = 0;
+    ORDER_TYPE_PURCHASE = 1; // Avoid nmaing conflicts with PURCHASE in the action enum
+    ORDER_TYPE_SELL = 2;
+}
+
+enum OrderStateType {
+    NOT_USED_ORDER_STATE_TYPE = 0;
+    OPEN = 1;
+    PLACED = 2;
+    PARTIALLY_EXECUTED = 3;
+    EXECUTED = 4;
+    CANCELLATION_REQUESTED = 5;
+    CANCELLED = 6;
+  }
+
+enum OrderCancelledBy {
+    NOT_USED_ORDER_CANCEL_BY = 0;
+    SMART_CONTRACT_OWNER = 1;
+    BROKER_ORACLE = 2;
+    USER = 3;
+}
+
+enum PaymentState {
+    NOT_USED_PAYMENT_STATE = 0;
+    NOT_PAID = 1;
+    PAID = 2;
+}
+
+message OrderState {
+    OrderStateType OrderStateType = 1;
+    optional OrderCancelledBy OrderCancelledBy  = 2;
+  }
+
+
+message Attestation {
+    string BrokerQuantity = 1; // Using string to represent Uint128
+    string ChainQuantity = 2; // Using string to represent Uint128
+    uint64 BlockHeight = 3;
+    uint64 timestamp = 4;
+    uint64 ReattestationBlockHeight = 5;
+}
+
+
 message Order {
     // Key Combination: 
     string TXID = 1;
@@ -13,8 +121,6 @@ message Order {
     string SmartContractAddr = 2;
     string Wallet = 3;
     
-    string OrderID = 2;
-    string Sender = 3;
     string AssetKey = 5;
     string Denom = 6;
     int64 Amount = 7;
@@ -22,7 +128,6 @@ message Order {
 
 
     // Currency balances and change:
-    string Currency = 8;
     string Issuer = 9;
     int64 CurrencyBalanceVal = 10;
     int32 CurrencyBalanceExp = 11;
@@ -158,12 +263,6 @@ enum TradeType {
     DUAL_REWARD = 5;
 }
 
-enum Order {
-    NOT_USED_ORDER = 0;
-    NEWEST = 1;
-    ALPHABETICAL = 2;
-    ACTIVITY = 3;
-}
 
 message Pool {
     string TXID = 1;
