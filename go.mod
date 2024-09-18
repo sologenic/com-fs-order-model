@@ -2,7 +2,11 @@ module github.com/sologenic/com-fs-transaction-model
 
 go 1.22.2
 
-require github.com/sologenic/fs-utils-lib/go/grpc-client v0.0.0-20240909024218-113ca5496aa1
+require (
+	github.com/sologenic/fs-utils-lib/go/grpc-client v0.0.0-20240909024218-113ca5496aa1
+	google.golang.org/grpc v1.58.3
+	google.golang.org/protobuf v1.31.0
+)
 
 require (
 	cloud.google.com/go/compute v1.23.0 // indirect
@@ -25,6 +29,4 @@ require (
 	google.golang.org/api v0.146.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20230920204549-e6e6cdab5c13 // indirect
-	google.golang.org/grpc v1.58.3 // indirect
-	google.golang.org/protobuf v1.31.0 // indirect
 )
