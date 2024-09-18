@@ -35,7 +35,7 @@ message TransactionQuery {
     optional string Creator = 8;
     optional string Denom = 9;
     optional OrderType OrderType = 10;
-    optional OrderState OrderState = 11;
+    optional OrderStateType OrderStateType = 11;
     optional PaymentState PaymentState = 12;
 }
 

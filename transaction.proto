@@ -33,7 +33,6 @@ message Transactions {
     optional int32 Offset = 2;
 }
 
-
 enum Action {
     NOT_USED_ACTION = 0;
     PURCHASE = 1;
@@ -122,15 +121,15 @@ enum OrderCancelledBy {
     USER = 3;
 }
 
+message OrderState {
+    OrderStateType OrderStateType = 1;
+    optional OrderCancelledBy OrderCancelledBy  = 2;
+}
+
 enum PaymentState {
     NOT_USED_PAYMENT_STATE = 0;
     NOT_PAID = 1;
     PAID = 2;
-}
-
-message OrderState {
-    OrderStateType OrderStateType = 1;
-    optional OrderCancelledBy OrderCancelledBy  = 2;
 }
 
 message Attestation {
