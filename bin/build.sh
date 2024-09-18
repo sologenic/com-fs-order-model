@@ -17,14 +17,14 @@ then
   service=$(ls *.proto| grep -v grpc | cut -d'/' -f2 | cut -d'.' -f1)
   
   protoc \
-  --proto_path=. "amm.proto" \
+  --proto_path=. "transaction.proto" \
   --proto_path=$(dirname $(dirname "$rd")) \
   "--go_out=." --go_opt=paths=source_relative \
   --go-grpc_opt=require_unimplemented_servers=false \
   "--go-grpc_out=." --go-grpc_opt=paths=source_relative
 
   protoc \
-  --proto_path=. "amm-grpc.proto" \
+  --proto_path=. "transaction-grpc.proto" \
   --proto_path=$(dirname $(dirname "$rd")) \
   "--go_out=." --go_opt=paths=source_relative \
   --go-grpc_opt=require_unimplemented_servers=false \
@@ -42,7 +42,7 @@ then
     --ts_proto_out=. \
     --ts_proto_opt=esModuleInterop=true \
     --ts_proto_opt=outputServices=grpc-js \
-    amm.proto
+    transaction.proto
 
     npm run build-ts
     rm -rf node_modules

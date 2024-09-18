@@ -1,18 +1,12 @@
-# AMM
+# Transaction
 
-The AMM proto provides all the functionality required to interact with the amm store.
-The AMM protoi also defines the domain objects for communication between the services and use events (e.g. messaging)
+The transaction list proto provides all the functionality required to interact with the transaction store.
 
-## Building the required files
+## Building the protos
 
-Once the proto file is updated, the following files need to be generated:
-
-* go
-
-### go
-
-There is a file, proto.sh, which can be used to generate the go files.
+Run the script
 
 ```sh
-./bin/proto.sh amm
+./bin/build.sh
 ```
+

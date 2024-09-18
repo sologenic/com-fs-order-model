@@ -113,7 +113,7 @@ enum OrderStateType {
     EXECUTED = 4;
     CANCELLATION_REQUESTED = 5;
     CANCELLED = 6;
-  }
+}
 
 enum OrderCancelledBy {
     NOT_USED_ORDER_CANCEL_BY = 0;
@@ -131,8 +131,7 @@ enum PaymentState {
 message OrderState {
     OrderStateType OrderStateType = 1;
     optional OrderCancelledBy OrderCancelledBy  = 2;
-  }
-
+}
 
 message Attestation {
     string BrokerQuantity = 1; // Using string to represent Uint128
