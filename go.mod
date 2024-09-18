@@ -1,4 +1,4 @@
-module github.com/PulsaraIO/fs-amm-model
+module github.com/sologenic/com-fs-transaction-model
 
 go 1.22.2
 
