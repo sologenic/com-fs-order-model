@@ -31,7 +31,7 @@ message TransactionQuery {
     optional Action Action = 5;
     optional string Sender = 6;
     // Order detilas
-    optional string OrderID = 7;
+    optional uint64 OrderID = 7;
     optional string Creator = 8;
     optional string Denom = 9;
     optional OrderType OrderType = 10;
