@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+package transaction;
+
+import "google/protobuf/empty.proto";
+import "transaction.proto";
+
+option go_package = "github.com/sologenic/com-fs-transaction-model;transaction";
+
+service TransactionService {
+    // Transaction
+    rpc UpertTransaction(Transaction) returns (TransactionID) {}
+    rpc GetTransaction(TransactionID) returns (Transaction) {}
+    rpc GetTransactions(TransactionQuery) returns (Transactions) {}
+
+    // Order
+    rpc UpsertOrder(Order) returns (google.protobuf.Empty) {}
+    rpc GetOrder(OrderKey) returns (Order) {}
+    rpc GetOrders(OrderQuery) returns (Orders) {}
+}
+
+message TransactionID {
+    string TXID = 1;
+}
+
+message TransactionQuery {
+    string Network = 1;
+    optional int32 Offset = 2;
+    optional string AssetKey = 3;
+    optional string SmartContractAddr = 4;
+    optional Action Action = 5;
+    optional string Sender = 6;
+    // Order detilas
+    optional string OrderID = 7;
+    optional string Creator = 8;
+    optional string Denom = 9;
+    optional OrderType OrderType = 10;
+    optional OrderState OrderState = 11;
+    optional PaymentState PaymentState = 12;
+}
+
+message OrderKey {
+    string Key = 1;
+}
+
+message OrderQuery {
+    string Network = 1;
+    optional int32 Offset = 9;
+    optional string SmartContractAddr = 2;
+    optional string AssetKey = 3;
+    optional string Creator = 4;
+    optional string Denom = 5;
+    optional OrderType OrderType = 6;
+    optional OrderState OrderState = 7;
+    optional PaymentState PaymentState = 8;
+}
