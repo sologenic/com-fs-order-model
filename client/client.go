@@ -4,31 +4,31 @@ The config:
 - Can only parse the config parts relevant to this middleware
 - Depends on providing the config as environment variables so that init() can run independent per component and no coordination is required
 
-Service fails (with panic) to initialize if the AMM_STORE environment variable is not set.
+Service fails (with panic) to initialize if the TRANSACTION_STORE environment variable is not set.
 */
 package client
 
 import (
 	"context"
 
-	grpcclient "github.com/PulsaraIO/be-util-lib/go/grpc-client"
-	grpcdef "github.com/PulsaraIO/fs-amm-model"
+	grpcclient "github.com/sologenic/com-fs-utils-lib/go/grpc-client"
+	grpcdef "github.com/sologenic/com-fs-transaction-model"
 )
 
-const endpoint = "AMM_STORE"
+const endpoint = "TRANSACTION_STORE"
 
 var (
-	client     *grpcdef.AMMServiceClient
+	client     *grpcdef.TransactionServiceClient
 	grpcClient *grpcclient.GRPCClient
 )
 
 func initClient() {
 	grpcClient = grpcclient.InitClient(endpoint)
-	cl := grpcdef.NewAMMServiceClient(grpcClient.Conn)
+	cl := grpcdef.NewTransactionServiceClient(grpcClient.Conn)
 	client = &cl
 }
 
-func Client() *grpcdef.AMMServiceClient {
+func Client() *grpcdef.TransactionServiceClient {
 	if client == nil {
 		initClient()
 	}
