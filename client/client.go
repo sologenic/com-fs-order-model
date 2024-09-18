@@ -11,28 +11,17 @@ package client
 import (
 	"context"
 
-	grpcclient "github.com/PulsaraIO/be-util-lib/go/grpc-client"
-	grpcdef "github.com/PulsaraIO/fs-amm-model"
+	grpcclient "github.com/sologenic/fs-utils-lib/go/grpc-client"
 )
 
 const endpoint = "AMM_STORE"
 
 var (
-	client     *grpcdef.AMMServiceClient
 	grpcClient *grpcclient.GRPCClient
 )
 
 func initClient() {
 	grpcClient = grpcclient.InitClient(endpoint)
-	cl := grpcdef.NewAMMServiceClient(grpcClient.Conn)
-	client = &cl
-}
-
-func Client() *grpcdef.AMMServiceClient {
-	if client == nil {
-		initClient()
-	}
-	return client
 }
 
 func AuthCtx(ctx context.Context) context.Context {
