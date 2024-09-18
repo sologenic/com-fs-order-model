@@ -1,0 +1,143 @@
+syntax = "proto3";
+
+package transaction;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/sologenic/com-fs-transaction-model;transaction";
+
+message Transaction {
+    string TXID = 1;
+    int64 Height = 2;
+    string Network = 3;
+    int64 CreatedAt = 4; 
+    // int64 UpdatedAt = 5; // TODO: consider: do we update TX record, otherwise no need for this field
+    // int64 DetectedAt = 6;
+    string AssetKey = 5;
+
+    string SmartContractAddr = 6;
+    Action Action = 7;
+    string Sender = 8;
+
+    // Store the snapshot of the order at the time of the transaction
+    OrderBase OrderDetail = 9; 
+
+    // Attenstation Details (optional)
+    optional Attestation Attestation = 10;
+
+    int64 FeeUSD = 11;
+}
+
+message Transactions {
+    repeated Transaction Transactions = 1;
+    optional int32 Offset = 2;
+}
+
+
+enum Action {
+    NOT_USED_ACTION = 0;
+    PURCHASE = 1;
+    SELL = 2;
+    REQUEST_ORDER_CANCEL = 3;
+    EXECUTE_ORDER = 4;
+    PAY_ORDER = 5;
+    REQUEST_REATTESTATION = 6;
+}
+
+// Same structure as Order in the Smart Contract
+message OrderBase {
+    uint64 OrderID = 1;
+    string Creator = 2;
+    string Denom = 3;
+    int64 Amount = 4;
+    int32 AmountExp = 5;
+    Instruction Instruction = 6;
+    optional Hold Hold = 7;
+    Coin FundsSent = 8;
+    OrderType OrderType = 9;
+    OrderState OrderState = 10;
+    optional PaymentState PaymentState = 11;
+    optional int64 AmountExecuted = 12;
+    optional int32 AmountExecutedExp = 13;
+    optional int64 UsedFundsAmount = 14;
+    optional int32 UsedFundsAmountExp = 15;
+    optional int64 Costs = 16;
+    optional int32 CostsExp = 17;
+}
+
+message Order {
+    // Key combination: Network-SmartContractAddr-AssetKey-OrderID
+    string Network = 1;
+    string SmartContractAddr = 2;
+    string AssetKey = 3;
+    OrderBase OrderBase = 4;
+    int64 CreatedAt = 5;
+    // Additional fields to keep track of the order
+    google.protobuf.Timestamp UpdatedAt = 6;
+
+}
+
+message Orders {
+    repeated Order Orders = 1;
+    optional int32 Offset = 2;
+}
+
+message Instruction {
+    string limit_price = 1;
+    string limit_price_exp = 2;
+    string options = 3; // Base64 encoded JSON string
+}
+
+message Hold {
+    string Denom = 1;
+    int64 Amount = 2;
+    int32 AmountExp = 3;
+}
+
+message Coin {
+    string Denom = 1;
+    int64 Amount = 2;
+}
+
+enum OrderType {
+    NOT_USED_ORDER_TYPE = 0;
+    ORDER_TYPE_PURCHASE = 1; // Avoid nmaing conflicts with PURCHASE in the action enum
+    ORDER_TYPE_SELL = 2;
+}
+
+enum OrderStateType {
+    NOT_USED_ORDER_STATE_TYPE = 0;
+    OPEN = 1;
+    PLACED = 2;
+    PARTIALLY_EXECUTED = 3;
+    EXECUTED = 4;
+    CANCELLATION_REQUESTED = 5;
+    CANCELLED = 6;
+  }
+
+enum OrderCancelledBy {
+    NOT_USED_ORDER_CANCEL_BY = 0;
+    SMART_CONTRACT_OWNER = 1;
+    BROKER_ORACLE = 2;
+    USER = 3;
+}
+
+enum PaymentState {
+    NOT_USED_PAYMENT_STATE = 0;
+    NOT_PAID = 1;
+    PAID = 2;
+}
+
+message OrderState {
+    OrderStateType OrderStateType = 1;
+    optional OrderCancelledBy OrderCancelledBy  = 2;
+  }
+
+
+message Attestation {
+    string BrokerQuantity = 1; // Using string to represent Uint128
+    string ChainQuantity = 2; // Using string to represent Uint128
+    uint64 BlockHeight = 3;
+    uint64 timestamp = 4;
+    uint64 ReattestationBlockHeight = 5;
+}
