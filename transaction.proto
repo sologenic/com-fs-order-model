@@ -7,7 +7,7 @@ import "google/protobuf/timestamp.proto";
 option go_package = "github.com/sologenic/com-fs-transaction-model;transaction";
 
 message Transaction {
-    string TXID = 1;
+    string TXID = 1; // Unique Key in the datastore
     int64 Height = 2;
     string Network = 3;
     int64 CreatedAt = 4; 
@@ -65,11 +65,11 @@ message OrderBase {
 }
 
 message Order {
-    // Key combination: Network-SmartContractAddr-OrderID
+    // Key combination: Network_SmartContractAddr_OrderID
     string Network = 1;
     string SmartContractAddr = 2;
     string AssetKey = 3;
-    OrderBase OrderBase = 4;
+    OrderBase OrderDetail = 4;
     int64 CreatedAt = 5;
     // Additional fields to keep track of the order
     google.protobuf.Timestamp UpdatedAt = 6;
