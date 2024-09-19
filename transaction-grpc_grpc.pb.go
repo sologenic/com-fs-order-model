@@ -20,7 +20,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TransactionServiceClient interface {
 	// Transaction
-	UpertTransaction(ctx context.Context, in *Transaction, opts ...grpc.CallOption) (*TransactionID, error)
+	UpsertTransaction(ctx context.Context, in *Transaction, opts ...grpc.CallOption) (*TransactionID, error)
 	GetTransaction(ctx context.Context, in *TransactionID, opts ...grpc.CallOption) (*Transaction, error)
 	GetTransactions(ctx context.Context, in *TransactionQuery, opts ...grpc.CallOption) (*Transactions, error)
 	// Order
@@ -37,9 +37,9 @@ func NewTransactionServiceClient(cc grpc.ClientConnInterface) TransactionService
 	return &transactionServiceClient{cc}
 }
 
-func (c *transactionServiceClient) UpertTransaction(ctx context.Context, in *Transaction, opts ...grpc.CallOption) (*TransactionID, error) {
+func (c *transactionServiceClient) UpsertTransaction(ctx context.Context, in *Transaction, opts ...grpc.CallOption) (*TransactionID, error) {
 	out := new(TransactionID)
-	err := c.cc.Invoke(ctx, "/transaction.TransactionService/UpertTransaction", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/transaction.TransactionService/UpsertTransaction", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -96,7 +96,7 @@ func (c *transactionServiceClient) GetOrders(ctx context.Context, in *OrderQuery
 // for forward compatibility
 type TransactionServiceServer interface {
 	// Transaction
-	UpertTransaction(context.Context, *Transaction) (*TransactionID, error)
+	UpsertTransaction(context.Context, *Transaction) (*TransactionID, error)
 	GetTransaction(context.Context, *TransactionID) (*Transaction, error)
 	GetTransactions(context.Context, *TransactionQuery) (*Transactions, error)
 	// Order
@@ -109,8 +109,8 @@ type TransactionServiceServer interface {
 type UnimplementedTransactionServiceServer struct {
 }
 
-func (UnimplementedTransactionServiceServer) UpertTransaction(context.Context, *Transaction) (*TransactionID, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpertTransaction not implemented")
+func (UnimplementedTransactionServiceServer) UpsertTransaction(context.Context, *Transaction) (*TransactionID, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpsertTransaction not implemented")
 }
 func (UnimplementedTransactionServiceServer) GetTransaction(context.Context, *TransactionID) (*Transaction, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTransaction not implemented")
@@ -139,20 +139,20 @@ func RegisterTransactionServiceServer(s grpc.ServiceRegistrar, srv TransactionSe
 	s.RegisterService(&TransactionService_ServiceDesc, srv)
 }
 
-func _TransactionService_UpertTransaction_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _TransactionService_UpsertTransaction_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Transaction)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TransactionServiceServer).UpertTransaction(ctx, in)
+		return srv.(TransactionServiceServer).UpsertTransaction(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/transaction.TransactionService/UpertTransaction",
+		FullMethod: "/transaction.TransactionService/UpsertTransaction",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TransactionServiceServer).UpertTransaction(ctx, req.(*Transaction))
+		return srv.(TransactionServiceServer).UpsertTransaction(ctx, req.(*Transaction))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -255,8 +255,8 @@ var TransactionService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*TransactionServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "UpertTransaction",
-			Handler:    _TransactionService_UpertTransaction_Handler,
+			MethodName: "UpsertTransaction",
+			Handler:    _TransactionService_UpsertTransaction_Handler,
 		},
 		{
 			MethodName: "GetTransaction",

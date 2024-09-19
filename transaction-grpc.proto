@@ -9,7 +9,7 @@ option go_package = "github.com/sologenic/com-fs-transaction-model;transaction";
 
 service TransactionService {
     // Transaction
-    rpc UpertTransaction(Transaction) returns (TransactionID) {}
+    rpc UpsertTransaction(Transaction) returns (TransactionID) {}
     rpc GetTransaction(TransactionID) returns (Transaction) {}
     rpc GetTransactions(TransactionQuery) returns (Transactions) {}
 
