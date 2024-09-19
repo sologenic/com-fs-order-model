@@ -65,7 +65,7 @@ message OrderBase {
 }
 
 message Order {
-    // Key combination: Network-SmartContractAddr-AssetKey-OrderID
+    // Key combination: Network-SmartContractAddr-OrderID
     string Network = 1;
     string SmartContractAddr = 2;
     string AssetKey = 3;
@@ -73,7 +73,6 @@ message Order {
     int64 CreatedAt = 5;
     // Additional fields to keep track of the order
     google.protobuf.Timestamp UpdatedAt = 6;
-
 }
 
 message Orders {
