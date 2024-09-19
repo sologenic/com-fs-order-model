@@ -16,7 +16,7 @@ message Transaction {
     string AssetKey = 5;
 
     string SmartContractAddr = 6;
-    Action Action = 7;
+    TransactionType TransactionType = 7;
     string Sender = 8;
 
     // Store the snapshot of the order at the time of the transaction
@@ -33,8 +33,8 @@ message Transactions {
     optional int32 Offset = 2;
 }
 
-enum Action {
-    NOT_USED_ACTION = 0;
+enum TransactionType {
+    NOT_USED_TRANSACTION_TYPE = 0;
     PURCHASE = 1;
     SELL = 2;
     REQUEST_ORDER_CANCEL = 3;

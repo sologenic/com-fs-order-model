@@ -28,7 +28,7 @@ message TransactionQuery {
     optional int32 Offset = 2;
     optional string AssetKey = 3;
     optional string SmartContractAddr = 4;
-    optional Action Action = 5;
+    optional TransactionType TransactionType = 5;
     optional string Sender = 6;
     // Order detilas
     optional uint64 OrderID = 7;
