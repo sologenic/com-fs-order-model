@@ -81,9 +81,9 @@ message Orders {
 }
 
 message Instruction {
-    string limit_price = 1;
-    string limit_price_exp = 2;
-    string options = 3; // Base64 encoded JSON string
+    string LimitPrice = 1;
+    string LimitPriceExp = 2;
+    string Options = 3; // Base64 encoded JSON string
 }
 
 message Hold {
@@ -135,6 +135,6 @@ message Attestation {
     string BrokerQuantity = 1; // Using string to represent Uint128
     string ChainQuantity = 2; // Using string to represent Uint128
     uint64 BlockHeight = 3;
-    uint64 timestamp = 4;
+    uint64 Timestamp = 4;
     uint64 ReattestationBlockHeight = 5;
 }
