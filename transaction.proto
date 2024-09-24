@@ -45,7 +45,7 @@ enum TransactionType {
 
 // Same structure as Order in the Smart Contract
 message OrderBase {
-    uint64 OrderID = 1;
+    int64 OrderID = 1; // Google datastore supports int64, not uint64, which is the used in the smart contract
     string Creator = 2;
     string Denom = 3;
     int64 Amount = 4;
@@ -134,7 +134,8 @@ enum PaymentState {
 message Attestation {
     string BrokerQuantity = 1; // Using string to represent Uint128
     string ChainQuantity = 2; // Using string to represent Uint128
-    uint64 BlockHeight = 3;
-    uint64 Timestamp = 4;
-    uint64 ReattestationBlockHeight = 5;
+    // Note: for the below fields, use int64 instead of uint64 as uint64 not supported in Google Datastore 
+    int64 BlockHeight = 3;
+    int64 Timestamp = 4;
+    int64 ReattestationBlockHeight = 5;
 }
