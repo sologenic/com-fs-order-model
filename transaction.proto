@@ -71,8 +71,12 @@ message Order {
     string AssetKey = 3;
     OrderBase OrderDetail = 4;
     int64 CreatedAt = 5;
-    // Additional fields to keep track of the order
+    // Additional fields to keep track of the order status in the broker and smart contract
     google.protobuf.Timestamp UpdatedAt = 6;
+    
+    // Broker related fields
+    OrderStatusInBroker OrderStatusInBroker = 7;
+    // TODO: Add more fields as needed such as the broker order ID, placed timestamp, etc.
 }
 
 message Orders {
@@ -128,6 +132,15 @@ enum PaymentState {
     NOT_USED_PAYMENT_STATE = 0;
     NOT_PAID = 1;
     PAID = 2;
+}
+
+enum OrderStatusInBroker {
+    NOT_USED_ORDER_STATUS_IN_BROKER = 0;
+    ORDER_STATUS_IN_BROKER_NOT_PLACED = 1; // initial status when the order is just created in the smart contract
+    // TODO: redefine the rest of the statuses according to the broker API
+    ORDER_STATUS_IN_BROKER_PLACED = 2;
+    ORDER_STATUS_IN_BROKER_EXECUTED = 3;
+    ORDER_STATUS_IN_BROKER_CANCELLED = 4;
 }
 
 message Attestation {
