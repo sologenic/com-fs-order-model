@@ -107,7 +107,7 @@ enum OrderStateType {
     NOT_USED_ORDER_STATE_TYPE = 0;
     OPEN = 1;
     PLACED = 2;
-    PARTIALLY_EXECUTED = 3;
+    PARTIALLY_EXECUTED = 3; 
     EXECUTED = 4;
     CANCELLATION_REQUESTED = 5;
     CANCELLED = 6;
@@ -116,8 +116,7 @@ enum OrderStateType {
 enum OrderCancelledBy {
     NOT_USED_ORDER_CANCEL_BY = 0;
     SMART_CONTRACT_OWNER = 1;
-    BROKER_ORACLE = 2;
-    USER = 3;
+    USER = 2;
 }
 
 message OrderState {
