@@ -17,6 +17,7 @@ service TransactionService {
     rpc UpsertOrder(Order) returns (google.protobuf.Empty) {}
     rpc GetOrder(OrderKey) returns (Order) {}
     rpc GetOrders(OrderQuery) returns (Orders) {}
+    rpc UpdateOrderStatusInBroker(UpdateOrderStatusInBrokerRequest) returns (google.protobuf.Empty) {}
 }
 
 message TransactionID {
@@ -53,4 +54,9 @@ message OrderQuery {
     optional OrderType OrderType = 7;
     optional OrderStateType OrderStateType = 8;
     optional PaymentState PaymentState = 9;
+}
+
+message UpdateOrderStatusInBrokerRequest {
+    string OrderKey = 1;
+    OrderStatusInBroker OrderStatusInBroker = 2;
 }
