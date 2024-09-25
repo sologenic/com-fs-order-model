@@ -33,6 +33,7 @@ message Transactions {
     optional int32 Offset = 2;
 }
 
+// Execution type(action) of the transaction against the smart contract
 enum TransactionType {
     NOT_USED_TRANSACTION_TYPE = 0;
     PURCHASE = 1;
@@ -139,8 +140,9 @@ enum OrderStatusInBroker {
     ORDER_STATUS_IN_BROKER_NOT_PLACED = 1; // initial status when the order is just created in the smart contract
     // TODO: redefine the rest of the statuses according to the broker API
     ORDER_STATUS_IN_BROKER_PLACED = 2;
-    ORDER_STATUS_IN_BROKER_EXECUTED = 3;
-    ORDER_STATUS_IN_BROKER_CANCELLED = 4;
+    ORDER_STATUS_IN_BROKER_PARTIALLY_EXECUTED = 3;
+    ORDER_STATUS_IN_BROKER_EXECUTED = 4;
+    ORDER_STATUS_IN_BROKER_CANCELLED = 5;
 }
 
 message Attestation {
