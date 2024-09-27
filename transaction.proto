@@ -122,6 +122,7 @@ enum OrderCancelledBy {
     NOT_USED_ORDER_CANCEL_BY = 0;
     SMART_CONTRACT_OWNER = 1;
     USER = 2;
+    BROKER_ORACLE = 3;
 }
 
 message OrderState {
