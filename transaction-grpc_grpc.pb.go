@@ -27,7 +27,7 @@ type TransactionServiceClient interface {
 	UpsertOrder(ctx context.Context, in *Order, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	GetOrder(ctx context.Context, in *OrderKey, opts ...grpc.CallOption) (*Order, error)
 	GetOrders(ctx context.Context, in *OrderQuery, opts ...grpc.CallOption) (*Orders, error)
-	UpdateOrderStatusInBroker(ctx context.Context, in *UpdateOrderStatusInBrokerRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	UpdateInternalOrderState(ctx context.Context, in *UpdateInternalOrderStateRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type transactionServiceClient struct {
@@ -92,9 +92,9 @@ func (c *transactionServiceClient) GetOrders(ctx context.Context, in *OrderQuery
 	return out, nil
 }
 
-func (c *transactionServiceClient) UpdateOrderStatusInBroker(ctx context.Context, in *UpdateOrderStatusInBrokerRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *transactionServiceClient) UpdateInternalOrderState(ctx context.Context, in *UpdateInternalOrderStateRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/transaction.TransactionService/UpdateOrderStatusInBroker", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/transaction.TransactionService/UpdateInternalOrderState", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -113,7 +113,7 @@ type TransactionServiceServer interface {
 	UpsertOrder(context.Context, *Order) (*emptypb.Empty, error)
 	GetOrder(context.Context, *OrderKey) (*Order, error)
 	GetOrders(context.Context, *OrderQuery) (*Orders, error)
-	UpdateOrderStatusInBroker(context.Context, *UpdateOrderStatusInBrokerRequest) (*emptypb.Empty, error)
+	UpdateInternalOrderState(context.Context, *UpdateInternalOrderStateRequest) (*emptypb.Empty, error)
 }
 
 // UnimplementedTransactionServiceServer should be embedded to have forward compatible implementations.
@@ -138,8 +138,8 @@ func (UnimplementedTransactionServiceServer) GetOrder(context.Context, *OrderKey
 func (UnimplementedTransactionServiceServer) GetOrders(context.Context, *OrderQuery) (*Orders, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetOrders not implemented")
 }
-func (UnimplementedTransactionServiceServer) UpdateOrderStatusInBroker(context.Context, *UpdateOrderStatusInBrokerRequest) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateOrderStatusInBroker not implemented")
+func (UnimplementedTransactionServiceServer) UpdateInternalOrderState(context.Context, *UpdateInternalOrderStateRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateInternalOrderState not implemented")
 }
 
 // UnsafeTransactionServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -261,20 +261,20 @@ func _TransactionService_GetOrders_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TransactionService_UpdateOrderStatusInBroker_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateOrderStatusInBrokerRequest)
+func _TransactionService_UpdateInternalOrderState_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateInternalOrderStateRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TransactionServiceServer).UpdateOrderStatusInBroker(ctx, in)
+		return srv.(TransactionServiceServer).UpdateInternalOrderState(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/transaction.TransactionService/UpdateOrderStatusInBroker",
+		FullMethod: "/transaction.TransactionService/UpdateInternalOrderState",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TransactionServiceServer).UpdateOrderStatusInBroker(ctx, req.(*UpdateOrderStatusInBrokerRequest))
+		return srv.(TransactionServiceServer).UpdateInternalOrderState(ctx, req.(*UpdateInternalOrderStateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -311,8 +311,8 @@ var TransactionService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _TransactionService_GetOrders_Handler,
 		},
 		{
-			MethodName: "UpdateOrderStatusInBroker",
-			Handler:    _TransactionService_UpdateOrderStatusInBroker_Handler,
+			MethodName: "UpdateInternalOrderState",
+			Handler:    _TransactionService_UpdateInternalOrderState_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

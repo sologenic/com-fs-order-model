@@ -113,7 +113,7 @@ enum OrderStateType {
     NOT_USED_ORDER_STATE_TYPE = 0;
     OPEN = 1;
     PLACED = 2;
-    PARTIALLY_EXECUTED = 3; 
+    PARTIALLY_EXECUTED = 3;
     EXECUTED = 4;
     CANCELLATION_REQUESTED = 5;
     CANCELLED = 6;
@@ -162,20 +162,13 @@ enum InternalOrderState {
     BROKER_ORDER_PARTIALLY_FILLED = 11; // order has been partially filled, OS in Broker: `partially_filled`
     BROKER_ORDER_FILLED = 12; // order has been completely filled, OS in Broker: `filled`
     BROKER_ORDER_EXPIRED = 13; // order has expired, OS in Broker: `expired`
-    
-    // Final update order states: Final state
+        
+    // Order final states
     BROKER_ORACLE_SUBMITTED_FINAL_UPDATE_ORDER = 14; // broker oracle has submitted a final update order request(partial_execution, final_execution, cancellation) to the smart contract
-}
-
-
-enum OrderStatusInBroker {
-    NOT_USED_ORDER_STATUS_IN_BROKER = 0;
-    ORDER_STATUS_IN_BROKER_NOT_PLACED = 1; // initial status when the order is just created in the smart contract
-    // TODO: redefine the rest of the statuses according to the broker API
-    ORDER_STATUS_IN_BROKER_PLACED = 2;
-    ORDER_STATUS_IN_BROKER_PARTIALLY_EXECUTED = 3;
-    ORDER_STATUS_IN_BROKER_EXECUTED = 4;
-    ORDER_STATUS_IN_BROKER_CANCELLED = 5;
+    // updated by TX-listener
+    SMART_CONTRACT_ORDER_PARTIALLY_EXECUTED = 15; // order has been partially executed in the smart contract, OS in SC: `partially_executed`
+    SMART_CONTRACT_ORDER_EXECUTED = 16; // order has been executed in the smart contract, OS in SC: `executed`
+    SMART_CONTRACT_ORDER_CANCELLED = 17; // order has been cancelled in the smart contract, OS in SC: `cancelled`   
 }
 
 message Attestation {
