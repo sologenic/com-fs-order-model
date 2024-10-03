@@ -73,7 +73,7 @@ message Order {
     string AssetKey = 3;
     OrderBase LatestSmartContractOrderDetail = 4; // Latest snapshot of the order in the smart contract
     int64 CreatedAt = 5;
-        
+
     // Additional fields to keep track of the order status in the broker and smart contract
     google.protobuf.Timestamp UpdatedAt = 6;
     
@@ -141,34 +141,35 @@ enum InternalOrderState {
     NOT_USED_INTERNAL_ORDER_STATE = 0;
     
     // Initial state: Order is just created in the smart contract
-    SMART_CONTRACT_NEW_ORDER_CREATED = 1; // initial status when the order(BUY/SELL) is just created in the smart contract, OS in SC: `open``
+    SMART_CONTRACT_NEW_ORDER_CREATED = 1; // initial status when the order(BUY/SELL) is just created in the smart contract, OrderState in SC: `open``
     
     // Order place states
     BROKER_ORDER_SUBMITTED = 2; // order is submitted to the broker for further processing
-    BROKER_ORDER_ACCEPTED = 3; //  order has been received by the broker, but hasn’t yet been routed to the execution venue, OS in Broker: `accepted`
+    BROKER_ORDER_ACCEPTED = 3; //  order has been received by the broker, but hasn’t yet been routed to the execution venue, OrderState in Broker: `accepted`
 
-    BROKER_ORDER_PENDING_NEW = 4; // order has been routed to the exchange and it hasn't yet been confirmed by the exchange, OS in Broker: `pending_new`
-    BROKER_ORDER_NEW = 5; // order has been confirmed by the exchange and is active, OS in Broker: `new`
+    BROKER_ORDER_PENDING_NEW = 4; // order has been routed to the exchange and it hasn't yet been confirmed by the exchange, OrderState in Broker: `pending_new`
+    BROKER_ORDER_NEW = 5; // order has been confirmed by the exchange and is active, OrderState in Broker: `new`
     
-    BROKER_ORACLE_SUBMITTED_UPDATE_ORDER_PLACED = 6; // broker oracle has submitted an update order request with `placed` status to the smart contract 
-    SMART_CONTRACT_ORDER_PLACED = 7; // order has been placed in the smart contract, OS in SC: `placed`
+    BROKER_ORACLE_SUBMITTED_UPDATE_ORDER = 6; // broker oracle has submitted an update order request with `placed` or `partially_filled` to the smart contract
+    SMART_CONTRACT_ORDER_PLACED = 7; // order has been placed in the smart contract, OrderState in SC: `placed`
     
     // Order cancellation states
-    SMART_CONTRACT_CANCEL_ORDER_REQUESTED = 8; // order cancellation request has been submitted to the smart contract, OS in SC: `cancellation_requested`
+    SMART_CONTRACT_CANCEL_ORDER_REQUESTED = 8; // order cancellation request has been submitted to the smart contract, OrderState in SC: `cancellation_requested`
     BROKER_ORDER_CANCEL_REQUESTED = 9; // order cancellation request has been submitted to the broker
-    BROKER_ORDER_CANCELED = 10; // order has been canceled by the broker, OS in Broker: `canceled`
+    BROKER_ORDER_CANCELED = 10; // order has been canceled by the broker, OrderState in Broker: `canceled`
     
     // Order execution states
-    BROKER_ORDER_PARTIALLY_FILLED = 11; // order has been partially filled, OS in Broker: `partially_filled`
-    BROKER_ORDER_FILLED = 12; // order has been completely filled, OS in Broker: `filled`
-    BROKER_ORDER_EXPIRED = 13; // order has expired, OS in Broker: `expired`
-        
+    BROKER_ORDER_PARTIALLY_FILLED = 11; // order has been partially filled, OrderState in Broker: `partially_filled`
+    BROKER_ORDER_FILLED = 12; // order has been completely filled, OrderState in Broker: `filled`
+    BROKER_ORDER_EXPIRED = 13; // order has expired, OrderState in Broker: `expired`
+    
+    SMART_CONTRACT_ORDER_PARTIALLY_EXECUTED = 15; // order has been partially executed in the smart contract, OrderState in SC: `partially_executed`
+    
     // Order final states
-    BROKER_ORACLE_SUBMITTED_FINAL_UPDATE_ORDER = 14; // broker oracle has submitted a final update order request(partial_execution, final_execution, cancellation) to the smart contract
+    BROKER_ORACLE_SUBMITTED_FINAL_UPDATE_ORDER = 14; // broker oracle has submitted a final update order request(final_execution, cancellation) to the smart contract
     // updated by TX-listener
-    SMART_CONTRACT_ORDER_PARTIALLY_EXECUTED = 15; // order has been partially executed in the smart contract, OS in SC: `partially_executed`
-    SMART_CONTRACT_ORDER_EXECUTED = 16; // order has been executed in the smart contract, OS in SC: `executed`
-    SMART_CONTRACT_ORDER_CANCELLED = 17; // order has been cancelled in the smart contract, OS in SC: `cancelled`   
+    SMART_CONTRACT_ORDER_EXECUTED = 16; // order has been executed in the smart contract, OrderState in SC: `executed`
+    SMART_CONTRACT_ORDER_CANCELLED = 17; // order has been cancelled in the smart contract, OrderState in SC: `cancelled`   
 }
 
 message Attestation {
