@@ -17,7 +17,6 @@ service TransactionService {
     rpc UpsertOrder(Order) returns (google.protobuf.Empty) {}
     rpc GetOrder(OrderKey) returns (Order) {}
     rpc GetOrders(OrderQuery) returns (Orders) {}
-    rpc UpdateInternalOrderState(UpdateInternalOrderStateRequest) returns (google.protobuf.Empty) {}
 }
 
 message TransactionID {
@@ -54,9 +53,4 @@ message OrderQuery {
     optional OrderType OrderType = 7;
     optional OrderStateType OrderStateType = 8;
     optional PaymentState PaymentState = 9;
-}
-
-message UpdateInternalOrderStateRequest {
-    string OrderKey = 1;
-    InternalOrderState InternalOrderState = 2;
 }
