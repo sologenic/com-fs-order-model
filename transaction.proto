@@ -257,7 +257,8 @@ enum InternalOrderState {
     BROKER_ORACLE_SUBMITTED_FINAL_UPDATE_ORDER = 14; // broker oracle has submitted a final update order request(final_execution, cancellation) to the smart contract
     // updated by TX-listener
     SMART_CONTRACT_ORDER_EXECUTED = 16; // order has been executed in the smart contract, OrderState in SC: `executed`
-    SMART_CONTRACT_ORDER_CANCELLED = 17; // order has been cancelled in the smart contract, OrderState in SC: `cancelled`   
+    SMART_CONTRACT_ORDER_CANCELLED = 17; // order has been cancelled in the smart contract, OrderState in SC: `cancelled`
+    BROKER_ORDER_CREATE_FAILED = 18; // order sent to the broker failed for whatever reason, order is not created in the broker
 }
 
 message Attestation {
