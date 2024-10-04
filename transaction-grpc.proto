@@ -18,7 +18,7 @@ service TransactionService {
     rpc GetOrder(OrderKey) returns (Order) {}
     rpc GetOrders(OrderQuery) returns (Orders) {}
 
-    // Trade Updates
+    // Order Updates
     rpc CreateOrderDetail(AlpacaOrderDetails) returns (google.protobuf.Empty) {}
     rpc GetOrderDetail(OrderDetailIDs) returns (AlpacaOrderDetails) {}
     rpc GetOrderDetails(ClientOrderID) returns (AlpacaOrderDetailsList) {}

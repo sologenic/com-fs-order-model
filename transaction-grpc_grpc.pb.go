@@ -43,7 +43,7 @@ type TransactionServiceClient interface {
 	UpsertOrder(ctx context.Context, in *Order, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	GetOrder(ctx context.Context, in *OrderKey, opts ...grpc.CallOption) (*Order, error)
 	GetOrders(ctx context.Context, in *OrderQuery, opts ...grpc.CallOption) (*Orders, error)
-	// Trade Updates
+	// Order Updates
 	CreateOrderDetail(ctx context.Context, in *AlpacaOrderDetails, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	GetOrderDetail(ctx context.Context, in *OrderDetailIDs, opts ...grpc.CallOption) (*AlpacaOrderDetails, error)
 	GetOrderDetails(ctx context.Context, in *ClientOrderID, opts ...grpc.CallOption) (*AlpacaOrderDetailsList, error)
@@ -150,7 +150,7 @@ type TransactionServiceServer interface {
 	UpsertOrder(context.Context, *Order) (*emptypb.Empty, error)
 	GetOrder(context.Context, *OrderKey) (*Order, error)
 	GetOrders(context.Context, *OrderQuery) (*Orders, error)
-	// Trade Updates
+	// Order Updates
 	CreateOrderDetail(context.Context, *AlpacaOrderDetails) (*emptypb.Empty, error)
 	GetOrderDetail(context.Context, *OrderDetailIDs) (*AlpacaOrderDetails, error)
 	GetOrderDetails(context.Context, *ClientOrderID) (*AlpacaOrderDetailsList, error)
