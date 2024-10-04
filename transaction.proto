@@ -80,45 +80,51 @@ message Order {
     // Internal Order state
     InternalOrderState InternalOrderState = 7;
 
-    string AlpacaOrderID = 8; // order ID in Alpaca, auto generated
-    string ClientOrderID = 9; // tag by Sologenic, format is datastore key for Order + "_" + timestamp in nanoseconds
-    google.protobuf.Timestamp SubmittedAt = 10;
-    optional google.protobuf.Timestamp FilledAt = 11;
-    optional google.protobuf.Timestamp ExpiredAt = 12;
-    optional google.protobuf.Timestamp CancelledAt = 13;
-    optional google.protobuf.Timestamp FailedAt = 14;
-    optional google.protobuf.Timestamp ReplacedAt = 15;
-    optional string ReplacedBy = 16; // if order is replaced, store the new order ID here
-    optional string Replaces = 17; // opposite of ReplacedBy, store the previous order ID here
-    string AssetID = 18;
-    string Symbol = 19;
-    AssetClass AssetClass = 20;
-    optional OrderClass OrderClass = 21;
-    TradeType TradeType = 22;
-    OrderType Side = 23; // TODO: determine - do we need this at this level since its inside OrderBase?
-    TimeInForce TimeInForce = 24;
+    AlpacaOrderDetails OrderDetails = 8;
+    bool IsPartialFill = 9; // update in trade listener
+}
+
+message AlpacaOrderDetails {
+    string AlpacaOrderID = 1; // order ID in Alpaca, auto generated
+    string ClientOrderID = 2; // tag by Sologenic, format is datastore key for Order + "_" + timestamp in nanoseconds
+    google.protobuf.Timestamp SubmittedAt = 3;
+    optional google.protobuf.Timestamp FilledAt = 4;
+    optional google.protobuf.Timestamp ExpiredAt = 5;
+    optional google.protobuf.Timestamp CancelledAt = 6;
+    optional google.protobuf.Timestamp FailedAt = 7;
+    optional google.protobuf.Timestamp ReplacedAt = 8;
+    optional string ReplacedBy = 9; // if order is replaced, store the new order ID here
+    optional string Replaces = 10; // opposite of ReplacedBy, store the previous order ID here
+    string AssetID = 11;
+    string Symbol = 12;
+    AssetClass AssetClass = 13;
+    optional OrderClass OrderClass = 14;
+    
+    TradeType TradeType = 15;
+    OrderType Side = 16; // TODO: determine - do we need this at this level since its inside OrderBase?
+    TimeInForce TimeInForce = 17;
     
     // Notional and Qty are optional as one can be null if the other is present. However, both cannot be null or present at the same time.
-    optional double Notional = 25; 
-    optional double TotalQty = 26;
-
-    double FilledQty = 27; // defaults to 0, updated as previous `FilledQty` + `PartialQty`
-    optional double FilledAvgPrice = 28;
-    optional double LimitPrice = 29;
-    optional double StopPrice = 30;
-    optional double TrailPrice = 31;
-    optional double TrailPercent = 32;
-    optional double HWM = 33; // High Water Mark, used for trailing stop orders
-    bool ExtendedHours = 34; // defaults to false
-    repeated Order Legs = 35;
-    optional double TotalPosition = 36;
+    optional double Notional = 18; 
+    optional double TotalQty = 19;
+    
+    double FilledQty = 20; // defaults to 0, updated as previous `FilledQty` + `PartialQty`
+    optional double FilledAvgPrice = 21;
+    optional double LimitPrice = 22;
+    optional double StopPrice = 23;
+    optional double TrailPrice = 24;
+    optional double TrailPercent = 25;
+    optional double HWM = 26; // High Water Mark, used for trailing stop orders
+    bool ExtendedHours = 27; // defaults to false
+    repeated Order Legs = 28;
+    optional double TotalPosition = 29;
     
     // Represents the price of the order processed at the time of partial fill. For example, if a 3 step partial fill occurs for an order at prices $1, $1.1 and $0.9,
     // the `PartialPrice` will be $1, $1.1 and $0.9 respectively. The average of these prices will be the `FilledAvgPrice`.
-    optional double PartialPrice = 37; 
+    optional double PartialPrice = 30; 
     // Represents the partial order processed at the time of partial fill. For example, if a order for 10 shares is partially filled with 5, 3 and 2 shares,
     // the `PartialQty` will be 5, 3 and 2 respectively.
-    optional double PartialQty = 38; // partial qty of the order
+    optional double PartialQty = 31; // partial qty of the order
 }
 
 enum OrderClass {
@@ -251,10 +257,11 @@ enum InternalOrderState {
     BROKER_ORDER_FILLED = 12; // order has been completely filled, OrderState in Broker: `filled`
     BROKER_ORDER_EXPIRED = 13; // order has expired, OrderState in Broker: `expired`
     
-    SMART_CONTRACT_ORDER_PARTIALLY_EXECUTED = 15; // order has been partially executed in the smart contract, OrderState in SC: `partially_executed`
-    
     // Order final states
     BROKER_ORACLE_SUBMITTED_FINAL_UPDATE_ORDER = 14; // broker oracle has submitted a final update order request(final_execution, cancellation) to the smart contract
+
+    SMART_CONTRACT_ORDER_PARTIALLY_EXECUTED = 15; // order has been partially executed in the smart contract, OrderState in SC: `partially_executed`
+
     // updated by TX-listener
     SMART_CONTRACT_ORDER_EXECUTED = 16; // order has been executed in the smart contract, OrderState in SC: `executed`
     SMART_CONTRACT_ORDER_CANCELLED = 17; // order has been cancelled in the smart contract, OrderState in SC: `cancelled`
