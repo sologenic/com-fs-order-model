@@ -127,6 +127,10 @@ message AlpacaOrderDetails {
     optional double PartialQty = 31; // partial qty of the order
 }
 
+message AlpacaOrderDetailsList {
+    repeated AlpacaOrderDetails AlpacaOrderDetailsList = 1;
+}
+
 enum OrderClass {
     NOT_USED_ORDER_CLASS = 0;
     ORDER_CLASS_SIMPLE = 1;
@@ -166,13 +170,6 @@ enum TradeType {
     OCO = 7; // One-Cancels-Other
     OTO = 8; // One-Triggers-Other
     TRAILING_STOP = 9;
-}
-
-message ClientOrderID {
-    string OrderKey = 1;
-    InternalOrderState OrderState = 2;
-
-    string Timestamp = 3;
 }
 
 message Orders {

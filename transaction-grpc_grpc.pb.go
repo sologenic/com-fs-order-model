@@ -26,6 +26,9 @@ const (
 	TransactionService_UpsertOrder_FullMethodName       = "/transaction.TransactionService/UpsertOrder"
 	TransactionService_GetOrder_FullMethodName          = "/transaction.TransactionService/GetOrder"
 	TransactionService_GetOrders_FullMethodName         = "/transaction.TransactionService/GetOrders"
+	TransactionService_CreateOrderDetail_FullMethodName = "/transaction.TransactionService/CreateOrderDetail"
+	TransactionService_GetOrderDetail_FullMethodName    = "/transaction.TransactionService/GetOrderDetail"
+	TransactionService_GetOrderDetails_FullMethodName   = "/transaction.TransactionService/GetOrderDetails"
 )
 
 // TransactionServiceClient is the client API for TransactionService service.
@@ -40,6 +43,10 @@ type TransactionServiceClient interface {
 	UpsertOrder(ctx context.Context, in *Order, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	GetOrder(ctx context.Context, in *OrderKey, opts ...grpc.CallOption) (*Order, error)
 	GetOrders(ctx context.Context, in *OrderQuery, opts ...grpc.CallOption) (*Orders, error)
+	// Trade Updates
+	CreateOrderDetail(ctx context.Context, in *AlpacaOrderDetails, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	GetOrderDetail(ctx context.Context, in *OrderDetailIDs, opts ...grpc.CallOption) (*AlpacaOrderDetails, error)
+	GetOrderDetails(ctx context.Context, in *ClientOrderID, opts ...grpc.CallOption) (*AlpacaOrderDetailsList, error)
 }
 
 type transactionServiceClient struct {
@@ -104,6 +111,33 @@ func (c *transactionServiceClient) GetOrders(ctx context.Context, in *OrderQuery
 	return out, nil
 }
 
+func (c *transactionServiceClient) CreateOrderDetail(ctx context.Context, in *AlpacaOrderDetails, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, TransactionService_CreateOrderDetail_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *transactionServiceClient) GetOrderDetail(ctx context.Context, in *OrderDetailIDs, opts ...grpc.CallOption) (*AlpacaOrderDetails, error) {
+	out := new(AlpacaOrderDetails)
+	err := c.cc.Invoke(ctx, TransactionService_GetOrderDetail_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *transactionServiceClient) GetOrderDetails(ctx context.Context, in *ClientOrderID, opts ...grpc.CallOption) (*AlpacaOrderDetailsList, error) {
+	out := new(AlpacaOrderDetailsList)
+	err := c.cc.Invoke(ctx, TransactionService_GetOrderDetails_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // TransactionServiceServer is the server API for TransactionService service.
 // All implementations should embed UnimplementedTransactionServiceServer
 // for forward compatibility
@@ -116,6 +150,10 @@ type TransactionServiceServer interface {
 	UpsertOrder(context.Context, *Order) (*emptypb.Empty, error)
 	GetOrder(context.Context, *OrderKey) (*Order, error)
 	GetOrders(context.Context, *OrderQuery) (*Orders, error)
+	// Trade Updates
+	CreateOrderDetail(context.Context, *AlpacaOrderDetails) (*emptypb.Empty, error)
+	GetOrderDetail(context.Context, *OrderDetailIDs) (*AlpacaOrderDetails, error)
+	GetOrderDetails(context.Context, *ClientOrderID) (*AlpacaOrderDetailsList, error)
 }
 
 // UnimplementedTransactionServiceServer should be embedded to have forward compatible implementations.
@@ -139,6 +177,15 @@ func (UnimplementedTransactionServiceServer) GetOrder(context.Context, *OrderKey
 }
 func (UnimplementedTransactionServiceServer) GetOrders(context.Context, *OrderQuery) (*Orders, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetOrders not implemented")
+}
+func (UnimplementedTransactionServiceServer) CreateOrderDetail(context.Context, *AlpacaOrderDetails) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateOrderDetail not implemented")
+}
+func (UnimplementedTransactionServiceServer) GetOrderDetail(context.Context, *OrderDetailIDs) (*AlpacaOrderDetails, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetOrderDetail not implemented")
+}
+func (UnimplementedTransactionServiceServer) GetOrderDetails(context.Context, *ClientOrderID) (*AlpacaOrderDetailsList, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetOrderDetails not implemented")
 }
 
 // UnsafeTransactionServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -260,6 +307,60 @@ func _TransactionService_GetOrders_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TransactionService_CreateOrderDetail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AlpacaOrderDetails)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TransactionServiceServer).CreateOrderDetail(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TransactionService_CreateOrderDetail_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TransactionServiceServer).CreateOrderDetail(ctx, req.(*AlpacaOrderDetails))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TransactionService_GetOrderDetail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(OrderDetailIDs)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TransactionServiceServer).GetOrderDetail(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TransactionService_GetOrderDetail_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TransactionServiceServer).GetOrderDetail(ctx, req.(*OrderDetailIDs))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TransactionService_GetOrderDetails_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ClientOrderID)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TransactionServiceServer).GetOrderDetails(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TransactionService_GetOrderDetails_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TransactionServiceServer).GetOrderDetails(ctx, req.(*ClientOrderID))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // TransactionService_ServiceDesc is the grpc.ServiceDesc for TransactionService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -290,6 +391,18 @@ var TransactionService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetOrders",
 			Handler:    _TransactionService_GetOrders_Handler,
+		},
+		{
+			MethodName: "CreateOrderDetail",
+			Handler:    _TransactionService_CreateOrderDetail_Handler,
+		},
+		{
+			MethodName: "GetOrderDetail",
+			Handler:    _TransactionService_GetOrderDetail_Handler,
+		},
+		{
+			MethodName: "GetOrderDetails",
+			Handler:    _TransactionService_GetOrderDetails_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

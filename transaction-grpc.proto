@@ -17,6 +17,11 @@ service TransactionService {
     rpc UpsertOrder(Order) returns (google.protobuf.Empty) {}
     rpc GetOrder(OrderKey) returns (Order) {}
     rpc GetOrders(OrderQuery) returns (Orders) {}
+
+    // Trade Updates
+    rpc CreateOrderDetail(AlpacaOrderDetails) returns (google.protobuf.Empty) {}
+    rpc GetOrderDetail(OrderDetailIDs) returns (AlpacaOrderDetails) {}
+    rpc GetOrderDetails(ClientOrderID) returns (AlpacaOrderDetailsList) {}
 }
 
 message TransactionID {
@@ -41,6 +46,15 @@ message TransactionQuery {
 
 message OrderKey {
     string Key = 1;
+}
+
+message OrderDetailIDs {
+    string AlpacaOrderID = 1;
+    string ClientOrderID = 2;
+}
+
+message ClientOrderID {
+    string ClientOrderID = 1;
 }
 
 message OrderQuery {
