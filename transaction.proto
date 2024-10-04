@@ -126,6 +126,7 @@ message AlpacaOrderDetails {
     // the `PartialQty` will be 5, 3 and 2 respectively.
     optional double PartialQty = 31; // partial qty of the order
     google.protobuf.Timestamp CreatedAt = 32;
+    string AlpacaStatus = 33; // status of the order in Alpaca
 }
 
 message AlpacaOrderDetailsList {
