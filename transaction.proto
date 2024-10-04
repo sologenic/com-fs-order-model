@@ -125,6 +125,7 @@ message AlpacaOrderDetails {
     // Represents the partial order processed at the time of partial fill. For example, if a order for 10 shares is partially filled with 5, 3 and 2 shares,
     // the `PartialQty` will be 5, 3 and 2 respectively.
     optional double PartialQty = 31; // partial qty of the order
+    google.protobuf.Timestamp CreatedAt = 32;
 }
 
 message AlpacaOrderDetailsList {
