@@ -14,6 +14,11 @@ func GetOrderKeyFromTX(tx *transactiongrpc.Transaction) string {
 	return tx.Network + "_" + tx.SmartContractAddr + "_" + strconv.Itoa(int(tx.OrderDetail.OrderID))
 }
 
+// Get the unique datastore key from the Order
+func GetOrderKeyFromOrder(order *transactiongrpc.Order) string {
+	return order.Network + "_" + order.SmartContractAddr + "_" + strconv.Itoa(int(order.LatestSmartContractOrderDetail.OrderID))
+}
+
 // Alpaca uses decimal.Decimal, but we need to convert it to float64 for our internal use
 func DecimalToDouble(d *decimal.Decimal) *float64 {
 	if d == nil {

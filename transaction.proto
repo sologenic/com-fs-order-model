@@ -248,6 +248,7 @@ enum InternalOrderState {
     
     // Order cancellation states
     SMART_CONTRACT_CANCEL_ORDER_REQUESTED = 8; // order cancellation request has been submitted to the smart contract, OrderState in SC: `cancellation_requested`
+    TX_LISTENER_CANCEL_ORDER_REQUESTED_BEFORE_PLACED = 19; // order cancellation request has been submitted to the smart contract before the order is placed. (directly cancel the order in the smart contract without making a cancel request to the broker)
     BROKER_ORDER_CANCEL_REQUESTED = 9; // order cancellation request has been submitted to the broker
     BROKER_ORDER_CANCELED = 10; // order has been canceled by the broker, OrderState in Broker: `canceled`
     
