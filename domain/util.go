@@ -47,7 +47,7 @@ func MapAlpacaOrderToInternal(tradeUpdate *alpaca.Order, internalOrder *transact
 	if tradeUpdate.LimitPrice != nil {
 		od.LimitPrice = decimalToDouble(tradeUpdate.LimitPrice)
 	}
-	od.FilledQty = 0 // also 0 from Alpaca
+	od.FilledQty = *decimalToDouble(&tradeUpdate.FilledQty)
 }
 
 // Alpaca uses decimal.Decimal, but we need to convert it to float64 for our internal use
