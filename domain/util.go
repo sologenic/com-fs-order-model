@@ -6,6 +6,7 @@ import (
 	"github.com/alpacahq/alpaca-trade-api-go/v3/alpaca"
 	"github.com/shopspring/decimal"
 	transactiongrpc "github.com/sologenic/com-fs-transaction-model"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 // Get the unique datastore key from the TX
@@ -19,8 +20,38 @@ func GetOrderKeyFromOrder(order *transactiongrpc.Order) string {
 	return order.Network + "_" + order.SmartContractAddr + "_" + strconv.Itoa(int(order.LatestSmartContractOrderDetail.OrderID))
 }
 
+// Map Alpaca Order to our AlpacaOrderDetails model
+// TODO: this is not complete, and will need to be updated as more use cases are discovered
+func MapAlpacaOrderToInternal(tradeUpdate *alpaca.Order, internalOrder *transactiongrpc.Order) {
+	internalOrder.UpdatedAt = timestamppb.New(tradeUpdate.UpdatedAt)
+
+	od := internalOrder.OrderDetails
+	od.AlpacaOrderID = tradeUpdate.ID
+	od.ClientOrderID = tradeUpdate.ClientOrderID
+	od.SubmittedAt = timestamppb.New(tradeUpdate.SubmittedAt)
+	od.AssetID = tradeUpdate.AssetID
+	od.Symbol = tradeUpdate.Symbol
+
+	od.AssetClass = mapAssetClass(tradeUpdate.AssetClass)
+	od.TradeType = mapTradeType(tradeUpdate.Type)
+	od.Side = mapSide(tradeUpdate.Side)
+	od.TimeInForce = mapTimeInForce(tradeUpdate.TimeInForce)
+	od.Status = statusMapper(tradeUpdate.Status)
+
+	if tradeUpdate.Notional != nil {
+		od.Notional = decimalToDouble(tradeUpdate.Notional)
+	}
+	if tradeUpdate.Qty != nil {
+		od.TotalQty = decimalToDouble(tradeUpdate.Qty)
+	}
+	if tradeUpdate.LimitPrice != nil {
+		od.LimitPrice = decimalToDouble(tradeUpdate.LimitPrice)
+	}
+	od.FilledQty = 0 // also 0 from Alpaca
+}
+
 // Alpaca uses decimal.Decimal, but we need to convert it to float64 for our internal use
-func DecimalToDouble(d *decimal.Decimal) *float64 {
+func decimalToDouble(d *decimal.Decimal) *float64 {
 	if d == nil {
 		return nil
 	}
@@ -29,7 +60,7 @@ func DecimalToDouble(d *decimal.Decimal) *float64 {
 }
 
 // Maps the Alpaca AssetClass string enum to the internal AssetClass int enum
-func MapAssetClass(assetClass alpaca.AssetClass) transactiongrpc.AssetClass {
+func mapAssetClass(assetClass alpaca.AssetClass) transactiongrpc.AssetClass {
 	switch assetClass {
 	case alpaca.USEquity:
 		return transactiongrpc.AssetClass_US_EQUITY
@@ -41,7 +72,7 @@ func MapAssetClass(assetClass alpaca.AssetClass) transactiongrpc.AssetClass {
 }
 
 // Maps  the Alpaca AssetType string enum to the internal AssetType int enum
-func MapTradeType(orderType alpaca.OrderType) transactiongrpc.TradeType {
+func mapTradeType(orderType alpaca.OrderType) transactiongrpc.TradeType {
 	switch orderType {
 	case alpaca.Market:
 		return transactiongrpc.TradeType_MARKET
@@ -59,7 +90,7 @@ func MapTradeType(orderType alpaca.OrderType) transactiongrpc.TradeType {
 }
 
 // Maps the Alpaca OrderType string enum to the internal OrderType int enum
-func MapSide(side alpaca.Side) transactiongrpc.OrderType {
+func mapSide(side alpaca.Side) transactiongrpc.OrderType {
 	switch side {
 	case alpaca.Buy:
 		return transactiongrpc.OrderType_ORDER_TYPE_PURCHASE
@@ -71,7 +102,7 @@ func MapSide(side alpaca.Side) transactiongrpc.OrderType {
 }
 
 // Maps the Alpaca TimeInForce string enum to the internal TimeInForce int enum
-func MapTimeInForce(timeInForce alpaca.TimeInForce) transactiongrpc.TimeInForce {
+func mapTimeInForce(timeInForce alpaca.TimeInForce) transactiongrpc.TimeInForce {
 	switch timeInForce {
 	case alpaca.Day:
 		return transactiongrpc.TimeInForce_DAY
@@ -87,5 +118,28 @@ func MapTimeInForce(timeInForce alpaca.TimeInForce) transactiongrpc.TimeInForce 
 		return transactiongrpc.TimeInForce_CLS
 	default:
 		return transactiongrpc.TimeInForce_NOT_USED_TIME_IN_FORCE
+	}
+}
+
+func statusMapper(event string) transactiongrpc.InternalOrderState {
+	switch event {
+	case "pending_new":
+		return transactiongrpc.InternalOrderState_BROKER_ORDER_PENDING_NEW
+	case "accepted":
+		return transactiongrpc.InternalOrderState_BROKER_ORDER_ACCEPTED
+	case "new":
+		return transactiongrpc.InternalOrderState_BROKER_ORDER_NEW
+	case "partial_fill":
+		return transactiongrpc.InternalOrderState_BROKER_ORDER_PARTIALLY_FILLED
+	case "fill":
+		return transactiongrpc.InternalOrderState_BROKER_ORDER_FILLED
+	case "pending_cancel":
+		return transactiongrpc.InternalOrderState_BROKER_ORDER_CANCEL_REQUESTED
+	case "canceled":
+		return transactiongrpc.InternalOrderState_BROKER_ORDER_CANCELED
+	case "expired":
+		return transactiongrpc.InternalOrderState_BROKER_ORDER_EXPIRED
+	default:
+		return transactiongrpc.InternalOrderState_NOT_USED_INTERNAL_ORDER_STATE
 	}
 }
