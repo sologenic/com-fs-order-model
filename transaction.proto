@@ -82,6 +82,7 @@ message Order {
 
     AlpacaOrderDetails OrderDetails = 8;
     bool IsPartialFill = 9; // update in trade listener
+    OrderInstruction OrderInstruction = 10; // parsed instruction to be forwarded to the broker
 }
 
 message AlpacaOrderDetails {
@@ -266,6 +267,22 @@ enum InternalOrderState {
     SMART_CONTRACT_ORDER_EXECUTED = 16; // order has been executed in the smart contract, OrderState in SC: `executed`
     SMART_CONTRACT_ORDER_CANCELLED = 17; // order has been cancelled in the smart contract, OrderState in SC: `cancelled`
     BROKER_ORDER_CREATE_FAILED = 18; // order sent to the broker failed for whatever reason, order is not created in the broker
+}
+
+// Instruction parsed from the OrderBase in the smart contract to be forwarded to the broker
+message OrderInstruction {
+    int64 LimitPrice = 1;
+    int32 LimitPriceExp = 2;
+    bool FillOrKill = 3; // true: order must be filled immediately or canceled, false: order can be partially filled, by default false
+    optional string ExpiresAt = 4; // In ISO-8601 Zulu format (e.g., "2024-02-29T23:59:59Z")
+    OrderOptionType OrderOptionType = 5;
+}
+
+enum OrderOptionType {
+    NOT_USED_ORDER_OPTION_TYPE = 0;
+    ORDER_OPTION_LIMIT = 1;
+    ORDER_OPTION_MARKET = 2; // Ignores LimitPrice, executes at market price
+    ORDER_OPTION_STOP_LOSS = 3; // Uses LimitPrice as the stop loss threshold
 }
 
 message Attestation {
