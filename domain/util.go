@@ -121,6 +121,21 @@ func mapTimeInForce(timeInForce alpaca.TimeInForce) transactiongrpc.TimeInForce 
 	}
 }
 
+/*
+// TODO: delete after fully implementing statusMapper
+refer to https://docs.alpaca.markets/docs/orders-at-alpaca#order-lifecycle
+
+# TYPES OF EVENTS FROM ALPACA
+after hour event:
+accepted
+
+common event types:
+new, fill, partial_fill, canceled, expired, done_for_day, replaced
+
+uncommon event types:
+rejected, pending_new, stopped, pending_cancel, pending_replace, calculated,
+suspended, order_replace_rejected, order_cancel_rejected
+*/
 func statusMapper(event string) transactiongrpc.InternalOrderState {
 	switch event {
 	case "pending_new":
