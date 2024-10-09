@@ -39,24 +39,23 @@ func MapAlpacaOrderToInternal(tradeUpdate *alpaca.Order, internalOrder *transact
 	od.Status = statusMapper(tradeUpdate.Status)
 
 	if tradeUpdate.Notional != nil {
-		od.Notional = decimalToDouble(tradeUpdate.Notional)
+		od.Notional = decimalToInternalDecimal(tradeUpdate.Notional)
 	}
 	if tradeUpdate.Qty != nil {
-		od.TotalQty = decimalToDouble(tradeUpdate.Qty)
+		od.TotalQty = decimalToInternalDecimal(tradeUpdate.Qty)
 	}
 	if tradeUpdate.LimitPrice != nil {
-		od.LimitPrice = decimalToDouble(tradeUpdate.LimitPrice)
+		od.LimitPrice = decimalToInternalDecimal(tradeUpdate.LimitPrice)
 	}
-	od.FilledQty = *decimalToDouble(&tradeUpdate.FilledQty)
+	od.FilledQty = decimalToInternalDecimal(&tradeUpdate.FilledQty)
 }
 
-// Alpaca uses decimal.Decimal, but we need to convert it to float64 for our internal use
-func decimalToDouble(d *decimal.Decimal) *float64 {
-	if d == nil {
-		return nil
+// Alpaca uses decimal.Decimal, convert it to our Decimal model
+func decimalToInternalDecimal(d *decimal.Decimal) *transactiongrpc.Decimal {
+	return &transactiongrpc.Decimal{
+		Value: d.CoefficientInt64(),
+		Exp:   d.Exponent(),
 	}
-	f, _ := d.Float64()
-	return &f
 }
 
 // Maps the Alpaca AssetClass string enum to the internal AssetClass int enum
