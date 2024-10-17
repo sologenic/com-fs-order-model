@@ -87,7 +87,7 @@ message Order {
 
 message AlpacaOrderDetails {
     string AlpacaOrderID = 1; // order ID in Alpaca, auto generated
-    string ClientOrderID = 2; // tag by Sologenic, format is datastore key for Order + "_" + timestamp in nanoseconds
+    string ClientOrderID = 2; // tag by Sologenic, format is datastore key for Order
     google.protobuf.Timestamp SubmittedAt = 3;
     optional google.protobuf.Timestamp FilledAt = 4;
     optional google.protobuf.Timestamp ExpiredAt = 5;
