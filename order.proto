@@ -1,0 +1,176 @@
+syntax = "proto3";
+
+package transaction;
+
+import "google/protobuf/timestamp.proto";
+import "enums.proto";
+import "alpaca.proto";
+
+option go_package = "github.com/sologenic/com-fs-transaction-model;transaction";
+
+message Order {
+    string Network = 1;
+    string SmartContractAddr = 2;
+    string AssetKey = 3;
+    OrderInstruction Instruction = 4; // Snapshot of the order in the smart contract
+    google.protobuf.Timestamp  CreatedAt = 5; 
+    TransactionType TransactionType = 6;
+    string TXID = 7; // Unique Key in the datastore
+    int64 GasFee = 8;
+    optional double GasFeeUSD = 9;
+    google.protobuf.Timestamp DetectedAt = 10;
+    int64 Height = 11;
+
+    optional Attestation Attestation = 12;
+
+    InternalOrderState InternalOrderState = 13;
+    AlpacaOrderDetails OrderDetails = 14;
+    
+    string ClientOrderID = 15; // tag created Sologenic to identify the associated trades
+    // TBD: Add more fields as needed
+}
+
+// Execution type(action) of the transaction against the smart contract
+enum TransactionType {
+    NOT_USED_TRANSACTION_TYPE = 0;
+    PURCHASE = 1;
+    SELL = 2;
+    REQUEST_ORDER_CANCEL = 3;
+    EXECUTE_ORDER = 4;
+    PAY_ORDER = 5;
+    REQUEST_REATTESTATION = 6;
+}
+
+// Same structure as Order in the Smart Contract
+message OrderInstruction {
+    int64 OrderID = 1; // Google datastore supports int64, not uint64, which is the used in the smart contract
+    string Creator = 2; // Sender in message from Coreum
+    string Denom = 3;
+    int64 Amount = 4;
+    int32 AmountExp = 5;
+
+    int64 LimitPrice = 6;
+    int32 LimitPriceExp = 7;
+    bool FillOrKill = 8; // true: order must be filled immediately or canceled, false: order can be partially filled, by default false
+    optional string ExpiresAt = 9; // In ISO-8601 Zulu format (e.g., "2024-02-29T23:59:59Z")
+    OrderDetailType OrderDetailType = 10;
+
+    optional Hold Hold = 11;
+    Coin FundsSent = 12;
+    OrderType OrderType = 13;
+    OrderState OrderState = 14;
+    optional PaymentState PaymentState = 15;
+    optional int64 AmountExecuted = 16;
+    optional int32 AmountExecutedExp = 17;
+    optional int64 UsedFundsAmount = 18;
+    optional int32 UsedFundsAmountExp = 19;
+    optional int64 Costs = 20;
+    optional int32 CostsExp = 21;
+}
+
+message Orders {
+    repeated Order Orders = 1;
+    optional int32 Offset = 2;
+}
+
+message Hold {
+    string Denom = 1;
+    int64 Amount = 2;
+    int32 AmountExp = 3;
+}
+
+message Coin {
+    string Denom = 1;
+    int64 Amount = 2;
+}
+
+enum OrderStateType {
+    NOT_USED_ORDER_STATE_TYPE = 0;
+    OPEN = 1;
+    PLACED = 2;
+    PARTIALLY_EXECUTED = 3;
+    EXECUTED = 4;
+    CANCELLATION_REQUESTED = 5;
+    CANCELLED = 6;
+}
+
+enum OrderCancelledBy {
+    NOT_USED_ORDER_CANCEL_BY = 0;
+    SMART_CONTRACT_OWNER = 1;
+    USER = 2;
+    BROKER_ORACLE = 3;
+}
+
+message OrderState {
+    OrderStateType OrderStateType = 1;
+    optional OrderCancelledBy OrderCancelledBy  = 2;
+}
+
+enum PaymentState {
+    NOT_USED_PAYMENT_STATE = 0;
+    NOT_PAID = 1;
+    PAID = 2;
+}
+
+enum InternalOrderState {
+    NOT_USED_INTERNAL_ORDER_STATE = 0;
+    
+    // Initial state: Order is just created in the smart contract
+    SMART_CONTRACT_NEW_ORDER_CREATED = 1; // initial status when the order(BUY/SELL) is just created in the smart contract, OrderState in SC: `open``
+    
+    // Order place states
+    BROKER_ORDER_PRE_SUBMITTED = 2; // order is pre-submitted to the broker for further processing
+    BROKER_ORDER_SUBMITTED = 3; // order is submitted to the broker for further processing
+    BROKER_ORDER_POST_SUBMITTED = 4; // order is post-submitted to the broker for further processing
+    
+    BROKER_ORDER_ACCEPTED = 5; // (afterhours) order has been received by the broker, but hasn’t yet been routed to the execution venue, OrderState in Broker: `accepted`
+
+    BROKER_ORDER_PENDING_NEW = 6; // order has been routed to the exchange and it hasn't yet been confirmed by the exchange, OrderState in Broker: `pending_new`
+    BROKER_ORDER_NEW = 7; // order has been confirmed by the exchange and is active, OrderState in Broker: `new`
+    
+    SMART_CONTRACT_PRE_ORDER_PLACED = 8; // order has been placed in the smart contract
+    SMART_CONTRACT_ORDER_PLACED = 9; // order has been placed in the smart contract, OrderState in SC: `placed`
+    SMART_CONTRACT_POST_ORDER_PLACED = 10; // order has been placed in the smart contract
+
+    BROKER_ORDER_PARTIALLY_FILLED = 11; // order has been partially filled, OrderState in Broker: `partially_filled`
+    SMART_CONTRACT_ORDER_PARTIALLY_FILLED = 12; // order has been partially executed in the smart contract, OrderState in SC: `partially_executed`
+
+    BROKER_ORDER_FILLED = 13; // order has been completely filled, OrderState in Broker: `filled`
+    
+    SMART_CONTRACT_ORDER_EXECUTED = 14; // order has been executed in the smart contract, OrderState in SC: `executed`
+        
+    BROKER_ORDER_PRE_CANCEL_REQUESTED = 15; // order cancellation request has been submitted to the broker
+    BROKER_ORDER_CANCEL_REQUESTED = 16; // order cancellation request has been submitted to the broker
+    BROKER_ORDER_POST_CANCEL_REQUESTED = 17; // order cancellation request has been submitted to the broker
+
+    BROKER_ORDER_CANCELED = 18; // order has been canceled by the broker, OrderState in Broker: `canceled`
+    BROKER_ORDER_REFUSED = 19; // order sent to the broker, but the broker refused to accept it
+    BROKER_ORDER_EXPIRED = 20; // order has expired, OrderState in Broker: `expired`
+    
+    SMART_CONTRACT_PRE_ORDER_CANCELLED = 21; // order has been cancelled in the smart contract
+    SMART_CONTRACT_ORDER_CANCELLED = 22; // order has been cancelled in the smart contract, OrderState in SC: `cancelled`
+    SMART_CONTRACT_POST_ORDER_CANCELLED = 23; // order has been cancelled in the smart contract
+
+    PROCESS_FINISHED = 24; // order has been processed and finished
+    
+    // Alternative scenarios
+    SMART_CONTRACT_PRE_CANCEL_ORDER_REQUESTED = 25; // order cancellation request has been submitted to the smart contract
+    SMART_CONTRACT_CANCEL_ORDER_REQUESTED = 26; // order cancellation request has been submitted to the smart contract, OrderState in SC: `cancellation_requested`
+    SMART_CONTRACT_POST_CANCEL_ORDER_REQUESTED = 27; // order cancellation request has been submitted to the smart contract
+}
+
+enum OrderDetailType {
+    NOT_USED_ORDER_DETAIL_TYPE = 0;
+    ORDER_DETAIL_LIMIT = 1;
+    ORDER_DETAIL_MARKET = 2; // Ignores LimitPrice, executes at market price
+    ORDER_DETAIL_STOP_LOSS = 3; // Uses LimitPrice as the stop loss threshold
+}
+
+message Attestation {
+    string BrokerQuantity = 1; // Using string to represent Uint128
+    string ChainQuantity = 2; // Using string to represent Uint128
+    // Note: for the below fields, use int64 instead of uint64 as uint64 not supported in Google Datastore 
+    int64 BlockHeight = 3;
+    int64 Timestamp = 4;
+    int64 ReattestationBlockHeight = 5;
+}

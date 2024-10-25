@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package transaction;
+
+option go_package = "github.com/sologenic/com-fs-transaction-model;transaction";
+
+// Represents a fixed-point decimal number.
+// Use `value` and `exp` with `decimal.New()` from `github.com/shopspring/decimal` to create a decimal.Decimal object.
+// This ensures precise handling without converting to floats or doubles.
+// The number is represented as: Number = value * 10 ^ exp
+message Decimal {
+    int64 Value = 1;
+    int32 Exp = 2;
+}

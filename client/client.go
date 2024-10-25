@@ -7,29 +7,53 @@ import (
 	grpcclient "github.com/sologenic/fs-utils-lib/go/grpc-client"
 )
 
-const endpoint = "TX_STORE"
-
-var (
-	client     *grpcdef.TransactionServiceClient
-	grpcClient *grpcclient.GRPCClient
+const (
+	orderEndpoint        = "TX_STORE"
+	alpacaTradesEndpoint = "AL_TRADES_STORE"
 )
 
-func initClient() {
-	grpcClient = grpcclient.InitClient(endpoint)
-	cl := grpcdef.NewTransactionServiceClient(grpcClient.Conn)
-	client = &cl
+var (
+	orderclient        *grpcdef.OrderServiceClient
+	alpacatradesclient *grpcdef.AlpacaTradesClient
+	grpcClient         *grpcclient.GRPCClient
+)
+
+func initOrderClient() {
+	grpcClient = grpcclient.InitClient(orderEndpoint)
+	cl := grpcdef.NewOrderServiceClient(grpcClient.Conn)
+	orderclient = &cl
 }
 
-func Client() *grpcdef.TransactionServiceClient {
-	if client == nil {
-		initClient()
+func OrderClient() *grpcdef.OrderServiceClient {
+	if orderclient == nil {
+		initOrderClient()
 	}
-	return client
+	return orderclient
 }
 
-func AuthCtx(ctx context.Context) context.Context {
+func OrderAuthCtx(ctx context.Context) context.Context {
 	if grpcClient == nil {
-		initClient()
+		initOrderClient()
+	}
+	return grpcClient.AuthCtx(ctx)
+}
+
+func initAlpacaTradesClient() {
+	grpcClient = grpcclient.InitClient(alpacaTradesEndpoint)
+	cl := grpcdef.NewAlpacaTradesClient(grpcClient.Conn)
+	alpacatradesclient = &cl
+}
+
+func AlpacaTradesClient() *grpcdef.AlpacaTradesClient {
+	if alpacatradesclient == nil {
+		initAlpacaTradesClient()
+	}
+	return alpacatradesclient
+}
+
+func AlpacaTradesAuthCtx(ctx context.Context) context.Context {
+	if grpcClient == nil {
+		initAlpacaTradesClient()
 	}
 	return grpcClient.AuthCtx(ctx)
 }

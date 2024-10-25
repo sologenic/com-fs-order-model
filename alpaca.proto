@@ -1,0 +1,105 @@
+syntax = "proto3";
+
+package transaction;
+
+import "google/protobuf/timestamp.proto";
+import "decimal.proto";
+import "enums.proto";
+
+option go_package = "github.com/sologenic/com-fs-transaction-model;transaction";
+
+message AlpacaOrderDetails {
+    string AlpacaOrderID = 1; // order ID in Alpaca, auto generated
+    string ClientOrderID = 2; // Suggestion: MOVE TO ORDER level, tag by Sologenic (DO NOT store keys, we only store the information which is used to generate the key)
+    google.protobuf.Timestamp SubmittedAt = 3;
+    optional google.protobuf.Timestamp FilledAt = 4;
+    optional google.protobuf.Timestamp ExpiredAt = 5;
+    optional google.protobuf.Timestamp CancelledAt = 6;
+    optional google.protobuf.Timestamp FailedAt = 7;
+    optional google.protobuf.Timestamp ReplacedAt = 8;
+    optional string ReplacedBy = 9; // if order is replaced, store the new order ID here
+    optional string Replaces = 10; // opposite of ReplacedBy, store the previous order ID here
+    string AssetID = 11;
+    string Symbol = 12;
+    AssetClass AssetClass = 13;
+    optional OrderClass OrderClass = 14;
+    
+    TradeType Type = 15;
+    OrderType Side = 16;
+    TimeInForce TimeInForce = 17;
+    
+    // Notional and Qty are optional as one can be null if the other is present. However, both cannot be null or present at the same time.
+    optional Decimal Notional = 18; 
+    optional Decimal TotalQty = 19;
+    
+    Decimal FilledQty = 20; // defaults to 0, updated as previous `FilledQty` + `PartialQty`
+    optional Decimal FilledAvgPrice = 21;
+    optional Decimal LimitPrice = 22;
+    optional Decimal StopPrice = 23;
+    optional Decimal TrailPrice = 24;
+    optional Decimal TrailPercent = 25;
+    optional Decimal HWM = 26; // High Water Mark, used for trailing stop orders
+    bool ExtendedHours = 27; // defaults to false
+    optional Decimal TotalPosition = 29;
+    
+    // Represents the price of the order processed at the time of partial fill. For example, if a 3 step partial fill occurs for an order at prices $1, $1.1 and $0.9,
+    // the `PartialPrice` will be $1, $1.1 and $0.9 respectively. The average of these prices will be the `FilledAvgPrice`.
+    optional Decimal PartialPrice = 30; 
+    // Represents the partial order processed at the time of partial fill. For example, if a order for 10 shares is partially filled with 5, 3 and 2 shares,
+    // the `PartialQty` will be 5, 3 and 2 respectively.
+    optional Decimal PartialQty = 31; // partial qty of the order
+    google.protobuf.Timestamp CreatedAt = 32;
+    
+    optional google.protobuf.Timestamp UpdatedAt = 50;
+
+    AlpacaOrderState Status = 33; // status of the order in Alpaca
+}
+
+message AlpacaOrderDetailsList {
+    repeated AlpacaOrderDetails AlpacaOrderDetailsList = 1;
+}
+
+enum AssetClass {
+    NOT_USED_ASSET_CLASS = 0;
+    US_EQUITY = 1;
+    CRYPTO = 2;
+}
+
+enum TimeInForce {
+    NOT_USED_TIME_IN_FORCE = 0;
+    DAY = 1;
+    GTC = 2;
+
+    // TODO: the below types will be implemented in the future
+    OPG = 3;
+    CLS = 4;
+    IOC = 5;
+    FOK = 6;
+}
+
+enum TradeType {
+    NOT_USED_TRADE_TYPE = 0;
+    MARKET = 1;
+    LIMIT = 2;
+    
+    // TODO: the below types will be implemented in the future
+    STOP = 3;
+    STOP_LIMIT = 4;
+    OPEN_CLOSE_AUCTION = 5;
+    BRACKET = 6;
+    OCO = 7; // One-Cancels-Other
+    OTO = 8; // One-Triggers-Other
+    TRAILING_STOP = 9;
+}
+
+enum OrderClass {
+    NOT_USED_ORDER_CLASS = 0;
+    ORDER_CLASS_SIMPLE = 1;
+    ORDER_CLASS_BRACKET = 2;
+    ORDER_CLASS_OCO = 3; // One-Cancels-Other
+    ORDER_CLASS_OTO = 4; // One-Triggers-Other
+}
+
+enum AlpacaOrderState {
+    NOT_USED_ALPACA_ORDER_STATE = 0;
+}

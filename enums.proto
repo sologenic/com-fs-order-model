@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package transaction;
+
+option go_package = "github.com/sologenic/com-fs-transaction-model;transaction";
+
+enum OrderType {
+    NOT_USED_ORDER_TYPE = 0;
+    ORDER_TYPE_PURCHASE = 1; // Avoid naming conflicts with PURCHASE in the action enum
+    ORDER_TYPE_SELL = 2;
+}

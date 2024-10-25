@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package transaction;
+
+import "google/protobuf/empty.proto";
+import "alpaca.proto";
+
+option go_package = "github.com/sologenic/com-fs-transaction-model;transaction";
+
+// Alapca Trade log
+service AlpacaTrades {
+    rpc Create(AlpacaOrderDetails) returns (google.protobuf.Empty) {}
+  //  rpc Get(Filter) returns (Records) {}
+    rpc Update(AlpacaOrderDetails) returns (google.protobuf.Empty) {} // Alpaca log line processed into order (a status/boolean)
+}
+

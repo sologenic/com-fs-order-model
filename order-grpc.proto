@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package transaction;
+
+import "google/protobuf/empty.proto";
+import "order.proto";
+import "enums.proto";
+
+option go_package = "github.com/sologenic/com-fs-transaction-model;transaction";
+
+service OrderService {
+    // Order
+    rpc UpsertOrder(Order) returns (OrderID) {}
+    rpc GetOrderByID(OrderID) returns (Order) {}
+    rpc GetOrderByKey(Key) returns (Order) {}
+    rpc GetOrders(OrderQuery) returns (Orders) {}
+    rpc UpdateOrderStep(OrderStepInstruction) returns (Order) {}
+    // Disaster Recovery
+    rpc GetUnfinishedOrders(google.protobuf.Empty) returns (Orders) {}
+}
+
+message OrderID {
+    string TXID = 1;
+    string Network = 2;
+}
+
+message OrderQuery {
+    string Network = 1;
+    optional int32 Offset = 2;
+    optional string AssetKey = 3;
+    optional string SmartContractAddr = 4;
+    optional TransactionType TransactionType = 5;
+    optional string Creator = 6;
+    // Order details
+    optional int64 OrderID = 7;
+    optional string Denom = 9;
+    optional OrderType OrderType = 10;
+    optional OrderStateType OrderStateType = 11;
+    optional PaymentState PaymentState = 12;
+}
+
+message Key {
+    string Key = 1;
+}
+
+message OrderStepInstruction {
+    optional string Key = 1;
+    optional Order Order = 2;
+    repeated InternalOrderState MustHaveState = 3;
+    InternalOrderState TargetState = 4;
+}
