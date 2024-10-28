@@ -3,8 +3,8 @@ syntax = "proto3";
 package transaction;
 
 import "google/protobuf/timestamp.proto";
-import "decimal.proto";
 import "enums.proto";
+import "decimal.proto";
 
 option go_package = "github.com/sologenic/com-fs-transaction-model;transaction";
 
@@ -16,43 +16,41 @@ message AlpacaOrderDetails {
     optional google.protobuf.Timestamp ExpiredAt = 5;
     optional google.protobuf.Timestamp CancelledAt = 6;
     optional google.protobuf.Timestamp FailedAt = 7;
-    optional google.protobuf.Timestamp ReplacedAt = 8;
-    optional string ReplacedBy = 9; // if order is replaced, store the new order ID here
-    optional string Replaces = 10; // opposite of ReplacedBy, store the previous order ID here
-    string AssetID = 11;
-    string Symbol = 12;
-    AssetClass AssetClass = 13;
-    optional OrderClass OrderClass = 14;
-    
-    TradeType Type = 15;
-    OrderType Side = 16;
-    TimeInForce TimeInForce = 17;
-    
+    string AssetID = 8;
+    string Symbol = 9;
+    AssetClass AssetClass = 10;
+    OrderClass OrderClass = 11;
+    TradeType Type = 12;
+    OrderType Side = 13;
+    TimeInForce TimeInForce = 14;
+
     // Notional and Qty are optional as one can be null if the other is present. However, both cannot be null or present at the same time.
-    optional Decimal Notional = 18; 
-    optional Decimal TotalQty = 19;
+    optional Decimal Notional = 15; 
+    optional Decimal OrderQty = 16;
     
-    Decimal FilledQty = 20; // defaults to 0, updated as previous `FilledQty` + `PartialQty`
-    optional Decimal FilledAvgPrice = 21;
-    optional Decimal LimitPrice = 22;
-    optional Decimal StopPrice = 23;
-    optional Decimal TrailPrice = 24;
-    optional Decimal TrailPercent = 25;
-    optional Decimal HWM = 26; // High Water Mark, used for trailing stop orders
-    bool ExtendedHours = 27; // defaults to false
-    optional Decimal TotalPosition = 29;
-    
+    Decimal FilledQty = 17; // defaults to 0, updated as previous `FilledQty` + `PartialQty`
+    optional Decimal FilledAvgPrice = 18;
+    optional Decimal LimitPrice = 19;
+    optional Decimal StopPrice = 20;
+    optional Decimal TrailPrice = 21;
+    optional Decimal TrailPercent = 22;
+    optional Decimal HWM = 23; // High Water Mark, used for trailing stop orders
+    bool ExtendedHours = 24; // defaults to false
+    google.protobuf.Timestamp CreatedAt = 25;
+    optional google.protobuf.Timestamp UpdatedAt = 26;
+    AlpacaOrderStatus Status = 27; // status of the order in Alpaca
+
+    // "position_qty" field from Alpaca Trade Update's event msg. 
+    // Since all orders will flow through Sologenic's custodial account, this will represent the total count of all shares on our platform.
+    optional Decimal TotalPosition = 28;
+    // "price" field from Alpaca Trade Update's event msg. 
     // Represents the price of the order processed at the time of partial fill. For example, if a 3 step partial fill occurs for an order at prices $1, $1.1 and $0.9,
     // the `PartialPrice` will be $1, $1.1 and $0.9 respectively. The average of these prices will be the `FilledAvgPrice`.
-    optional Decimal PartialPrice = 30; 
-    // Represents the partial order processed at the time of partial fill. For example, if a order for 10 shares is partially filled with 5, 3 and 2 shares,
-    // the `PartialQty` will be 5, 3 and 2 respectively.
-    optional Decimal PartialQty = 31; // partial qty of the order
-    google.protobuf.Timestamp CreatedAt = 32;
-    
-    optional google.protobuf.Timestamp UpdatedAt = 50;
-
-    AlpacaOrderState Status = 33; // status of the order in Alpaca
+    optional Decimal PartialPrice = 29; 
+    // "qty" field from Alpaca Trade Update's event msg. 
+    // Represents the partial order processed at the time of partial fill. 
+    // For example, if a order for 10 shares is partially filled with 5, 3 and 2 shares, the `PartialQty` will be 5, 3 and 2 respectively.
+    optional Decimal PartialQty = 30;
 }
 
 message AlpacaOrderDetailsList {
@@ -100,6 +98,23 @@ enum OrderClass {
     ORDER_CLASS_OTO = 4; // One-Triggers-Other
 }
 
-enum AlpacaOrderState {
-    NOT_USED_ALPACA_ORDER_STATE = 0;
+enum AlpacaOrderStatus {
+    NOT_USED_ALPACA_ORDER_STATUS = 0;
+    // common statuses
+    PENDING_NEW = 1; // the order has been received by Alpaca, and routed to the exchanges, but has not yet been accepted for execution.
+    NEW = 2; // the order has been received by Alpaca, and routed to exchanges for execution.
+    PARTIALLY_FILLED = 3; // the order has been partially filled.
+    FILLED = 4; // the order has been filled, and no further updates will occur for the order.
+    DONE_FOR_DAY = 5; // the order is done executing for the day, and will not receive further updates until the next trading day.
+    CANCELED = 6; // the order has been canceled, and no further updates will occur for the order. This can be either due to a cancel request by the user, or the order has been canceled by the exchanges due to its time-in-force.
+    EXPIRED = 7; // the order has expired, and no further updates will occur for the order.
+
+    // uncommon statuses
+    PENDING_CANCEL = 8; // the order is waiting to be canceled.
+    ACCEPTED = 9; // the order has been received by Alpaca, but hasn’t yet been routed to the execution venue.
+    ACCEPTED_FOR_BIDDING = 10; // the order has been received by exchanges, and is evaluated for pricing.
+    STOPPED = 11; // the order has been stopped, and a trade is guaranteed for the order, usually at a stated price or better, but has not yet occurred.
+    REJECTED = 12; // the order has been rejected, and no further updates will occur for the order.
+    SUSPENDED = 13; // the order has been suspended, and is not eligible for trading.
+    CALCULATED = 14; // the order has been completed for the day (either filled or done for day), but remaining settlement calculations are still pending.
 }

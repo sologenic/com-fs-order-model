@@ -1,12 +1,14 @@
 package domain
 
 import (
+	"fmt"
 	"strconv"
+	"time"
 
 	"github.com/alpacahq/alpaca-trade-api-go/v3/alpaca"
 	"github.com/shopspring/decimal"
 	ordergrpc "github.com/sologenic/com-fs-transaction-model"
-	// "google.golang.org/protobuf/types/known/timestamppb"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 // Get the unique datastore key from the Order
@@ -15,41 +17,65 @@ func GetOrderKeyFromOrder(order *ordergrpc.Order) string {
 }
 
 // Map Alpaca Order to our AlpacaOrderDetails model
-// TODO: refactor based on new Order object
-// func MapAlpacaOrderToInternal(tradeUpdate *alpaca.Order, internalOrder *ordergrpc.AlpacaOrderDetails) {
-// 	internalOrder.UpdatedAt = timestamppb.New(tradeUpdate.UpdatedAt)
+func MapAlpacaOrderToInternal(tu *alpaca.TradeUpdate, aod *ordergrpc.AlpacaOrderDetails) error {
+	if tu == nil {
+		return nil
+	}
+	if tu.Order.ID != aod.AlpacaOrderID {
+		return fmt.Errorf("Order.ID does not match AlpacaOrderDetails.AlpacaOrderID")
+	}
+	order := tu.Order
+	aod.AlpacaOrderID = order.ID
+	aod.ClientOrderID = order.ClientOrderID
+	aod.SubmittedAt = convertTimeToTimestamp(&order.SubmittedAt)
+	aod.FilledAt = convertTimeToTimestamp(order.FilledAt)
+	aod.ExpiredAt = convertTimeToTimestamp(order.ExpiredAt)
+	aod.CancelledAt = convertTimeToTimestamp(order.CanceledAt)
+	aod.FailedAt = convertTimeToTimestamp(order.FailedAt)
+	aod.AssetID = order.AssetID
+	aod.Symbol = order.Symbol
+	aod.AssetClass = mapAssetClass(order.AssetClass)
+	aod.OrderClass = mapOrderClass(order.OrderClass)
+	aod.Type = mapTradeType(order.Type)
+	aod.Side = mapSide(order.Side)
+	aod.TimeInForce = mapTimeInForce(order.TimeInForce)
+	aod.Notional = DecimalToInternalDecimal(order.Notional)
+	aod.OrderQty = DecimalToInternalDecimal(order.Qty)
+	aod.FilledQty = DecimalToInternalDecimal(&order.FilledQty)
+	aod.FilledAvgPrice = DecimalToInternalDecimal(order.FilledAvgPrice)
+	aod.LimitPrice = DecimalToInternalDecimal(order.LimitPrice)
+	aod.StopPrice = DecimalToInternalDecimal(order.StopPrice)
+	aod.TrailPrice = DecimalToInternalDecimal(order.TrailPrice)
+	aod.TrailPercent = DecimalToInternalDecimal(order.TrailPercent)
+	aod.HWM = DecimalToInternalDecimal(order.HWM)
+	aod.ExtendedHours = order.ExtendedHours
+	aod.CreatedAt = convertTimeToTimestamp(&order.CreatedAt)
+	aod.UpdatedAt = convertTimeToTimestamp(&order.UpdatedAt)
+	aod.Status = mapStatus(order.Status)
+	aod.TotalPosition = DecimalToInternalDecimal(tu.PositionQty)
+	aod.PartialPrice = DecimalToInternalDecimal(tu.Price)
+	aod.PartialQty = DecimalToInternalDecimal(tu.Qty)
+	return nil
+}
 
-// 	od := internalOrder.OrderDetails
-// 	od.AlpacaOrderID = tradeUpdate.ID
-// 	od.ClientOrderID = tradeUpdate.ClientOrderID
-// 	od.SubmittedAt = timestamppb.New(tradeUpdate.SubmittedAt)
-// 	od.AssetID = tradeUpdate.AssetID
-// 	od.Symbol = tradeUpdate.Symbol
-
-// 	od.AssetClass = mapAssetClass(tradeUpdate.AssetClass)
-// 	od.TradeType = mapTradeType(tradeUpdate.Type)
-// 	od.Side = mapSide(tradeUpdate.Side)
-// 	od.TimeInForce = mapTimeInForce(tradeUpdate.TimeInForce)
-// 	od.Status = statusMapper(tradeUpdate.Status)
-
-// 	if tradeUpdate.Notional != nil {
-// 		od.Notional = decimalToInternalDecimal(tradeUpdate.Notional)
-// 	}
-// 	if tradeUpdate.Qty != nil {
-// 		od.TotalQty = decimalToInternalDecimal(tradeUpdate.Qty)
-// 	}
-// 	if tradeUpdate.LimitPrice != nil {
-// 		od.LimitPrice = decimalToInternalDecimal(tradeUpdate.LimitPrice)
-// 	}
-// 	od.FilledQty = decimalToInternalDecimal(&tradeUpdate.FilledQty)
-// }
-
-// Alpaca uses decimal.Decimal, convert it to our Decimal model
-func decimalToInternalDecimal(d *decimal.Decimal) *ordergrpc.Decimal {
+// Alpaca uses decimal.Decimal, convert it to our Decimal message
+func DecimalToInternalDecimal(d *decimal.Decimal) *ordergrpc.Decimal {
+	if d == nil {
+		return nil
+	}
 	return &ordergrpc.Decimal{
 		Value: d.CoefficientInt64(),
 		Exp:   d.Exponent(),
 	}
+}
+
+// Convert our Decimal message to decimal.Decimal
+func InternalDecimalToDecimal(d *ordergrpc.Decimal) *decimal.Decimal {
+	if d == nil {
+		return nil
+	}
+    dec := decimal.New(d.Value, d.Exp)
+    return &dec
 }
 
 // Maps the Alpaca AssetClass string enum to the internal AssetClass int enum
@@ -114,40 +140,59 @@ func mapTimeInForce(timeInForce alpaca.TimeInForce) ordergrpc.TimeInForce {
 	}
 }
 
-/*
-// TODO: delete after fully implementing statusMapper
-refer to https://docs.alpaca.markets/docs/orders-at-alpaca#order-lifecycle
-
-# TYPES OF EVENTS FROM ALPACA
-after hour event:
-accepted
-
-common event types:
-new, fill, partial_fill, canceled, expired, done_for_day, replaced
-
-uncommon event types:
-rejected, pending_new, stopped, pending_cancel, pending_replace, calculated,
-suspended, order_replace_rejected, order_cancel_rejected
-*/
-func statusMapper(event string) ordergrpc.InternalOrderState {
-	switch event {
+func mapStatus(status string) ordergrpc.AlpacaOrderStatus {
+	switch status {
 	case "pending_new":
-		return ordergrpc.InternalOrderState_BROKER_ORDER_PENDING_NEW
-	case "accepted":
-		return ordergrpc.InternalOrderState_BROKER_ORDER_ACCEPTED
+		return ordergrpc.AlpacaOrderStatus_PENDING_NEW
 	case "new":
-		return ordergrpc.InternalOrderState_BROKER_ORDER_NEW
-	case "partial_fill":
-		return ordergrpc.InternalOrderState_BROKER_ORDER_PARTIALLY_FILLED
-	case "fill":
-		return ordergrpc.InternalOrderState_BROKER_ORDER_FILLED
-	case "pending_cancel":
-		return ordergrpc.InternalOrderState_BROKER_ORDER_CANCEL_REQUESTED
+		return ordergrpc.AlpacaOrderStatus_NEW
+	case "partially_filled":
+		return ordergrpc.AlpacaOrderStatus_PARTIALLY_FILLED
+	case "filled":
+		return ordergrpc.AlpacaOrderStatus_FILLED
+	case "done_for_day":
+		return ordergrpc.AlpacaOrderStatus_DONE_FOR_DAY
 	case "canceled":
-		return ordergrpc.InternalOrderState_BROKER_ORDER_CANCELED
+		return ordergrpc.AlpacaOrderStatus_CANCELED
 	case "expired":
-		return ordergrpc.InternalOrderState_BROKER_ORDER_EXPIRED
+		return ordergrpc.AlpacaOrderStatus_EXPIRED
+	case "pending_cancel":
+		return ordergrpc.AlpacaOrderStatus_PENDING_CANCEL
+	case "accepted":
+		return ordergrpc.AlpacaOrderStatus_ACCEPTED
+	case "accepted_for_bidding":
+		return ordergrpc.AlpacaOrderStatus_ACCEPTED_FOR_BIDDING
+	case "stopped":
+		return ordergrpc.AlpacaOrderStatus_STOPPED
+	case "rejected":
+		return ordergrpc.AlpacaOrderStatus_REJECTED
+	case "suspended":
+		return ordergrpc.AlpacaOrderStatus_SUSPENDED
+	case "calculated":
+		return ordergrpc.AlpacaOrderStatus_CALCULATED
 	default:
-		return ordergrpc.InternalOrderState_NOT_USED_INTERNAL_ORDER_STATE
+		return ordergrpc.AlpacaOrderStatus_NOT_USED_ALPACA_ORDER_STATUS
 	}
+}
+
+func mapOrderClass(oc alpaca.OrderClass) ordergrpc.OrderClass {
+	switch oc {
+	case alpaca.Simple:
+		return ordergrpc.OrderClass_ORDER_CLASS_SIMPLE
+	case alpaca.Bracket:
+		return ordergrpc.OrderClass_ORDER_CLASS_BRACKET
+	case alpaca.OCO:
+		return ordergrpc.OrderClass_ORDER_CLASS_OCO
+	case alpaca.OTO:
+		return ordergrpc.OrderClass_ORDER_CLASS_OTO
+	default:
+		return ordergrpc.OrderClass_NOT_USED_ORDER_CLASS
+	}
+}
+
+func convertTimeToTimestamp(time *time.Time) *timestamppb.Timestamp {
+	if time == nil {
+		return nil
+	}
+	return timestamppb.New(*time)
 }
