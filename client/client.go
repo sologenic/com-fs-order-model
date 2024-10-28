@@ -3,7 +3,7 @@ package client
 import (
 	"context"
 
-	grpcdef "github.com/sologenic/com-fs-transaction-model"
+	grpcdef "github.com/sologenic/com-fs-order-model"
 	grpcclient "github.com/sologenic/fs-utils-lib/go/grpc-client"
 )
 

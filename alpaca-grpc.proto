@@ -1,11 +1,11 @@
 syntax = "proto3";
 
-package transaction;
+package order;
 
 import "google/protobuf/empty.proto";
 import "alpaca.proto";
 
-option go_package = "github.com/sologenic/com-fs-transaction-model;transaction";
+option go_package = "github.com/sologenic/com-fs-order-model;order";
 
 // Alapca Trade log
 service AlpacaTrades {

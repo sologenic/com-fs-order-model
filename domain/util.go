@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/alpacahq/alpaca-trade-api-go/v3/alpaca"
-	ordergrpc "github.com/sologenic/com-fs-transaction-model"
+	ordergrpc "github.com/sologenic/com-fs-order-model"
 	dutils "github.com/sologenic/com-fs-utils-lib/go/decimal"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )

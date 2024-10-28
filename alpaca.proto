@@ -1,12 +1,12 @@
 syntax = "proto3";
 
-package transaction;
+package order;
 
 import "google/protobuf/timestamp.proto";
 import "enums.proto";
-import "decimal.proto";
+import "sologenic/com-fs-utils-lib/go/decimal/decimal.proto";
 
-option go_package = "github.com/sologenic/com-fs-transaction-model;transaction";
+option go_package = "github.com/sologenic/com-fs-order-model;order";
 
 message AlpacaOrderDetails {
     string AlpacaOrderID = 1; // order ID in Alpaca, auto generated
@@ -25,16 +25,16 @@ message AlpacaOrderDetails {
     TimeInForce TimeInForce = 14;
 
     // Notional and Qty are optional as one can be null if the other is present. However, both cannot be null or present at the same time.
-    optional Decimal Notional = 15; 
-    optional Decimal OrderQty = 16;
+    optional decimal.Decimal Notional = 15; 
+    optional decimal.Decimal OrderQty = 16;
     
-    Decimal FilledQty = 17; // defaults to 0, updated as previous `FilledQty` + `PartialQty`
-    optional Decimal FilledAvgPrice = 18;
-    optional Decimal LimitPrice = 19;
-    optional Decimal StopPrice = 20;
-    optional Decimal TrailPrice = 21;
-    optional Decimal TrailPercent = 22;
-    optional Decimal HWM = 23; // High Water Mark, used for trailing stop orders
+    decimal.Decimal FilledQty = 17; // defaults to 0, updated as previous `FilledQty` + `PartialQty`
+    optional decimal.Decimal FilledAvgPrice = 18;
+    optional decimal.Decimal LimitPrice = 19;
+    optional decimal.Decimal StopPrice = 20;
+    optional decimal.Decimal TrailPrice = 21;
+    optional decimal.Decimal TrailPercent = 22;
+    optional decimal.Decimal HWM = 23; // High Water Mark, used for trailing stop orders
     bool ExtendedHours = 24; // defaults to false
     google.protobuf.Timestamp CreatedAt = 25;
     optional google.protobuf.Timestamp UpdatedAt = 26;
@@ -42,15 +42,15 @@ message AlpacaOrderDetails {
 
     // "position_qty" field from Alpaca Trade Update's event msg. 
     // Since all orders will flow through Sologenic's custodial account, this will represent the total count of all shares on our platform.
-    optional Decimal TotalPosition = 28;
+    optional decimal.Decimal TotalPosition = 28;
     // "price" field from Alpaca Trade Update's event msg. 
     // Represents the price of the order processed at the time of partial fill. For example, if a 3 step partial fill occurs for an order at prices $1, $1.1 and $0.9,
     // the `PartialPrice` will be $1, $1.1 and $0.9 respectively. The average of these prices will be the `FilledAvgPrice`.
-    optional Decimal PartialPrice = 29; 
+    optional decimal.Decimal PartialPrice = 29; 
     // "qty" field from Alpaca Trade Update's event msg. 
     // Represents the partial order processed at the time of partial fill. 
     // For example, if a order for 10 shares is partially filled with 5, 3 and 2 shares, the `PartialQty` will be 5, 3 and 2 respectively.
-    optional Decimal PartialQty = 30;
+    optional decimal.Decimal PartialQty = 30;
 }
 
 message AlpacaOrderDetailsList {

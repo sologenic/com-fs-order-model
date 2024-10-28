@@ -1,13 +1,13 @@
-module github.com/sologenic/com-fs-transaction-model
+module github.com/sologenic/com-fs-order-model
 
-go 1.22.2
+go 1.22.8
 
 require (
 	github.com/alpacahq/alpaca-trade-api-go/v3 v3.6.0
-	github.com/sologenic/com-fs-utils-lib/go/decimal v0.0.0-20241028184645-fad2d9478c2c
+	github.com/sologenic/com-fs-utils-lib/go/decimal v0.0.0-20241028225442-5f495cd67cb5
 	github.com/sologenic/fs-utils-lib/go/grpc-client v0.0.0-20240909024218-113ca5496aa1
 	google.golang.org/grpc v1.58.3
-	google.golang.org/protobuf v1.31.0
+	google.golang.org/protobuf v1.35.1
 )
 
 require (

@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package transaction;
+package order;
 
-option go_package = "github.com/sologenic/com-fs-transaction-model;transaction";
+option go_package = "github.com/sologenic/com-fs-order-model;order";
 
 enum OrderType {
     NOT_USED_ORDER_TYPE = 0;
