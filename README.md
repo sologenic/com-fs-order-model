@@ -1,6 +1,6 @@
-# Transaction
+# Order
 
-The transaction list proto provides all the functionality required to interact with the transaction store.
+The order proto provides all the functionality required to interact with the order store.
 
 ## Building the protos
 
