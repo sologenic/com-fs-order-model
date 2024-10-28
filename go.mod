@@ -4,7 +4,7 @@ go 1.22.2
 
 require (
 	github.com/alpacahq/alpaca-trade-api-go/v3 v3.6.0
-	github.com/shopspring/decimal v1.4.0
+	github.com/sologenic/com-fs-utils-lib/go/decimal v0.0.0-20241028184645-fad2d9478c2c
 	github.com/sologenic/fs-utils-lib/go/grpc-client v0.0.0-20240909024218-113ca5496aa1
 	google.golang.org/grpc v1.58.3
 	google.golang.org/protobuf v1.31.0
@@ -24,6 +24,7 @@ require (
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/rs/zerolog v1.28.0 // indirect
+	github.com/shopspring/decimal v1.4.0 // indirect
 	github.com/sologenic/fs-utils-lib/go/logger v0.0.0-20240223003950-07aa5b1de71e // indirect
 	go.opencensus.io v0.24.0 // indirect
 	golang.org/x/crypto v0.14.0 // indirect

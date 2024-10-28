@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"github.com/alpacahq/alpaca-trade-api-go/v3/alpaca"
-	"github.com/shopspring/decimal"
 	ordergrpc "github.com/sologenic/com-fs-transaction-model"
+	dutils "github.com/sologenic/com-fs-utils-lib/go/decimal"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -39,43 +39,23 @@ func MapAlpacaOrderToInternal(tu *alpaca.TradeUpdate, aod *ordergrpc.AlpacaOrder
 	aod.Type = mapTradeType(order.Type)
 	aod.Side = mapSide(order.Side)
 	aod.TimeInForce = mapTimeInForce(order.TimeInForce)
-	aod.Notional = DecimalToInternalDecimal(order.Notional)
-	aod.OrderQty = DecimalToInternalDecimal(order.Qty)
-	aod.FilledQty = DecimalToInternalDecimal(&order.FilledQty)
-	aod.FilledAvgPrice = DecimalToInternalDecimal(order.FilledAvgPrice)
-	aod.LimitPrice = DecimalToInternalDecimal(order.LimitPrice)
-	aod.StopPrice = DecimalToInternalDecimal(order.StopPrice)
-	aod.TrailPrice = DecimalToInternalDecimal(order.TrailPrice)
-	aod.TrailPercent = DecimalToInternalDecimal(order.TrailPercent)
-	aod.HWM = DecimalToInternalDecimal(order.HWM)
+	aod.Notional = dutils.DecimalToInternalDecimal(order.Notional)
+	aod.OrderQty = dutils.DecimalToInternalDecimal(order.Qty)
+	aod.FilledQty = dutils.DecimalToInternalDecimal(&order.FilledQty)
+	aod.FilledAvgPrice = dutils.DecimalToInternalDecimal(order.FilledAvgPrice)
+	aod.LimitPrice = dutils.DecimalToInternalDecimal(order.LimitPrice)
+	aod.StopPrice = dutils.DecimalToInternalDecimal(order.StopPrice)
+	aod.TrailPrice = dutils.DecimalToInternalDecimal(order.TrailPrice)
+	aod.TrailPercent = dutils.DecimalToInternalDecimal(order.TrailPercent)
+	aod.HWM = dutils.DecimalToInternalDecimal(order.HWM)
 	aod.ExtendedHours = order.ExtendedHours
 	aod.CreatedAt = convertTimeToTimestamp(&order.CreatedAt)
 	aod.UpdatedAt = convertTimeToTimestamp(&order.UpdatedAt)
 	aod.Status = mapStatus(order.Status)
-	aod.TotalPosition = DecimalToInternalDecimal(tu.PositionQty)
-	aod.PartialPrice = DecimalToInternalDecimal(tu.Price)
-	aod.PartialQty = DecimalToInternalDecimal(tu.Qty)
+	aod.TotalPosition = dutils.DecimalToInternalDecimal(tu.PositionQty)
+	aod.PartialPrice = dutils.DecimalToInternalDecimal(tu.Price)
+	aod.PartialQty = dutils.DecimalToInternalDecimal(tu.Qty)
 	return nil
-}
-
-// Alpaca uses decimal.Decimal, convert it to our Decimal message
-func DecimalToInternalDecimal(d *decimal.Decimal) *ordergrpc.Decimal {
-	if d == nil {
-		return nil
-	}
-	return &ordergrpc.Decimal{
-		Value: d.CoefficientInt64(),
-		Exp:   d.Exponent(),
-	}
-}
-
-// Convert our Decimal message to decimal.Decimal
-func InternalDecimalToDecimal(d *ordergrpc.Decimal) *decimal.Decimal {
-	if d == nil {
-		return nil
-	}
-    dec := decimal.New(d.Value, d.Exp)
-    return &dec
 }
 
 // Maps the Alpaca AssetClass string enum to the internal AssetClass int enum
