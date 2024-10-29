@@ -424,6 +424,8 @@ func (OrderDetailType) EnumDescriptor() ([]byte, []int) {
 	return file_order_proto_rawDescGZIP(), []int{5}
 }
 
+// Order key: OrderID-SmartContractAddr-Network (1 entry per order)
+// Order history key:  OrderID-SmartContractAddr-{Auto-generated numeric number by datastore} (M entries per order)
 type Order struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

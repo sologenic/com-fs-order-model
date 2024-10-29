@@ -8,6 +8,8 @@ import "alpaca.proto";
 
 option go_package = "github.com/sologenic/com-fs-order-model;order";
 
+// Order key: OrderID-SmartContractAddr-Network (1 entry per order)
+// Order history key:  OrderID-SmartContractAddr-{Auto-generated numeric number by datastore} (M entries per order) 
 message Order {
     string Network = 1;
     string SmartContractAddr = 2;
