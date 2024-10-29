@@ -3,30 +3,29 @@ syntax = "proto3";
 package order;
 
 import "google/protobuf/timestamp.proto";
-import "enums.proto";
+import "util.proto";
 import "alpaca.proto";
-import "sologenic/com-fs-utils-lib/go/decimal/decimal.proto";
 
 option go_package = "github.com/sologenic/com-fs-order-model;order";
 
 message Order {
     string Network = 1;
     string SmartContractAddr = 2;
-    string AssetKey = 3;
-    OrderInstruction Instruction = 4; // Snapshot of the order in the smart contract
-    google.protobuf.Timestamp CreatedAt = 5;
-    google.protobuf.Timestamp UpdatedAt = 6;
-    TransactionType TransactionType = 7;
-    string TXID = 8; // Unique Key in the datastore
-    int64 GasFee = 9;
-    optional double GasFeeUSD = 10;
-    google.protobuf.Timestamp DetectedAt = 11;
-    int64 Height = 12;
+    OrderInstruction Instruction = 3; // Snapshot of the order in the smart contract
+    google.protobuf.Timestamp CreatedAt = 4;
+    google.protobuf.Timestamp UpdatedAt = 5;
+    TransactionType TransactionType = 6;
+    string TXID = 7; // Unique Key in the datastore
+    int64 GasFee = 8;
+    optional double GasFeeUSD = 9;
+    google.protobuf.Timestamp DetectedAt = 10;
+    int64 Height = 11;
 
-    InternalOrderState InternalOrderState = 13;
-    AlpacaOrderDetails OrderDetails = 14;
-    
-    string ClientOrderID = 15; // tag created Sologenic to identify the associated trades
+    InternalOrderState InternalOrderState = 12;
+    AlpacaOrderDetails OrderDetails = 13; // Matches data on SmartContractAddr, orderdetails.OrderID and network
+
+    // Bookkeeping: did we process this event from broker smart contract order log?
+    optional Processed Processed = 31;
 }
 
 // Execution type(action) of the transaction against the smart contract
@@ -163,15 +162,4 @@ enum OrderDetailType {
     ORDER_DETAIL_LIMIT = 1;
     ORDER_DETAIL_MARKET = 2; // Ignores LimitPrice, executes at market price
     ORDER_DETAIL_STOP_LOSS = 3; // Uses LimitPrice as the stop loss threshold
-}
-
-message Attestation {
-    string Network = 1;
-    string SmartContractAddr = 2;
-    string AssetKey = 3;
-    optional decimal.Decimal BrokerQuantity = 4; 
-    decimal.Decimal ChainQuantity = 5;
-    int64 BlockHeight = 6;
-    google.protobuf.Timestamp Timestamp = 7;
-    optional int64 ReattestationBlockHeight = 8;
 }

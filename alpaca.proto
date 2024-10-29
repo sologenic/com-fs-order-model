@@ -3,14 +3,15 @@ syntax = "proto3";
 package order;
 
 import "google/protobuf/timestamp.proto";
-import "enums.proto";
+import "util.proto";
 import "sologenic/com-fs-utils-lib/go/decimal/decimal.proto";
 
 option go_package = "github.com/sologenic/com-fs-order-model;order";
 
+// Key orderID-SmartContractAddr-network (is as unique identifier for the order in message to Alpaca)
 message AlpacaOrderDetails {
     string AlpacaOrderID = 1; // order ID in Alpaca, auto generated
-    string ClientOrderID = 2; // Suggestion: MOVE TO ORDER level, tag by Sologenic (DO NOT store keys, we only store the information which is used to generate the key)
+    ClientOrderID ClientOrderID = 2; // unique identifier for the order in message to Alpaca, value is from the key function
     google.protobuf.Timestamp SubmittedAt = 3;
     optional google.protobuf.Timestamp FilledAt = 4;
     optional google.protobuf.Timestamp ExpiredAt = 5;
@@ -51,6 +52,15 @@ message AlpacaOrderDetails {
     // Represents the partial order processed at the time of partial fill. 
     // For example, if a order for 10 shares is partially filled with 5, 3 and 2 shares, the `PartialQty` will be 5, 3 and 2 respectively.
     optional decimal.Decimal PartialQty = 30;
+
+    // Bookkeeping: did we process this event from alpaca order log?
+    optional Processed Processed = 31;
+}
+
+message ClientOrderID {
+    string Network = 1;
+    string SmartContractAddr = 2;
+    int64 OrderID = 3;
 }
 
 message AlpacaOrderDetailsList {

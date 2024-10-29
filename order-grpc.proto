@@ -4,7 +4,7 @@ package order;
 
 import "google/protobuf/empty.proto";
 import "order.proto";
-import "enums.proto";
+import "util.proto";
 
 option go_package = "github.com/sologenic/com-fs-order-model;order";
 
