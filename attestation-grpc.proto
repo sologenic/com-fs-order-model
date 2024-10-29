@@ -17,13 +17,13 @@ service AttestationService {
 message AttestationID {
     string Network = 1;
     string SmartContractAddr = 2;
-    string AssetKey = 3;
+    string Denom = 3;
     optional int64 BlockHeight = 4; // Default will return the latest attestation
 }
 
 message AttestationQuery {
     string Network = 1;
     string SmartContractAddr = 2;
-    string AssetKey = 3;
+    string Denom = 3;
     optional int32 Offset = 5;
 }
