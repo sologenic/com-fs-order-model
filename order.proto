@@ -5,6 +5,7 @@ package order;
 import "google/protobuf/timestamp.proto";
 import "enums.proto";
 import "alpaca.proto";
+import "sologenic/com-fs-utils-lib/go/decimal/decimal.proto";
 
 option go_package = "github.com/sologenic/com-fs-order-model;order";
 
@@ -13,7 +14,7 @@ message Order {
     string SmartContractAddr = 2;
     string AssetKey = 3;
     OrderInstruction Instruction = 4; // Snapshot of the order in the smart contract
-    google.protobuf.Timestamp  CreatedAt = 5; 
+    google.protobuf.Timestamp CreatedAt = 5; 
     TransactionType TransactionType = 6;
     string TXID = 7; // Unique Key in the datastore
     int64 GasFee = 8;
@@ -21,13 +22,10 @@ message Order {
     google.protobuf.Timestamp DetectedAt = 10;
     int64 Height = 11;
 
-    optional Attestation Attestation = 12;
-
-    InternalOrderState InternalOrderState = 13;
-    AlpacaOrderDetails OrderDetails = 14;
+    InternalOrderState InternalOrderState = 12;
+    AlpacaOrderDetails OrderDetails = 13;
     
-    string ClientOrderID = 15; // tag created Sologenic to identify the associated trades
-    // TBD: Add more fields as needed
+    string ClientOrderID = 14; // tag created Sologenic to identify the associated trades
 }
 
 // Execution type(action) of the transaction against the smart contract
@@ -167,10 +165,12 @@ enum OrderDetailType {
 }
 
 message Attestation {
-    string BrokerQuantity = 1; // Using string to represent Uint128
-    string ChainQuantity = 2; // Using string to represent Uint128
-    // Note: for the below fields, use int64 instead of uint64 as uint64 not supported in Google Datastore 
-    int64 BlockHeight = 3;
-    int64 Timestamp = 4;
-    int64 ReattestationBlockHeight = 5;
+    string Network = 1;
+    string SmartContractAddr = 2;
+    string AssetKey = 3;
+    optional decimal.Decimal BrokerQuantity = 4; 
+    decimal.Decimal ChainQuantity = 5;
+    int64 BlockHeight = 6;
+    google.protobuf.Timestamp Timestamp = 7;
+    optional int64 ReattestationBlockHeight = 8;
 }
