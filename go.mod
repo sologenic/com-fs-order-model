@@ -4,7 +4,7 @@ go 1.22.8
 
 require (
 	github.com/alpacahq/alpaca-trade-api-go/v3 v3.6.0
-	github.com/sologenic/com-fs-utils-lib/go/decimal v0.0.0-20241028225442-5f495cd67cb5
+	github.com/sologenic/com-fs-utils-lib/go/decimal v0.0.0-20241028230612-350dd06f24af
 	github.com/sologenic/fs-utils-lib/go/grpc-client v0.0.0-20240909024218-113ca5496aa1
 	google.golang.org/grpc v1.65.0
 	google.golang.org/protobuf v1.35.1
