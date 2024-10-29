@@ -19,122 +19,122 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// AlpacaTradesClient is the client API for AlpacaTrades service.
+// AlpacaServiceClient is the client API for AlpacaService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type AlpacaTradesClient interface {
+type AlpacaServiceClient interface {
 	Create(ctx context.Context, in *AlpacaOrderDetails, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	//  rpc Get(Filter) returns (Records) {}
 	Update(ctx context.Context, in *AlpacaOrderDetails, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
-type alpacaTradesClient struct {
+type alpacaServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewAlpacaTradesClient(cc grpc.ClientConnInterface) AlpacaTradesClient {
-	return &alpacaTradesClient{cc}
+func NewAlpacaServiceClient(cc grpc.ClientConnInterface) AlpacaServiceClient {
+	return &alpacaServiceClient{cc}
 }
 
-func (c *alpacaTradesClient) Create(ctx context.Context, in *AlpacaOrderDetails, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *alpacaServiceClient) Create(ctx context.Context, in *AlpacaOrderDetails, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/order.AlpacaTrades/Create", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/order.AlpacaService/Create", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *alpacaTradesClient) Update(ctx context.Context, in *AlpacaOrderDetails, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *alpacaServiceClient) Update(ctx context.Context, in *AlpacaOrderDetails, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/order.AlpacaTrades/Update", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/order.AlpacaService/Update", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// AlpacaTradesServer is the server API for AlpacaTrades service.
-// All implementations should embed UnimplementedAlpacaTradesServer
+// AlpacaServiceServer is the server API for AlpacaService service.
+// All implementations should embed UnimplementedAlpacaServiceServer
 // for forward compatibility
-type AlpacaTradesServer interface {
+type AlpacaServiceServer interface {
 	Create(context.Context, *AlpacaOrderDetails) (*emptypb.Empty, error)
 	//  rpc Get(Filter) returns (Records) {}
 	Update(context.Context, *AlpacaOrderDetails) (*emptypb.Empty, error)
 }
 
-// UnimplementedAlpacaTradesServer should be embedded to have forward compatible implementations.
-type UnimplementedAlpacaTradesServer struct {
+// UnimplementedAlpacaServiceServer should be embedded to have forward compatible implementations.
+type UnimplementedAlpacaServiceServer struct {
 }
 
-func (UnimplementedAlpacaTradesServer) Create(context.Context, *AlpacaOrderDetails) (*emptypb.Empty, error) {
+func (UnimplementedAlpacaServiceServer) Create(context.Context, *AlpacaOrderDetails) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
 }
-func (UnimplementedAlpacaTradesServer) Update(context.Context, *AlpacaOrderDetails) (*emptypb.Empty, error) {
+func (UnimplementedAlpacaServiceServer) Update(context.Context, *AlpacaOrderDetails) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
 }
 
-// UnsafeAlpacaTradesServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to AlpacaTradesServer will
+// UnsafeAlpacaServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to AlpacaServiceServer will
 // result in compilation errors.
-type UnsafeAlpacaTradesServer interface {
-	mustEmbedUnimplementedAlpacaTradesServer()
+type UnsafeAlpacaServiceServer interface {
+	mustEmbedUnimplementedAlpacaServiceServer()
 }
 
-func RegisterAlpacaTradesServer(s grpc.ServiceRegistrar, srv AlpacaTradesServer) {
-	s.RegisterService(&AlpacaTrades_ServiceDesc, srv)
+func RegisterAlpacaServiceServer(s grpc.ServiceRegistrar, srv AlpacaServiceServer) {
+	s.RegisterService(&AlpacaService_ServiceDesc, srv)
 }
 
-func _AlpacaTrades_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _AlpacaService_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AlpacaOrderDetails)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AlpacaTradesServer).Create(ctx, in)
+		return srv.(AlpacaServiceServer).Create(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/order.AlpacaTrades/Create",
+		FullMethod: "/order.AlpacaService/Create",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AlpacaTradesServer).Create(ctx, req.(*AlpacaOrderDetails))
+		return srv.(AlpacaServiceServer).Create(ctx, req.(*AlpacaOrderDetails))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AlpacaTrades_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _AlpacaService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AlpacaOrderDetails)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AlpacaTradesServer).Update(ctx, in)
+		return srv.(AlpacaServiceServer).Update(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/order.AlpacaTrades/Update",
+		FullMethod: "/order.AlpacaService/Update",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AlpacaTradesServer).Update(ctx, req.(*AlpacaOrderDetails))
+		return srv.(AlpacaServiceServer).Update(ctx, req.(*AlpacaOrderDetails))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// AlpacaTrades_ServiceDesc is the grpc.ServiceDesc for AlpacaTrades service.
+// AlpacaService_ServiceDesc is the grpc.ServiceDesc for AlpacaService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var AlpacaTrades_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "order.AlpacaTrades",
-	HandlerType: (*AlpacaTradesServer)(nil),
+var AlpacaService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "order.AlpacaService",
+	HandlerType: (*AlpacaServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "Create",
-			Handler:    _AlpacaTrades_Create_Handler,
+			Handler:    _AlpacaService_Create_Handler,
 		},
 		{
 			MethodName: "Update",
-			Handler:    _AlpacaTrades_Update_Handler,
+			Handler:    _AlpacaService_Update_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
