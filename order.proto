@@ -14,18 +14,19 @@ message Order {
     string SmartContractAddr = 2;
     string AssetKey = 3;
     OrderInstruction Instruction = 4; // Snapshot of the order in the smart contract
-    google.protobuf.Timestamp CreatedAt = 5; 
-    TransactionType TransactionType = 6;
-    string TXID = 7; // Unique Key in the datastore
-    int64 GasFee = 8;
-    optional double GasFeeUSD = 9;
-    google.protobuf.Timestamp DetectedAt = 10;
-    int64 Height = 11;
+    google.protobuf.Timestamp CreatedAt = 5;
+    google.protobuf.Timestamp UpdatedAt = 6;
+    TransactionType TransactionType = 7;
+    string TXID = 8; // Unique Key in the datastore
+    int64 GasFee = 9;
+    optional double GasFeeUSD = 10;
+    google.protobuf.Timestamp DetectedAt = 11;
+    int64 Height = 12;
 
-    InternalOrderState InternalOrderState = 12;
-    AlpacaOrderDetails OrderDetails = 13;
+    InternalOrderState InternalOrderState = 13;
+    AlpacaOrderDetails OrderDetails = 14;
     
-    string ClientOrderID = 14; // tag created Sologenic to identify the associated trades
+    string ClientOrderID = 15; // tag created Sologenic to identify the associated trades
 }
 
 // Execution type(action) of the transaction against the smart contract
