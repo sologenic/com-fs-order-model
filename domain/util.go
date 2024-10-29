@@ -3,6 +3,7 @@ package domain
 import (
 	"fmt"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/alpacahq/alpaca-trade-api-go/v3/alpaca"
@@ -13,7 +14,7 @@ import (
 
 // Get the unique datastore key from the Order
 func GetOrderKeyFromOrder(order *ordergrpc.Order) string {
-	return order.Network + "_" + order.SmartContractAddr + "_" + strconv.Itoa(int(order.Instruction.OrderID))
+	return strconv.Itoa(int(order.Instruction.OrderID)) + "-" + order.Network + "-" + order.SmartContractAddr
 }
 
 // Map Alpaca Order to our AlpacaOrderDetails model
@@ -24,9 +25,15 @@ func MapAlpacaOrderToInternal(tu *alpaca.TradeUpdate, aod *ordergrpc.AlpacaOrder
 	if tu.Order.ID != aod.AlpacaOrderID {
 		return fmt.Errorf("Order.ID does not match AlpacaOrderDetails.AlpacaOrderID")
 	}
+
 	order := tu.Order
+	clientOrderID, err := parseClientOrderIDString(order.ClientOrderID)
+	if err != nil {
+		return fmt.Errorf("failed to parse ClientOrderID: %v", err)
+	}
+
 	aod.AlpacaOrderID = order.ID
-	aod.ClientOrderID = order.ClientOrderID
+	aod.ClientOrderID = clientOrderID
 	aod.SubmittedAt = convertTimeToTimestamp(&order.SubmittedAt)
 	aod.FilledAt = convertTimeToTimestamp(order.FilledAt)
 	aod.ExpiredAt = convertTimeToTimestamp(order.ExpiredAt)
@@ -56,6 +63,26 @@ func MapAlpacaOrderToInternal(tu *alpaca.TradeUpdate, aod *ordergrpc.AlpacaOrder
 	aod.PartialPrice = dutils.DecimalToInternalDecimal(tu.Price)
 	aod.PartialQty = dutils.DecimalToInternalDecimal(tu.Qty)
 	return nil
+}
+
+// Parse ClientOrderID string into the GRPC struct
+// format: orderID-SmartContractAddr-network
+func parseClientOrderIDString(clientOrderIDString string) (*ordergrpc.ClientOrderID, error) {
+	parts := strings.Split(clientOrderIDString, "-")
+	if len(parts) != 3 {
+		return nil, fmt.Errorf("invalid ClientOrderID format")
+	}
+
+	orderIDInt64, err := strconv.ParseInt(parts[0], 10, 64)
+	if err != nil {
+		return nil, fmt.Errorf("invalid OrderID format: %v", err)
+	}
+
+	return &ordergrpc.ClientOrderID{
+		OrderID:           orderIDInt64,
+		SmartContractAddr: parts[1],
+		Network:           parts[2],
+	}, nil
 }
 
 // Maps the Alpaca AssetClass string enum to the internal AssetClass int enum
