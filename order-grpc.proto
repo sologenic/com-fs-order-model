@@ -27,16 +27,19 @@ message OrderID {
 message OrderQuery {
     string Network = 1;
     optional int32 Offset = 2;
-    optional string AssetKey = 3;
-    optional string SmartContractAddr = 4;
-    optional TransactionType TransactionType = 5;
-    optional string Creator = 6;
-    // Order details
-    optional int64 OrderID = 7;
-    optional string Denom = 9;
-    optional OrderType OrderType = 10;
-    optional OrderStateType OrderStateType = 11;
-    optional PaymentState PaymentState = 12;
+    optional string SmartContractAddr = 3;
+    optional TransactionType TransactionType = 4;
+    optional string TXID = 5;
+    optional int64 Height = 6;
+    optional InternalOrderState InternalOrderState = 7;
+    optional Processed Processed = 8;
+    // Fields in OrderInstruction
+    optional string Creator = 9;
+    optional int64 OrderID = 10;
+    optional string Denom = 11;
+    optional OrderType OrderType = 12;
+    optional OrderStateType OrderStateType = 13;
+    optional PaymentState PaymentState = 14;
 }
 
 message Key {
