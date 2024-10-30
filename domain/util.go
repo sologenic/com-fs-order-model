@@ -18,51 +18,45 @@ func GetOrderKeyFromOrder(order *ordergrpc.Order) string {
 }
 
 // Map Alpaca Order to our AlpacaOrderDetails model
-func MapAlpacaOrderToInternal(tu *alpaca.TradeUpdate, aod *ordergrpc.AlpacaOrderDetails) error {
-	if tu == nil {
-		return nil
-	}
-	if tu.Order.ID != aod.AlpacaOrderID {
-		return fmt.Errorf("Order.ID does not match AlpacaOrderDetails.AlpacaOrderID")
-	}
-
-	order := tu.Order
-	clientOrderID, err := parseClientOrderIDString(order.ClientOrderID)
+func MapAlpacaOrderToInternal(tu *alpaca.TradeUpdate) (*ordergrpc.AlpacaOrderDetails, error) {
+	o := tu.Order
+	coID, err := parseClientOrderIDString(o.ClientOrderID)
 	if err != nil {
-		return fmt.Errorf("failed to parse ClientOrderID: %v", err)
+		return nil, fmt.Errorf("failed to parse ClientOrderID: %v", err)
 	}
-
-	aod.AlpacaOrderID = order.ID
-	aod.ClientOrderID = clientOrderID
-	aod.SubmittedAt = convertTimeToTimestamp(&order.SubmittedAt)
-	aod.FilledAt = convertTimeToTimestamp(order.FilledAt)
-	aod.ExpiredAt = convertTimeToTimestamp(order.ExpiredAt)
-	aod.CancelledAt = convertTimeToTimestamp(order.CanceledAt)
-	aod.FailedAt = convertTimeToTimestamp(order.FailedAt)
-	aod.AssetID = order.AssetID
-	aod.Symbol = order.Symbol
-	aod.AssetClass = mapAssetClass(order.AssetClass)
-	aod.OrderClass = mapOrderClass(order.OrderClass)
-	aod.Type = mapTradeType(order.Type)
-	aod.Side = mapSide(order.Side)
-	aod.TimeInForce = mapTimeInForce(order.TimeInForce)
-	aod.Notional = dutils.DecimalToInternalDecimal(order.Notional)
-	aod.OrderQty = dutils.DecimalToInternalDecimal(order.Qty)
-	aod.FilledQty = dutils.DecimalToInternalDecimal(&order.FilledQty)
-	aod.FilledAvgPrice = dutils.DecimalToInternalDecimal(order.FilledAvgPrice)
-	aod.LimitPrice = dutils.DecimalToInternalDecimal(order.LimitPrice)
-	aod.StopPrice = dutils.DecimalToInternalDecimal(order.StopPrice)
-	aod.TrailPrice = dutils.DecimalToInternalDecimal(order.TrailPrice)
-	aod.TrailPercent = dutils.DecimalToInternalDecimal(order.TrailPercent)
-	aod.HWM = dutils.DecimalToInternalDecimal(order.HWM)
-	aod.ExtendedHours = order.ExtendedHours
-	aod.CreatedAt = convertTimeToTimestamp(&order.CreatedAt)
-	aod.UpdatedAt = convertTimeToTimestamp(&order.UpdatedAt)
-	aod.Status = mapStatus(order.Status)
-	aod.TotalPosition = dutils.DecimalToInternalDecimal(tu.PositionQty)
-	aod.PartialPrice = dutils.DecimalToInternalDecimal(tu.Price)
-	aod.PartialQty = dutils.DecimalToInternalDecimal(tu.Qty)
-	return nil
+	return &ordergrpc.AlpacaOrderDetails{
+		AlpacaOrderID:  o.ID,
+		ClientOrderID:  coID,
+		SubmittedAt:    convertTimeToTimestamp(&o.SubmittedAt),
+		FilledAt:       convertTimeToTimestamp(o.FilledAt),
+		ExpiredAt:      convertTimeToTimestamp(o.ExpiredAt),
+		CancelledAt:    convertTimeToTimestamp(o.CanceledAt),
+		FailedAt:       convertTimeToTimestamp(o.FailedAt),
+		AssetID:        o.AssetID,
+		Symbol:         o.Symbol,
+		AssetClass:     mapAssetClass(o.AssetClass),
+		OrderClass:     mapOrderClass(o.OrderClass),
+		Type:           mapTradeType(o.Type),
+		Side:           mapSide(o.Side),
+		TimeInForce:    mapTimeInForce(o.TimeInForce),
+		Notional:       dutils.DecimalToInternalDecimal(o.Notional),
+		OrderQty:       dutils.DecimalToInternalDecimal(o.Qty),
+		FilledQty:      dutils.DecimalToInternalDecimal(&o.FilledQty),
+		FilledAvgPrice: dutils.DecimalToInternalDecimal(o.FilledAvgPrice),
+		LimitPrice:     dutils.DecimalToInternalDecimal(o.LimitPrice),
+		StopPrice:      dutils.DecimalToInternalDecimal(o.StopPrice),
+		TrailPrice:     dutils.DecimalToInternalDecimal(o.TrailPrice),
+		TrailPercent:   dutils.DecimalToInternalDecimal(o.TrailPercent),
+		HWM:            dutils.DecimalToInternalDecimal(o.HWM),
+		ExtendedHours:  o.ExtendedHours,
+		CreatedAt:      convertTimeToTimestamp(&o.CreatedAt),
+		UpdatedAt:      convertTimeToTimestamp(&o.UpdatedAt),
+		Status:         mapStatus(o.Status),
+		TotalPosition:  dutils.DecimalToInternalDecimal(tu.PositionQty),
+		PartialPrice:   dutils.DecimalToInternalDecimal(tu.Price),
+		PartialQty:     dutils.DecimalToInternalDecimal(tu.Qty),
+		// Processed: true, // TODO: figure out where and how to set this
+	}, nil
 }
 
 // Parse ClientOrderID string into the GRPC struct
