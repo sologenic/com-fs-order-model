@@ -14,7 +14,7 @@ const (
 
 var (
 	orderclient        *grpcdef.OrderServiceClient
-	alpacatradesclient *grpcdef.AlpacaTradesClient
+	alpacatradesclient *grpcdef.AlpacaServiceClient
 	grpcClient         *grpcclient.GRPCClient
 )
 
@@ -40,11 +40,11 @@ func OrderAuthCtx(ctx context.Context) context.Context {
 
 func initAlpacaTradesClient() {
 	grpcClient = grpcclient.InitClient(alpacaTradesEndpoint)
-	cl := grpcdef.NewAlpacaTradesClient(grpcClient.Conn)
+	cl := grpcdef.NewAlpacaServiceClient(grpcClient.Conn)
 	alpacatradesclient = &cl
 }
 
-func AlpacaTradesClient() *grpcdef.AlpacaTradesClient {
+func AlpacaTradesClient() *grpcdef.AlpacaServiceClient {
 	if alpacatradesclient == nil {
 		initAlpacaTradesClient()
 	}

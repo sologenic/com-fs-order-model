@@ -110,6 +110,10 @@ enum PaymentState {
     PAID = 2;
 }
 
+// TODO: re-number after adding new values
+// An action requires a PRE state under two conditions:
+//  1. The data needs to be verified when the application restarts.
+//  2. An internal entity (broker oracle) needs to communicate with an external entity (smart contract or Alpaca).
 enum InternalOrderState {
     NOT_USED_INTERNAL_ORDER_STATE = 0;
     
@@ -119,7 +123,6 @@ enum InternalOrderState {
     // Order place states
     BROKER_ORDER_PRE_SUBMITTED = 2; // order is pre-submitted to the broker for further processing
     BROKER_ORDER_SUBMITTED = 3; // order is submitted to the broker for further processing
-    BROKER_ORDER_POST_SUBMITTED = 4; // order is post-submitted to the broker for further processing
     
     BROKER_ORDER_ACCEPTED = 5; // (afterhours) order has been received by the broker, but hasn’t yet been routed to the execution venue, OrderState in Broker: `accepted`
 
@@ -128,18 +131,19 @@ enum InternalOrderState {
     
     SMART_CONTRACT_PRE_ORDER_PLACED = 8; // order has been placed in the smart contract
     SMART_CONTRACT_ORDER_PLACED = 9; // order has been placed in the smart contract, OrderState in SC: `placed`
-    SMART_CONTRACT_POST_ORDER_PLACED = 10; // order has been placed in the smart contract
 
     BROKER_ORDER_PARTIALLY_FILLED = 11; // order has been partially filled, OrderState in Broker: `partially_filled`
-    SMART_CONTRACT_ORDER_PARTIALLY_FILLED = 12; // order has been partially executed in the smart contract, OrderState in SC: `partially_executed`
+
+    SMART_CONTRACT_ORDER_PRE_PARTIALLY_FILLED_SUBMITTED = 53; // order has been partially executed in the smart contract 
+    SMART_CONTRACT_ORDER_PARTIALL_FILLED_SUBMITTED = 12; // order has been partially executed in the smart contract, OrderState in SC: `partially_executed`
 
     BROKER_ORDER_FILLED = 13; // order has been completely filled, OrderState in Broker: `filled`
     
+    SMART_CONTRACT_PRE_ORDER_EXECUTED = 56; // order has been executed in the smart contract
     SMART_CONTRACT_ORDER_EXECUTED = 14; // order has been executed in the smart contract, OrderState in SC: `executed`
-        
+
     BROKER_ORDER_PRE_CANCEL_REQUESTED = 15; // order cancellation request has been submitted to the broker
     BROKER_ORDER_CANCEL_REQUESTED = 16; // order cancellation request has been submitted to the broker
-    BROKER_ORDER_POST_CANCEL_REQUESTED = 17; // order cancellation request has been submitted to the broker
 
     BROKER_ORDER_CANCELED = 18; // order has been canceled by the broker, OrderState in Broker: `canceled`
     BROKER_ORDER_REFUSED = 19; // order sent to the broker, but the broker refused to accept it
@@ -147,14 +151,11 @@ enum InternalOrderState {
     
     SMART_CONTRACT_PRE_ORDER_CANCELLED = 21; // order has been cancelled in the smart contract
     SMART_CONTRACT_ORDER_CANCELLED = 22; // order has been cancelled in the smart contract, OrderState in SC: `cancelled`
-    SMART_CONTRACT_POST_ORDER_CANCELLED = 23; // order has been cancelled in the smart contract
 
     PROCESS_FINISHED = 24; // order has been processed and finished
     
     // Alternative scenarios
-    SMART_CONTRACT_PRE_CANCEL_ORDER_REQUESTED = 25; // order cancellation request has been submitted to the smart contract
     SMART_CONTRACT_CANCEL_ORDER_REQUESTED = 26; // order cancellation request has been submitted to the smart contract, OrderState in SC: `cancellation_requested`
-    SMART_CONTRACT_POST_CANCEL_ORDER_REQUESTED = 27; // order cancellation request has been submitted to the smart contract
 }
 
 enum OrderDetailType {

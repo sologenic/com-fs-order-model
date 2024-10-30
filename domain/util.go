@@ -3,6 +3,7 @@ package domain
 import (
 	"fmt"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/alpacahq/alpaca-trade-api-go/v3/alpaca"
@@ -24,9 +25,15 @@ func MapAlpacaOrderToInternal(tu *alpaca.TradeUpdate, aod *ordergrpc.AlpacaOrder
 	if tu.Order.ID != aod.AlpacaOrderID {
 		return fmt.Errorf("Order.ID does not match AlpacaOrderDetails.AlpacaOrderID")
 	}
+
 	order := tu.Order
+	coID, err := mapClientOrderID(order.ClientOrderID)
+	if err != nil {
+		return err
+	}
+
 	aod.AlpacaOrderID = order.ID
-	aod.ClientOrderID = order.ClientOrderID
+	aod.ClientOrderID = coID
 	aod.SubmittedAt = convertTimeToTimestamp(&order.SubmittedAt)
 	aod.FilledAt = convertTimeToTimestamp(order.FilledAt)
 	aod.ExpiredAt = convertTimeToTimestamp(order.ExpiredAt)
@@ -175,4 +182,20 @@ func convertTimeToTimestamp(time *time.Time) *timestamppb.Timestamp {
 		return nil
 	}
 	return timestamppb.New(*time)
+}
+
+func mapClientOrderID(coID string) (*ordergrpc.ClientOrderID, error) {
+	coIDParts := strings.Split(coID, "-")
+	if len(coIDParts) != 3 {
+		return nil, fmt.Errorf("invalid ClientOrderID format")
+	}
+	oid, err := strconv.ParseInt(coIDParts[2], 10, 64)
+	if err != nil {
+		return nil, fmt.Errorf("order ID is not a valid int64")
+	}
+	return &ordergrpc.ClientOrderID{
+		Network:           coIDParts[0],
+		SmartContractAddr: coIDParts[1],
+		OrderID:           oid,
+	}, nil
 }
