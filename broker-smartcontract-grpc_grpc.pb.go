@@ -19,9 +19,9 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type BrokerSmartContractServiceClient interface {
-	Create(ctx context.Context, in *Order, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	CreateBrokerSmartContractOrder(ctx context.Context, in *Order, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// rpc Get(Filter) returns (Records) {}
-	Update(ctx context.Context, in *Order, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	UpdateBrokerSmartContractOrder(ctx context.Context, in *Order, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type brokerSmartContractServiceClient struct {
@@ -32,18 +32,18 @@ func NewBrokerSmartContractServiceClient(cc grpc.ClientConnInterface) BrokerSmar
 	return &brokerSmartContractServiceClient{cc}
 }
 
-func (c *brokerSmartContractServiceClient) Create(ctx context.Context, in *Order, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *brokerSmartContractServiceClient) CreateBrokerSmartContractOrder(ctx context.Context, in *Order, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/order.BrokerSmartContractService/Create", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/order.BrokerSmartContractService/CreateBrokerSmartContractOrder", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *brokerSmartContractServiceClient) Update(ctx context.Context, in *Order, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *brokerSmartContractServiceClient) UpdateBrokerSmartContractOrder(ctx context.Context, in *Order, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/order.BrokerSmartContractService/Update", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/order.BrokerSmartContractService/UpdateBrokerSmartContractOrder", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -54,20 +54,20 @@ func (c *brokerSmartContractServiceClient) Update(ctx context.Context, in *Order
 // All implementations should embed UnimplementedBrokerSmartContractServiceServer
 // for forward compatibility
 type BrokerSmartContractServiceServer interface {
-	Create(context.Context, *Order) (*emptypb.Empty, error)
+	CreateBrokerSmartContractOrder(context.Context, *Order) (*emptypb.Empty, error)
 	// rpc Get(Filter) returns (Records) {}
-	Update(context.Context, *Order) (*emptypb.Empty, error)
+	UpdateBrokerSmartContractOrder(context.Context, *Order) (*emptypb.Empty, error)
 }
 
 // UnimplementedBrokerSmartContractServiceServer should be embedded to have forward compatible implementations.
 type UnimplementedBrokerSmartContractServiceServer struct {
 }
 
-func (UnimplementedBrokerSmartContractServiceServer) Create(context.Context, *Order) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
+func (UnimplementedBrokerSmartContractServiceServer) CreateBrokerSmartContractOrder(context.Context, *Order) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateBrokerSmartContractOrder not implemented")
 }
-func (UnimplementedBrokerSmartContractServiceServer) Update(context.Context, *Order) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
+func (UnimplementedBrokerSmartContractServiceServer) UpdateBrokerSmartContractOrder(context.Context, *Order) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateBrokerSmartContractOrder not implemented")
 }
 
 // UnsafeBrokerSmartContractServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -81,38 +81,38 @@ func RegisterBrokerSmartContractServiceServer(s grpc.ServiceRegistrar, srv Broke
 	s.RegisterService(&BrokerSmartContractService_ServiceDesc, srv)
 }
 
-func _BrokerSmartContractService_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _BrokerSmartContractService_CreateBrokerSmartContractOrder_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Order)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(BrokerSmartContractServiceServer).Create(ctx, in)
+		return srv.(BrokerSmartContractServiceServer).CreateBrokerSmartContractOrder(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/order.BrokerSmartContractService/Create",
+		FullMethod: "/order.BrokerSmartContractService/CreateBrokerSmartContractOrder",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BrokerSmartContractServiceServer).Create(ctx, req.(*Order))
+		return srv.(BrokerSmartContractServiceServer).CreateBrokerSmartContractOrder(ctx, req.(*Order))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _BrokerSmartContractService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _BrokerSmartContractService_UpdateBrokerSmartContractOrder_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Order)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(BrokerSmartContractServiceServer).Update(ctx, in)
+		return srv.(BrokerSmartContractServiceServer).UpdateBrokerSmartContractOrder(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/order.BrokerSmartContractService/Update",
+		FullMethod: "/order.BrokerSmartContractService/UpdateBrokerSmartContractOrder",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BrokerSmartContractServiceServer).Update(ctx, req.(*Order))
+		return srv.(BrokerSmartContractServiceServer).UpdateBrokerSmartContractOrder(ctx, req.(*Order))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -125,12 +125,12 @@ var BrokerSmartContractService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*BrokerSmartContractServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Create",
-			Handler:    _BrokerSmartContractService_Create_Handler,
+			MethodName: "CreateBrokerSmartContractOrder",
+			Handler:    _BrokerSmartContractService_CreateBrokerSmartContractOrder_Handler,
 		},
 		{
-			MethodName: "Update",
-			Handler:    _BrokerSmartContractService_Update_Handler,
+			MethodName: "UpdateBrokerSmartContractOrder",
+			Handler:    _BrokerSmartContractService_UpdateBrokerSmartContractOrder_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

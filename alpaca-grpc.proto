@@ -9,8 +9,8 @@ option go_package = "github.com/sologenic/com-fs-order-model;order";
 
 // Alpaca Trade log
 service AlpacaService {
-    rpc Create(AlpacaOrderDetails) returns (google.protobuf.Empty) {}
+    rpc CreateAlpacaOrder(AlpacaOrderDetails) returns (google.protobuf.Empty) {}
   //  rpc Get(Filter) returns (Records) {}
-    rpc Update(AlpacaOrderDetails) returns (google.protobuf.Empty) {} // Alpaca log line processed into order
+    rpc UpdateAlpacaOrder(AlpacaOrderDetails) returns (google.protobuf.Empty) {} // Alpaca log line processed into order
 }
 

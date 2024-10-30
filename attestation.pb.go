@@ -22,6 +22,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// key: Denom-SmartContractAddr-Network-BlockHeight
 type Attestation struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

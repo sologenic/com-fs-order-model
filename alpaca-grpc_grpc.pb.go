@@ -19,9 +19,9 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AlpacaServiceClient interface {
-	Create(ctx context.Context, in *AlpacaOrderDetails, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	CreateAlpacaOrder(ctx context.Context, in *AlpacaOrderDetails, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// rpc Get(Filter) returns (Records) {}
-	Update(ctx context.Context, in *AlpacaOrderDetails, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	UpdateAlpacaOrder(ctx context.Context, in *AlpacaOrderDetails, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type alpacaServiceClient struct {
@@ -32,18 +32,18 @@ func NewAlpacaServiceClient(cc grpc.ClientConnInterface) AlpacaServiceClient {
 	return &alpacaServiceClient{cc}
 }
 
-func (c *alpacaServiceClient) Create(ctx context.Context, in *AlpacaOrderDetails, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *alpacaServiceClient) CreateAlpacaOrder(ctx context.Context, in *AlpacaOrderDetails, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/order.AlpacaService/Create", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/order.AlpacaService/CreateAlpacaOrder", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *alpacaServiceClient) Update(ctx context.Context, in *AlpacaOrderDetails, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *alpacaServiceClient) UpdateAlpacaOrder(ctx context.Context, in *AlpacaOrderDetails, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/order.AlpacaService/Update", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/order.AlpacaService/UpdateAlpacaOrder", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -54,20 +54,20 @@ func (c *alpacaServiceClient) Update(ctx context.Context, in *AlpacaOrderDetails
 // All implementations should embed UnimplementedAlpacaServiceServer
 // for forward compatibility
 type AlpacaServiceServer interface {
-	Create(context.Context, *AlpacaOrderDetails) (*emptypb.Empty, error)
+	CreateAlpacaOrder(context.Context, *AlpacaOrderDetails) (*emptypb.Empty, error)
 	// rpc Get(Filter) returns (Records) {}
-	Update(context.Context, *AlpacaOrderDetails) (*emptypb.Empty, error)
+	UpdateAlpacaOrder(context.Context, *AlpacaOrderDetails) (*emptypb.Empty, error)
 }
 
 // UnimplementedAlpacaServiceServer should be embedded to have forward compatible implementations.
 type UnimplementedAlpacaServiceServer struct {
 }
 
-func (UnimplementedAlpacaServiceServer) Create(context.Context, *AlpacaOrderDetails) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
+func (UnimplementedAlpacaServiceServer) CreateAlpacaOrder(context.Context, *AlpacaOrderDetails) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateAlpacaOrder not implemented")
 }
-func (UnimplementedAlpacaServiceServer) Update(context.Context, *AlpacaOrderDetails) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
+func (UnimplementedAlpacaServiceServer) UpdateAlpacaOrder(context.Context, *AlpacaOrderDetails) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateAlpacaOrder not implemented")
 }
 
 // UnsafeAlpacaServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -81,38 +81,38 @@ func RegisterAlpacaServiceServer(s grpc.ServiceRegistrar, srv AlpacaServiceServe
 	s.RegisterService(&AlpacaService_ServiceDesc, srv)
 }
 
-func _AlpacaService_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _AlpacaService_CreateAlpacaOrder_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AlpacaOrderDetails)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AlpacaServiceServer).Create(ctx, in)
+		return srv.(AlpacaServiceServer).CreateAlpacaOrder(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/order.AlpacaService/Create",
+		FullMethod: "/order.AlpacaService/CreateAlpacaOrder",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AlpacaServiceServer).Create(ctx, req.(*AlpacaOrderDetails))
+		return srv.(AlpacaServiceServer).CreateAlpacaOrder(ctx, req.(*AlpacaOrderDetails))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AlpacaService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _AlpacaService_UpdateAlpacaOrder_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AlpacaOrderDetails)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AlpacaServiceServer).Update(ctx, in)
+		return srv.(AlpacaServiceServer).UpdateAlpacaOrder(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/order.AlpacaService/Update",
+		FullMethod: "/order.AlpacaService/UpdateAlpacaOrder",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AlpacaServiceServer).Update(ctx, req.(*AlpacaOrderDetails))
+		return srv.(AlpacaServiceServer).UpdateAlpacaOrder(ctx, req.(*AlpacaOrderDetails))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -125,12 +125,12 @@ var AlpacaService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*AlpacaServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Create",
-			Handler:    _AlpacaService_Create_Handler,
+			MethodName: "CreateAlpacaOrder",
+			Handler:    _AlpacaService_CreateAlpacaOrder_Handler,
 		},
 		{
-			MethodName: "Update",
-			Handler:    _AlpacaService_Update_Handler,
+			MethodName: "UpdateAlpacaOrder",
+			Handler:    _AlpacaService_UpdateAlpacaOrder_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
