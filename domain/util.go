@@ -14,7 +14,7 @@ import (
 
 // Get the unique datastore key from the Order
 func GetOrderKeyFromOrder(order *ordergrpc.Order) string {
-	return strconv.Itoa(int(order.Instruction.OrderID)) + "-" + order.Network + "-" + order.SmartContractAddr
+	return strconv.Itoa(int(order.Instruction.OrderID)) + "-" + order.SmartContractAddr + "-" + order.Network
 }
 
 // Map Alpaca Order to our AlpacaOrderDetails model
