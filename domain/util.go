@@ -12,19 +12,36 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
+type AlpacaResponse struct {
+	Order       *alpaca.Order
+	TradeUpdate *alpaca.TradeUpdate
+}
+
 // Get the unique datastore key from the Order
+// format: orderID-SmartContractAddr-network
 func GetOrderKeyFromOrder(order *ordergrpc.Order) string {
 	return strconv.Itoa(int(order.Instruction.OrderID)) + "-" + order.SmartContractAddr + "-" + order.Network
 }
 
-// Map Alpaca Order to our AlpacaOrderDetails model
-func MapAlpacaOrderToInternal(tu *alpaca.TradeUpdate) (*ordergrpc.AlpacaOrderDetails, error) {
-	o := tu.Order
+// Map Alpaca responses to our AlpacaOrderDetails model
+// Two types of responses are handled: Order(SDK response) and TradeUpdate(Update event via websocket)
+func MapAlpacaOrderToInternal(ar *AlpacaResponse) (*ordergrpc.AlpacaOrderDetails, error) {
+	var o alpaca.Order
+	var tu *alpaca.TradeUpdate
+
+	if ar.TradeUpdate != nil {
+		o = ar.TradeUpdate.Order
+		tu = ar.TradeUpdate
+	}
+	if ar.Order != nil {
+		o = *ar.Order
+	}
+
 	coID, err := parseClientOrderIDString(o.ClientOrderID)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse ClientOrderID: %v", err)
 	}
-	return &ordergrpc.AlpacaOrderDetails{
+	aod := &ordergrpc.AlpacaOrderDetails{
 		AlpacaOrderID:  o.ID,
 		ClientOrderID:  coID,
 		SubmittedAt:    convertTimeToTimestamp(&o.SubmittedAt),
@@ -52,11 +69,14 @@ func MapAlpacaOrderToInternal(tu *alpaca.TradeUpdate) (*ordergrpc.AlpacaOrderDet
 		CreatedAt:      convertTimeToTimestamp(&o.CreatedAt),
 		UpdatedAt:      convertTimeToTimestamp(&o.UpdatedAt),
 		Status:         mapStatus(o.Status),
-		TotalPosition:  dutils.DecimalToInternalDecimal(tu.PositionQty),
-		PartialPrice:   dutils.DecimalToInternalDecimal(tu.Price),
-		PartialQty:     dutils.DecimalToInternalDecimal(tu.Qty),
-		// Processed: true, // TODO: figure out where and how to set this
-	}, nil
+	}
+
+	if tu != nil {
+		aod.TotalPosition = dutils.DecimalToInternalDecimal(tu.PositionQty)
+		aod.PartialPrice = dutils.DecimalToInternalDecimal(tu.Price)
+		aod.PartialQty = dutils.DecimalToInternalDecimal(tu.Qty)
+	}
+	return aod, nil
 }
 
 // Parse ClientOrderID string into the GRPC struct
