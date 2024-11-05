@@ -133,7 +133,7 @@ enum InternalOrderState {
     BROKER_ORDER_PARTIALLY_FILLED = 11; // order has been partially filled, OrderState in Broker: `partially_filled`
 
     SMART_CONTRACT_ORDER_PRE_PARTIALLY_FILLED_SUBMITTED = 53; // order has been partially executed in the smart contract 
-    SMART_CONTRACT_ORDER_PARTIALL_FILLED_SUBMITTED = 12; // order has been partially executed in the smart contract, OrderState in SC: `partially_executed`
+    SMART_CONTRACT_ORDER_PARTIALLY_FILLED_SUBMITTED = 12; // order has been partially executed in the smart contract, OrderState in SC: `partially_executed`
 
     BROKER_ORDER_FILLED = 13; // order has been completely filled, OrderState in Broker: `filled`
     
