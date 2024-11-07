@@ -32,7 +32,7 @@ message OrderQuery {
     optional string TXID = 5;
     optional int64 Height = 6;
     optional InternalOrderState InternalOrderState = 7;
-    optional Processed Processed = 8;
+    optional ProcesseInfo ProcesseInfo = 8;
     // Fields in OrderInstruction
     optional string Creator = 9;
     optional int64 OrderID = 10;

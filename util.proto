@@ -12,15 +12,15 @@ enum OrderType {
     ORDER_TYPE_SELL = 2;
 }
 
-message Processed {
-    ProcessedState ProcessedState = 1;
+message ProcesseInfo {
+    ProcessState ProcessState = 1;
     google.protobuf.Timestamp ProcessedAt = 2;
 }
 
-enum ProcessedState {
-    NOT_USED_PROCESSED_STATE = 0;
-    PROCESSED_STATE_OPEN = 1;
-    PROCESSED_STATE_LOCKED = 2;
-    PROCESSED_STATE_FAILED = 3;
-    PROCESSED_STATE_PROCESSED = 4;
+enum ProcessState {
+    NOT_USED_PROCESS_STATE = 0;
+    PROCESS_STATE_OPEN = 1;
+    PROCESS_STATE_LOCKED = 2;
+    PROCESS_STATE_FAILED = 3;
+    PROCESS_STATE_PROCESSED = 4;
 }
