@@ -13,6 +13,13 @@ enum OrderType {
 }
 
 message Processed {
-    bool Processed = 1;
+    ProcessedState ProcessedState = 1;
     google.protobuf.Timestamp ProcessedAt = 2;
+}
+
+enum ProcessedState {
+    NOT_USED_PROCESSED_STATE = 0;
+    PROCESSED_STATE_OPEN = 1;
+    PROCESSED_STATE_LOCKED = 2;
+    PROCESSED_STATE_PROCESSED = 3;
 }

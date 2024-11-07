@@ -19,9 +19,13 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AlpacaServiceClient interface {
+	// Non-transaction
 	CreateAlpacaOrder(ctx context.Context, in *AlpacaOrderDetails, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// rpc Get(Filter) returns (Records) {}
 	UpdateAlpacaOrder(ctx context.Context, in *AlpacaOrderDetails, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// Transaction
+	GetAndLockUnprocessedAlpacaOrder(ctx context.Context, in *AlpacaOrderDetails, opts ...grpc.CallOption) (*AlpacaOrderDetails, error)
+	SetAlpacaOrderProcessed(ctx context.Context, in *AlpacaOrderDetails, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type alpacaServiceClient struct {
@@ -50,13 +54,35 @@ func (c *alpacaServiceClient) UpdateAlpacaOrder(ctx context.Context, in *AlpacaO
 	return out, nil
 }
 
+func (c *alpacaServiceClient) GetAndLockUnprocessedAlpacaOrder(ctx context.Context, in *AlpacaOrderDetails, opts ...grpc.CallOption) (*AlpacaOrderDetails, error) {
+	out := new(AlpacaOrderDetails)
+	err := c.cc.Invoke(ctx, "/order.AlpacaService/GetAndLockUnprocessedAlpacaOrder", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *alpacaServiceClient) SetAlpacaOrderProcessed(ctx context.Context, in *AlpacaOrderDetails, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/order.AlpacaService/SetAlpacaOrderProcessed", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AlpacaServiceServer is the server API for AlpacaService service.
 // All implementations should embed UnimplementedAlpacaServiceServer
 // for forward compatibility
 type AlpacaServiceServer interface {
+	// Non-transaction
 	CreateAlpacaOrder(context.Context, *AlpacaOrderDetails) (*emptypb.Empty, error)
 	// rpc Get(Filter) returns (Records) {}
 	UpdateAlpacaOrder(context.Context, *AlpacaOrderDetails) (*emptypb.Empty, error)
+	// Transaction
+	GetAndLockUnprocessedAlpacaOrder(context.Context, *AlpacaOrderDetails) (*AlpacaOrderDetails, error)
+	SetAlpacaOrderProcessed(context.Context, *AlpacaOrderDetails) (*emptypb.Empty, error)
 }
 
 // UnimplementedAlpacaServiceServer should be embedded to have forward compatible implementations.
@@ -68,6 +94,12 @@ func (UnimplementedAlpacaServiceServer) CreateAlpacaOrder(context.Context, *Alpa
 }
 func (UnimplementedAlpacaServiceServer) UpdateAlpacaOrder(context.Context, *AlpacaOrderDetails) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateAlpacaOrder not implemented")
+}
+func (UnimplementedAlpacaServiceServer) GetAndLockUnprocessedAlpacaOrder(context.Context, *AlpacaOrderDetails) (*AlpacaOrderDetails, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAndLockUnprocessedAlpacaOrder not implemented")
+}
+func (UnimplementedAlpacaServiceServer) SetAlpacaOrderProcessed(context.Context, *AlpacaOrderDetails) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetAlpacaOrderProcessed not implemented")
 }
 
 // UnsafeAlpacaServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -117,6 +149,42 @@ func _AlpacaService_UpdateAlpacaOrder_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AlpacaService_GetAndLockUnprocessedAlpacaOrder_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AlpacaOrderDetails)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AlpacaServiceServer).GetAndLockUnprocessedAlpacaOrder(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/order.AlpacaService/GetAndLockUnprocessedAlpacaOrder",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AlpacaServiceServer).GetAndLockUnprocessedAlpacaOrder(ctx, req.(*AlpacaOrderDetails))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AlpacaService_SetAlpacaOrderProcessed_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AlpacaOrderDetails)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AlpacaServiceServer).SetAlpacaOrderProcessed(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/order.AlpacaService/SetAlpacaOrderProcessed",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AlpacaServiceServer).SetAlpacaOrderProcessed(ctx, req.(*AlpacaOrderDetails))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AlpacaService_ServiceDesc is the grpc.ServiceDesc for AlpacaService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -131,6 +199,14 @@ var AlpacaService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateAlpacaOrder",
 			Handler:    _AlpacaService_UpdateAlpacaOrder_Handler,
+		},
+		{
+			MethodName: "GetAndLockUnprocessedAlpacaOrder",
+			Handler:    _AlpacaService_GetAndLockUnprocessedAlpacaOrder_Handler,
+		},
+		{
+			MethodName: "SetAlpacaOrderProcessed",
+			Handler:    _AlpacaService_SetAlpacaOrderProcessed_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
