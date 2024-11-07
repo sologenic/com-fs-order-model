@@ -54,7 +54,7 @@ message AlpacaOrderDetails {
     optional decimal.Decimal PartialQty = 30;
 
     // Bookkeeping: did we process this event from alpaca order log?
-    optional ProcesseInfo ProcesseInfo = 31;
+    optional ProcessInfo ProcessInfo = 31;
 }
 
 message ClientOrderID {

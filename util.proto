@@ -12,7 +12,7 @@ enum OrderType {
     ORDER_TYPE_SELL = 2;
 }
 
-message ProcesseInfo {
+message ProcessInfo {
     ProcessState ProcessState = 1;
     google.protobuf.Timestamp ProcessedAt = 2;
 }

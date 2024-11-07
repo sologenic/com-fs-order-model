@@ -27,7 +27,7 @@ message Order {
     AlpacaOrderDetails OrderDetails = 13; // Matches data on SmartContractAddr, orderdetails.OrderID and network
 
     // Bookkeeping: did we process this event from broker smart contract order log?
-    optional ProcesseInfo ProcesseInfo = 31;
+    optional ProcessInfo ProcessInfo = 31;
 }
 
 // Execution type(action) of the transaction against the smart contract
