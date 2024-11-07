@@ -19,9 +19,13 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type BrokerSmartContractServiceClient interface {
+	// Non-transaction
 	CreateBrokerSmartContractOrder(ctx context.Context, in *Order, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// rpc Get(Filter) returns (Records) {}
 	UpdateBrokerSmartContractOrder(ctx context.Context, in *Order, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// Transaction
+	GetAndLockUnprocessedBSCOrder(ctx context.Context, in *Order, opts ...grpc.CallOption) (*Order, error)
+	SetBSCOrderProcessed(ctx context.Context, in *Order, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type brokerSmartContractServiceClient struct {
@@ -50,13 +54,35 @@ func (c *brokerSmartContractServiceClient) UpdateBrokerSmartContractOrder(ctx co
 	return out, nil
 }
 
+func (c *brokerSmartContractServiceClient) GetAndLockUnprocessedBSCOrder(ctx context.Context, in *Order, opts ...grpc.CallOption) (*Order, error) {
+	out := new(Order)
+	err := c.cc.Invoke(ctx, "/order.BrokerSmartContractService/GetAndLockUnprocessedBSCOrder", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *brokerSmartContractServiceClient) SetBSCOrderProcessed(ctx context.Context, in *Order, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/order.BrokerSmartContractService/SetBSCOrderProcessed", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // BrokerSmartContractServiceServer is the server API for BrokerSmartContractService service.
 // All implementations should embed UnimplementedBrokerSmartContractServiceServer
 // for forward compatibility
 type BrokerSmartContractServiceServer interface {
+	// Non-transaction
 	CreateBrokerSmartContractOrder(context.Context, *Order) (*emptypb.Empty, error)
 	// rpc Get(Filter) returns (Records) {}
 	UpdateBrokerSmartContractOrder(context.Context, *Order) (*emptypb.Empty, error)
+	// Transaction
+	GetAndLockUnprocessedBSCOrder(context.Context, *Order) (*Order, error)
+	SetBSCOrderProcessed(context.Context, *Order) (*emptypb.Empty, error)
 }
 
 // UnimplementedBrokerSmartContractServiceServer should be embedded to have forward compatible implementations.
@@ -68,6 +94,12 @@ func (UnimplementedBrokerSmartContractServiceServer) CreateBrokerSmartContractOr
 }
 func (UnimplementedBrokerSmartContractServiceServer) UpdateBrokerSmartContractOrder(context.Context, *Order) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateBrokerSmartContractOrder not implemented")
+}
+func (UnimplementedBrokerSmartContractServiceServer) GetAndLockUnprocessedBSCOrder(context.Context, *Order) (*Order, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAndLockUnprocessedBSCOrder not implemented")
+}
+func (UnimplementedBrokerSmartContractServiceServer) SetBSCOrderProcessed(context.Context, *Order) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetBSCOrderProcessed not implemented")
 }
 
 // UnsafeBrokerSmartContractServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -117,6 +149,42 @@ func _BrokerSmartContractService_UpdateBrokerSmartContractOrder_Handler(srv inte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _BrokerSmartContractService_GetAndLockUnprocessedBSCOrder_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Order)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BrokerSmartContractServiceServer).GetAndLockUnprocessedBSCOrder(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/order.BrokerSmartContractService/GetAndLockUnprocessedBSCOrder",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BrokerSmartContractServiceServer).GetAndLockUnprocessedBSCOrder(ctx, req.(*Order))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BrokerSmartContractService_SetBSCOrderProcessed_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Order)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BrokerSmartContractServiceServer).SetBSCOrderProcessed(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/order.BrokerSmartContractService/SetBSCOrderProcessed",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BrokerSmartContractServiceServer).SetBSCOrderProcessed(ctx, req.(*Order))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // BrokerSmartContractService_ServiceDesc is the grpc.ServiceDesc for BrokerSmartContractService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -131,6 +199,14 @@ var BrokerSmartContractService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateBrokerSmartContractOrder",
 			Handler:    _BrokerSmartContractService_UpdateBrokerSmartContractOrder_Handler,
+		},
+		{
+			MethodName: "GetAndLockUnprocessedBSCOrder",
+			Handler:    _BrokerSmartContractService_GetAndLockUnprocessedBSCOrder_Handler,
+		},
+		{
+			MethodName: "SetBSCOrderProcessed",
+			Handler:    _BrokerSmartContractService_SetBSCOrderProcessed_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

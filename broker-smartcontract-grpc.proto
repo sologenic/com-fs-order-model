@@ -9,8 +9,13 @@ option go_package = "github.com/sologenic/com-fs-order-model;order";
 
 // Broker smart contract Trade log
 service BrokerSmartContractService {
+    // Non-transaction
     rpc CreateBrokerSmartContractOrder(Order) returns (google.protobuf.Empty) {}
   //  rpc Get(Filter) returns (Records) {}
     rpc UpdateBrokerSmartContractOrder(Order) returns (google.protobuf.Empty) {} // Broker smart contract log line processed into order
-}
+    
+    // Transaction
+    rpc GetAndLockUnprocessedBSCOrder(Order) returns (Order) {}
+    rpc SetBSCOrderProcessed(Order) returns (google.protobuf.Empty) {}
+  }
 
