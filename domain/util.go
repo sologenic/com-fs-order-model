@@ -42,33 +42,33 @@ func MapAlpacaOrderToInternal(ar *AlpacaResponse) (*ordergrpc.BrokerOrderDetails
 		return nil, fmt.Errorf("failed to parse ClientOrderID: %v", err)
 	}
 	aod := &ordergrpc.BrokerOrderDetails{
-		BrokerAssignedID:  o.ID,
-		ClientOrderID:  coID,
-		SubmittedAt:    convertTimeToTimestamp(&o.SubmittedAt),
-		FilledAt:       convertTimeToTimestamp(o.FilledAt),
-		ExpiredAt:      convertTimeToTimestamp(o.ExpiredAt),
-		CancelledAt:    convertTimeToTimestamp(o.CanceledAt),
-		FailedAt:       convertTimeToTimestamp(o.FailedAt),
-		AssetID:        o.AssetID,
-		Symbol:         o.Symbol,
-		AssetClass:     mapAssetClass(o.AssetClass),
-		OrderClass:     mapOrderClass(o.OrderClass),
-		Type:           mapTradeType(o.Type),
-		Side:           mapSide(o.Side),
-		TimeInForce:    mapTimeInForce(o.TimeInForce),
-		Notional:       dutils.DecimalToInternalDecimal(o.Notional),
-		OrderQty:       dutils.DecimalToInternalDecimal(o.Qty),
-		FilledQty:      dutils.DecimalToInternalDecimal(&o.FilledQty),
-		FilledAvgPrice: dutils.DecimalToInternalDecimal(o.FilledAvgPrice),
-		LimitPrice:     dutils.DecimalToInternalDecimal(o.LimitPrice),
-		StopPrice:      dutils.DecimalToInternalDecimal(o.StopPrice),
-		TrailPrice:     dutils.DecimalToInternalDecimal(o.TrailPrice),
-		TrailPercent:   dutils.DecimalToInternalDecimal(o.TrailPercent),
-		HWM:            dutils.DecimalToInternalDecimal(o.HWM),
-		ExtendedHours:  o.ExtendedHours,
-		CreatedAt:      convertTimeToTimestamp(&o.CreatedAt),
-		UpdatedAt:      convertTimeToTimestamp(&o.UpdatedAt),
-		Status:         mapStatus(o.Status),
+		BrokerAssignedID: o.ID,
+		ClientOrderID:    coID,
+		SubmittedAt:      convertTimeToTimestamp(&o.SubmittedAt),
+		FilledAt:         convertTimeToTimestamp(o.FilledAt),
+		ExpiredAt:        convertTimeToTimestamp(o.ExpiredAt),
+		CancelledAt:      convertTimeToTimestamp(o.CanceledAt),
+		FailedAt:         convertTimeToTimestamp(o.FailedAt),
+		AssetID:          o.AssetID,
+		Symbol:           o.Symbol,
+		AssetClass:       mapAssetClass(o.AssetClass),
+		OrderClass:       mapOrderClass(o.OrderClass),
+		Type:             mapTradeType(o.Type),
+		Side:             mapSide(o.Side),
+		TimeInForce:      mapTimeInForce(o.TimeInForce),
+		Notional:         dutils.DecimalToInternalDecimal(o.Notional),
+		OrderQty:         dutils.DecimalToInternalDecimal(o.Qty),
+		FilledQty:        dutils.DecimalToInternalDecimal(&o.FilledQty),
+		FilledAvgPrice:   dutils.DecimalToInternalDecimal(o.FilledAvgPrice),
+		LimitPrice:       dutils.DecimalToInternalDecimal(o.LimitPrice),
+		StopPrice:        dutils.DecimalToInternalDecimal(o.StopPrice),
+		TrailPrice:       dutils.DecimalToInternalDecimal(o.TrailPrice),
+		TrailPercent:     dutils.DecimalToInternalDecimal(o.TrailPercent),
+		HWM:              dutils.DecimalToInternalDecimal(o.HWM),
+		ExtendedHours:    o.ExtendedHours,
+		CreatedAt:        convertTimeToTimestamp(&o.CreatedAt),
+		UpdatedAt:        convertTimeToTimestamp(&o.UpdatedAt),
+		Status:           mapStatus(o.Status),
 	}
 
 	if tu != nil {
@@ -79,8 +79,8 @@ func MapAlpacaOrderToInternal(ar *AlpacaResponse) (*ordergrpc.BrokerOrderDetails
 	return aod, nil
 }
 
-func ParseInternalClientOrderIDToStr(order *ordergrpc.Order) string {
-	return fmt.Sprintf("%d-%s-%s", order.Instruction.OrderID, order.SmartContractAddr, order.Network)
+func ParseInternalClientOrderIDToStr(bod *ordergrpc.ClientOrderID) string {
+	return fmt.Sprintf("%d-%s-%s", bod.OrderID, bod.SmartContractAddr, bod.Network)
 }
 
 // Parse ClientOrderID string into the GRPC struct
