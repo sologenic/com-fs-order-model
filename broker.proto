@@ -9,8 +9,8 @@ import "sologenic/com-fs-utils-lib/go/decimal/decimal.proto";
 option go_package = "github.com/sologenic/com-fs-order-model;order";
 
 // Key orderID-SmartContractAddr-network (is as unique identifier for the order in message to Alpaca)
-message AlpacaOrderDetails {
-    string AlpacaOrderID = 1; // order ID in Alpaca, auto generated
+message BrokerOrderDetails {
+    string BrokerAssignedID = 1; // auto generated ID from Alpaca
     ClientOrderID ClientOrderID = 2; // unique identifier for the order in message to Alpaca, value is from the key function
     google.protobuf.Timestamp SubmittedAt = 3;
     optional google.protobuf.Timestamp FilledAt = 4;
@@ -39,7 +39,7 @@ message AlpacaOrderDetails {
     bool ExtendedHours = 24; // defaults to false
     google.protobuf.Timestamp CreatedAt = 25;
     optional google.protobuf.Timestamp UpdatedAt = 26;
-    AlpacaOrderStatus Status = 27; // status of the order in Alpaca
+    BrokerOrderStatus Status = 27; // status of the order in Alpaca
 
     // "position_qty" field from Alpaca Trade Update's event msg. 
     // Since all orders will flow through Sologenic's custodial account, this will represent the total count of all shares on our platform.
@@ -63,8 +63,8 @@ message ClientOrderID {
     int64 OrderID = 3;
 }
 
-message AlpacaOrderDetailsList {
-    repeated AlpacaOrderDetails AlpacaOrderDetailsList = 1;
+message BrokerOrderDetailsList {
+    repeated BrokerOrderDetails BrokerOrderDetailsList = 1;
 }
 
 enum AssetClass {
@@ -108,7 +108,7 @@ enum OrderClass {
     ORDER_CLASS_OTO = 4; // One-Triggers-Other
 }
 
-enum AlpacaOrderStatus {
+enum BrokerOrderStatus {
     NOT_USED_ALPACA_ORDER_STATUS = 0;
     // common statuses
     PENDING_NEW = 1; // the order has been received by Alpaca, and routed to the exchanges, but has not yet been accepted for execution.

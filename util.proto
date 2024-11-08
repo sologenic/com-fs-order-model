@@ -24,3 +24,9 @@ enum ProcessState {
     PROCESS_STATE_FAILED = 3;
     PROCESS_STATE_PROCESSED = 4;
 }
+
+message LockLogRecord {
+    string Key = 1;
+    repeated ProcessState MustHaveState = 2;
+    ProcessState TargetState = 3;
+}

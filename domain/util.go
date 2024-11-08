@@ -25,7 +25,7 @@ func GetOrderKeyFromOrder(order *ordergrpc.Order) string {
 
 // Map Alpaca responses to our AlpacaOrderDetails model
 // Two types of responses are handled: Order(SDK response) and TradeUpdate(Update event via websocket)
-func MapAlpacaOrderToInternal(ar *AlpacaResponse) (*ordergrpc.AlpacaOrderDetails, error) {
+func MapAlpacaOrderToInternal(ar *AlpacaResponse) (*ordergrpc.BrokerOrderDetails, error) {
 	var o alpaca.Order
 	var tu *alpaca.TradeUpdate
 
@@ -37,12 +37,12 @@ func MapAlpacaOrderToInternal(ar *AlpacaResponse) (*ordergrpc.AlpacaOrderDetails
 		o = *ar.Order
 	}
 
-	coID, err := parseClientOrderIDString(o.ClientOrderID)
+	coID, err := ParseStrClientOrderIDToInternal(o.ClientOrderID)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse ClientOrderID: %v", err)
 	}
-	aod := &ordergrpc.AlpacaOrderDetails{
-		AlpacaOrderID:  o.ID,
+	aod := &ordergrpc.BrokerOrderDetails{
+		BrokerAssignedID:  o.ID,
 		ClientOrderID:  coID,
 		SubmittedAt:    convertTimeToTimestamp(&o.SubmittedAt),
 		FilledAt:       convertTimeToTimestamp(o.FilledAt),
@@ -79,9 +79,13 @@ func MapAlpacaOrderToInternal(ar *AlpacaResponse) (*ordergrpc.AlpacaOrderDetails
 	return aod, nil
 }
 
+func ParseInternalClientOrderIDToStr(order *ordergrpc.Order) string {
+	return fmt.Sprintf("%d-%s-%s", order.Instruction.OrderID, order.SmartContractAddr, order.Network)
+}
+
 // Parse ClientOrderID string into the GRPC struct
 // format: orderID-SmartContractAddr-network
-func parseClientOrderIDString(clientOrderIDString string) (*ordergrpc.ClientOrderID, error) {
+func ParseStrClientOrderIDToInternal(clientOrderIDString string) (*ordergrpc.ClientOrderID, error) {
 	parts := strings.Split(clientOrderIDString, "-")
 	if len(parts) != 3 {
 		return nil, fmt.Errorf("invalid ClientOrderID format")
@@ -161,38 +165,38 @@ func mapTimeInForce(timeInForce alpaca.TimeInForce) ordergrpc.TimeInForce {
 	}
 }
 
-func mapStatus(status string) ordergrpc.AlpacaOrderStatus {
+func mapStatus(status string) ordergrpc.BrokerOrderStatus {
 	switch status {
 	case "pending_new":
-		return ordergrpc.AlpacaOrderStatus_PENDING_NEW
+		return ordergrpc.BrokerOrderStatus_PENDING_NEW
 	case "new":
-		return ordergrpc.AlpacaOrderStatus_NEW
+		return ordergrpc.BrokerOrderStatus_NEW
 	case "partially_filled":
-		return ordergrpc.AlpacaOrderStatus_PARTIALLY_FILLED
+		return ordergrpc.BrokerOrderStatus_PARTIALLY_FILLED
 	case "filled":
-		return ordergrpc.AlpacaOrderStatus_FILLED
+		return ordergrpc.BrokerOrderStatus_FILLED
 	case "done_for_day":
-		return ordergrpc.AlpacaOrderStatus_DONE_FOR_DAY
+		return ordergrpc.BrokerOrderStatus_DONE_FOR_DAY
 	case "canceled":
-		return ordergrpc.AlpacaOrderStatus_CANCELED
+		return ordergrpc.BrokerOrderStatus_CANCELED
 	case "expired":
-		return ordergrpc.AlpacaOrderStatus_EXPIRED
+		return ordergrpc.BrokerOrderStatus_EXPIRED
 	case "pending_cancel":
-		return ordergrpc.AlpacaOrderStatus_PENDING_CANCEL
+		return ordergrpc.BrokerOrderStatus_PENDING_CANCEL
 	case "accepted":
-		return ordergrpc.AlpacaOrderStatus_ACCEPTED
+		return ordergrpc.BrokerOrderStatus_ACCEPTED
 	case "accepted_for_bidding":
-		return ordergrpc.AlpacaOrderStatus_ACCEPTED_FOR_BIDDING
+		return ordergrpc.BrokerOrderStatus_ACCEPTED_FOR_BIDDING
 	case "stopped":
-		return ordergrpc.AlpacaOrderStatus_STOPPED
+		return ordergrpc.BrokerOrderStatus_STOPPED
 	case "rejected":
-		return ordergrpc.AlpacaOrderStatus_REJECTED
+		return ordergrpc.BrokerOrderStatus_REJECTED
 	case "suspended":
-		return ordergrpc.AlpacaOrderStatus_SUSPENDED
+		return ordergrpc.BrokerOrderStatus_SUSPENDED
 	case "calculated":
-		return ordergrpc.AlpacaOrderStatus_CALCULATED
+		return ordergrpc.BrokerOrderStatus_CALCULATED
 	default:
-		return ordergrpc.AlpacaOrderStatus_NOT_USED_ALPACA_ORDER_STATUS
+		return ordergrpc.BrokerOrderStatus_NOT_USED_ALPACA_ORDER_STATUS
 	}
 }
 

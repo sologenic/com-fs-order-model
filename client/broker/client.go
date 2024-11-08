@@ -4,7 +4,7 @@ import (
 	"context"
 
 	grpcdef "github.com/sologenic/com-fs-order-model"
-	grpcclient "github.com/sologenic/fs-utils-lib/go/grpc-client"
+	grpcclient "github.com/sologenic/com-fs-utils-lib/go/grpc-client"
 )
 
 const (
@@ -12,17 +12,17 @@ const (
 )
 
 var (
-	client     *grpcdef.AlpacaServiceClient
+	client     *grpcdef.BrokerLogServiceClient
 	grpcClient *grpcclient.GRPCClient
 )
 
 func initClient() {
 	grpcClient = grpcclient.InitClient(orderEndpoint)
-	cl := grpcdef.NewAlpacaServiceClient(grpcClient.Conn)
+	cl := grpcdef.NewBrokerLogServiceClient(grpcClient.Conn)
 	client = &cl
 }
 
-func Client() *grpcdef.AlpacaServiceClient {
+func Client() *grpcdef.BrokerLogServiceClient {
 	if client == nil {
 		initClient()
 	}
