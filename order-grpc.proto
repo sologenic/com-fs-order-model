@@ -42,10 +42,6 @@ message OrderQuery {
     optional PaymentState PaymentState = 14;
 }
 
-message Key {
-    string Key = 1;
-}
-
 message OrderStepInstruction {
     optional string Key = 1;
     optional Order Order = 2;

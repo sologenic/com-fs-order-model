@@ -30,3 +30,7 @@ message LockLogRecord {
     repeated ProcessState MustHaveState = 2;
     ProcessState TargetState = 3;
 }
+
+message Key {
+    string Key = 1;
+}

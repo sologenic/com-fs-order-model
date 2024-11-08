@@ -30,7 +30,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type SmartContractLogServiceClient interface {
 	// Non-transaction
-	CreateSmartContractLog(ctx context.Context, in *Order, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	CreateSmartContractLog(ctx context.Context, in *Order, opts ...grpc.CallOption) (*Key, error)
 	// TODO: determine if we will need the Update method -> with the introduction of the LockLogRecord message,
 	// we can handle the must have state and target state dynamically. Therefore, we may not need the Update method.
 	UpdateSmartContractLog(ctx context.Context, in *Order, opts ...grpc.CallOption) (*emptypb.Empty, error)
@@ -46,8 +46,8 @@ func NewSmartContractLogServiceClient(cc grpc.ClientConnInterface) SmartContract
 	return &smartContractLogServiceClient{cc}
 }
 
-func (c *smartContractLogServiceClient) CreateSmartContractLog(ctx context.Context, in *Order, opts ...grpc.CallOption) (*emptypb.Empty, error) {
-	out := new(emptypb.Empty)
+func (c *smartContractLogServiceClient) CreateSmartContractLog(ctx context.Context, in *Order, opts ...grpc.CallOption) (*Key, error) {
+	out := new(Key)
 	err := c.cc.Invoke(ctx, SmartContractLogService_CreateSmartContractLog_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -78,7 +78,7 @@ func (c *smartContractLogServiceClient) SetSmartContractLogLock(ctx context.Cont
 // for forward compatibility
 type SmartContractLogServiceServer interface {
 	// Non-transaction
-	CreateSmartContractLog(context.Context, *Order) (*emptypb.Empty, error)
+	CreateSmartContractLog(context.Context, *Order) (*Key, error)
 	// TODO: determine if we will need the Update method -> with the introduction of the LockLogRecord message,
 	// we can handle the must have state and target state dynamically. Therefore, we may not need the Update method.
 	UpdateSmartContractLog(context.Context, *Order) (*emptypb.Empty, error)
@@ -90,7 +90,7 @@ type SmartContractLogServiceServer interface {
 type UnimplementedSmartContractLogServiceServer struct {
 }
 
-func (UnimplementedSmartContractLogServiceServer) CreateSmartContractLog(context.Context, *Order) (*emptypb.Empty, error) {
+func (UnimplementedSmartContractLogServiceServer) CreateSmartContractLog(context.Context, *Order) (*Key, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateSmartContractLog not implemented")
 }
 func (UnimplementedSmartContractLogServiceServer) UpdateSmartContractLog(context.Context, *Order) (*emptypb.Empty, error) {

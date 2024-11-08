@@ -11,7 +11,7 @@ option go_package = "github.com/sologenic/com-fs-order-model;order";
 // Broker Trade Update Log
 service BrokerLogService {
   // Non-transaction
-  rpc CreateBrokerLog(BrokerOrderDetails) returns (google.protobuf.Empty) {}
+  rpc CreateBrokerLog(BrokerOrderDetails) returns (Key) {}
   // rpc Get(Filter) returns (Records) {}
   
   // TODO: determine if we will need the Update method -> with the introduction of the LockLogRecord message,
