@@ -14,7 +14,7 @@ service OrderService {
     rpc GetOrderByID(OrderID) returns (Order) {}
     rpc GetOrderByKey(Key) returns (Order) {}
     rpc GetOrders(OrderQuery) returns (Orders) {}
-    rpc UpdateOrderStep(OrderStepInstruction) returns (Order) {}
+    rpc UpdateOrderStep(OrderStepInstruction) returns (Order) {} // Transaction to lock and update order state
     // Disaster Recovery
     rpc GetUnfinishedOrders(google.protobuf.Empty) returns (Orders) {}
 }
