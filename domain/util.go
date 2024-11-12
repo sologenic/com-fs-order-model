@@ -19,8 +19,8 @@ type AlpacaResponse struct {
 
 // Get the unique datastore key from the Order
 // format: orderID-SmartContractAddr-network
-func GetOrderKeyFromOrder(order *ordergrpc.Order) string {
-	return strconv.Itoa(int(order.Instruction.OrderID)) + "-" + order.SmartContractAddr + "-" + order.Network
+func GetOrderKeyStrFromOrder(order *ordergrpc.Order) string {
+	return fmt.Sprintf("%d-%s-%s", order.Instruction.OrderID, order.SmartContractAddr, order.Network)
 }
 
 // Map Alpaca responses to our AlpacaOrderDetails model
