@@ -12,17 +12,16 @@ const (
 )
 
 var (
-	client     *grpcdef.OrderServiceClient
+	client     grpcdef.OrderServiceClient
 	grpcClient *grpcclient.GRPCClient
 )
 
 func initClient() {
 	grpcClient = grpcclient.InitClient(orderEndpoint)
-	cl := grpcdef.NewOrderServiceClient(grpcClient.Conn)
-	client = &cl
+	client = grpcdef.NewOrderServiceClient(grpcClient.Conn)
 }
 
-func Client() *grpcdef.OrderServiceClient {
+func Client() grpcdef.OrderServiceClient {
 	if client == nil {
 		initClient()
 	}

@@ -12,17 +12,16 @@ const (
 )
 
 var (
-	client     *grpcdef.BrokerLogServiceClient
+	client     grpcdef.BrokerLogServiceClient
 	grpcClient *grpcclient.GRPCClient
 )
 
 func initClient() {
 	grpcClient = grpcclient.InitClient(orderEndpoint)
-	cl := grpcdef.NewBrokerLogServiceClient(grpcClient.Conn)
-	client = &cl
+	client = grpcdef.NewBrokerLogServiceClient(grpcClient.Conn)
 }
 
-func Client() *grpcdef.BrokerLogServiceClient {
+func Client() grpcdef.BrokerLogServiceClient {
 	if client == nil {
 		initClient()
 	}
