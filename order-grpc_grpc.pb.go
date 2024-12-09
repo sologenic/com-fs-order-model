@@ -20,7 +20,7 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	OrderService_Upsert_FullMethodName           = "/order.OrderService/Upsert"
+	OrderService_UpsertWithState_FullMethodName  = "/order.OrderService/UpsertWithState"
 	OrderService_GetByID_FullMethodName          = "/order.OrderService/GetByID"
 	OrderService_GetByKey_FullMethodName         = "/order.OrderService/GetByKey"
 	OrderService_GetAll_FullMethodName           = "/order.OrderService/GetAll"
@@ -33,7 +33,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type OrderServiceClient interface {
 	// Order
-	Upsert(ctx context.Context, in *Order, opts ...grpc.CallOption) (*OrderID, error)
+	UpsertWithState(ctx context.Context, in *UpsertMessage, opts ...grpc.CallOption) (*OrderID, error)
 	GetByID(ctx context.Context, in *OrderID, opts ...grpc.CallOption) (*Order, error)
 	GetByKey(ctx context.Context, in *Key, opts ...grpc.CallOption) (*Order, error)
 	GetAll(ctx context.Context, in *OrderQuery, opts ...grpc.CallOption) (*Orders, error)
@@ -50,9 +50,9 @@ func NewOrderServiceClient(cc grpc.ClientConnInterface) OrderServiceClient {
 	return &orderServiceClient{cc}
 }
 
-func (c *orderServiceClient) Upsert(ctx context.Context, in *Order, opts ...grpc.CallOption) (*OrderID, error) {
+func (c *orderServiceClient) UpsertWithState(ctx context.Context, in *UpsertMessage, opts ...grpc.CallOption) (*OrderID, error) {
 	out := new(OrderID)
-	err := c.cc.Invoke(ctx, OrderService_Upsert_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, OrderService_UpsertWithState_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -109,7 +109,7 @@ func (c *orderServiceClient) GetAllUnfinished(ctx context.Context, in *emptypb.E
 // for forward compatibility
 type OrderServiceServer interface {
 	// Order
-	Upsert(context.Context, *Order) (*OrderID, error)
+	UpsertWithState(context.Context, *UpsertMessage) (*OrderID, error)
 	GetByID(context.Context, *OrderID) (*Order, error)
 	GetByKey(context.Context, *Key) (*Order, error)
 	GetAll(context.Context, *OrderQuery) (*Orders, error)
@@ -122,8 +122,8 @@ type OrderServiceServer interface {
 type UnimplementedOrderServiceServer struct {
 }
 
-func (UnimplementedOrderServiceServer) Upsert(context.Context, *Order) (*OrderID, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Upsert not implemented")
+func (UnimplementedOrderServiceServer) UpsertWithState(context.Context, *UpsertMessage) (*OrderID, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpsertWithState not implemented")
 }
 func (UnimplementedOrderServiceServer) GetByID(context.Context, *OrderID) (*Order, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetByID not implemented")
@@ -152,20 +152,20 @@ func RegisterOrderServiceServer(s grpc.ServiceRegistrar, srv OrderServiceServer)
 	s.RegisterService(&OrderService_ServiceDesc, srv)
 }
 
-func _OrderService_Upsert_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Order)
+func _OrderService_UpsertWithState_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpsertMessage)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(OrderServiceServer).Upsert(ctx, in)
+		return srv.(OrderServiceServer).UpsertWithState(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: OrderService_Upsert_FullMethodName,
+		FullMethod: OrderService_UpsertWithState_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(OrderServiceServer).Upsert(ctx, req.(*Order))
+		return srv.(OrderServiceServer).UpsertWithState(ctx, req.(*UpsertMessage))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -268,8 +268,8 @@ var OrderService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*OrderServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Upsert",
-			Handler:    _OrderService_Upsert_Handler,
+			MethodName: "UpsertWithState",
+			Handler:    _OrderService_UpsertWithState_Handler,
 		},
 		{
 			MethodName: "GetByID",
