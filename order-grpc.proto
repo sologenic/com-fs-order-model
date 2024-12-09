@@ -10,13 +10,13 @@ option go_package = "github.com/sologenic/com-fs-order-model;order";
 
 service OrderService {
     // Order
-    rpc UpsertOrder(Order) returns (OrderID) {}
-    rpc GetOrderByID(OrderID) returns (Order) {}
-    rpc GetOrderByKey(Key) returns (Order) {}
-    rpc GetOrders(OrderQuery) returns (Orders) {}
-    rpc UpdateOrderStep(OrderStepInstruction) returns (Order) {} // Transaction to lock and update order state
+    rpc Upsert(Order) returns (OrderID) {}
+    rpc GetByID(OrderID) returns (Order) {}
+    rpc GetByKey(Key) returns (Order) {}
+    rpc GetAll(OrderQuery) returns (Orders) {}
+    rpc UpdateStep(OrderStepInstruction) returns (Order) {} // Transaction to lock and update order state
     // Disaster Recovery
-    rpc GetUnfinishedOrders(google.protobuf.Empty) returns (Orders) {}
+    rpc GetAllUnfinished(google.protobuf.Empty) returns (Orders) {}
 }
 
 message OrderID {
