@@ -23,15 +23,8 @@ func GetOrderKeyStrFromOrder(order *ordergrpc.Order) string {
 	return fmt.Sprintf("%d-%s-%s", order.Instruction.OrderID, order.SmartContractAddr, order.Network)
 }
 
-// Strip the timestamp from the log key to get the original key
-// logKey format: timestamp-keyStr
-func StripTimestampFromLogKey(logKey string) (string, error) {
-	i := strings.Index(logKey, "-")
-	if i == -1 {
-		return "", fmt.Errorf("invalid key: %s", logKey)
-	}
-	k := logKey[i+1:]
-	return k, nil
+func LogKeyToStr(key *ordergrpc.Key) string {
+	return fmt.Sprintf("%d-%s", *key.Timestamp, key.Key)
 }
 
 // Map Alpaca responses to our AlpacaOrderDetails model
