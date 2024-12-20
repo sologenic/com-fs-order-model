@@ -9,6 +9,7 @@ import (
 	"github.com/alpacahq/alpaca-trade-api-go/v3/alpaca"
 	ordergrpc "github.com/sologenic/com-fs-order-model"
 	dutils "github.com/sologenic/com-fs-utils-lib/go/decimal"
+	metadatagrpc "github.com/sologenic/com-fs-utils-lib/models/metadata"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -20,7 +21,7 @@ type AlpacaResponse struct {
 // Get the unique datastore key from the Order
 // order key format: orderID-SmartContractAddr-network
 func GetOrderKeyStrFromOrder(order *ordergrpc.Order) string {
-	return fmt.Sprintf("%d-%s-%s", order.Instruction.OrderID, order.SmartContractAddr, order.Network)
+	return fmt.Sprintf("%d-%s-%d", order.Instruction.OrderID, order.SmartContractAddr, order.Network)
 }
 
 func LogKeyToStr(key *ordergrpc.Key) string {
@@ -95,15 +96,22 @@ func ParseStrClientOrderIDToInternal(clientOrderIDString string) (*ordergrpc.Cli
 		return nil, fmt.Errorf("invalid ClientOrderID format")
 	}
 
+	// Parse OrderID
 	orderIDInt64, err := strconv.ParseInt(parts[0], 10, 64)
 	if err != nil {
 		return nil, fmt.Errorf("invalid OrderID format: %v", err)
 	}
 
+	// Parse Network string to enum
+	network, err := mapNetworkStrToGRPC(parts[2])
+	if err != nil {
+		return nil, fmt.Errorf("invalid network format: %v", err)
+	}
+
 	return &ordergrpc.ClientOrderID{
 		OrderID:           orderIDInt64,
 		SmartContractAddr: parts[1],
-		Network:           parts[2],
+		Network:           network,
 	}, nil
 }
 
@@ -224,4 +232,12 @@ func convertTimeToTimestamp(time *time.Time) *timestamppb.Timestamp {
 		return nil
 	}
 	return timestamppb.New(*time)
+}
+
+func mapNetworkStrToGRPC(networkStr string) (metadatagrpc.Network, error) {
+	v, exists := metadatagrpc.Network_value[strings.ToUpper(networkStr)]
+	if !exists {
+		return metadatagrpc.Network_NETWORK_DO_NOT_USE, fmt.Errorf("invalid network: %s", networkStr)
+	}
+	return metadatagrpc.Network(v), nil
 }

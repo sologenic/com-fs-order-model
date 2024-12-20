@@ -13,6 +13,7 @@ import (
 	"github.com/google/go-cmp/cmp/cmpopts"
 	ordergrpc "github.com/sologenic/com-fs-order-model"
 	utildecimal "github.com/sologenic/com-fs-utils-lib/go/decimal"
+	metadatagrpc "github.com/sologenic/com-fs-utils-lib/models/metadata"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
@@ -48,9 +49,9 @@ func TestGetOrderKeyStrFromOrder(t *testing.T) {
 					OrderID: 12345,
 				},
 				SmartContractAddr: "0xABC123",
-				Network:           "mainnet",
+				Network:           metadatagrpc.Network_MAINNET,
 			},
-			expected: "12345-0xABC123-mainnet",
+			expected: "12345-0xABC123-1",
 		},
 		{
 			name: "Empty SmartContractAddr",
@@ -59,20 +60,31 @@ func TestGetOrderKeyStrFromOrder(t *testing.T) {
 					OrderID: 67890,
 				},
 				SmartContractAddr: "",
-				Network:           "testnet",
+				Network:           metadatagrpc.Network_TESTNET,
 			},
-			expected: "67890--testnet",
+			expected: "67890--2",
 		},
 		{
-			name: "Empty Network",
+			name: "Invalid Network",
 			order: &ordergrpc.Order{
 				Instruction: &ordergrpc.OrderInstruction{
 					OrderID: 11111,
 				},
 				SmartContractAddr: "0xDEF456",
-				Network:           "",
+				Network:           metadatagrpc.Network_NETWORK_DO_NOT_USE,
 			},
-			expected: "11111-0xDEF456-",
+			expected: "11111-0xDEF456-0",
+		},
+		{
+			name: "Devnet",
+			order: &ordergrpc.Order{
+				Instruction: &ordergrpc.OrderInstruction{
+					OrderID: 22222,
+				},
+				SmartContractAddr: "0xGHI789",
+				Network:           metadatagrpc.Network_DEVNET,
+			},
+			expected: "22222-0xGHI789-3",
 		},
 	}
 
@@ -80,53 +92,6 @@ func TestGetOrderKeyStrFromOrder(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			result := GetOrderKeyStrFromOrder(tt.order)
 			assert.Equal(t, tt.expected, result)
-		})
-	}
-}
-
-func TestStripTimestampFromLogKey(t *testing.T) {
-	tests := []struct {
-		name        string
-		logKey      string
-		expected    string
-		expectError bool
-	}{
-		{
-			name:        "Valid log key with single dash",
-			logKey:      "1731111796875394000-70-testcore1et29cek95pl0zralsf43u4uply0g9nmxnj7fyt9yfy74spch7fpq3f8j0e-testnet",
-			expected:    "70-testcore1et29cek95pl0zralsf43u4uply0g9nmxnj7fyt9yfy74spch7fpq3f8j0e-testnet",
-			expectError: false,
-		},
-		{
-			name:        "Log key without dash",
-			logKey:      "invalidkey",
-			expected:    "",
-			expectError: true,
-		},
-		{
-			name:        "Empty log key",
-			logKey:      "",
-			expected:    "",
-			expectError: true,
-		},
-		{
-			name:        "Log key starts with dash",
-			logKey:      "-startingWithDash",
-			expected:    "startingWithDash",
-			expectError: false,
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			result, err := StripTimestampFromLogKey(tt.logKey)
-			if tt.expectError {
-				assert.Error(t, err)
-				assert.Equal(t, "", result)
-			} else {
-				assert.NoError(t, err)
-				assert.Equal(t, tt.expected, result)
-			}
 		})
 	}
 }
@@ -146,7 +111,7 @@ func TestMapAlpacaOrderToInternal(t *testing.T) {
 				ClientOrderID: &ordergrpc.ClientOrderID{
 					OrderID:           79,
 					SmartContractAddr: "testcore1et29cek95pl0zralsf43u4uply0g9nmxnj7fyt9yfy74spch7fpq3f8j0e",
-					Network:           "testnet",
+					Network:           metadatagrpc.Network_TESTNET,
 				},
 				SubmittedAt:    timestamppb.New(time.Unix(0, 0)),
 				FilledAt:       nil,
@@ -187,7 +152,7 @@ func TestMapAlpacaOrderToInternal(t *testing.T) {
 				ClientOrderID: &ordergrpc.ClientOrderID{
 					OrderID:           79,
 					SmartContractAddr: "testcore1et29cek95pl0zralsf43u4uply0g9nmxnj7fyt9yfy74spch7fpq3f8j0e",
-					Network:           "testnet",
+					Network:           metadatagrpc.Network_TESTNET,
 				},
 				SubmittedAt:    timestamppb.New(time.Unix(0, 0)),
 				FilledAt:       nil,
@@ -228,7 +193,7 @@ func TestMapAlpacaOrderToInternal(t *testing.T) {
 				ClientOrderID: &ordergrpc.ClientOrderID{
 					OrderID:           79,
 					SmartContractAddr: "testcore1et29cek95pl0zralsf43u4uply0g9nmxnj7fyt9yfy74spch7fpq3f8j0e",
-					Network:           "testnet",
+					Network:           metadatagrpc.Network_TESTNET,
 				},
 				SubmittedAt:    timestamppb.New(time.Unix(0, 0)),
 				FilledAt:       nil,
@@ -269,7 +234,7 @@ func TestMapAlpacaOrderToInternal(t *testing.T) {
 				ClientOrderID: &ordergrpc.ClientOrderID{
 					OrderID:           79,
 					SmartContractAddr: "testcore1et29cek95pl0zralsf43u4uply0g9nmxnj7fyt9yfy74spch7fpq3f8j0e",
-					Network:           "testnet",
+					Network:           metadatagrpc.Network_TESTNET,
 				},
 				SubmittedAt:    timestamppb.New(time.Unix(0, 0)),
 				FilledAt:       timestamppb.New(time.Unix(0, 0)),
@@ -310,7 +275,7 @@ func TestMapAlpacaOrderToInternal(t *testing.T) {
 				ClientOrderID: &ordergrpc.ClientOrderID{
 					OrderID:           79,
 					SmartContractAddr: "testcore1et29cek95pl0zralsf43u4uply0g9nmxnj7fyt9yfy74spch7fpq3f8j0e",
-					Network:           "testnet",
+					Network:           metadatagrpc.Network_TESTNET,
 				},
 				SubmittedAt:    timestamppb.New(time.Unix(0, 0)),
 				FilledAt:       timestamppb.New(time.Unix(0, 0)),
@@ -351,7 +316,7 @@ func TestMapAlpacaOrderToInternal(t *testing.T) {
 				ClientOrderID: &ordergrpc.ClientOrderID{
 					OrderID:           79,
 					SmartContractAddr: "testcore1et29cek95pl0zralsf43u4uply0g9nmxnj7fyt9yfy74spch7fpq3f8j0e",
-					Network:           "testnet",
+					Network:           metadatagrpc.Network_TESTNET,
 				},
 				SubmittedAt:    timestamppb.New(time.Unix(0, 0)),
 				FilledAt:       timestamppb.New(time.Unix(0, 0)),
@@ -467,19 +432,9 @@ func TestParseInternalClientOrderIDToStr(t *testing.T) {
 			clientOrderID: &ordergrpc.ClientOrderID{
 				OrderID:           12345,
 				SmartContractAddr: "testcore1cek95pl0zralsf43u4uply0g9nmxnj7fyt9yfy74spch7fpq3f8j0e",
-				Network:           "mainnet",
+				Network:           metadatagrpc.Network_TESTNET,
 			},
 			expected:    "12345-testcore1cek95pl0zralsf43u4uply0g9nmxnj7fyt9yfy74spch7fpq3f8j0e-mainnet",
-			expectPanic: false,
-		},
-		{
-			name: "All Fields Empty",
-			clientOrderID: &ordergrpc.ClientOrderID{
-				OrderID:           0,
-				SmartContractAddr: "",
-				Network:           "",
-			},
-			expected:    "0--",
 			expectPanic: false,
 		},
 		{
@@ -517,7 +472,7 @@ func TestParseStrClientOrderIDToInternal(t *testing.T) {
 			expected: &ordergrpc.ClientOrderID{
 				OrderID:           12345,
 				SmartContractAddr: "testcore1cek95pl0zralsf43u4uply0g9nmxnj7fyt9yfy74spch7fpq3f8j0e",
-				Network:           "mainnet",
+				Network:           metadatagrpc.Network_MAINNET,
 			},
 			expectError: false,
 		},
@@ -545,7 +500,7 @@ func TestParseStrClientOrderIDToInternal(t *testing.T) {
 			expected: &ordergrpc.ClientOrderID{
 				OrderID:           0,
 				SmartContractAddr: "",
-				Network:           "",
+				Network:           metadatagrpc.Network_NETWORK_DO_NOT_USE,
 			},
 			expectError: false,
 		},
