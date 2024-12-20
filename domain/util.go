@@ -102,8 +102,13 @@ func ParseStrClientOrderIDToInternal(clientOrderIDString string) (*ordergrpc.Cli
 		return nil, fmt.Errorf("invalid OrderID format: %v", err)
 	}
 
+	// Validate network value is not empty
+	if parts[2] == "" {
+		return nil, fmt.Errorf("network value cannot be empty")
+	}
+
 	// Parse Network string to enum
-	network, err := mapNetworkStrToGRPC(parts[2])
+	networkInt, err := strconv.ParseInt(parts[2], 10, 32)
 	if err != nil {
 		return nil, fmt.Errorf("invalid network format: %v", err)
 	}
@@ -111,7 +116,7 @@ func ParseStrClientOrderIDToInternal(clientOrderIDString string) (*ordergrpc.Cli
 	return &ordergrpc.ClientOrderID{
 		OrderID:           orderIDInt64,
 		SmartContractAddr: parts[1],
-		Network:           network,
+		Network:           metadatagrpc.Network(networkInt),
 	}, nil
 }
 

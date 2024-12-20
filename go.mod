@@ -7,6 +7,7 @@ require (
 	github.com/google/go-cmp v0.6.0
 	github.com/sologenic/com-fs-utils-lib/go/decimal v0.0.0-20241028230612-350dd06f24af
 	github.com/sologenic/com-fs-utils-lib/go/grpc-client v0.0.0-20241030223317-5bff63a9ee29
+	github.com/sologenic/com-fs-utils-lib/go/unittest v0.0.0-20241212234326-14a7503bbe70
 	github.com/sologenic/com-fs-utils-lib/models/metadata v0.0.0-20241212234326-14a7503bbe70
 	github.com/stretchr/testify v1.9.0
 	google.golang.org/grpc v1.65.0
