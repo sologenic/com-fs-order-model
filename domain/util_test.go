@@ -434,7 +434,7 @@ func TestParseInternalClientOrderIDToStr(t *testing.T) {
 				SmartContractAddr: "testcore1cek95pl0zralsf43u4uply0g9nmxnj7fyt9yfy74spch7fpq3f8j0e",
 				Network:           metadatagrpc.Network_TESTNET,
 			},
-			expected:    "12345-testcore1cek95pl0zralsf43u4uply0g9nmxnj7fyt9yfy74spch7fpq3f8j0e-mainnet",
+			expected:    "12345-testcore1cek95pl0zralsf43u4uply0g9nmxnj7fyt9yfy74spch7fpq3f8j0e-2",
 			expectPanic: false,
 		},
 		{
