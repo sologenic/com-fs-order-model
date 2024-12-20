@@ -2,11 +2,13 @@ syntax = "proto3";
 
 package order;
 
+option go_package = "github.com/sologenic/com-fs-order-model;order";
+
 import "google/protobuf/timestamp.proto";
 import "util.proto";
 import "sologenic/com-fs-utils-lib/go/decimal/decimal.proto";
+import "sologenic/com-fs-utils-lib/models/metadata/metadata.proto";
 
-option go_package = "github.com/sologenic/com-fs-order-model;order";
 
 // Key orderID-SmartContractAddr-network (is as unique identifier for the order in message to Alpaca)
 message BrokerOrderDetails {
@@ -58,7 +60,7 @@ message BrokerOrderDetails {
 }
 
 message ClientOrderID {
-    string Network = 1;
+    metadata.Network Network = 1;
     string SmartContractAddr = 2;
     int64 OrderID = 3;
 }
