@@ -33,5 +33,5 @@ message LockLogRecord {
 
 message Key {
     string Key = 1;
-    optional int64 Timestamp = 2;
+    optional string KeyPrefix = 2;
 }
