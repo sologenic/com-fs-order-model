@@ -25,7 +25,7 @@ func GetOrderKeyStrFromOrder(order *ordergrpc.Order) string {
 }
 
 func LogKeyToStr(key *ordergrpc.Key) string {
-	return fmt.Sprintf("%d-%s", *key.Timestamp, key.Key)
+	return fmt.Sprintf("%s-%s", *key.KeyPrefix, key.Key)
 }
 
 // Map Alpaca responses to our AlpacaOrderDetails model
