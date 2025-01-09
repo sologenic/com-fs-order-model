@@ -11,6 +11,7 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -19,11 +20,12 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	OrderService_GetByID_FullMethodName         = "/order.OrderService/GetByID"
-	OrderService_GetByKey_FullMethodName        = "/order.OrderService/GetByKey"
-	OrderService_GetAll_FullMethodName          = "/order.OrderService/GetAll"
-	OrderService_UpsertWithState_FullMethodName = "/order.OrderService/UpsertWithState"
-	OrderService_UpdateStep_FullMethodName      = "/order.OrderService/UpdateStep"
+	OrderService_GetByID_FullMethodName          = "/order.OrderService/GetByID"
+	OrderService_GetByKey_FullMethodName         = "/order.OrderService/GetByKey"
+	OrderService_GetAll_FullMethodName           = "/order.OrderService/GetAll"
+	OrderService_GetAllUnfinished_FullMethodName = "/order.OrderService/GetAllUnfinished"
+	OrderService_UpsertWithState_FullMethodName  = "/order.OrderService/UpsertWithState"
+	OrderService_UpdateStep_FullMethodName       = "/order.OrderService/UpdateStep"
 )
 
 // OrderServiceClient is the client API for OrderService service.
@@ -33,6 +35,8 @@ type OrderServiceClient interface {
 	GetByID(ctx context.Context, in *OrderID, opts ...grpc.CallOption) (*Order, error)
 	GetByKey(ctx context.Context, in *Key, opts ...grpc.CallOption) (*Order, error)
 	GetAll(ctx context.Context, in *OrderQuery, opts ...grpc.CallOption) (*Orders, error)
+	// TODO: determine if we need this method: recovery uses unprocessed (open or locked) logs, so this method may just be for querying purposes
+	GetAllUnfinished(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*Orders, error)
 	// Transactional operations
 	UpsertWithState(ctx context.Context, in *UpsertMessage, opts ...grpc.CallOption) (*OrderID, error)
 	UpdateStep(ctx context.Context, in *OrderStepInstruction, opts ...grpc.CallOption) (*Order, error)
@@ -73,6 +77,15 @@ func (c *orderServiceClient) GetAll(ctx context.Context, in *OrderQuery, opts ..
 	return out, nil
 }
 
+func (c *orderServiceClient) GetAllUnfinished(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*Orders, error) {
+	out := new(Orders)
+	err := c.cc.Invoke(ctx, OrderService_GetAllUnfinished_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *orderServiceClient) UpsertWithState(ctx context.Context, in *UpsertMessage, opts ...grpc.CallOption) (*OrderID, error) {
 	out := new(OrderID)
 	err := c.cc.Invoke(ctx, OrderService_UpsertWithState_FullMethodName, in, out, opts...)
@@ -98,6 +111,8 @@ type OrderServiceServer interface {
 	GetByID(context.Context, *OrderID) (*Order, error)
 	GetByKey(context.Context, *Key) (*Order, error)
 	GetAll(context.Context, *OrderQuery) (*Orders, error)
+	// TODO: determine if we need this method: recovery uses unprocessed (open or locked) logs, so this method may just be for querying purposes
+	GetAllUnfinished(context.Context, *emptypb.Empty) (*Orders, error)
 	// Transactional operations
 	UpsertWithState(context.Context, *UpsertMessage) (*OrderID, error)
 	UpdateStep(context.Context, *OrderStepInstruction) (*Order, error)
@@ -115,6 +130,9 @@ func (UnimplementedOrderServiceServer) GetByKey(context.Context, *Key) (*Order, 
 }
 func (UnimplementedOrderServiceServer) GetAll(context.Context, *OrderQuery) (*Orders, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAll not implemented")
+}
+func (UnimplementedOrderServiceServer) GetAllUnfinished(context.Context, *emptypb.Empty) (*Orders, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAllUnfinished not implemented")
 }
 func (UnimplementedOrderServiceServer) UpsertWithState(context.Context, *UpsertMessage) (*OrderID, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpsertWithState not implemented")
@@ -188,6 +206,24 @@ func _OrderService_GetAll_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _OrderService_GetAllUnfinished_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OrderServiceServer).GetAllUnfinished(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: OrderService_GetAllUnfinished_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OrderServiceServer).GetAllUnfinished(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _OrderService_UpsertWithState_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpsertMessage)
 	if err := dec(in); err != nil {
@@ -242,6 +278,10 @@ var OrderService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetAll",
 			Handler:    _OrderService_GetAll_Handler,
+		},
+		{
+			MethodName: "GetAllUnfinished",
+			Handler:    _OrderService_GetAllUnfinished_Handler,
 		},
 		{
 			MethodName: "UpsertWithState",
