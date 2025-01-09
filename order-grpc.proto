@@ -4,20 +4,18 @@ package order;
 
 option go_package = "github.com/sologenic/com-fs-order-model;order";
 
-import "google/protobuf/empty.proto";
 import "order.proto";
 import "util.proto";
 import "sologenic/com-fs-utils-lib/models/metadata/metadata.proto";
 
 service OrderService {
-    // Order
-    rpc UpsertWithState(UpsertMessage) returns (OrderID) {}
     rpc GetByID(OrderID) returns (Order) {}
     rpc GetByKey(Key) returns (Order) {}
     rpc GetAll(OrderQuery) returns (Orders) {}
-    rpc UpdateStep(OrderStepInstruction) returns (Order) {} // Transaction to lock and update order state
-    // Disaster Recovery
-    rpc GetAllUnfinished(google.protobuf.Empty) returns (Orders) {}
+
+    // Transactional operations
+    rpc UpsertWithState(UpsertMessage) returns (OrderID) {}
+    rpc UpdateStep(OrderStepInstruction) returns (Order) {}
 }
 
 message UpsertMessage {
