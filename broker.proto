@@ -57,6 +57,8 @@ message BrokerOrderDetails {
 
     // Bookkeeping: did we process this event from alpaca order log?
     optional ProcessInfo ProcessInfo = 31;
+
+    optional string InstanceID = 32; // ID used by logs to identify the instance where the log was created/ processed
 }
 
 message ClientOrderID {

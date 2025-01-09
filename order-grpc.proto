@@ -10,14 +10,15 @@ import "util.proto";
 import "sologenic/com-fs-utils-lib/models/metadata/metadata.proto";
 
 service OrderService {
-    // Order
-    rpc UpsertWithState(UpsertMessage) returns (OrderID) {}
     rpc GetByID(OrderID) returns (Order) {}
     rpc GetByKey(Key) returns (Order) {}
     rpc GetAll(OrderQuery) returns (Orders) {}
-    rpc UpdateStep(OrderStepInstruction) returns (Order) {} // Transaction to lock and update order state
-    // Disaster Recovery
+    // TODO: determine if we need this method: recovery uses unprocessed (open or locked) logs
     rpc GetAllUnfinished(google.protobuf.Empty) returns (Orders) {}
+
+    // Transactional operations
+    rpc UpsertWithState(UpsertMessage) returns (OrderID) {}
+    rpc UpdateStep(OrderStepInstruction) returns (Order) {}
 }
 
 message UpsertMessage {
