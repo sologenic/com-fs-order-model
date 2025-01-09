@@ -13,7 +13,7 @@ service OrderService {
     rpc GetByID(OrderID) returns (Order) {}
     rpc GetByKey(Key) returns (Order) {}
     rpc GetAll(OrderQuery) returns (Orders) {}
-    // TODO: determine if we need this method: recovery uses unprocessed (open or locked) logs, so this method may just be for querying purposes
+    // TODO: determine if we need this method: recovery uses unprocessed (open or locked) logs
     rpc GetAllUnfinished(google.protobuf.Empty) returns (Orders) {}
 
     // Transactional operations
