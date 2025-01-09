@@ -2,10 +2,11 @@ syntax = "proto3";
 
 package order;
 
+option go_package = "github.com/sologenic/com-fs-order-model;order";
+
 import "google/protobuf/empty.proto";
 import "attestation.proto";
-
-option go_package = "github.com/sologenic/com-fs-order-model;order";
+import "sologenic/com-fs-utils-lib/models/metadata/metadata.proto";
 
 service AttestationService {
     rpc Create(Attestation) returns (google.protobuf.Empty) {}
@@ -15,15 +16,15 @@ service AttestationService {
 }
 
 message AttestationID {
-    string Network = 1;
+    metadata.Network Network = 1;
     string SmartContractAddr = 2;
-    string AssetKey = 3;
+    string Denom = 3;
     optional int64 BlockHeight = 4; // Default will return the latest attestation
 }
 
 message AttestationQuery {
-    string Network = 1;
+    metadata.Network Network = 1;
     string SmartContractAddr = 2;
-    string AssetKey = 3;
+    string Denom = 3;
     optional int32 Offset = 5;
 }

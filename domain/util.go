@@ -3,59 +3,121 @@ package domain
 import (
 	"fmt"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/alpacahq/alpaca-trade-api-go/v3/alpaca"
 	ordergrpc "github.com/sologenic/com-fs-order-model"
 	dutils "github.com/sologenic/com-fs-utils-lib/go/decimal"
+	metadatagrpc "github.com/sologenic/com-fs-utils-lib/models/metadata"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-// Get the unique datastore key from the Order
-func GetOrderKeyFromOrder(order *ordergrpc.Order) string {
-	return order.Network + "_" + order.SmartContractAddr + "_" + strconv.Itoa(int(order.Instruction.OrderID))
+type AlpacaResponse struct {
+	Order       *alpaca.Order
+	TradeUpdate *alpaca.TradeUpdate
 }
 
-// Map Alpaca Order to our AlpacaOrderDetails model
-func MapAlpacaOrderToInternal(tu *alpaca.TradeUpdate, aod *ordergrpc.AlpacaOrderDetails) error {
-	if tu == nil {
-		return nil
+// Get the unique datastore key from the Order
+// order key format: orderID-SmartContractAddr-network
+func GetOrderKeyStrFromOrder(order *ordergrpc.Order) string {
+	return fmt.Sprintf("%d-%s-%d", order.Instruction.OrderID, order.SmartContractAddr, order.Network)
+}
+
+func LogKeyToStr(key *ordergrpc.Key) string {
+	return fmt.Sprintf("%s-%s", *key.KeyPrefix, key.Key)
+}
+
+// Map Alpaca responses to our AlpacaOrderDetails model
+// Two types of responses are handled: Order(SDK response) and TradeUpdate(Update event via websocket)
+func MapAlpacaOrderToInternal(ar *AlpacaResponse) (*ordergrpc.BrokerOrderDetails, error) {
+	var o alpaca.Order
+	var tu *alpaca.TradeUpdate
+
+	if ar.TradeUpdate != nil {
+		o = ar.TradeUpdate.Order
+		tu = ar.TradeUpdate
 	}
-	if tu.Order.ID != aod.AlpacaOrderID {
-		return fmt.Errorf("Order.ID does not match AlpacaOrderDetails.AlpacaOrderID")
+	if ar.Order != nil {
+		o = *ar.Order
 	}
-	order := tu.Order
-	aod.AlpacaOrderID = order.ID
-	aod.ClientOrderID = order.ClientOrderID
-	aod.SubmittedAt = convertTimeToTimestamp(&order.SubmittedAt)
-	aod.FilledAt = convertTimeToTimestamp(order.FilledAt)
-	aod.ExpiredAt = convertTimeToTimestamp(order.ExpiredAt)
-	aod.CancelledAt = convertTimeToTimestamp(order.CanceledAt)
-	aod.FailedAt = convertTimeToTimestamp(order.FailedAt)
-	aod.AssetID = order.AssetID
-	aod.Symbol = order.Symbol
-	aod.AssetClass = mapAssetClass(order.AssetClass)
-	aod.OrderClass = mapOrderClass(order.OrderClass)
-	aod.Type = mapTradeType(order.Type)
-	aod.Side = mapSide(order.Side)
-	aod.TimeInForce = mapTimeInForce(order.TimeInForce)
-	aod.Notional = dutils.DecimalToInternalDecimal(order.Notional)
-	aod.OrderQty = dutils.DecimalToInternalDecimal(order.Qty)
-	aod.FilledQty = dutils.DecimalToInternalDecimal(&order.FilledQty)
-	aod.FilledAvgPrice = dutils.DecimalToInternalDecimal(order.FilledAvgPrice)
-	aod.LimitPrice = dutils.DecimalToInternalDecimal(order.LimitPrice)
-	aod.StopPrice = dutils.DecimalToInternalDecimal(order.StopPrice)
-	aod.TrailPrice = dutils.DecimalToInternalDecimal(order.TrailPrice)
-	aod.TrailPercent = dutils.DecimalToInternalDecimal(order.TrailPercent)
-	aod.HWM = dutils.DecimalToInternalDecimal(order.HWM)
-	aod.ExtendedHours = order.ExtendedHours
-	aod.CreatedAt = convertTimeToTimestamp(&order.CreatedAt)
-	aod.UpdatedAt = convertTimeToTimestamp(&order.UpdatedAt)
-	aod.Status = mapStatus(order.Status)
-	aod.TotalPosition = dutils.DecimalToInternalDecimal(tu.PositionQty)
-	aod.PartialPrice = dutils.DecimalToInternalDecimal(tu.Price)
-	aod.PartialQty = dutils.DecimalToInternalDecimal(tu.Qty)
-	return nil
+
+	coID, err := ParseStrClientOrderIDToInternal(o.ClientOrderID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse ClientOrderID: %v", err)
+	}
+	aod := &ordergrpc.BrokerOrderDetails{
+		BrokerAssignedID: o.ID,
+		ClientOrderID:    coID,
+		SubmittedAt:      convertTimeToTimestamp(&o.SubmittedAt),
+		FilledAt:         convertTimeToTimestamp(o.FilledAt),
+		ExpiredAt:        convertTimeToTimestamp(o.ExpiredAt),
+		CancelledAt:      convertTimeToTimestamp(o.CanceledAt),
+		FailedAt:         convertTimeToTimestamp(o.FailedAt),
+		AssetID:          o.AssetID,
+		Symbol:           o.Symbol,
+		AssetClass:       mapAssetClass(o.AssetClass),
+		OrderClass:       mapOrderClass(o.OrderClass),
+		Type:             mapTradeType(o.Type),
+		Side:             mapSide(o.Side),
+		TimeInForce:      mapTimeInForce(o.TimeInForce),
+		Notional:         dutils.DecimalToInternalDecimal(o.Notional),
+		OrderQty:         dutils.DecimalToInternalDecimal(o.Qty),
+		FilledQty:        dutils.DecimalToInternalDecimal(&o.FilledQty),
+		FilledAvgPrice:   dutils.DecimalToInternalDecimal(o.FilledAvgPrice),
+		LimitPrice:       dutils.DecimalToInternalDecimal(o.LimitPrice),
+		StopPrice:        dutils.DecimalToInternalDecimal(o.StopPrice),
+		TrailPrice:       dutils.DecimalToInternalDecimal(o.TrailPrice),
+		TrailPercent:     dutils.DecimalToInternalDecimal(o.TrailPercent),
+		HWM:              dutils.DecimalToInternalDecimal(o.HWM),
+		ExtendedHours:    o.ExtendedHours,
+		CreatedAt:        convertTimeToTimestamp(&o.CreatedAt),
+		UpdatedAt:        convertTimeToTimestamp(&o.UpdatedAt),
+		Status:           mapStatus(o.Status),
+	}
+
+	if tu != nil {
+		aod.TotalPosition = dutils.DecimalToInternalDecimal(tu.PositionQty)
+		aod.PartialPrice = dutils.DecimalToInternalDecimal(tu.Price)
+		aod.PartialQty = dutils.DecimalToInternalDecimal(tu.Qty)
+	}
+	return aod, nil
+}
+
+func ParseInternalClientOrderIDToStr(bod *ordergrpc.ClientOrderID) string {
+	return fmt.Sprintf("%d-%s-%d", bod.OrderID, bod.SmartContractAddr, bod.Network)
+}
+
+// Parse ClientOrderID string into the GRPC struct
+// format: orderID-SmartContractAddr-network
+func ParseStrClientOrderIDToInternal(clientOrderIDString string) (*ordergrpc.ClientOrderID, error) {
+	parts := strings.Split(clientOrderIDString, "-")
+	if len(parts) != 3 {
+		return nil, fmt.Errorf("invalid ClientOrderID format")
+	}
+
+	// Parse OrderID
+	orderIDInt64, err := strconv.ParseInt(parts[0], 10, 64)
+	if err != nil {
+		return nil, fmt.Errorf("invalid OrderID format: %v", err)
+	}
+
+	// Validate network value is not empty
+	if parts[2] == "" {
+		return nil, fmt.Errorf("network value cannot be empty")
+	}
+
+	// Parse Network string to enum
+	networkInt, err := strconv.ParseInt(parts[2], 10, 32)
+	if err != nil {
+		return nil, fmt.Errorf("invalid network format: %v", err)
+	}
+
+	return &ordergrpc.ClientOrderID{
+		OrderID:           orderIDInt64,
+		SmartContractAddr: parts[1],
+		Network:           metadatagrpc.Network(networkInt),
+	}, nil
 }
 
 // Maps the Alpaca AssetClass string enum to the internal AssetClass int enum
@@ -120,38 +182,38 @@ func mapTimeInForce(timeInForce alpaca.TimeInForce) ordergrpc.TimeInForce {
 	}
 }
 
-func mapStatus(status string) ordergrpc.AlpacaOrderStatus {
+func mapStatus(status string) ordergrpc.BrokerOrderStatus {
 	switch status {
 	case "pending_new":
-		return ordergrpc.AlpacaOrderStatus_PENDING_NEW
+		return ordergrpc.BrokerOrderStatus_PENDING_NEW
 	case "new":
-		return ordergrpc.AlpacaOrderStatus_NEW
+		return ordergrpc.BrokerOrderStatus_NEW
 	case "partially_filled":
-		return ordergrpc.AlpacaOrderStatus_PARTIALLY_FILLED
+		return ordergrpc.BrokerOrderStatus_PARTIALLY_FILLED
 	case "filled":
-		return ordergrpc.AlpacaOrderStatus_FILLED
+		return ordergrpc.BrokerOrderStatus_FILLED
 	case "done_for_day":
-		return ordergrpc.AlpacaOrderStatus_DONE_FOR_DAY
+		return ordergrpc.BrokerOrderStatus_DONE_FOR_DAY
 	case "canceled":
-		return ordergrpc.AlpacaOrderStatus_CANCELED
+		return ordergrpc.BrokerOrderStatus_CANCELED
 	case "expired":
-		return ordergrpc.AlpacaOrderStatus_EXPIRED
+		return ordergrpc.BrokerOrderStatus_EXPIRED
 	case "pending_cancel":
-		return ordergrpc.AlpacaOrderStatus_PENDING_CANCEL
+		return ordergrpc.BrokerOrderStatus_PENDING_CANCEL
 	case "accepted":
-		return ordergrpc.AlpacaOrderStatus_ACCEPTED
+		return ordergrpc.BrokerOrderStatus_ACCEPTED
 	case "accepted_for_bidding":
-		return ordergrpc.AlpacaOrderStatus_ACCEPTED_FOR_BIDDING
+		return ordergrpc.BrokerOrderStatus_ACCEPTED_FOR_BIDDING
 	case "stopped":
-		return ordergrpc.AlpacaOrderStatus_STOPPED
+		return ordergrpc.BrokerOrderStatus_STOPPED
 	case "rejected":
-		return ordergrpc.AlpacaOrderStatus_REJECTED
+		return ordergrpc.BrokerOrderStatus_REJECTED
 	case "suspended":
-		return ordergrpc.AlpacaOrderStatus_SUSPENDED
+		return ordergrpc.BrokerOrderStatus_SUSPENDED
 	case "calculated":
-		return ordergrpc.AlpacaOrderStatus_CALCULATED
+		return ordergrpc.BrokerOrderStatus_CALCULATED
 	default:
-		return ordergrpc.AlpacaOrderStatus_NOT_USED_ALPACA_ORDER_STATUS
+		return ordergrpc.BrokerOrderStatus_NOT_USED_ALPACA_ORDER_STATUS
 	}
 }
 
@@ -175,4 +237,12 @@ func convertTimeToTimestamp(time *time.Time) *timestamppb.Timestamp {
 		return nil
 	}
 	return timestamppb.New(*time)
+}
+
+func mapNetworkStrToGRPC(networkStr string) (metadatagrpc.Network, error) {
+	v, exists := metadatagrpc.Network_value[strings.ToUpper(networkStr)]
+	if !exists {
+		return metadatagrpc.Network_NETWORK_DO_NOT_USE, fmt.Errorf("invalid network: %s", networkStr)
+	}
+	return metadatagrpc.Network(v), nil
 }

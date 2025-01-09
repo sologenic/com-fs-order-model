@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package order;
+
+import "google/protobuf/empty.proto";
+import "order.proto";
+import "util.proto";
+
+option go_package = "github.com/sologenic/com-fs-order-model;order";
+
+// Smart Contract Trade Log
+service SmartContractLogService {
+  // Non-transaction
+  rpc Create(Order) returns (Key) {}
+  // rpc Get(Filter) returns (Records) {}
+  
+  // TODO: determine if we will need the Update method -> with the introduction of the LockLogRecord message,
+  // we can handle the must have state and target state dynamically. Therefore, we may not need the Update method.
+  rpc Update(Order) returns (google.protobuf.Empty) {} // Smart contract log line processed into order
+  
+  // Transaction
+  rpc SetLock(LockLogRecord) returns (Order) {}
+}

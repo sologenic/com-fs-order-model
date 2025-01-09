@@ -2,45 +2,50 @@ syntax = "proto3";
 
 package order;
 
+option go_package = "github.com/sologenic/com-fs-order-model;order";
+
 import "google/protobuf/empty.proto";
 import "order.proto";
-import "enums.proto";
-
-option go_package = "github.com/sologenic/com-fs-order-model;order";
+import "util.proto";
+import "sologenic/com-fs-utils-lib/models/metadata/metadata.proto";
 
 service OrderService {
     // Order
-    rpc UpsertOrder(Order) returns (OrderID) {}
-    rpc GetOrderByID(OrderID) returns (Order) {}
-    rpc GetOrderByKey(Key) returns (Order) {}
-    rpc GetOrders(OrderQuery) returns (Orders) {}
-    rpc UpdateOrderStep(OrderStepInstruction) returns (Order) {}
+    rpc UpsertWithState(UpsertMessage) returns (OrderID) {}
+    rpc GetByID(OrderID) returns (Order) {}
+    rpc GetByKey(Key) returns (Order) {}
+    rpc GetAll(OrderQuery) returns (Orders) {}
+    rpc UpdateStep(OrderStepInstruction) returns (Order) {} // Transaction to lock and update order state
     // Disaster Recovery
-    rpc GetUnfinishedOrders(google.protobuf.Empty) returns (Orders) {}
+    rpc GetAllUnfinished(google.protobuf.Empty) returns (Orders) {}
+}
+
+message UpsertMessage {
+    Order Order = 1;
+    OrderStepInstruction OrderStepInstruction = 2;
 }
 
 message OrderID {
     string TXID = 1;
-    string Network = 2;
+    metadata.Network Network = 2;
 }
 
 message OrderQuery {
-    string Network = 1;
+    metadata.Network Network = 1;
     optional int32 Offset = 2;
-    optional string AssetKey = 3;
-    optional string SmartContractAddr = 4;
-    optional TransactionType TransactionType = 5;
-    optional string Creator = 6;
-    // Order details
-    optional int64 OrderID = 7;
-    optional string Denom = 9;
-    optional OrderType OrderType = 10;
-    optional OrderStateType OrderStateType = 11;
-    optional PaymentState PaymentState = 12;
-}
-
-message Key {
-    string Key = 1;
+    optional string SmartContractAddr = 3;
+    optional TransactionType TransactionType = 4;
+    optional string TXID = 5;
+    optional int64 Height = 6;
+    optional InternalOrderState InternalOrderState = 7;
+    optional ProcessInfo ProcessInfo = 8;
+    // Fields in OrderInstruction
+    optional string Creator = 9;
+    optional int64 OrderID = 10;
+    optional string Denom = 11;
+    optional OrderType OrderType = 12;
+    optional OrderStateType OrderStateType = 13;
+    optional PaymentState PaymentState = 14;
 }
 
 message OrderStepInstruction {
