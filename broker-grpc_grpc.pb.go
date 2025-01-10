@@ -23,18 +23,20 @@ const (
 	BrokerLogService_Create_FullMethodName            = "/order.BrokerLogService/Create"
 	BrokerLogService_SetLock_FullMethodName           = "/order.BrokerLogService/SetLock"
 	BrokerLogService_GetAllUnprocessed_FullMethodName = "/order.BrokerLogService/GetAllUnprocessed"
+	BrokerLogService_GetLatest_FullMethodName         = "/order.BrokerLogService/GetLatest"
 )
 
 // BrokerLogServiceClient is the client API for BrokerLogService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type BrokerLogServiceClient interface {
-	// Non-transaction
 	Create(ctx context.Context, in *BrokerOrderDetails, opts ...grpc.CallOption) (*Key, error)
 	// Transaction
 	SetLock(ctx context.Context, in *LockLogRecord, opts ...grpc.CallOption) (*BrokerOrderDetails, error)
 	// For recovery, get all unprocessed Broker Logs. Unprocessed logs are logs that are in the states `OPEN` or `LOCKED`.
 	GetAllUnprocessed(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*BrokerOrderDetailsList, error)
+	// Starting point for rescanner
+	GetLatest(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*BrokerOrderDetails, error)
 }
 
 type brokerLogServiceClient struct {
@@ -72,16 +74,26 @@ func (c *brokerLogServiceClient) GetAllUnprocessed(ctx context.Context, in *empt
 	return out, nil
 }
 
+func (c *brokerLogServiceClient) GetLatest(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*BrokerOrderDetails, error) {
+	out := new(BrokerOrderDetails)
+	err := c.cc.Invoke(ctx, BrokerLogService_GetLatest_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // BrokerLogServiceServer is the server API for BrokerLogService service.
 // All implementations should embed UnimplementedBrokerLogServiceServer
 // for forward compatibility
 type BrokerLogServiceServer interface {
-	// Non-transaction
 	Create(context.Context, *BrokerOrderDetails) (*Key, error)
 	// Transaction
 	SetLock(context.Context, *LockLogRecord) (*BrokerOrderDetails, error)
 	// For recovery, get all unprocessed Broker Logs. Unprocessed logs are logs that are in the states `OPEN` or `LOCKED`.
 	GetAllUnprocessed(context.Context, *emptypb.Empty) (*BrokerOrderDetailsList, error)
+	// Starting point for rescanner
+	GetLatest(context.Context, *emptypb.Empty) (*BrokerOrderDetails, error)
 }
 
 // UnimplementedBrokerLogServiceServer should be embedded to have forward compatible implementations.
@@ -96,6 +108,9 @@ func (UnimplementedBrokerLogServiceServer) SetLock(context.Context, *LockLogReco
 }
 func (UnimplementedBrokerLogServiceServer) GetAllUnprocessed(context.Context, *emptypb.Empty) (*BrokerOrderDetailsList, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAllUnprocessed not implemented")
+}
+func (UnimplementedBrokerLogServiceServer) GetLatest(context.Context, *emptypb.Empty) (*BrokerOrderDetails, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetLatest not implemented")
 }
 
 // UnsafeBrokerLogServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -163,6 +178,24 @@ func _BrokerLogService_GetAllUnprocessed_Handler(srv interface{}, ctx context.Co
 	return interceptor(ctx, in, info, handler)
 }
 
+func _BrokerLogService_GetLatest_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BrokerLogServiceServer).GetLatest(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: BrokerLogService_GetLatest_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BrokerLogServiceServer).GetLatest(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // BrokerLogService_ServiceDesc is the grpc.ServiceDesc for BrokerLogService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -181,6 +214,10 @@ var BrokerLogService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetAllUnprocessed",
 			Handler:    _BrokerLogService_GetAllUnprocessed_Handler,
+		},
+		{
+			MethodName: "GetLatest",
+			Handler:    _BrokerLogService_GetLatest_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

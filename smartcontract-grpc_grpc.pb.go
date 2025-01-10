@@ -21,24 +21,22 @@ const _ = grpc.SupportPackageIsVersion7
 
 const (
 	SmartContractLogService_Create_FullMethodName            = "/order.SmartContractLogService/Create"
-	SmartContractLogService_Update_FullMethodName            = "/order.SmartContractLogService/Update"
 	SmartContractLogService_SetLock_FullMethodName           = "/order.SmartContractLogService/SetLock"
 	SmartContractLogService_GetAllUnprocessed_FullMethodName = "/order.SmartContractLogService/GetAllUnprocessed"
+	SmartContractLogService_GetLatest_FullMethodName         = "/order.SmartContractLogService/GetLatest"
 )
 
 // SmartContractLogServiceClient is the client API for SmartContractLogService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type SmartContractLogServiceClient interface {
-	// Non-transaction
 	Create(ctx context.Context, in *Order, opts ...grpc.CallOption) (*Key, error)
-	// TODO: determine if we will need the Update method -> with the introduction of the LockLogRecord message,
-	// we can handle the must have state and target state dynamically. Therefore, we may not need the Update method.
-	Update(ctx context.Context, in *Order, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// Transaction
 	SetLock(ctx context.Context, in *LockLogRecord, opts ...grpc.CallOption) (*Order, error)
 	// For recovery, get all unprocessed Smart Contract Logs. Unprocessed logs are logs that are in the states `OPEN` or `LOCKED`.
 	GetAllUnprocessed(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*Orders, error)
+	// Starting point for rescanner
+	GetLatest(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*Order, error)
 }
 
 type smartContractLogServiceClient struct {
@@ -52,15 +50,6 @@ func NewSmartContractLogServiceClient(cc grpc.ClientConnInterface) SmartContract
 func (c *smartContractLogServiceClient) Create(ctx context.Context, in *Order, opts ...grpc.CallOption) (*Key, error) {
 	out := new(Key)
 	err := c.cc.Invoke(ctx, SmartContractLogService_Create_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *smartContractLogServiceClient) Update(ctx context.Context, in *Order, opts ...grpc.CallOption) (*emptypb.Empty, error) {
-	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, SmartContractLogService_Update_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -85,19 +74,26 @@ func (c *smartContractLogServiceClient) GetAllUnprocessed(ctx context.Context, i
 	return out, nil
 }
 
+func (c *smartContractLogServiceClient) GetLatest(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*Order, error) {
+	out := new(Order)
+	err := c.cc.Invoke(ctx, SmartContractLogService_GetLatest_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // SmartContractLogServiceServer is the server API for SmartContractLogService service.
 // All implementations should embed UnimplementedSmartContractLogServiceServer
 // for forward compatibility
 type SmartContractLogServiceServer interface {
-	// Non-transaction
 	Create(context.Context, *Order) (*Key, error)
-	// TODO: determine if we will need the Update method -> with the introduction of the LockLogRecord message,
-	// we can handle the must have state and target state dynamically. Therefore, we may not need the Update method.
-	Update(context.Context, *Order) (*emptypb.Empty, error)
 	// Transaction
 	SetLock(context.Context, *LockLogRecord) (*Order, error)
 	// For recovery, get all unprocessed Smart Contract Logs. Unprocessed logs are logs that are in the states `OPEN` or `LOCKED`.
 	GetAllUnprocessed(context.Context, *emptypb.Empty) (*Orders, error)
+	// Starting point for rescanner
+	GetLatest(context.Context, *emptypb.Empty) (*Order, error)
 }
 
 // UnimplementedSmartContractLogServiceServer should be embedded to have forward compatible implementations.
@@ -107,14 +103,14 @@ type UnimplementedSmartContractLogServiceServer struct {
 func (UnimplementedSmartContractLogServiceServer) Create(context.Context, *Order) (*Key, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
 }
-func (UnimplementedSmartContractLogServiceServer) Update(context.Context, *Order) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
-}
 func (UnimplementedSmartContractLogServiceServer) SetLock(context.Context, *LockLogRecord) (*Order, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetLock not implemented")
 }
 func (UnimplementedSmartContractLogServiceServer) GetAllUnprocessed(context.Context, *emptypb.Empty) (*Orders, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAllUnprocessed not implemented")
+}
+func (UnimplementedSmartContractLogServiceServer) GetLatest(context.Context, *emptypb.Empty) (*Order, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetLatest not implemented")
 }
 
 // UnsafeSmartContractLogServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -142,24 +138,6 @@ func _SmartContractLogService_Create_Handler(srv interface{}, ctx context.Contex
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(SmartContractLogServiceServer).Create(ctx, req.(*Order))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _SmartContractLogService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Order)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(SmartContractLogServiceServer).Update(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: SmartContractLogService_Update_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SmartContractLogServiceServer).Update(ctx, req.(*Order))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -200,6 +178,24 @@ func _SmartContractLogService_GetAllUnprocessed_Handler(srv interface{}, ctx con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SmartContractLogService_GetLatest_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SmartContractLogServiceServer).GetLatest(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SmartContractLogService_GetLatest_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SmartContractLogServiceServer).GetLatest(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // SmartContractLogService_ServiceDesc is the grpc.ServiceDesc for SmartContractLogService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -212,16 +208,16 @@ var SmartContractLogService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _SmartContractLogService_Create_Handler,
 		},
 		{
-			MethodName: "Update",
-			Handler:    _SmartContractLogService_Update_Handler,
-		},
-		{
 			MethodName: "SetLock",
 			Handler:    _SmartContractLogService_SetLock_Handler,
 		},
 		{
 			MethodName: "GetAllUnprocessed",
 			Handler:    _SmartContractLogService_GetAllUnprocessed_Handler,
+		},
+		{
+			MethodName: "GetLatest",
+			Handler:    _SmartContractLogService_GetLatest_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

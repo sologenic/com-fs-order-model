@@ -35,7 +35,7 @@ type OrderServiceClient interface {
 	GetByID(ctx context.Context, in *OrderID, opts ...grpc.CallOption) (*Order, error)
 	GetByKey(ctx context.Context, in *Key, opts ...grpc.CallOption) (*Order, error)
 	GetAll(ctx context.Context, in *OrderQuery, opts ...grpc.CallOption) (*Orders, error)
-	// TODO: determine if we need this method: recovery uses unprocessed (open or locked) logs, so this method may just be for querying purposes
+	// TODO: determine if we need this method: recovery uses unprocessed (open or locked) logs
 	GetAllUnfinished(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*Orders, error)
 	// Transactional operations
 	UpsertWithState(ctx context.Context, in *UpsertMessage, opts ...grpc.CallOption) (*OrderID, error)
@@ -111,7 +111,7 @@ type OrderServiceServer interface {
 	GetByID(context.Context, *OrderID) (*Order, error)
 	GetByKey(context.Context, *Key) (*Order, error)
 	GetAll(context.Context, *OrderQuery) (*Orders, error)
-	// TODO: determine if we need this method: recovery uses unprocessed (open or locked) logs, so this method may just be for querying purposes
+	// TODO: determine if we need this method: recovery uses unprocessed (open or locked) logs
 	GetAllUnfinished(context.Context, *emptypb.Empty) (*Orders, error)
 	// Transactional operations
 	UpsertWithState(context.Context, *UpsertMessage) (*OrderID, error)

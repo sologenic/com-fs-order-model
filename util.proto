@@ -31,7 +31,13 @@ message LockLogRecord {
     ProcessState TargetState = 3;
 }
 
+// The `Key` field represents the datastore key for the `Order` message.
+// The `KeyPrefix` field is used to create a key for broker or smart contract logs (prefix + key = key for logs).
+// The `IsNew` field identifies if the record linked to the key is new. This is helpful for recovery because
+// both the rescanner and the recovery service might pick up the same record. When creating log records, if `IsNew` is true, the Key is sent
+// through the channel for processing. Otherwise, it isn't sent, as an existing key signals the recovery service will handle it.
 message Key {
     string Key = 1;
     optional string KeyPrefix = 2;
+    optional bool IsNew = 3;
 }
