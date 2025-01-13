@@ -18,7 +18,7 @@ service SmartContractLogService {
   rpc SetLock(LockLogRecord) returns (Order) {}
 
   // For recovery, get all unprocessed Smart Contract Logs. Unprocessed logs are logs that are in the states `OPEN` or `LOCKED`.
-  rpc GetAllUnprocessed(google.protobuf.Empty) returns (Orders) {}
+  rpc GetAllUnprocessed(InstanceID) returns (Orders) {}
   // Starting point for rescanner
   rpc GetLatest(google.protobuf.Empty) returns (Order) {}
 }

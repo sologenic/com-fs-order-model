@@ -34,7 +34,7 @@ type SmartContractLogServiceClient interface {
 	// Transaction
 	SetLock(ctx context.Context, in *LockLogRecord, opts ...grpc.CallOption) (*Order, error)
 	// For recovery, get all unprocessed Smart Contract Logs. Unprocessed logs are logs that are in the states `OPEN` or `LOCKED`.
-	GetAllUnprocessed(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*Orders, error)
+	GetAllUnprocessed(ctx context.Context, in *InstanceID, opts ...grpc.CallOption) (*Orders, error)
 	// Starting point for rescanner
 	GetLatest(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*Order, error)
 }
@@ -65,7 +65,7 @@ func (c *smartContractLogServiceClient) SetLock(ctx context.Context, in *LockLog
 	return out, nil
 }
 
-func (c *smartContractLogServiceClient) GetAllUnprocessed(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*Orders, error) {
+func (c *smartContractLogServiceClient) GetAllUnprocessed(ctx context.Context, in *InstanceID, opts ...grpc.CallOption) (*Orders, error) {
 	out := new(Orders)
 	err := c.cc.Invoke(ctx, SmartContractLogService_GetAllUnprocessed_FullMethodName, in, out, opts...)
 	if err != nil {
@@ -91,7 +91,7 @@ type SmartContractLogServiceServer interface {
 	// Transaction
 	SetLock(context.Context, *LockLogRecord) (*Order, error)
 	// For recovery, get all unprocessed Smart Contract Logs. Unprocessed logs are logs that are in the states `OPEN` or `LOCKED`.
-	GetAllUnprocessed(context.Context, *emptypb.Empty) (*Orders, error)
+	GetAllUnprocessed(context.Context, *InstanceID) (*Orders, error)
 	// Starting point for rescanner
 	GetLatest(context.Context, *emptypb.Empty) (*Order, error)
 }
@@ -106,7 +106,7 @@ func (UnimplementedSmartContractLogServiceServer) Create(context.Context, *Order
 func (UnimplementedSmartContractLogServiceServer) SetLock(context.Context, *LockLogRecord) (*Order, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetLock not implemented")
 }
-func (UnimplementedSmartContractLogServiceServer) GetAllUnprocessed(context.Context, *emptypb.Empty) (*Orders, error) {
+func (UnimplementedSmartContractLogServiceServer) GetAllUnprocessed(context.Context, *InstanceID) (*Orders, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAllUnprocessed not implemented")
 }
 func (UnimplementedSmartContractLogServiceServer) GetLatest(context.Context, *emptypb.Empty) (*Order, error) {
@@ -161,7 +161,7 @@ func _SmartContractLogService_SetLock_Handler(srv interface{}, ctx context.Conte
 }
 
 func _SmartContractLogService_GetAllUnprocessed_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(emptypb.Empty)
+	in := new(InstanceID)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -173,7 +173,7 @@ func _SmartContractLogService_GetAllUnprocessed_Handler(srv interface{}, ctx con
 		FullMethod: SmartContractLogService_GetAllUnprocessed_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SmartContractLogServiceServer).GetAllUnprocessed(ctx, req.(*emptypb.Empty))
+		return srv.(SmartContractLogServiceServer).GetAllUnprocessed(ctx, req.(*InstanceID))
 	}
 	return interceptor(ctx, in, info, handler)
 }

@@ -34,7 +34,7 @@ type BrokerLogServiceClient interface {
 	// Transaction
 	SetLock(ctx context.Context, in *LockLogRecord, opts ...grpc.CallOption) (*BrokerOrderDetails, error)
 	// For recovery, get all unprocessed Broker Logs. Unprocessed logs are logs that are in the states `OPEN` or `LOCKED`.
-	GetAllUnprocessed(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*BrokerOrderDetailsList, error)
+	GetAllUnprocessed(ctx context.Context, in *InstanceID, opts ...grpc.CallOption) (*BrokerOrderDetailsList, error)
 	// Starting point for rescanner
 	GetLatest(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*BrokerOrderDetails, error)
 }
@@ -65,7 +65,7 @@ func (c *brokerLogServiceClient) SetLock(ctx context.Context, in *LockLogRecord,
 	return out, nil
 }
 
-func (c *brokerLogServiceClient) GetAllUnprocessed(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*BrokerOrderDetailsList, error) {
+func (c *brokerLogServiceClient) GetAllUnprocessed(ctx context.Context, in *InstanceID, opts ...grpc.CallOption) (*BrokerOrderDetailsList, error) {
 	out := new(BrokerOrderDetailsList)
 	err := c.cc.Invoke(ctx, BrokerLogService_GetAllUnprocessed_FullMethodName, in, out, opts...)
 	if err != nil {
@@ -91,7 +91,7 @@ type BrokerLogServiceServer interface {
 	// Transaction
 	SetLock(context.Context, *LockLogRecord) (*BrokerOrderDetails, error)
 	// For recovery, get all unprocessed Broker Logs. Unprocessed logs are logs that are in the states `OPEN` or `LOCKED`.
-	GetAllUnprocessed(context.Context, *emptypb.Empty) (*BrokerOrderDetailsList, error)
+	GetAllUnprocessed(context.Context, *InstanceID) (*BrokerOrderDetailsList, error)
 	// Starting point for rescanner
 	GetLatest(context.Context, *emptypb.Empty) (*BrokerOrderDetails, error)
 }
@@ -106,7 +106,7 @@ func (UnimplementedBrokerLogServiceServer) Create(context.Context, *BrokerOrderD
 func (UnimplementedBrokerLogServiceServer) SetLock(context.Context, *LockLogRecord) (*BrokerOrderDetails, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetLock not implemented")
 }
-func (UnimplementedBrokerLogServiceServer) GetAllUnprocessed(context.Context, *emptypb.Empty) (*BrokerOrderDetailsList, error) {
+func (UnimplementedBrokerLogServiceServer) GetAllUnprocessed(context.Context, *InstanceID) (*BrokerOrderDetailsList, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAllUnprocessed not implemented")
 }
 func (UnimplementedBrokerLogServiceServer) GetLatest(context.Context, *emptypb.Empty) (*BrokerOrderDetails, error) {
@@ -161,7 +161,7 @@ func _BrokerLogService_SetLock_Handler(srv interface{}, ctx context.Context, dec
 }
 
 func _BrokerLogService_GetAllUnprocessed_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(emptypb.Empty)
+	in := new(InstanceID)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -173,7 +173,7 @@ func _BrokerLogService_GetAllUnprocessed_Handler(srv interface{}, ctx context.Co
 		FullMethod: BrokerLogService_GetAllUnprocessed_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BrokerLogServiceServer).GetAllUnprocessed(ctx, req.(*emptypb.Empty))
+		return srv.(BrokerLogServiceServer).GetAllUnprocessed(ctx, req.(*InstanceID))
 	}
 	return interceptor(ctx, in, info, handler)
 }

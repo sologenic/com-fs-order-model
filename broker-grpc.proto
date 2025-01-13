@@ -18,7 +18,7 @@ service BrokerLogService {
   rpc SetLock(LockLogRecord) returns (BrokerOrderDetails) {}
 
   // For recovery, get all unprocessed Broker Logs. Unprocessed logs are logs that are in the states `OPEN` or `LOCKED`.
-  rpc GetAllUnprocessed(google.protobuf.Empty) returns (BrokerOrderDetailsList) {}
+  rpc GetAllUnprocessed(InstanceID) returns (BrokerOrderDetailsList) {}
   // Starting point for rescanner
   rpc GetLatest(google.protobuf.Empty) returns (BrokerOrderDetails) {}
 }

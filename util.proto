@@ -41,3 +41,7 @@ message Key {
     optional string KeyPrefix = 2;
     optional bool IsNew = 3;
 }
+
+message InstanceID {
+    string InstanceID = 1;
+}
