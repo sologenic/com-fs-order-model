@@ -40,7 +40,7 @@ protoc \
 "--go-grpc_out=." --go-grpc_opt=paths=source_relative
 
 protoc \
---proto_path=. "smartcontract-grpc.proto" \
+--proto_path=. "smartcontractlog-grpc.proto" \
 --proto_path=$(dirname $(dirname "$rd")) \
 "--go_out=." --go_opt=paths=source_relative \
 --go-grpc_opt=require_unimplemented_servers=false \
