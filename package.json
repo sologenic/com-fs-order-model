@@ -2,7 +2,7 @@
   "name": "com-fs-order-model",
   "version": "1.1.0",
   "description": "Full stack model for Order",
-  "main": "build/order.js",
+  "main": "build/index.js",
   "scripts": {
     "build": "rm -rf ./build && npx tsc -p tsconfig.json"  
   },
