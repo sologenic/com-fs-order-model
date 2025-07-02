@@ -471,6 +471,7 @@ export interface Order {
     | undefined;
   /** SequenceID */
   Sequence: number;
+  OrganizationID: string;
 }
 
 /** Same structure as Order in the Smart Contract */
@@ -542,6 +543,7 @@ function createBaseOrder(): Order {
     InstanceID: undefined,
     BlockTime: undefined,
     Sequence: 0,
+    OrganizationID: "",
   };
 }
 
@@ -597,6 +599,9 @@ export const Order = {
     }
     if (message.Sequence !== 0) {
       writer.uint32(136).int64(message.Sequence);
+    }
+    if (message.OrganizationID !== "") {
+      writer.uint32(146).string(message.OrganizationID);
     }
     return writer;
   },
@@ -727,6 +732,13 @@ export const Order = {
 
           message.Sequence = longToNumber(reader.int64() as Long);
           continue;
+        case 18:
+          if (tag !== 146) {
+            break;
+          }
+
+          message.OrganizationID = reader.string();
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -757,6 +769,7 @@ export const Order = {
       InstanceID: isSet(object.InstanceID) ? globalThis.String(object.InstanceID) : undefined,
       BlockTime: isSet(object.BlockTime) ? fromJsonTimestamp(object.BlockTime) : undefined,
       Sequence: isSet(object.Sequence) ? globalThis.Number(object.Sequence) : 0,
+      OrganizationID: isSet(object.OrganizationID) ? globalThis.String(object.OrganizationID) : "",
     };
   },
 
@@ -813,6 +826,9 @@ export const Order = {
     if (message.Sequence !== 0) {
       obj.Sequence = Math.round(message.Sequence);
     }
+    if (message.OrganizationID !== "") {
+      obj.OrganizationID = message.OrganizationID;
+    }
     return obj;
   },
 
@@ -844,6 +860,7 @@ export const Order = {
     message.InstanceID = object.InstanceID ?? undefined;
     message.BlockTime = object.BlockTime ?? undefined;
     message.Sequence = object.Sequence ?? 0;
+    message.OrganizationID = object.OrganizationID ?? "";
     return message;
   },
 };

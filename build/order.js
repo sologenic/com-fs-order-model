@@ -441,6 +441,7 @@ function createBaseOrder() {
         InstanceID: undefined,
         BlockTime: undefined,
         Sequence: 0,
+        OrganizationID: "",
     };
 }
 export const Order = {
@@ -495,6 +496,9 @@ export const Order = {
         }
         if (message.Sequence !== 0) {
             writer.uint32(136).int64(message.Sequence);
+        }
+        if (message.OrganizationID !== "") {
+            writer.uint32(146).string(message.OrganizationID);
         }
         return writer;
     },
@@ -607,6 +611,12 @@ export const Order = {
                     }
                     message.Sequence = longToNumber(reader.int64());
                     continue;
+                case 18:
+                    if (tag !== 146) {
+                        break;
+                    }
+                    message.OrganizationID = reader.string();
+                    continue;
             }
             if ((tag & 7) === 4 || tag === 0) {
                 break;
@@ -636,6 +646,7 @@ export const Order = {
             InstanceID: isSet(object.InstanceID) ? globalThis.String(object.InstanceID) : undefined,
             BlockTime: isSet(object.BlockTime) ? fromJsonTimestamp(object.BlockTime) : undefined,
             Sequence: isSet(object.Sequence) ? globalThis.Number(object.Sequence) : 0,
+            OrganizationID: isSet(object.OrganizationID) ? globalThis.String(object.OrganizationID) : "",
         };
     },
     toJSON(message) {
@@ -691,13 +702,16 @@ export const Order = {
         if (message.Sequence !== 0) {
             obj.Sequence = Math.round(message.Sequence);
         }
+        if (message.OrganizationID !== "") {
+            obj.OrganizationID = message.OrganizationID;
+        }
         return obj;
     },
     create(base) {
         return Order.fromPartial(base !== null && base !== void 0 ? base : {});
     },
     fromPartial(object) {
-        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p;
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q;
         const message = createBaseOrder();
         message.Network = (_a = object.Network) !== null && _a !== void 0 ? _a : 0;
         message.SmartContractAddr = (_b = object.SmartContractAddr) !== null && _b !== void 0 ? _b : "";
@@ -722,6 +736,7 @@ export const Order = {
         message.InstanceID = (_m = object.InstanceID) !== null && _m !== void 0 ? _m : undefined;
         message.BlockTime = (_o = object.BlockTime) !== null && _o !== void 0 ? _o : undefined;
         message.Sequence = (_p = object.Sequence) !== null && _p !== void 0 ? _p : 0;
+        message.OrganizationID = (_q = object.OrganizationID) !== null && _q !== void 0 ? _q : "";
         return message;
     },
 };

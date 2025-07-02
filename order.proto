@@ -35,6 +35,7 @@ message Order {
 
     google.protobuf.Timestamp BlockTime = 16;
     int64 Sequence = 17; // SequenceID
+    string OrganizationID = 18;
 }
 
 // Execution type(action) of the transaction against the smart contract

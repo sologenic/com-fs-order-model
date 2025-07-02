@@ -128,6 +128,7 @@ export interface Order {
     BlockTime: Date | undefined;
     /** SequenceID */
     Sequence: number;
+    OrganizationID: string;
 }
 /** Same structure as Order in the Smart Contract */
 export interface OrderInstruction {
@@ -308,6 +309,7 @@ export declare const Order: {
         InstanceID?: string | undefined;
         BlockTime?: Date | undefined;
         Sequence?: number | undefined;
+        OrganizationID?: string | undefined;
     } & {
         Network?: Network | undefined;
         SmartContractAddr?: string | undefined;
@@ -601,6 +603,7 @@ export declare const Order: {
         InstanceID?: string | undefined;
         BlockTime?: Date | undefined;
         Sequence?: number | undefined;
+        OrganizationID?: string | undefined;
     } & { [K_20 in Exclude<keyof I, keyof Order>]: never; }>(base?: I | undefined): Order;
     fromPartial<I_1 extends {
         Network?: Network | undefined;
@@ -731,6 +734,7 @@ export declare const Order: {
         InstanceID?: string | undefined;
         BlockTime?: Date | undefined;
         Sequence?: number | undefined;
+        OrganizationID?: string | undefined;
     } & {
         Network?: Network | undefined;
         SmartContractAddr?: string | undefined;
@@ -1024,6 +1028,7 @@ export declare const Order: {
         InstanceID?: string | undefined;
         BlockTime?: Date | undefined;
         Sequence?: number | undefined;
+        OrganizationID?: string | undefined;
     } & { [K_41 in Exclude<keyof I_1, keyof Order>]: never; }>(object: I_1): Order;
 };
 export declare const OrderInstruction: {
@@ -1317,6 +1322,7 @@ export declare const Orders: {
             InstanceID?: string | undefined;
             BlockTime?: Date | undefined;
             Sequence?: number | undefined;
+            OrganizationID?: string | undefined;
         }[] | undefined;
         Offset?: number | undefined;
     } & {
@@ -1449,6 +1455,7 @@ export declare const Orders: {
             InstanceID?: string | undefined;
             BlockTime?: Date | undefined;
             Sequence?: number | undefined;
+            OrganizationID?: string | undefined;
         }[] & ({
             Network?: Network | undefined;
             SmartContractAddr?: string | undefined;
@@ -1578,6 +1585,7 @@ export declare const Orders: {
             InstanceID?: string | undefined;
             BlockTime?: Date | undefined;
             Sequence?: number | undefined;
+            OrganizationID?: string | undefined;
         } & {
             Network?: Network | undefined;
             SmartContractAddr?: string | undefined;
@@ -1871,6 +1879,7 @@ export declare const Orders: {
             InstanceID?: string | undefined;
             BlockTime?: Date | undefined;
             Sequence?: number | undefined;
+            OrganizationID?: string | undefined;
         } & { [K_20 in Exclude<keyof I["Orders"][number], keyof Order>]: never; })[] & { [K_21 in Exclude<keyof I["Orders"], keyof {
             Network?: Network | undefined;
             SmartContractAddr?: string | undefined;
@@ -2000,6 +2009,7 @@ export declare const Orders: {
             InstanceID?: string | undefined;
             BlockTime?: Date | undefined;
             Sequence?: number | undefined;
+            OrganizationID?: string | undefined;
         }[]>]: never; }) | undefined;
         Offset?: number | undefined;
     } & { [K_22 in Exclude<keyof I, keyof Orders>]: never; }>(base?: I | undefined): Orders;
@@ -2133,6 +2143,7 @@ export declare const Orders: {
             InstanceID?: string | undefined;
             BlockTime?: Date | undefined;
             Sequence?: number | undefined;
+            OrganizationID?: string | undefined;
         }[] | undefined;
         Offset?: number | undefined;
     } & {
@@ -2265,6 +2276,7 @@ export declare const Orders: {
             InstanceID?: string | undefined;
             BlockTime?: Date | undefined;
             Sequence?: number | undefined;
+            OrganizationID?: string | undefined;
         }[] & ({
             Network?: Network | undefined;
             SmartContractAddr?: string | undefined;
@@ -2394,6 +2406,7 @@ export declare const Orders: {
             InstanceID?: string | undefined;
             BlockTime?: Date | undefined;
             Sequence?: number | undefined;
+            OrganizationID?: string | undefined;
         } & {
             Network?: Network | undefined;
             SmartContractAddr?: string | undefined;
@@ -2687,6 +2700,7 @@ export declare const Orders: {
             InstanceID?: string | undefined;
             BlockTime?: Date | undefined;
             Sequence?: number | undefined;
+            OrganizationID?: string | undefined;
         } & { [K_43 in Exclude<keyof I_1["Orders"][number], keyof Order>]: never; })[] & { [K_44 in Exclude<keyof I_1["Orders"], keyof {
             Network?: Network | undefined;
             SmartContractAddr?: string | undefined;
@@ -2816,6 +2830,7 @@ export declare const Orders: {
             InstanceID?: string | undefined;
             BlockTime?: Date | undefined;
             Sequence?: number | undefined;
+            OrganizationID?: string | undefined;
         }[]>]: never; }) | undefined;
         Offset?: number | undefined;
     } & { [K_45 in Exclude<keyof I_1, keyof Orders>]: never; }>(object: I_1): Orders;
