@@ -125,7 +125,7 @@ export interface Order {
     ProcessInfo?: ProcessInfo | undefined;
     /** ID used by logs to identify the instance where the log was created/ processed */
     InstanceID?: string | undefined;
-    BlockHeight: number;
+    BlockTime: Date | undefined;
     /** SequenceID */
     Sequence: number;
 }
@@ -306,7 +306,7 @@ export declare const Order: {
             ProcessedAt?: Date | undefined;
         } | undefined;
         InstanceID?: string | undefined;
-        BlockHeight?: number | undefined;
+        BlockTime?: Date | undefined;
         Sequence?: number | undefined;
     } & {
         Network?: Network | undefined;
@@ -599,7 +599,7 @@ export declare const Order: {
             ProcessedAt?: Date | undefined;
         } & { [K_19 in Exclude<keyof I["ProcessInfo"], keyof ProcessInfo>]: never; }) | undefined;
         InstanceID?: string | undefined;
-        BlockHeight?: number | undefined;
+        BlockTime?: Date | undefined;
         Sequence?: number | undefined;
     } & { [K_20 in Exclude<keyof I, keyof Order>]: never; }>(base?: I | undefined): Order;
     fromPartial<I_1 extends {
@@ -729,7 +729,7 @@ export declare const Order: {
             ProcessedAt?: Date | undefined;
         } | undefined;
         InstanceID?: string | undefined;
-        BlockHeight?: number | undefined;
+        BlockTime?: Date | undefined;
         Sequence?: number | undefined;
     } & {
         Network?: Network | undefined;
@@ -1022,7 +1022,7 @@ export declare const Order: {
             ProcessedAt?: Date | undefined;
         } & { [K_40 in Exclude<keyof I_1["ProcessInfo"], keyof ProcessInfo>]: never; }) | undefined;
         InstanceID?: string | undefined;
-        BlockHeight?: number | undefined;
+        BlockTime?: Date | undefined;
         Sequence?: number | undefined;
     } & { [K_41 in Exclude<keyof I_1, keyof Order>]: never; }>(object: I_1): Order;
 };
@@ -1315,7 +1315,7 @@ export declare const Orders: {
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
-            BlockHeight?: number | undefined;
+            BlockTime?: Date | undefined;
             Sequence?: number | undefined;
         }[] | undefined;
         Offset?: number | undefined;
@@ -1447,7 +1447,7 @@ export declare const Orders: {
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
-            BlockHeight?: number | undefined;
+            BlockTime?: Date | undefined;
             Sequence?: number | undefined;
         }[] & ({
             Network?: Network | undefined;
@@ -1576,7 +1576,7 @@ export declare const Orders: {
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
-            BlockHeight?: number | undefined;
+            BlockTime?: Date | undefined;
             Sequence?: number | undefined;
         } & {
             Network?: Network | undefined;
@@ -1869,7 +1869,7 @@ export declare const Orders: {
                 ProcessedAt?: Date | undefined;
             } & { [K_19 in Exclude<keyof I["Orders"][number]["ProcessInfo"], keyof ProcessInfo>]: never; }) | undefined;
             InstanceID?: string | undefined;
-            BlockHeight?: number | undefined;
+            BlockTime?: Date | undefined;
             Sequence?: number | undefined;
         } & { [K_20 in Exclude<keyof I["Orders"][number], keyof Order>]: never; })[] & { [K_21 in Exclude<keyof I["Orders"], keyof {
             Network?: Network | undefined;
@@ -1998,7 +1998,7 @@ export declare const Orders: {
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
-            BlockHeight?: number | undefined;
+            BlockTime?: Date | undefined;
             Sequence?: number | undefined;
         }[]>]: never; }) | undefined;
         Offset?: number | undefined;
@@ -2131,7 +2131,7 @@ export declare const Orders: {
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
-            BlockHeight?: number | undefined;
+            BlockTime?: Date | undefined;
             Sequence?: number | undefined;
         }[] | undefined;
         Offset?: number | undefined;
@@ -2263,7 +2263,7 @@ export declare const Orders: {
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
-            BlockHeight?: number | undefined;
+            BlockTime?: Date | undefined;
             Sequence?: number | undefined;
         }[] & ({
             Network?: Network | undefined;
@@ -2392,7 +2392,7 @@ export declare const Orders: {
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
-            BlockHeight?: number | undefined;
+            BlockTime?: Date | undefined;
             Sequence?: number | undefined;
         } & {
             Network?: Network | undefined;
@@ -2685,7 +2685,7 @@ export declare const Orders: {
                 ProcessedAt?: Date | undefined;
             } & { [K_42 in Exclude<keyof I_1["Orders"][number]["ProcessInfo"], keyof ProcessInfo>]: never; }) | undefined;
             InstanceID?: string | undefined;
-            BlockHeight?: number | undefined;
+            BlockTime?: Date | undefined;
             Sequence?: number | undefined;
         } & { [K_43 in Exclude<keyof I_1["Orders"][number], keyof Order>]: never; })[] & { [K_44 in Exclude<keyof I_1["Orders"], keyof {
             Network?: Network | undefined;
@@ -2814,7 +2814,7 @@ export declare const Orders: {
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
-            BlockHeight?: number | undefined;
+            BlockTime?: Date | undefined;
             Sequence?: number | undefined;
         }[]>]: never; }) | undefined;
         Offset?: number | undefined;

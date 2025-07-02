@@ -439,7 +439,7 @@ function createBaseOrder() {
         BrokerOrderDetails: undefined,
         ProcessInfo: undefined,
         InstanceID: undefined,
-        BlockHeight: 0,
+        BlockTime: undefined,
         Sequence: 0,
     };
 }
@@ -490,8 +490,8 @@ export const Order = {
         if (message.InstanceID !== undefined) {
             writer.uint32(122).string(message.InstanceID);
         }
-        if (message.BlockHeight !== 0) {
-            writer.uint32(128).int64(message.BlockHeight);
+        if (message.BlockTime !== undefined) {
+            Timestamp.encode(toTimestamp(message.BlockTime), writer.uint32(130).fork()).ldelim();
         }
         if (message.Sequence !== 0) {
             writer.uint32(136).int64(message.Sequence);
@@ -596,10 +596,10 @@ export const Order = {
                     message.InstanceID = reader.string();
                     continue;
                 case 16:
-                    if (tag !== 128) {
+                    if (tag !== 130) {
                         break;
                     }
-                    message.BlockHeight = longToNumber(reader.int64());
+                    message.BlockTime = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
                     continue;
                 case 17:
                     if (tag !== 136) {
@@ -634,7 +634,7 @@ export const Order = {
                 : undefined,
             ProcessInfo: isSet(object.ProcessInfo) ? ProcessInfo.fromJSON(object.ProcessInfo) : undefined,
             InstanceID: isSet(object.InstanceID) ? globalThis.String(object.InstanceID) : undefined,
-            BlockHeight: isSet(object.BlockHeight) ? globalThis.Number(object.BlockHeight) : 0,
+            BlockTime: isSet(object.BlockTime) ? fromJsonTimestamp(object.BlockTime) : undefined,
             Sequence: isSet(object.Sequence) ? globalThis.Number(object.Sequence) : 0,
         };
     },
@@ -685,8 +685,8 @@ export const Order = {
         if (message.InstanceID !== undefined) {
             obj.InstanceID = message.InstanceID;
         }
-        if (message.BlockHeight !== 0) {
-            obj.BlockHeight = Math.round(message.BlockHeight);
+        if (message.BlockTime !== undefined) {
+            obj.BlockTime = message.BlockTime.toISOString();
         }
         if (message.Sequence !== 0) {
             obj.Sequence = Math.round(message.Sequence);
@@ -720,7 +720,7 @@ export const Order = {
             ? ProcessInfo.fromPartial(object.ProcessInfo)
             : undefined;
         message.InstanceID = (_m = object.InstanceID) !== null && _m !== void 0 ? _m : undefined;
-        message.BlockHeight = (_o = object.BlockHeight) !== null && _o !== void 0 ? _o : 0;
+        message.BlockTime = (_o = object.BlockTime) !== null && _o !== void 0 ? _o : undefined;
         message.Sequence = (_p = object.Sequence) !== null && _p !== void 0 ? _p : 0;
         return message;
     },
