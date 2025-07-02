@@ -1,6 +1,6 @@
 module github.com/sologenic/com-fs-order-model
 
-go 1.23.4
+go 1.24.4
 
 require (
 	github.com/alpacahq/alpaca-trade-api-go/v3 v3.6.0

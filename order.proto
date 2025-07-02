@@ -32,6 +32,9 @@ message Order {
     optional ProcessInfo ProcessInfo = 14;
 
     optional string InstanceID = 15; // ID used by logs to identify the instance where the log was created/ processed
+
+    int64 BlockHeight = 16;
+    int64 Sequence = 17; // SequenceID
 }
 
 // Execution type(action) of the transaction against the smart contract
