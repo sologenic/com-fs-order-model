@@ -469,9 +469,10 @@ export interface Order {
   BlockTime:
     | Date
     | undefined;
-  /** SequenceID */
+  /** Sequence */
   Sequence: number;
   OrganizationID: string;
+  UserID: string;
 }
 
 /** Same structure as Order in the Smart Contract */
@@ -544,6 +545,7 @@ function createBaseOrder(): Order {
     BlockTime: undefined,
     Sequence: 0,
     OrganizationID: "",
+    UserID: "",
   };
 }
 
@@ -602,6 +604,9 @@ export const Order = {
     }
     if (message.OrganizationID !== "") {
       writer.uint32(146).string(message.OrganizationID);
+    }
+    if (message.UserID !== "") {
+      writer.uint32(154).string(message.UserID);
     }
     return writer;
   },
@@ -739,6 +744,13 @@ export const Order = {
 
           message.OrganizationID = reader.string();
           continue;
+        case 19:
+          if (tag !== 154) {
+            break;
+          }
+
+          message.UserID = reader.string();
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -770,6 +782,7 @@ export const Order = {
       BlockTime: isSet(object.BlockTime) ? fromJsonTimestamp(object.BlockTime) : undefined,
       Sequence: isSet(object.Sequence) ? globalThis.Number(object.Sequence) : 0,
       OrganizationID: isSet(object.OrganizationID) ? globalThis.String(object.OrganizationID) : "",
+      UserID: isSet(object.UserID) ? globalThis.String(object.UserID) : "",
     };
   },
 
@@ -829,6 +842,9 @@ export const Order = {
     if (message.OrganizationID !== "") {
       obj.OrganizationID = message.OrganizationID;
     }
+    if (message.UserID !== "") {
+      obj.UserID = message.UserID;
+    }
     return obj;
   },
 
@@ -861,6 +877,7 @@ export const Order = {
     message.BlockTime = object.BlockTime ?? undefined;
     message.Sequence = object.Sequence ?? 0;
     message.OrganizationID = object.OrganizationID ?? "";
+    message.UserID = object.UserID ?? "";
     return message;
   },
 };

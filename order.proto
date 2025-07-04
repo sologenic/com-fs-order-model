@@ -34,8 +34,9 @@ message Order {
     optional string InstanceID = 15; // ID used by logs to identify the instance where the log was created/ processed
 
     google.protobuf.Timestamp BlockTime = 16;
-    int64 Sequence = 17; // SequenceID
+    int64 Sequence = 17; // Sequence
     string OrganizationID = 18;
+    string UserID = 19;
 }
 
 // Execution type(action) of the transaction against the smart contract

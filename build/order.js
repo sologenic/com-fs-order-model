@@ -442,6 +442,7 @@ function createBaseOrder() {
         BlockTime: undefined,
         Sequence: 0,
         OrganizationID: "",
+        UserID: "",
     };
 }
 export const Order = {
@@ -499,6 +500,9 @@ export const Order = {
         }
         if (message.OrganizationID !== "") {
             writer.uint32(146).string(message.OrganizationID);
+        }
+        if (message.UserID !== "") {
+            writer.uint32(154).string(message.UserID);
         }
         return writer;
     },
@@ -617,6 +621,12 @@ export const Order = {
                     }
                     message.OrganizationID = reader.string();
                     continue;
+                case 19:
+                    if (tag !== 154) {
+                        break;
+                    }
+                    message.UserID = reader.string();
+                    continue;
             }
             if ((tag & 7) === 4 || tag === 0) {
                 break;
@@ -647,6 +657,7 @@ export const Order = {
             BlockTime: isSet(object.BlockTime) ? fromJsonTimestamp(object.BlockTime) : undefined,
             Sequence: isSet(object.Sequence) ? globalThis.Number(object.Sequence) : 0,
             OrganizationID: isSet(object.OrganizationID) ? globalThis.String(object.OrganizationID) : "",
+            UserID: isSet(object.UserID) ? globalThis.String(object.UserID) : "",
         };
     },
     toJSON(message) {
@@ -705,13 +716,16 @@ export const Order = {
         if (message.OrganizationID !== "") {
             obj.OrganizationID = message.OrganizationID;
         }
+        if (message.UserID !== "") {
+            obj.UserID = message.UserID;
+        }
         return obj;
     },
     create(base) {
         return Order.fromPartial(base !== null && base !== void 0 ? base : {});
     },
     fromPartial(object) {
-        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q;
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r;
         const message = createBaseOrder();
         message.Network = (_a = object.Network) !== null && _a !== void 0 ? _a : 0;
         message.SmartContractAddr = (_b = object.SmartContractAddr) !== null && _b !== void 0 ? _b : "";
@@ -737,6 +751,7 @@ export const Order = {
         message.BlockTime = (_o = object.BlockTime) !== null && _o !== void 0 ? _o : undefined;
         message.Sequence = (_p = object.Sequence) !== null && _p !== void 0 ? _p : 0;
         message.OrganizationID = (_q = object.OrganizationID) !== null && _q !== void 0 ? _q : "";
+        message.UserID = (_r = object.UserID) !== null && _r !== void 0 ? _r : "";
         return message;
     },
 };
