@@ -240,7 +240,7 @@ export declare const Order: {
             FailedAt?: Date | undefined;
             AssetID?: string | undefined;
             Symbol?: string | undefined;
-            AssetClass?: import("./broker").AssetClass | undefined;
+            AssetClass?: import("./sologenic/com-fs-asset-model/asset").AssetType | undefined;
             OrderClass?: import("./broker").OrderClass | undefined;
             Type?: import("./broker").TradeType | undefined;
             Side?: OrderType | undefined;
@@ -302,6 +302,7 @@ export declare const Order: {
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
+            ClearingBroker?: import("./broker").ClearingBroker | undefined;
         } | undefined;
         ProcessInfo?: {
             ProcessState?: import("./util").ProcessState | undefined;
@@ -413,7 +414,7 @@ export declare const Order: {
             FailedAt?: Date | undefined;
             AssetID?: string | undefined;
             Symbol?: string | undefined;
-            AssetClass?: import("./broker").AssetClass | undefined;
+            AssetClass?: import("./sologenic/com-fs-asset-model/asset").AssetType | undefined;
             OrderClass?: import("./broker").OrderClass | undefined;
             Type?: import("./broker").TradeType | undefined;
             Side?: OrderType | undefined;
@@ -475,6 +476,7 @@ export declare const Order: {
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
+            ClearingBroker?: import("./broker").ClearingBroker | undefined;
         } & {
             BrokerAssignedID?: string | undefined;
             ClientOrderID?: ({
@@ -493,7 +495,7 @@ export declare const Order: {
             FailedAt?: Date | undefined;
             AssetID?: string | undefined;
             Symbol?: string | undefined;
-            AssetClass?: import("./broker").AssetClass | undefined;
+            AssetClass?: import("./sologenic/com-fs-asset-model/asset").AssetType | undefined;
             OrderClass?: import("./broker").OrderClass | undefined;
             Type?: import("./broker").TradeType | undefined;
             Side?: OrderType | undefined;
@@ -594,6 +596,7 @@ export declare const Order: {
                 ProcessedAt?: Date | undefined;
             } & { [K_17 in Exclude<keyof I["BrokerOrderDetails"]["ProcessInfo"], keyof ProcessInfo>]: never; }) | undefined;
             InstanceID?: string | undefined;
+            ClearingBroker?: import("./broker").ClearingBroker | undefined;
         } & { [K_18 in Exclude<keyof I["BrokerOrderDetails"], keyof BrokerOrderDetails>]: never; }) | undefined;
         ProcessInfo?: ({
             ProcessState?: import("./util").ProcessState | undefined;
@@ -667,7 +670,7 @@ export declare const Order: {
             FailedAt?: Date | undefined;
             AssetID?: string | undefined;
             Symbol?: string | undefined;
-            AssetClass?: import("./broker").AssetClass | undefined;
+            AssetClass?: import("./sologenic/com-fs-asset-model/asset").AssetType | undefined;
             OrderClass?: import("./broker").OrderClass | undefined;
             Type?: import("./broker").TradeType | undefined;
             Side?: OrderType | undefined;
@@ -729,6 +732,7 @@ export declare const Order: {
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
+            ClearingBroker?: import("./broker").ClearingBroker | undefined;
         } | undefined;
         ProcessInfo?: {
             ProcessState?: import("./util").ProcessState | undefined;
@@ -840,7 +844,7 @@ export declare const Order: {
             FailedAt?: Date | undefined;
             AssetID?: string | undefined;
             Symbol?: string | undefined;
-            AssetClass?: import("./broker").AssetClass | undefined;
+            AssetClass?: import("./sologenic/com-fs-asset-model/asset").AssetType | undefined;
             OrderClass?: import("./broker").OrderClass | undefined;
             Type?: import("./broker").TradeType | undefined;
             Side?: OrderType | undefined;
@@ -902,6 +906,7 @@ export declare const Order: {
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
+            ClearingBroker?: import("./broker").ClearingBroker | undefined;
         } & {
             BrokerAssignedID?: string | undefined;
             ClientOrderID?: ({
@@ -920,7 +925,7 @@ export declare const Order: {
             FailedAt?: Date | undefined;
             AssetID?: string | undefined;
             Symbol?: string | undefined;
-            AssetClass?: import("./broker").AssetClass | undefined;
+            AssetClass?: import("./sologenic/com-fs-asset-model/asset").AssetType | undefined;
             OrderClass?: import("./broker").OrderClass | undefined;
             Type?: import("./broker").TradeType | undefined;
             Side?: OrderType | undefined;
@@ -1021,6 +1026,7 @@ export declare const Order: {
                 ProcessedAt?: Date | undefined;
             } & { [K_38 in Exclude<keyof I_1["BrokerOrderDetails"]["ProcessInfo"], keyof ProcessInfo>]: never; }) | undefined;
             InstanceID?: string | undefined;
+            ClearingBroker?: import("./broker").ClearingBroker | undefined;
         } & { [K_39 in Exclude<keyof I_1["BrokerOrderDetails"], keyof BrokerOrderDetails>]: never; }) | undefined;
         ProcessInfo?: ({
             ProcessState?: import("./util").ProcessState | undefined;
@@ -1257,7 +1263,7 @@ export declare const Orders: {
                 FailedAt?: Date | undefined;
                 AssetID?: string | undefined;
                 Symbol?: string | undefined;
-                AssetClass?: import("./broker").AssetClass | undefined;
+                AssetClass?: import("./sologenic/com-fs-asset-model/asset").AssetType | undefined;
                 OrderClass?: import("./broker").OrderClass | undefined;
                 Type?: import("./broker").TradeType | undefined;
                 Side?: OrderType | undefined;
@@ -1319,6 +1325,7 @@ export declare const Orders: {
                     ProcessedAt?: Date | undefined;
                 } | undefined;
                 InstanceID?: string | undefined;
+                ClearingBroker?: import("./broker").ClearingBroker | undefined;
             } | undefined;
             ProcessInfo?: {
                 ProcessState?: import("./util").ProcessState | undefined;
@@ -1391,7 +1398,7 @@ export declare const Orders: {
                 FailedAt?: Date | undefined;
                 AssetID?: string | undefined;
                 Symbol?: string | undefined;
-                AssetClass?: import("./broker").AssetClass | undefined;
+                AssetClass?: import("./sologenic/com-fs-asset-model/asset").AssetType | undefined;
                 OrderClass?: import("./broker").OrderClass | undefined;
                 Type?: import("./broker").TradeType | undefined;
                 Side?: OrderType | undefined;
@@ -1453,6 +1460,7 @@ export declare const Orders: {
                     ProcessedAt?: Date | undefined;
                 } | undefined;
                 InstanceID?: string | undefined;
+                ClearingBroker?: import("./broker").ClearingBroker | undefined;
             } | undefined;
             ProcessInfo?: {
                 ProcessState?: import("./util").ProcessState | undefined;
@@ -1522,7 +1530,7 @@ export declare const Orders: {
                 FailedAt?: Date | undefined;
                 AssetID?: string | undefined;
                 Symbol?: string | undefined;
-                AssetClass?: import("./broker").AssetClass | undefined;
+                AssetClass?: import("./sologenic/com-fs-asset-model/asset").AssetType | undefined;
                 OrderClass?: import("./broker").OrderClass | undefined;
                 Type?: import("./broker").TradeType | undefined;
                 Side?: OrderType | undefined;
@@ -1584,6 +1592,7 @@ export declare const Orders: {
                     ProcessedAt?: Date | undefined;
                 } | undefined;
                 InstanceID?: string | undefined;
+                ClearingBroker?: import("./broker").ClearingBroker | undefined;
             } | undefined;
             ProcessInfo?: {
                 ProcessState?: import("./util").ProcessState | undefined;
@@ -1695,7 +1704,7 @@ export declare const Orders: {
                 FailedAt?: Date | undefined;
                 AssetID?: string | undefined;
                 Symbol?: string | undefined;
-                AssetClass?: import("./broker").AssetClass | undefined;
+                AssetClass?: import("./sologenic/com-fs-asset-model/asset").AssetType | undefined;
                 OrderClass?: import("./broker").OrderClass | undefined;
                 Type?: import("./broker").TradeType | undefined;
                 Side?: OrderType | undefined;
@@ -1757,6 +1766,7 @@ export declare const Orders: {
                     ProcessedAt?: Date | undefined;
                 } | undefined;
                 InstanceID?: string | undefined;
+                ClearingBroker?: import("./broker").ClearingBroker | undefined;
             } & {
                 BrokerAssignedID?: string | undefined;
                 ClientOrderID?: ({
@@ -1775,7 +1785,7 @@ export declare const Orders: {
                 FailedAt?: Date | undefined;
                 AssetID?: string | undefined;
                 Symbol?: string | undefined;
-                AssetClass?: import("./broker").AssetClass | undefined;
+                AssetClass?: import("./sologenic/com-fs-asset-model/asset").AssetType | undefined;
                 OrderClass?: import("./broker").OrderClass | undefined;
                 Type?: import("./broker").TradeType | undefined;
                 Side?: OrderType | undefined;
@@ -1876,6 +1886,7 @@ export declare const Orders: {
                     ProcessedAt?: Date | undefined;
                 } & { [K_17 in Exclude<keyof I["Orders"][number]["BrokerOrderDetails"]["ProcessInfo"], keyof ProcessInfo>]: never; }) | undefined;
                 InstanceID?: string | undefined;
+                ClearingBroker?: import("./broker").ClearingBroker | undefined;
             } & { [K_18 in Exclude<keyof I["Orders"][number]["BrokerOrderDetails"], keyof BrokerOrderDetails>]: never; }) | undefined;
             ProcessInfo?: ({
                 ProcessState?: import("./util").ProcessState | undefined;
@@ -1948,7 +1959,7 @@ export declare const Orders: {
                 FailedAt?: Date | undefined;
                 AssetID?: string | undefined;
                 Symbol?: string | undefined;
-                AssetClass?: import("./broker").AssetClass | undefined;
+                AssetClass?: import("./sologenic/com-fs-asset-model/asset").AssetType | undefined;
                 OrderClass?: import("./broker").OrderClass | undefined;
                 Type?: import("./broker").TradeType | undefined;
                 Side?: OrderType | undefined;
@@ -2010,6 +2021,7 @@ export declare const Orders: {
                     ProcessedAt?: Date | undefined;
                 } | undefined;
                 InstanceID?: string | undefined;
+                ClearingBroker?: import("./broker").ClearingBroker | undefined;
             } | undefined;
             ProcessInfo?: {
                 ProcessState?: import("./util").ProcessState | undefined;
@@ -2083,7 +2095,7 @@ export declare const Orders: {
                 FailedAt?: Date | undefined;
                 AssetID?: string | undefined;
                 Symbol?: string | undefined;
-                AssetClass?: import("./broker").AssetClass | undefined;
+                AssetClass?: import("./sologenic/com-fs-asset-model/asset").AssetType | undefined;
                 OrderClass?: import("./broker").OrderClass | undefined;
                 Type?: import("./broker").TradeType | undefined;
                 Side?: OrderType | undefined;
@@ -2145,6 +2157,7 @@ export declare const Orders: {
                     ProcessedAt?: Date | undefined;
                 } | undefined;
                 InstanceID?: string | undefined;
+                ClearingBroker?: import("./broker").ClearingBroker | undefined;
             } | undefined;
             ProcessInfo?: {
                 ProcessState?: import("./util").ProcessState | undefined;
@@ -2217,7 +2230,7 @@ export declare const Orders: {
                 FailedAt?: Date | undefined;
                 AssetID?: string | undefined;
                 Symbol?: string | undefined;
-                AssetClass?: import("./broker").AssetClass | undefined;
+                AssetClass?: import("./sologenic/com-fs-asset-model/asset").AssetType | undefined;
                 OrderClass?: import("./broker").OrderClass | undefined;
                 Type?: import("./broker").TradeType | undefined;
                 Side?: OrderType | undefined;
@@ -2279,6 +2292,7 @@ export declare const Orders: {
                     ProcessedAt?: Date | undefined;
                 } | undefined;
                 InstanceID?: string | undefined;
+                ClearingBroker?: import("./broker").ClearingBroker | undefined;
             } | undefined;
             ProcessInfo?: {
                 ProcessState?: import("./util").ProcessState | undefined;
@@ -2348,7 +2362,7 @@ export declare const Orders: {
                 FailedAt?: Date | undefined;
                 AssetID?: string | undefined;
                 Symbol?: string | undefined;
-                AssetClass?: import("./broker").AssetClass | undefined;
+                AssetClass?: import("./sologenic/com-fs-asset-model/asset").AssetType | undefined;
                 OrderClass?: import("./broker").OrderClass | undefined;
                 Type?: import("./broker").TradeType | undefined;
                 Side?: OrderType | undefined;
@@ -2410,6 +2424,7 @@ export declare const Orders: {
                     ProcessedAt?: Date | undefined;
                 } | undefined;
                 InstanceID?: string | undefined;
+                ClearingBroker?: import("./broker").ClearingBroker | undefined;
             } | undefined;
             ProcessInfo?: {
                 ProcessState?: import("./util").ProcessState | undefined;
@@ -2521,7 +2536,7 @@ export declare const Orders: {
                 FailedAt?: Date | undefined;
                 AssetID?: string | undefined;
                 Symbol?: string | undefined;
-                AssetClass?: import("./broker").AssetClass | undefined;
+                AssetClass?: import("./sologenic/com-fs-asset-model/asset").AssetType | undefined;
                 OrderClass?: import("./broker").OrderClass | undefined;
                 Type?: import("./broker").TradeType | undefined;
                 Side?: OrderType | undefined;
@@ -2583,6 +2598,7 @@ export declare const Orders: {
                     ProcessedAt?: Date | undefined;
                 } | undefined;
                 InstanceID?: string | undefined;
+                ClearingBroker?: import("./broker").ClearingBroker | undefined;
             } & {
                 BrokerAssignedID?: string | undefined;
                 ClientOrderID?: ({
@@ -2601,7 +2617,7 @@ export declare const Orders: {
                 FailedAt?: Date | undefined;
                 AssetID?: string | undefined;
                 Symbol?: string | undefined;
-                AssetClass?: import("./broker").AssetClass | undefined;
+                AssetClass?: import("./sologenic/com-fs-asset-model/asset").AssetType | undefined;
                 OrderClass?: import("./broker").OrderClass | undefined;
                 Type?: import("./broker").TradeType | undefined;
                 Side?: OrderType | undefined;
@@ -2702,6 +2718,7 @@ export declare const Orders: {
                     ProcessedAt?: Date | undefined;
                 } & { [K_40 in Exclude<keyof I_1["Orders"][number]["BrokerOrderDetails"]["ProcessInfo"], keyof ProcessInfo>]: never; }) | undefined;
                 InstanceID?: string | undefined;
+                ClearingBroker?: import("./broker").ClearingBroker | undefined;
             } & { [K_41 in Exclude<keyof I_1["Orders"][number]["BrokerOrderDetails"], keyof BrokerOrderDetails>]: never; }) | undefined;
             ProcessInfo?: ({
                 ProcessState?: import("./util").ProcessState | undefined;
@@ -2774,7 +2791,7 @@ export declare const Orders: {
                 FailedAt?: Date | undefined;
                 AssetID?: string | undefined;
                 Symbol?: string | undefined;
-                AssetClass?: import("./broker").AssetClass | undefined;
+                AssetClass?: import("./sologenic/com-fs-asset-model/asset").AssetType | undefined;
                 OrderClass?: import("./broker").OrderClass | undefined;
                 Type?: import("./broker").TradeType | undefined;
                 Side?: OrderType | undefined;
@@ -2836,6 +2853,7 @@ export declare const Orders: {
                     ProcessedAt?: Date | undefined;
                 } | undefined;
                 InstanceID?: string | undefined;
+                ClearingBroker?: import("./broker").ClearingBroker | undefined;
             } | undefined;
             ProcessInfo?: {
                 ProcessState?: import("./util").ProcessState | undefined;

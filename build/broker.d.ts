@@ -1,26 +1,32 @@
 import _m0 from "protobufjs/minimal";
+import { AssetType } from "./sologenic/com-fs-asset-model/asset";
 import { Decimal } from "./sologenic/com-fs-utils-lib/go/decimal/decimal";
 import { Network } from "./sologenic/com-fs-utils-lib/models/metadata/metadata";
 import { OrderType, ProcessInfo } from "./util";
 export declare const protobufPackage = "order";
-export declare enum AssetClass {
-    NOT_USED_ASSET_CLASS = 0,
-    US_EQUITY = 1,
-    CRYPTO = 2,
+export declare enum ClearingBroker {
+    NOT_USED_CLEARING_BROKER = 0,
+    ALPACA = 1,
+    RQD = 2,
     UNRECOGNIZED = -1
 }
-export declare function assetClassFromJSON(object: any): AssetClass;
-export declare function assetClassToJSON(object: AssetClass): string;
+export declare function clearingBrokerFromJSON(object: any): ClearingBroker;
+export declare function clearingBrokerToJSON(object: ClearingBroker): string;
 export declare enum TimeInForce {
     NOT_USED_TIME_IN_FORCE = 0,
     DAY = 1,
-    GTC = 2,
-    GTT = 3,
-    /** OPG - TODO: the below types will be implemented in the future */
-    OPG = 4,
-    CLS = 5,
-    IOC = 6,
-    FOK = 7,
+    /** GOOD_TILL_CANCELED - GTC */
+    GOOD_TILL_CANCELED = 2,
+    /** AT_THE_OPENING - OPG */
+    AT_THE_OPENING = 3,
+    /** AT_THE_CLOSE - CLS */
+    AT_THE_CLOSE = 4,
+    /** IMMEDIATE_OR_CANCEL - IOC */
+    IMMEDIATE_OR_CANCEL = 5,
+    /** FILL_OR_KILL - FOK */
+    FILL_OR_KILL = 6,
+    /** GOOD_TILL_TRIGGERED - GTT */
+    GOOD_TILL_TRIGGERED = 7,
     UNRECOGNIZED = -1
 }
 export declare function timeInForceFromJSON(object: any): TimeInForce;
@@ -29,15 +35,14 @@ export declare enum TradeType {
     NOT_USED_TRADE_TYPE = 0,
     MARKET = 1,
     LIMIT = 2,
-    /** STOP - TODO: the below types will be implemented in the future */
     STOP = 3,
     STOP_LIMIT = 4,
     OPEN_CLOSE_AUCTION = 5,
     BRACKET = 6,
-    /** OCO - One-Cancels-Other */
-    OCO = 7,
-    /** OTO - One-Triggers-Other */
-    OTO = 8,
+    /** ONE_CANCELS_OTHER - OCO */
+    ONE_CANCELS_OTHER = 7,
+    /** ONE_TRIGGERS_OTHER - OTO */
+    ONE_TRIGGERS_OTHER = 8,
     TRAILING_STOP = 9,
     UNRECOGNIZED = -1
 }
@@ -47,19 +52,19 @@ export declare enum OrderClass {
     NOT_USED_ORDER_CLASS = 0,
     ORDER_CLASS_SIMPLE = 1,
     ORDER_CLASS_BRACKET = 2,
-    /** ORDER_CLASS_OCO - One-Cancels-Other */
-    ORDER_CLASS_OCO = 3,
-    /** ORDER_CLASS_OTO - One-Triggers-Other */
-    ORDER_CLASS_OTO = 4,
+    /** ORDER_CLASS_ONE_CANCELS_OTHER - OCO */
+    ORDER_CLASS_ONE_CANCELS_OTHER = 3,
+    /** ORDER_CLASS_ONE_TRIGGERS_OTHER - OTO */
+    ORDER_CLASS_ONE_TRIGGERS_OTHER = 4,
     UNRECOGNIZED = -1
 }
 export declare function orderClassFromJSON(object: any): OrderClass;
 export declare function orderClassToJSON(object: OrderClass): string;
 export declare enum BrokerOrderStatus {
-    NOT_USED_ALPACA_ORDER_STATUS = 0,
+    NOT_USED_ORDER_STATUS = 0,
     /** PENDING_NEW - common statuses */
     PENDING_NEW = 1,
-    /** NEW - the order has been received by Alpaca, and routed to exchanges for execution. */
+    /** NEW - the order has been received by the broker, and routed to exchanges for execution. */
     NEW = 2,
     /** PARTIALLY_FILLED - the order has been partially filled. */
     PARTIALLY_FILLED = 3,
@@ -73,7 +78,7 @@ export declare enum BrokerOrderStatus {
     EXPIRED = 7,
     /** PENDING_CANCEL - uncommon statuses */
     PENDING_CANCEL = 8,
-    /** ACCEPTED - the order has been received by Alpaca, but hasn’t yet been routed to the execution venue. */
+    /** ACCEPTED - the order has been received by the broker, but hasn’t yet been routed to the execution venue. */
     ACCEPTED = 9,
     /** ACCEPTED_FOR_BIDDING - the order has been received by exchanges, and is evaluated for pricing. */
     ACCEPTED_FOR_BIDDING = 10,
@@ -89,11 +94,11 @@ export declare enum BrokerOrderStatus {
 }
 export declare function brokerOrderStatusFromJSON(object: any): BrokerOrderStatus;
 export declare function brokerOrderStatusToJSON(object: BrokerOrderStatus): string;
-/** Key orderID-SmartContractAddr-network (is as unique identifier for the order in message to Alpaca) */
+/** Key orderID-SmartContractAddr-network (is as unique identifier for the order in message to the broker) */
 export interface BrokerOrderDetails {
-    /** auto generated ID from Alpaca */
+    /** auto generated ID from the broker */
     BrokerAssignedID: string;
-    /** unique identifier for the order in message to Alpaca, value is from the key function */
+    /** unique identifier for the order in message to the broker, value is from the key function */
     ClientOrderID: ClientOrderID | undefined;
     SubmittedAt: Date | undefined;
     FilledAt?: Date | undefined;
@@ -102,7 +107,8 @@ export interface BrokerOrderDetails {
     FailedAt?: Date | undefined;
     AssetID: string;
     Symbol: string;
-    AssetClass: AssetClass;
+    /** Also called AssetType in the asset model */
+    AssetClass: AssetType;
     OrderClass: OrderClass;
     Type: TradeType;
     Side: OrderType;
@@ -119,33 +125,30 @@ export interface BrokerOrderDetails {
     TrailPercent?: Decimal | undefined;
     /** High Water Mark, used for trailing stop orders */
     HWM?: Decimal | undefined;
-    /** defaults to false */
+    /** defaults to false TODO: needs explanation */
     ExtendedHours: boolean;
     CreatedAt: Date | undefined;
     UpdatedAt?: Date | undefined;
-    /** status of the order in Alpaca */
+    /** status of the order in exchange */
     Status: BrokerOrderStatus;
-    /**
-     * "position_qty" field from Alpaca Trade Update's event msg.
-     * Since all orders will flow through Sologenic's custodial account, this will represent the total count of all shares on our platform.
-     */
+    /** Since all orders will flow through Sologenic's custodial account, this will represent the total count of all shares on our platform. */
     TotalPosition?: Decimal | undefined;
     /**
-     * "price" field from Alpaca Trade Update's event msg.
      * Represents the price of the order processed at the time of partial fill. For example, if a 3 step partial fill occurs for an order at prices $1, $1.1 and $0.9,
      * the `PartialPrice` will be $1, $1.1 and $0.9 respectively. The average of these prices will be the `FilledAvgPrice`.
      */
     PartialPrice?: Decimal | undefined;
     /**
-     * "qty" field from Alpaca Trade Update's event msg.
      * Represents the partial order processed at the time of partial fill.
      * For example, if a order for 10 shares is partially filled with 5, 3 and 2 shares, the `PartialQty` will be 5, 3 and 2 respectively.
      */
     PartialQty?: Decimal | undefined;
-    /** Bookkeeping: did we process this event from alpaca order log? */
+    /** Bookkeeping: did we process this event from the broker order log? */
     ProcessInfo?: ProcessInfo | undefined;
     /** ID used by logs to identify the instance where the log was created/ processed */
     InstanceID?: string | undefined;
+    /** Broker that cleared the order, e.g. Alpaca, RQD, etc. */
+    ClearingBroker: ClearingBroker;
 }
 export interface ClientOrderID {
     Network: Network;
@@ -174,7 +177,7 @@ export declare const BrokerOrderDetails: {
         FailedAt?: Date | undefined;
         AssetID?: string | undefined;
         Symbol?: string | undefined;
-        AssetClass?: AssetClass | undefined;
+        AssetClass?: AssetType | undefined;
         OrderClass?: OrderClass | undefined;
         Type?: TradeType | undefined;
         Side?: OrderType | undefined;
@@ -236,6 +239,7 @@ export declare const BrokerOrderDetails: {
             ProcessedAt?: Date | undefined;
         } | undefined;
         InstanceID?: string | undefined;
+        ClearingBroker?: ClearingBroker | undefined;
     } & {
         BrokerAssignedID?: string | undefined;
         ClientOrderID?: ({
@@ -254,7 +258,7 @@ export declare const BrokerOrderDetails: {
         FailedAt?: Date | undefined;
         AssetID?: string | undefined;
         Symbol?: string | undefined;
-        AssetClass?: AssetClass | undefined;
+        AssetClass?: AssetType | undefined;
         OrderClass?: OrderClass | undefined;
         Type?: TradeType | undefined;
         Side?: OrderType | undefined;
@@ -355,6 +359,7 @@ export declare const BrokerOrderDetails: {
             ProcessedAt?: Date | undefined;
         } & { [K_13 in Exclude<keyof I["ProcessInfo"], keyof ProcessInfo>]: never; }) | undefined;
         InstanceID?: string | undefined;
+        ClearingBroker?: ClearingBroker | undefined;
     } & { [K_14 in Exclude<keyof I, keyof BrokerOrderDetails>]: never; }>(base?: I | undefined): BrokerOrderDetails;
     fromPartial<I_1 extends {
         BrokerAssignedID?: string | undefined;
@@ -370,7 +375,7 @@ export declare const BrokerOrderDetails: {
         FailedAt?: Date | undefined;
         AssetID?: string | undefined;
         Symbol?: string | undefined;
-        AssetClass?: AssetClass | undefined;
+        AssetClass?: AssetType | undefined;
         OrderClass?: OrderClass | undefined;
         Type?: TradeType | undefined;
         Side?: OrderType | undefined;
@@ -432,6 +437,7 @@ export declare const BrokerOrderDetails: {
             ProcessedAt?: Date | undefined;
         } | undefined;
         InstanceID?: string | undefined;
+        ClearingBroker?: ClearingBroker | undefined;
     } & {
         BrokerAssignedID?: string | undefined;
         ClientOrderID?: ({
@@ -450,7 +456,7 @@ export declare const BrokerOrderDetails: {
         FailedAt?: Date | undefined;
         AssetID?: string | undefined;
         Symbol?: string | undefined;
-        AssetClass?: AssetClass | undefined;
+        AssetClass?: AssetType | undefined;
         OrderClass?: OrderClass | undefined;
         Type?: TradeType | undefined;
         Side?: OrderType | undefined;
@@ -551,6 +557,7 @@ export declare const BrokerOrderDetails: {
             ProcessedAt?: Date | undefined;
         } & { [K_28 in Exclude<keyof I_1["ProcessInfo"], keyof ProcessInfo>]: never; }) | undefined;
         InstanceID?: string | undefined;
+        ClearingBroker?: ClearingBroker | undefined;
     } & { [K_29 in Exclude<keyof I_1, keyof BrokerOrderDetails>]: never; }>(object: I_1): BrokerOrderDetails;
 };
 export declare const ClientOrderID: {
@@ -597,7 +604,7 @@ export declare const BrokerOrderDetailsList: {
             FailedAt?: Date | undefined;
             AssetID?: string | undefined;
             Symbol?: string | undefined;
-            AssetClass?: AssetClass | undefined;
+            AssetClass?: AssetType | undefined;
             OrderClass?: OrderClass | undefined;
             Type?: TradeType | undefined;
             Side?: OrderType | undefined;
@@ -659,6 +666,7 @@ export declare const BrokerOrderDetailsList: {
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
+            ClearingBroker?: ClearingBroker | undefined;
         }[] | undefined;
     } & {
         BrokerOrderDetailsList?: ({
@@ -675,7 +683,7 @@ export declare const BrokerOrderDetailsList: {
             FailedAt?: Date | undefined;
             AssetID?: string | undefined;
             Symbol?: string | undefined;
-            AssetClass?: AssetClass | undefined;
+            AssetClass?: AssetType | undefined;
             OrderClass?: OrderClass | undefined;
             Type?: TradeType | undefined;
             Side?: OrderType | undefined;
@@ -737,6 +745,7 @@ export declare const BrokerOrderDetailsList: {
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
+            ClearingBroker?: ClearingBroker | undefined;
         }[] & ({
             BrokerAssignedID?: string | undefined;
             ClientOrderID?: {
@@ -751,7 +760,7 @@ export declare const BrokerOrderDetailsList: {
             FailedAt?: Date | undefined;
             AssetID?: string | undefined;
             Symbol?: string | undefined;
-            AssetClass?: AssetClass | undefined;
+            AssetClass?: AssetType | undefined;
             OrderClass?: OrderClass | undefined;
             Type?: TradeType | undefined;
             Side?: OrderType | undefined;
@@ -813,6 +822,7 @@ export declare const BrokerOrderDetailsList: {
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
+            ClearingBroker?: ClearingBroker | undefined;
         } & {
             BrokerAssignedID?: string | undefined;
             ClientOrderID?: ({
@@ -831,7 +841,7 @@ export declare const BrokerOrderDetailsList: {
             FailedAt?: Date | undefined;
             AssetID?: string | undefined;
             Symbol?: string | undefined;
-            AssetClass?: AssetClass | undefined;
+            AssetClass?: AssetType | undefined;
             OrderClass?: OrderClass | undefined;
             Type?: TradeType | undefined;
             Side?: OrderType | undefined;
@@ -932,6 +942,7 @@ export declare const BrokerOrderDetailsList: {
                 ProcessedAt?: Date | undefined;
             } & { [K_13 in Exclude<keyof I["BrokerOrderDetailsList"][number]["ProcessInfo"], keyof ProcessInfo>]: never; }) | undefined;
             InstanceID?: string | undefined;
+            ClearingBroker?: ClearingBroker | undefined;
         } & { [K_14 in Exclude<keyof I["BrokerOrderDetailsList"][number], keyof BrokerOrderDetails>]: never; })[] & { [K_15 in Exclude<keyof I["BrokerOrderDetailsList"], keyof {
             BrokerAssignedID?: string | undefined;
             ClientOrderID?: {
@@ -946,7 +957,7 @@ export declare const BrokerOrderDetailsList: {
             FailedAt?: Date | undefined;
             AssetID?: string | undefined;
             Symbol?: string | undefined;
-            AssetClass?: AssetClass | undefined;
+            AssetClass?: AssetType | undefined;
             OrderClass?: OrderClass | undefined;
             Type?: TradeType | undefined;
             Side?: OrderType | undefined;
@@ -1008,6 +1019,7 @@ export declare const BrokerOrderDetailsList: {
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
+            ClearingBroker?: ClearingBroker | undefined;
         }[]>]: never; }) | undefined;
     } & { [K_16 in Exclude<keyof I, "BrokerOrderDetailsList">]: never; }>(base?: I | undefined): BrokerOrderDetailsList;
     fromPartial<I_1 extends {
@@ -1025,7 +1037,7 @@ export declare const BrokerOrderDetailsList: {
             FailedAt?: Date | undefined;
             AssetID?: string | undefined;
             Symbol?: string | undefined;
-            AssetClass?: AssetClass | undefined;
+            AssetClass?: AssetType | undefined;
             OrderClass?: OrderClass | undefined;
             Type?: TradeType | undefined;
             Side?: OrderType | undefined;
@@ -1087,6 +1099,7 @@ export declare const BrokerOrderDetailsList: {
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
+            ClearingBroker?: ClearingBroker | undefined;
         }[] | undefined;
     } & {
         BrokerOrderDetailsList?: ({
@@ -1103,7 +1116,7 @@ export declare const BrokerOrderDetailsList: {
             FailedAt?: Date | undefined;
             AssetID?: string | undefined;
             Symbol?: string | undefined;
-            AssetClass?: AssetClass | undefined;
+            AssetClass?: AssetType | undefined;
             OrderClass?: OrderClass | undefined;
             Type?: TradeType | undefined;
             Side?: OrderType | undefined;
@@ -1165,6 +1178,7 @@ export declare const BrokerOrderDetailsList: {
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
+            ClearingBroker?: ClearingBroker | undefined;
         }[] & ({
             BrokerAssignedID?: string | undefined;
             ClientOrderID?: {
@@ -1179,7 +1193,7 @@ export declare const BrokerOrderDetailsList: {
             FailedAt?: Date | undefined;
             AssetID?: string | undefined;
             Symbol?: string | undefined;
-            AssetClass?: AssetClass | undefined;
+            AssetClass?: AssetType | undefined;
             OrderClass?: OrderClass | undefined;
             Type?: TradeType | undefined;
             Side?: OrderType | undefined;
@@ -1241,6 +1255,7 @@ export declare const BrokerOrderDetailsList: {
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
+            ClearingBroker?: ClearingBroker | undefined;
         } & {
             BrokerAssignedID?: string | undefined;
             ClientOrderID?: ({
@@ -1259,7 +1274,7 @@ export declare const BrokerOrderDetailsList: {
             FailedAt?: Date | undefined;
             AssetID?: string | undefined;
             Symbol?: string | undefined;
-            AssetClass?: AssetClass | undefined;
+            AssetClass?: AssetType | undefined;
             OrderClass?: OrderClass | undefined;
             Type?: TradeType | undefined;
             Side?: OrderType | undefined;
@@ -1360,6 +1375,7 @@ export declare const BrokerOrderDetailsList: {
                 ProcessedAt?: Date | undefined;
             } & { [K_30 in Exclude<keyof I_1["BrokerOrderDetailsList"][number]["ProcessInfo"], keyof ProcessInfo>]: never; }) | undefined;
             InstanceID?: string | undefined;
+            ClearingBroker?: ClearingBroker | undefined;
         } & { [K_31 in Exclude<keyof I_1["BrokerOrderDetailsList"][number], keyof BrokerOrderDetails>]: never; })[] & { [K_32 in Exclude<keyof I_1["BrokerOrderDetailsList"], keyof {
             BrokerAssignedID?: string | undefined;
             ClientOrderID?: {
@@ -1374,7 +1390,7 @@ export declare const BrokerOrderDetailsList: {
             FailedAt?: Date | undefined;
             AssetID?: string | undefined;
             Symbol?: string | undefined;
-            AssetClass?: AssetClass | undefined;
+            AssetClass?: AssetType | undefined;
             OrderClass?: OrderClass | undefined;
             Type?: TradeType | undefined;
             Side?: OrderType | undefined;
@@ -1436,6 +1452,7 @@ export declare const BrokerOrderDetailsList: {
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
+            ClearingBroker?: ClearingBroker | undefined;
         }[]>]: never; }) | undefined;
     } & { [K_33 in Exclude<keyof I_1, "BrokerOrderDetailsList">]: never; }>(object: I_1): BrokerOrderDetailsList;
 };

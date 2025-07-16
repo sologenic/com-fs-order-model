@@ -8,12 +8,12 @@ import "google/protobuf/timestamp.proto";
 import "util.proto";
 import "sologenic/com-fs-utils-lib/go/decimal/decimal.proto";
 import "sologenic/com-fs-utils-lib/models/metadata/metadata.proto";
+import "sologenic/com-fs-asset-model/asset.proto";
 
-
-// Key orderID-SmartContractAddr-network (is as unique identifier for the order in message to Alpaca)
+// Key orderID-SmartContractAddr-network (is as unique identifier for the order in message to the broker)
 message BrokerOrderDetails {
-    string BrokerAssignedID = 1; // auto generated ID from Alpaca
-    ClientOrderID ClientOrderID = 2; // unique identifier for the order in message to Alpaca, value is from the key function
+    string BrokerAssignedID = 1; // auto generated ID from the broker
+    ClientOrderID ClientOrderID = 2; // unique identifier for the order in message to the broker, value is from the key function
     google.protobuf.Timestamp SubmittedAt = 3;
     optional google.protobuf.Timestamp FilledAt = 4;
     optional google.protobuf.Timestamp ExpiredAt = 5;
@@ -21,7 +21,7 @@ message BrokerOrderDetails {
     optional google.protobuf.Timestamp FailedAt = 7;
     string AssetID = 8;
     string Symbol = 9;
-    AssetClass AssetClass = 10;
+    asset.AssetType AssetClass = 10; // Also called AssetType in the asset model
     OrderClass OrderClass = 11;
     TradeType Type = 12;
     OrderType Side = 13;
@@ -38,27 +38,34 @@ message BrokerOrderDetails {
     optional decimal.Decimal TrailPrice = 21;
     optional decimal.Decimal TrailPercent = 22;
     optional decimal.Decimal HWM = 23; // High Water Mark, used for trailing stop orders
-    bool ExtendedHours = 24; // defaults to false
+    bool ExtendedHours = 24; // defaults to false TODO: needs explanation
     google.protobuf.Timestamp CreatedAt = 25;
     optional google.protobuf.Timestamp UpdatedAt = 26;
-    BrokerOrderStatus Status = 27; // status of the order in Alpaca
+    BrokerOrderStatus Status = 27; // status of the order in exchange
 
-    // "position_qty" field from Alpaca Trade Update's event msg. 
     // Since all orders will flow through Sologenic's custodial account, this will represent the total count of all shares on our platform.
     optional decimal.Decimal TotalPosition = 28;
-    // "price" field from Alpaca Trade Update's event msg. 
+
     // Represents the price of the order processed at the time of partial fill. For example, if a 3 step partial fill occurs for an order at prices $1, $1.1 and $0.9,
     // the `PartialPrice` will be $1, $1.1 and $0.9 respectively. The average of these prices will be the `FilledAvgPrice`.
     optional decimal.Decimal PartialPrice = 29; 
-    // "qty" field from Alpaca Trade Update's event msg. 
+
     // Represents the partial order processed at the time of partial fill. 
     // For example, if a order for 10 shares is partially filled with 5, 3 and 2 shares, the `PartialQty` will be 5, 3 and 2 respectively.
     optional decimal.Decimal PartialQty = 30;
 
-    // Bookkeeping: did we process this event from alpaca order log?
+    // Bookkeeping: did we process this event from the broker order log?
     optional ProcessInfo ProcessInfo = 31;
 
     optional string InstanceID = 32; // ID used by logs to identify the instance where the log was created/ processed
+
+    ClearingBroker ClearingBroker = 33; // Broker that cleared the order, e.g. Alpaca, RQD, etc.
+}
+
+enum ClearingBroker {
+    NOT_USED_CLEARING_BROKER = 0;
+    ALPACA = 1;
+    RQD = 2;
 }
 
 message ClientOrderID {
@@ -71,36 +78,27 @@ message BrokerOrderDetailsList {
     repeated BrokerOrderDetails BrokerOrderDetailsList = 1;
 }
 
-enum AssetClass {
-    NOT_USED_ASSET_CLASS = 0;
-    US_EQUITY = 1;
-    CRYPTO = 2;
-}
-
 enum TimeInForce {
     NOT_USED_TIME_IN_FORCE = 0;
     DAY = 1;
-    GTC = 2;
-    GTT = 3;
-    // TODO: the below types will be implemented in the future
-    OPG = 4;
-    CLS = 5;
-    IOC = 6;
-    FOK = 7;
+    GOOD_TILL_CANCELED = 2; // GTC
+    AT_THE_OPENING = 3; // OPG
+    AT_THE_CLOSE = 4; // CLS
+    IMMEDIATE_OR_CANCEL = 5; // IOC
+    FILL_OR_KILL = 6; // FOK
+    GOOD_TILL_TRIGGERED = 7; // GTT
 }
 
 enum TradeType {
     NOT_USED_TRADE_TYPE = 0;
     MARKET = 1;
     LIMIT = 2;
-    
-    // TODO: the below types will be implemented in the future
     STOP = 3;
     STOP_LIMIT = 4;
     OPEN_CLOSE_AUCTION = 5;
     BRACKET = 6;
-    OCO = 7; // One-Cancels-Other
-    OTO = 8; // One-Triggers-Other
+    ONE_CANCELS_OTHER = 7; // OCO
+    ONE_TRIGGERS_OTHER = 8; // OTO
     TRAILING_STOP = 9;
 }
 
@@ -108,15 +106,15 @@ enum OrderClass {
     NOT_USED_ORDER_CLASS = 0;
     ORDER_CLASS_SIMPLE = 1;
     ORDER_CLASS_BRACKET = 2;
-    ORDER_CLASS_OCO = 3; // One-Cancels-Other
-    ORDER_CLASS_OTO = 4; // One-Triggers-Other
+    ORDER_CLASS_ONE_CANCELS_OTHER = 3; // OCO
+    ORDER_CLASS_ONE_TRIGGERS_OTHER = 4; // OTO
 }
 
 enum BrokerOrderStatus {
-    NOT_USED_ALPACA_ORDER_STATUS = 0;
+    NOT_USED_ORDER_STATUS = 0;
     // common statuses
-    PENDING_NEW = 1; // the order has been received by Alpaca, and routed to the exchanges, but has not yet been accepted for execution.
-    NEW = 2; // the order has been received by Alpaca, and routed to exchanges for execution.
+    PENDING_NEW = 1; // the order has been received by the broker, and routed to the exchanges, but has not yet been accepted for execution.
+    NEW = 2; // the order has been received by the broker, and routed to exchanges for execution.
     PARTIALLY_FILLED = 3; // the order has been partially filled.
     FILLED = 4; // the order has been filled, and no further updates will occur for the order.
     DONE_FOR_DAY = 5; // the order is done executing for the day, and will not receive further updates until the next trading day.
@@ -125,7 +123,7 @@ enum BrokerOrderStatus {
 
     // uncommon statuses
     PENDING_CANCEL = 8; // the order is waiting to be canceled.
-    ACCEPTED = 9; // the order has been received by Alpaca, but hasn’t yet been routed to the execution venue.
+    ACCEPTED = 9; // the order has been received by the broker, but hasn’t yet been routed to the execution venue.
     ACCEPTED_FOR_BIDDING = 10; // the order has been received by exchanges, and is evaluated for pricing.
     STOPPED = 11; // the order has been stopped, and a trade is guaranteed for the order, usually at a stated price or better, but has not yet occurred.
     REJECTED = 12; // the order has been rejected, and no further updates will occur for the order.
