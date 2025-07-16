@@ -53,8 +53,8 @@ export var TimeInForce;
 (function (TimeInForce) {
     TimeInForce[TimeInForce["NOT_USED_TIME_IN_FORCE"] = 0] = "NOT_USED_TIME_IN_FORCE";
     TimeInForce[TimeInForce["DAY"] = 1] = "DAY";
-    /** GOOD_TILL_CANCELED - GTC */
-    TimeInForce[TimeInForce["GOOD_TILL_CANCELED"] = 2] = "GOOD_TILL_CANCELED";
+    /** GOOD_TIL_CANCELED - GTC */
+    TimeInForce[TimeInForce["GOOD_TIL_CANCELED"] = 2] = "GOOD_TIL_CANCELED";
     /** AT_THE_OPENING - OPG */
     TimeInForce[TimeInForce["AT_THE_OPENING"] = 3] = "AT_THE_OPENING";
     /** AT_THE_CLOSE - CLS */
@@ -63,8 +63,8 @@ export var TimeInForce;
     TimeInForce[TimeInForce["IMMEDIATE_OR_CANCEL"] = 5] = "IMMEDIATE_OR_CANCEL";
     /** FILL_OR_KILL - FOK */
     TimeInForce[TimeInForce["FILL_OR_KILL"] = 6] = "FILL_OR_KILL";
-    /** GOOD_TILL_TRIGGERED - GTT */
-    TimeInForce[TimeInForce["GOOD_TILL_TRIGGERED"] = 7] = "GOOD_TILL_TRIGGERED";
+    /** GOOD_TIL_TIME - GTT */
+    TimeInForce[TimeInForce["GOOD_TIL_TIME"] = 7] = "GOOD_TIL_TIME";
     TimeInForce[TimeInForce["UNRECOGNIZED"] = -1] = "UNRECOGNIZED";
 })(TimeInForce || (TimeInForce = {}));
 export function timeInForceFromJSON(object) {
@@ -76,8 +76,8 @@ export function timeInForceFromJSON(object) {
         case "DAY":
             return TimeInForce.DAY;
         case 2:
-        case "GOOD_TILL_CANCELED":
-            return TimeInForce.GOOD_TILL_CANCELED;
+        case "GOOD_TIL_CANCELED":
+            return TimeInForce.GOOD_TIL_CANCELED;
         case 3:
         case "AT_THE_OPENING":
             return TimeInForce.AT_THE_OPENING;
@@ -91,8 +91,8 @@ export function timeInForceFromJSON(object) {
         case "FILL_OR_KILL":
             return TimeInForce.FILL_OR_KILL;
         case 7:
-        case "GOOD_TILL_TRIGGERED":
-            return TimeInForce.GOOD_TILL_TRIGGERED;
+        case "GOOD_TIL_TIME":
+            return TimeInForce.GOOD_TIL_TIME;
         case -1:
         case "UNRECOGNIZED":
         default:
@@ -105,8 +105,8 @@ export function timeInForceToJSON(object) {
             return "NOT_USED_TIME_IN_FORCE";
         case TimeInForce.DAY:
             return "DAY";
-        case TimeInForce.GOOD_TILL_CANCELED:
-            return "GOOD_TILL_CANCELED";
+        case TimeInForce.GOOD_TIL_CANCELED:
+            return "GOOD_TIL_CANCELED";
         case TimeInForce.AT_THE_OPENING:
             return "AT_THE_OPENING";
         case TimeInForce.AT_THE_CLOSE:
@@ -115,8 +115,8 @@ export function timeInForceToJSON(object) {
             return "IMMEDIATE_OR_CANCEL";
         case TimeInForce.FILL_OR_KILL:
             return "FILL_OR_KILL";
-        case TimeInForce.GOOD_TILL_TRIGGERED:
-            return "GOOD_TILL_TRIGGERED";
+        case TimeInForce.GOOD_TIL_TIME:
+            return "GOOD_TIL_TIME";
         case TimeInForce.UNRECOGNIZED:
         default:
             return "UNRECOGNIZED";

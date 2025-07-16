@@ -15,8 +15,8 @@ export declare function clearingBrokerToJSON(object: ClearingBroker): string;
 export declare enum TimeInForce {
     NOT_USED_TIME_IN_FORCE = 0,
     DAY = 1,
-    /** GOOD_TILL_CANCELED - GTC */
-    GOOD_TILL_CANCELED = 2,
+    /** GOOD_TIL_CANCELED - GTC */
+    GOOD_TIL_CANCELED = 2,
     /** AT_THE_OPENING - OPG */
     AT_THE_OPENING = 3,
     /** AT_THE_CLOSE - CLS */
@@ -25,8 +25,8 @@ export declare enum TimeInForce {
     IMMEDIATE_OR_CANCEL = 5,
     /** FILL_OR_KILL - FOK */
     FILL_OR_KILL = 6,
-    /** GOOD_TILL_TRIGGERED - GTT */
-    GOOD_TILL_TRIGGERED = 7,
+    /** GOOD_TIL_TIME - GTT */
+    GOOD_TIL_TIME = 7,
     UNRECOGNIZED = -1
 }
 export declare function timeInForceFromJSON(object: any): TimeInForce;

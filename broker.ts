@@ -57,8 +57,8 @@ export function clearingBrokerToJSON(object: ClearingBroker): string {
 export enum TimeInForce {
   NOT_USED_TIME_IN_FORCE = 0,
   DAY = 1,
-  /** GOOD_TILL_CANCELED - GTC */
-  GOOD_TILL_CANCELED = 2,
+  /** GOOD_TIL_CANCELED - GTC */
+  GOOD_TIL_CANCELED = 2,
   /** AT_THE_OPENING - OPG */
   AT_THE_OPENING = 3,
   /** AT_THE_CLOSE - CLS */
@@ -67,8 +67,8 @@ export enum TimeInForce {
   IMMEDIATE_OR_CANCEL = 5,
   /** FILL_OR_KILL - FOK */
   FILL_OR_KILL = 6,
-  /** GOOD_TILL_TRIGGERED - GTT */
-  GOOD_TILL_TRIGGERED = 7,
+  /** GOOD_TIL_TIME - GTT */
+  GOOD_TIL_TIME = 7,
   UNRECOGNIZED = -1,
 }
 
@@ -81,8 +81,8 @@ export function timeInForceFromJSON(object: any): TimeInForce {
     case "DAY":
       return TimeInForce.DAY;
     case 2:
-    case "GOOD_TILL_CANCELED":
-      return TimeInForce.GOOD_TILL_CANCELED;
+    case "GOOD_TIL_CANCELED":
+      return TimeInForce.GOOD_TIL_CANCELED;
     case 3:
     case "AT_THE_OPENING":
       return TimeInForce.AT_THE_OPENING;
@@ -96,8 +96,8 @@ export function timeInForceFromJSON(object: any): TimeInForce {
     case "FILL_OR_KILL":
       return TimeInForce.FILL_OR_KILL;
     case 7:
-    case "GOOD_TILL_TRIGGERED":
-      return TimeInForce.GOOD_TILL_TRIGGERED;
+    case "GOOD_TIL_TIME":
+      return TimeInForce.GOOD_TIL_TIME;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -111,8 +111,8 @@ export function timeInForceToJSON(object: TimeInForce): string {
       return "NOT_USED_TIME_IN_FORCE";
     case TimeInForce.DAY:
       return "DAY";
-    case TimeInForce.GOOD_TILL_CANCELED:
-      return "GOOD_TILL_CANCELED";
+    case TimeInForce.GOOD_TIL_CANCELED:
+      return "GOOD_TIL_CANCELED";
     case TimeInForce.AT_THE_OPENING:
       return "AT_THE_OPENING";
     case TimeInForce.AT_THE_CLOSE:
@@ -121,8 +121,8 @@ export function timeInForceToJSON(object: TimeInForce): string {
       return "IMMEDIATE_OR_CANCEL";
     case TimeInForce.FILL_OR_KILL:
       return "FILL_OR_KILL";
-    case TimeInForce.GOOD_TILL_TRIGGERED:
-      return "GOOD_TILL_TRIGGERED";
+    case TimeInForce.GOOD_TIL_TIME:
+      return "GOOD_TIL_TIME";
     case TimeInForce.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
