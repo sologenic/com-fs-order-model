@@ -15,11 +15,12 @@ export declare enum TimeInForce {
     NOT_USED_TIME_IN_FORCE = 0,
     DAY = 1,
     GTC = 2,
+    GTT = 3,
     /** OPG - TODO: the below types will be implemented in the future */
-    OPG = 3,
-    CLS = 4,
-    IOC = 5,
-    FOK = 6,
+    OPG = 4,
+    CLS = 5,
+    IOC = 6,
+    FOK = 7,
     UNRECOGNIZED = -1
 }
 export declare function timeInForceFromJSON(object: any): TimeInForce;
