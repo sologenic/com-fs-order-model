@@ -3,8 +3,8 @@ syntax = "proto3";
 package order;
 
 import "google/protobuf/empty.proto";
-import "broker.proto";
-import "util.proto";
+import "sologenic/com-fs-order-model/broker.proto";
+import "sologenic/com-fs-order-model/util.proto";
 
 option go_package = "github.com/sologenic/com-fs-order-model;order";
 

@@ -1,8 +1,8 @@
 import _m0 from "protobufjs/minimal";
-import { AssetType } from "./sologenic/com-fs-asset-model/asset";
-import { OrderType, ProcessInfo } from "./sologenic/com-fs-order-model/util";
-import { Decimal } from "./sologenic/com-fs-utils-lib/go/decimal/decimal";
-import { Network } from "./sologenic/com-fs-utils-lib/models/metadata/metadata";
+import { AssetType } from "../com-fs-asset-model/asset";
+import { Decimal } from "../com-fs-utils-lib/go/decimal/decimal";
+import { Network } from "../com-fs-utils-lib/models/metadata/metadata";
+import { OrderType, ProcessInfo } from "./util";
 export declare const protobufPackage = "order";
 export declare enum ClearingBroker {
     NOT_USED_CLEARING_BROKER = 0,
@@ -235,7 +235,7 @@ export declare const BrokerOrderDetails: {
             Exp?: number | undefined;
         } | undefined;
         ProcessInfo?: {
-            ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+            ProcessState?: import("./util").ProcessState | undefined;
             ProcessedAt?: Date | undefined;
         } | undefined;
         InstanceID?: string | undefined;
@@ -352,10 +352,10 @@ export declare const BrokerOrderDetails: {
             Exp?: number | undefined;
         } & { [K_12 in Exclude<keyof I["PartialQty"], keyof Decimal>]: never; }) | undefined;
         ProcessInfo?: ({
-            ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+            ProcessState?: import("./util").ProcessState | undefined;
             ProcessedAt?: Date | undefined;
         } & {
-            ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+            ProcessState?: import("./util").ProcessState | undefined;
             ProcessedAt?: Date | undefined;
         } & { [K_13 in Exclude<keyof I["ProcessInfo"], keyof ProcessInfo>]: never; }) | undefined;
         InstanceID?: string | undefined;
@@ -433,7 +433,7 @@ export declare const BrokerOrderDetails: {
             Exp?: number | undefined;
         } | undefined;
         ProcessInfo?: {
-            ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+            ProcessState?: import("./util").ProcessState | undefined;
             ProcessedAt?: Date | undefined;
         } | undefined;
         InstanceID?: string | undefined;
@@ -550,10 +550,10 @@ export declare const BrokerOrderDetails: {
             Exp?: number | undefined;
         } & { [K_27 in Exclude<keyof I_1["PartialQty"], keyof Decimal>]: never; }) | undefined;
         ProcessInfo?: ({
-            ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+            ProcessState?: import("./util").ProcessState | undefined;
             ProcessedAt?: Date | undefined;
         } & {
-            ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+            ProcessState?: import("./util").ProcessState | undefined;
             ProcessedAt?: Date | undefined;
         } & { [K_28 in Exclude<keyof I_1["ProcessInfo"], keyof ProcessInfo>]: never; }) | undefined;
         InstanceID?: string | undefined;
@@ -662,7 +662,7 @@ export declare const BrokerOrderDetailsList: {
                 Exp?: number | undefined;
             } | undefined;
             ProcessInfo?: {
-                ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                ProcessState?: import("./util").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
@@ -741,7 +741,7 @@ export declare const BrokerOrderDetailsList: {
                 Exp?: number | undefined;
             } | undefined;
             ProcessInfo?: {
-                ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                ProcessState?: import("./util").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
@@ -818,7 +818,7 @@ export declare const BrokerOrderDetailsList: {
                 Exp?: number | undefined;
             } | undefined;
             ProcessInfo?: {
-                ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                ProcessState?: import("./util").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
@@ -935,10 +935,10 @@ export declare const BrokerOrderDetailsList: {
                 Exp?: number | undefined;
             } & { [K_12 in Exclude<keyof I["BrokerOrderDetailsList"][number]["PartialQty"], keyof Decimal>]: never; }) | undefined;
             ProcessInfo?: ({
-                ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                ProcessState?: import("./util").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
             } & {
-                ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                ProcessState?: import("./util").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
             } & { [K_13 in Exclude<keyof I["BrokerOrderDetailsList"][number]["ProcessInfo"], keyof ProcessInfo>]: never; }) | undefined;
             InstanceID?: string | undefined;
@@ -1015,7 +1015,7 @@ export declare const BrokerOrderDetailsList: {
                 Exp?: number | undefined;
             } | undefined;
             ProcessInfo?: {
-                ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                ProcessState?: import("./util").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
@@ -1095,7 +1095,7 @@ export declare const BrokerOrderDetailsList: {
                 Exp?: number | undefined;
             } | undefined;
             ProcessInfo?: {
-                ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                ProcessState?: import("./util").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
@@ -1174,7 +1174,7 @@ export declare const BrokerOrderDetailsList: {
                 Exp?: number | undefined;
             } | undefined;
             ProcessInfo?: {
-                ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                ProcessState?: import("./util").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
@@ -1251,7 +1251,7 @@ export declare const BrokerOrderDetailsList: {
                 Exp?: number | undefined;
             } | undefined;
             ProcessInfo?: {
-                ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                ProcessState?: import("./util").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
@@ -1368,10 +1368,10 @@ export declare const BrokerOrderDetailsList: {
                 Exp?: number | undefined;
             } & { [K_29 in Exclude<keyof I_1["BrokerOrderDetailsList"][number]["PartialQty"], keyof Decimal>]: never; }) | undefined;
             ProcessInfo?: ({
-                ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                ProcessState?: import("./util").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
             } & {
-                ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                ProcessState?: import("./util").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
             } & { [K_30 in Exclude<keyof I_1["BrokerOrderDetailsList"][number]["ProcessInfo"], keyof ProcessInfo>]: never; }) | undefined;
             InstanceID?: string | undefined;
@@ -1448,7 +1448,7 @@ export declare const BrokerOrderDetailsList: {
                 Exp?: number | undefined;
             } | undefined;
             ProcessInfo?: {
-                ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                ProcessState?: import("./util").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;

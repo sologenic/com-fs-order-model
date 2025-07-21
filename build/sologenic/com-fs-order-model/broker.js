@@ -2,15 +2,15 @@
 // versions:
 //   protoc-gen-ts_proto  v1.181.2
 //   protoc               v5.29.1
-// source: broker.proto
+// source: sologenic/com-fs-order-model/broker.proto
 /* eslint-disable */
 import Long from "long";
 import _m0 from "protobufjs/minimal";
-import { Timestamp } from "./google/protobuf/timestamp";
-import { assetTypeFromJSON, assetTypeToJSON } from "./sologenic/com-fs-asset-model/asset";
-import { orderTypeFromJSON, orderTypeToJSON, ProcessInfo } from "./sologenic/com-fs-order-model/util";
-import { Decimal } from "./sologenic/com-fs-utils-lib/go/decimal/decimal";
-import { networkFromJSON, networkToJSON } from "./sologenic/com-fs-utils-lib/models/metadata/metadata";
+import { Timestamp } from "../../google/protobuf/timestamp";
+import { assetTypeFromJSON, assetTypeToJSON } from "../com-fs-asset-model/asset";
+import { Decimal } from "../com-fs-utils-lib/go/decimal/decimal";
+import { networkFromJSON, networkToJSON } from "../com-fs-utils-lib/models/metadata/metadata";
+import { orderTypeFromJSON, orderTypeToJSON, ProcessInfo } from "./util";
 export const protobufPackage = "order";
 export var ClearingBroker;
 (function (ClearingBroker) {
