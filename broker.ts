@@ -9,9 +9,9 @@ import Long from "long";
 import _m0 from "protobufjs/minimal";
 import { Timestamp } from "./google/protobuf/timestamp";
 import { AssetType, assetTypeFromJSON, assetTypeToJSON } from "./sologenic/com-fs-asset-model/asset";
-import { OrderType, orderTypeFromJSON, orderTypeToJSON, ProcessInfo } from "./sologenic/com-fs-order-model/util";
 import { Decimal } from "./sologenic/com-fs-utils-lib/go/decimal/decimal";
 import { Network, networkFromJSON, networkToJSON } from "./sologenic/com-fs-utils-lib/models/metadata/metadata";
+import { OrderType, orderTypeFromJSON, orderTypeToJSON, ProcessInfo } from "./util";
 
 export const protobufPackage = "order";
 

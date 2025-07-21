@@ -1,7 +1,7 @@
 import _m0 from "protobufjs/minimal";
-import { BrokerOrderDetails } from "./sologenic/com-fs-order-model/broker";
-import { OrderType, ProcessInfo } from "./sologenic/com-fs-order-model/util";
+import { BrokerOrderDetails } from "./broker";
 import { Network } from "./sologenic/com-fs-utils-lib/models/metadata/metadata";
+import { OrderType, ProcessInfo } from "./util";
 export declare const protobufPackage = "order";
 /** Execution type(action) of the transaction against the smart contract */
 export declare enum TransactionType {
@@ -241,10 +241,10 @@ export declare const Order: {
             AssetID?: string | undefined;
             Symbol?: string | undefined;
             AssetClass?: import("./sologenic/com-fs-asset-model/asset").AssetType | undefined;
-            OrderClass?: import("./sologenic/com-fs-order-model/broker").OrderClass | undefined;
-            Type?: import("./sologenic/com-fs-order-model/broker").TradeType | undefined;
+            OrderClass?: import("./broker").OrderClass | undefined;
+            Type?: import("./broker").TradeType | undefined;
             Side?: OrderType | undefined;
-            TimeInForce?: import("./sologenic/com-fs-order-model/broker").TimeInForce | undefined;
+            TimeInForce?: import("./broker").TimeInForce | undefined;
             Notional?: {
                 Value?: number | undefined;
                 Exp?: number | undefined;
@@ -284,7 +284,7 @@ export declare const Order: {
             ExtendedHours?: boolean | undefined;
             CreatedAt?: Date | undefined;
             UpdatedAt?: Date | undefined;
-            Status?: import("./sologenic/com-fs-order-model/broker").BrokerOrderStatus | undefined;
+            Status?: import("./broker").BrokerOrderStatus | undefined;
             TotalPosition?: {
                 Value?: number | undefined;
                 Exp?: number | undefined;
@@ -298,14 +298,14 @@ export declare const Order: {
                 Exp?: number | undefined;
             } | undefined;
             ProcessInfo?: {
-                ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                ProcessState?: import("./util").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
-            ClearingBroker?: import("./sologenic/com-fs-order-model/broker").ClearingBroker | undefined;
+            ClearingBroker?: import("./broker").ClearingBroker | undefined;
         } | undefined;
         ProcessInfo?: {
-            ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+            ProcessState?: import("./util").ProcessState | undefined;
             ProcessedAt?: Date | undefined;
         } | undefined;
         InstanceID?: string | undefined;
@@ -415,10 +415,10 @@ export declare const Order: {
             AssetID?: string | undefined;
             Symbol?: string | undefined;
             AssetClass?: import("./sologenic/com-fs-asset-model/asset").AssetType | undefined;
-            OrderClass?: import("./sologenic/com-fs-order-model/broker").OrderClass | undefined;
-            Type?: import("./sologenic/com-fs-order-model/broker").TradeType | undefined;
+            OrderClass?: import("./broker").OrderClass | undefined;
+            Type?: import("./broker").TradeType | undefined;
             Side?: OrderType | undefined;
-            TimeInForce?: import("./sologenic/com-fs-order-model/broker").TimeInForce | undefined;
+            TimeInForce?: import("./broker").TimeInForce | undefined;
             Notional?: {
                 Value?: number | undefined;
                 Exp?: number | undefined;
@@ -458,7 +458,7 @@ export declare const Order: {
             ExtendedHours?: boolean | undefined;
             CreatedAt?: Date | undefined;
             UpdatedAt?: Date | undefined;
-            Status?: import("./sologenic/com-fs-order-model/broker").BrokerOrderStatus | undefined;
+            Status?: import("./broker").BrokerOrderStatus | undefined;
             TotalPosition?: {
                 Value?: number | undefined;
                 Exp?: number | undefined;
@@ -472,11 +472,11 @@ export declare const Order: {
                 Exp?: number | undefined;
             } | undefined;
             ProcessInfo?: {
-                ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                ProcessState?: import("./util").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
-            ClearingBroker?: import("./sologenic/com-fs-order-model/broker").ClearingBroker | undefined;
+            ClearingBroker?: import("./broker").ClearingBroker | undefined;
         } & {
             BrokerAssignedID?: string | undefined;
             ClientOrderID?: ({
@@ -487,7 +487,7 @@ export declare const Order: {
                 Network?: Network | undefined;
                 SmartContractAddr?: string | undefined;
                 OrderID?: number | undefined;
-            } & { [K_4 in Exclude<keyof I["BrokerOrderDetails"]["ClientOrderID"], keyof import("./sologenic/com-fs-order-model/broker").ClientOrderID>]: never; }) | undefined;
+            } & { [K_4 in Exclude<keyof I["BrokerOrderDetails"]["ClientOrderID"], keyof import("./broker").ClientOrderID>]: never; }) | undefined;
             SubmittedAt?: Date | undefined;
             FilledAt?: Date | undefined;
             ExpiredAt?: Date | undefined;
@@ -496,10 +496,10 @@ export declare const Order: {
             AssetID?: string | undefined;
             Symbol?: string | undefined;
             AssetClass?: import("./sologenic/com-fs-asset-model/asset").AssetType | undefined;
-            OrderClass?: import("./sologenic/com-fs-order-model/broker").OrderClass | undefined;
-            Type?: import("./sologenic/com-fs-order-model/broker").TradeType | undefined;
+            OrderClass?: import("./broker").OrderClass | undefined;
+            Type?: import("./broker").TradeType | undefined;
             Side?: OrderType | undefined;
-            TimeInForce?: import("./sologenic/com-fs-order-model/broker").TimeInForce | undefined;
+            TimeInForce?: import("./broker").TimeInForce | undefined;
             Notional?: ({
                 Value?: number | undefined;
                 Exp?: number | undefined;
@@ -566,7 +566,7 @@ export declare const Order: {
             ExtendedHours?: boolean | undefined;
             CreatedAt?: Date | undefined;
             UpdatedAt?: Date | undefined;
-            Status?: import("./sologenic/com-fs-order-model/broker").BrokerOrderStatus | undefined;
+            Status?: import("./broker").BrokerOrderStatus | undefined;
             TotalPosition?: ({
                 Value?: number | undefined;
                 Exp?: number | undefined;
@@ -589,20 +589,20 @@ export declare const Order: {
                 Exp?: number | undefined;
             } & { [K_16 in Exclude<keyof I["BrokerOrderDetails"]["PartialQty"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
             ProcessInfo?: ({
-                ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                ProcessState?: import("./util").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
             } & {
-                ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                ProcessState?: import("./util").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
             } & { [K_17 in Exclude<keyof I["BrokerOrderDetails"]["ProcessInfo"], keyof ProcessInfo>]: never; }) | undefined;
             InstanceID?: string | undefined;
-            ClearingBroker?: import("./sologenic/com-fs-order-model/broker").ClearingBroker | undefined;
+            ClearingBroker?: import("./broker").ClearingBroker | undefined;
         } & { [K_18 in Exclude<keyof I["BrokerOrderDetails"], keyof BrokerOrderDetails>]: never; }) | undefined;
         ProcessInfo?: ({
-            ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+            ProcessState?: import("./util").ProcessState | undefined;
             ProcessedAt?: Date | undefined;
         } & {
-            ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+            ProcessState?: import("./util").ProcessState | undefined;
             ProcessedAt?: Date | undefined;
         } & { [K_19 in Exclude<keyof I["ProcessInfo"], keyof ProcessInfo>]: never; }) | undefined;
         InstanceID?: string | undefined;
@@ -671,10 +671,10 @@ export declare const Order: {
             AssetID?: string | undefined;
             Symbol?: string | undefined;
             AssetClass?: import("./sologenic/com-fs-asset-model/asset").AssetType | undefined;
-            OrderClass?: import("./sologenic/com-fs-order-model/broker").OrderClass | undefined;
-            Type?: import("./sologenic/com-fs-order-model/broker").TradeType | undefined;
+            OrderClass?: import("./broker").OrderClass | undefined;
+            Type?: import("./broker").TradeType | undefined;
             Side?: OrderType | undefined;
-            TimeInForce?: import("./sologenic/com-fs-order-model/broker").TimeInForce | undefined;
+            TimeInForce?: import("./broker").TimeInForce | undefined;
             Notional?: {
                 Value?: number | undefined;
                 Exp?: number | undefined;
@@ -714,7 +714,7 @@ export declare const Order: {
             ExtendedHours?: boolean | undefined;
             CreatedAt?: Date | undefined;
             UpdatedAt?: Date | undefined;
-            Status?: import("./sologenic/com-fs-order-model/broker").BrokerOrderStatus | undefined;
+            Status?: import("./broker").BrokerOrderStatus | undefined;
             TotalPosition?: {
                 Value?: number | undefined;
                 Exp?: number | undefined;
@@ -728,14 +728,14 @@ export declare const Order: {
                 Exp?: number | undefined;
             } | undefined;
             ProcessInfo?: {
-                ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                ProcessState?: import("./util").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
-            ClearingBroker?: import("./sologenic/com-fs-order-model/broker").ClearingBroker | undefined;
+            ClearingBroker?: import("./broker").ClearingBroker | undefined;
         } | undefined;
         ProcessInfo?: {
-            ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+            ProcessState?: import("./util").ProcessState | undefined;
             ProcessedAt?: Date | undefined;
         } | undefined;
         InstanceID?: string | undefined;
@@ -845,10 +845,10 @@ export declare const Order: {
             AssetID?: string | undefined;
             Symbol?: string | undefined;
             AssetClass?: import("./sologenic/com-fs-asset-model/asset").AssetType | undefined;
-            OrderClass?: import("./sologenic/com-fs-order-model/broker").OrderClass | undefined;
-            Type?: import("./sologenic/com-fs-order-model/broker").TradeType | undefined;
+            OrderClass?: import("./broker").OrderClass | undefined;
+            Type?: import("./broker").TradeType | undefined;
             Side?: OrderType | undefined;
-            TimeInForce?: import("./sologenic/com-fs-order-model/broker").TimeInForce | undefined;
+            TimeInForce?: import("./broker").TimeInForce | undefined;
             Notional?: {
                 Value?: number | undefined;
                 Exp?: number | undefined;
@@ -888,7 +888,7 @@ export declare const Order: {
             ExtendedHours?: boolean | undefined;
             CreatedAt?: Date | undefined;
             UpdatedAt?: Date | undefined;
-            Status?: import("./sologenic/com-fs-order-model/broker").BrokerOrderStatus | undefined;
+            Status?: import("./broker").BrokerOrderStatus | undefined;
             TotalPosition?: {
                 Value?: number | undefined;
                 Exp?: number | undefined;
@@ -902,11 +902,11 @@ export declare const Order: {
                 Exp?: number | undefined;
             } | undefined;
             ProcessInfo?: {
-                ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                ProcessState?: import("./util").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
-            ClearingBroker?: import("./sologenic/com-fs-order-model/broker").ClearingBroker | undefined;
+            ClearingBroker?: import("./broker").ClearingBroker | undefined;
         } & {
             BrokerAssignedID?: string | undefined;
             ClientOrderID?: ({
@@ -917,7 +917,7 @@ export declare const Order: {
                 Network?: Network | undefined;
                 SmartContractAddr?: string | undefined;
                 OrderID?: number | undefined;
-            } & { [K_25 in Exclude<keyof I_1["BrokerOrderDetails"]["ClientOrderID"], keyof import("./sologenic/com-fs-order-model/broker").ClientOrderID>]: never; }) | undefined;
+            } & { [K_25 in Exclude<keyof I_1["BrokerOrderDetails"]["ClientOrderID"], keyof import("./broker").ClientOrderID>]: never; }) | undefined;
             SubmittedAt?: Date | undefined;
             FilledAt?: Date | undefined;
             ExpiredAt?: Date | undefined;
@@ -926,10 +926,10 @@ export declare const Order: {
             AssetID?: string | undefined;
             Symbol?: string | undefined;
             AssetClass?: import("./sologenic/com-fs-asset-model/asset").AssetType | undefined;
-            OrderClass?: import("./sologenic/com-fs-order-model/broker").OrderClass | undefined;
-            Type?: import("./sologenic/com-fs-order-model/broker").TradeType | undefined;
+            OrderClass?: import("./broker").OrderClass | undefined;
+            Type?: import("./broker").TradeType | undefined;
             Side?: OrderType | undefined;
-            TimeInForce?: import("./sologenic/com-fs-order-model/broker").TimeInForce | undefined;
+            TimeInForce?: import("./broker").TimeInForce | undefined;
             Notional?: ({
                 Value?: number | undefined;
                 Exp?: number | undefined;
@@ -996,7 +996,7 @@ export declare const Order: {
             ExtendedHours?: boolean | undefined;
             CreatedAt?: Date | undefined;
             UpdatedAt?: Date | undefined;
-            Status?: import("./sologenic/com-fs-order-model/broker").BrokerOrderStatus | undefined;
+            Status?: import("./broker").BrokerOrderStatus | undefined;
             TotalPosition?: ({
                 Value?: number | undefined;
                 Exp?: number | undefined;
@@ -1019,20 +1019,20 @@ export declare const Order: {
                 Exp?: number | undefined;
             } & { [K_37 in Exclude<keyof I_1["BrokerOrderDetails"]["PartialQty"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
             ProcessInfo?: ({
-                ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                ProcessState?: import("./util").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
             } & {
-                ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                ProcessState?: import("./util").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
             } & { [K_38 in Exclude<keyof I_1["BrokerOrderDetails"]["ProcessInfo"], keyof ProcessInfo>]: never; }) | undefined;
             InstanceID?: string | undefined;
-            ClearingBroker?: import("./sologenic/com-fs-order-model/broker").ClearingBroker | undefined;
+            ClearingBroker?: import("./broker").ClearingBroker | undefined;
         } & { [K_39 in Exclude<keyof I_1["BrokerOrderDetails"], keyof BrokerOrderDetails>]: never; }) | undefined;
         ProcessInfo?: ({
-            ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+            ProcessState?: import("./util").ProcessState | undefined;
             ProcessedAt?: Date | undefined;
         } & {
-            ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+            ProcessState?: import("./util").ProcessState | undefined;
             ProcessedAt?: Date | undefined;
         } & { [K_40 in Exclude<keyof I_1["ProcessInfo"], keyof ProcessInfo>]: never; }) | undefined;
         InstanceID?: string | undefined;
@@ -1264,10 +1264,10 @@ export declare const Orders: {
                 AssetID?: string | undefined;
                 Symbol?: string | undefined;
                 AssetClass?: import("./sologenic/com-fs-asset-model/asset").AssetType | undefined;
-                OrderClass?: import("./sologenic/com-fs-order-model/broker").OrderClass | undefined;
-                Type?: import("./sologenic/com-fs-order-model/broker").TradeType | undefined;
+                OrderClass?: import("./broker").OrderClass | undefined;
+                Type?: import("./broker").TradeType | undefined;
                 Side?: OrderType | undefined;
-                TimeInForce?: import("./sologenic/com-fs-order-model/broker").TimeInForce | undefined;
+                TimeInForce?: import("./broker").TimeInForce | undefined;
                 Notional?: {
                     Value?: number | undefined;
                     Exp?: number | undefined;
@@ -1307,7 +1307,7 @@ export declare const Orders: {
                 ExtendedHours?: boolean | undefined;
                 CreatedAt?: Date | undefined;
                 UpdatedAt?: Date | undefined;
-                Status?: import("./sologenic/com-fs-order-model/broker").BrokerOrderStatus | undefined;
+                Status?: import("./broker").BrokerOrderStatus | undefined;
                 TotalPosition?: {
                     Value?: number | undefined;
                     Exp?: number | undefined;
@@ -1321,14 +1321,14 @@ export declare const Orders: {
                     Exp?: number | undefined;
                 } | undefined;
                 ProcessInfo?: {
-                    ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                    ProcessState?: import("./util").ProcessState | undefined;
                     ProcessedAt?: Date | undefined;
                 } | undefined;
                 InstanceID?: string | undefined;
-                ClearingBroker?: import("./sologenic/com-fs-order-model/broker").ClearingBroker | undefined;
+                ClearingBroker?: import("./broker").ClearingBroker | undefined;
             } | undefined;
             ProcessInfo?: {
-                ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                ProcessState?: import("./util").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
@@ -1399,10 +1399,10 @@ export declare const Orders: {
                 AssetID?: string | undefined;
                 Symbol?: string | undefined;
                 AssetClass?: import("./sologenic/com-fs-asset-model/asset").AssetType | undefined;
-                OrderClass?: import("./sologenic/com-fs-order-model/broker").OrderClass | undefined;
-                Type?: import("./sologenic/com-fs-order-model/broker").TradeType | undefined;
+                OrderClass?: import("./broker").OrderClass | undefined;
+                Type?: import("./broker").TradeType | undefined;
                 Side?: OrderType | undefined;
-                TimeInForce?: import("./sologenic/com-fs-order-model/broker").TimeInForce | undefined;
+                TimeInForce?: import("./broker").TimeInForce | undefined;
                 Notional?: {
                     Value?: number | undefined;
                     Exp?: number | undefined;
@@ -1442,7 +1442,7 @@ export declare const Orders: {
                 ExtendedHours?: boolean | undefined;
                 CreatedAt?: Date | undefined;
                 UpdatedAt?: Date | undefined;
-                Status?: import("./sologenic/com-fs-order-model/broker").BrokerOrderStatus | undefined;
+                Status?: import("./broker").BrokerOrderStatus | undefined;
                 TotalPosition?: {
                     Value?: number | undefined;
                     Exp?: number | undefined;
@@ -1456,14 +1456,14 @@ export declare const Orders: {
                     Exp?: number | undefined;
                 } | undefined;
                 ProcessInfo?: {
-                    ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                    ProcessState?: import("./util").ProcessState | undefined;
                     ProcessedAt?: Date | undefined;
                 } | undefined;
                 InstanceID?: string | undefined;
-                ClearingBroker?: import("./sologenic/com-fs-order-model/broker").ClearingBroker | undefined;
+                ClearingBroker?: import("./broker").ClearingBroker | undefined;
             } | undefined;
             ProcessInfo?: {
-                ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                ProcessState?: import("./util").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
@@ -1531,10 +1531,10 @@ export declare const Orders: {
                 AssetID?: string | undefined;
                 Symbol?: string | undefined;
                 AssetClass?: import("./sologenic/com-fs-asset-model/asset").AssetType | undefined;
-                OrderClass?: import("./sologenic/com-fs-order-model/broker").OrderClass | undefined;
-                Type?: import("./sologenic/com-fs-order-model/broker").TradeType | undefined;
+                OrderClass?: import("./broker").OrderClass | undefined;
+                Type?: import("./broker").TradeType | undefined;
                 Side?: OrderType | undefined;
-                TimeInForce?: import("./sologenic/com-fs-order-model/broker").TimeInForce | undefined;
+                TimeInForce?: import("./broker").TimeInForce | undefined;
                 Notional?: {
                     Value?: number | undefined;
                     Exp?: number | undefined;
@@ -1574,7 +1574,7 @@ export declare const Orders: {
                 ExtendedHours?: boolean | undefined;
                 CreatedAt?: Date | undefined;
                 UpdatedAt?: Date | undefined;
-                Status?: import("./sologenic/com-fs-order-model/broker").BrokerOrderStatus | undefined;
+                Status?: import("./broker").BrokerOrderStatus | undefined;
                 TotalPosition?: {
                     Value?: number | undefined;
                     Exp?: number | undefined;
@@ -1588,14 +1588,14 @@ export declare const Orders: {
                     Exp?: number | undefined;
                 } | undefined;
                 ProcessInfo?: {
-                    ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                    ProcessState?: import("./util").ProcessState | undefined;
                     ProcessedAt?: Date | undefined;
                 } | undefined;
                 InstanceID?: string | undefined;
-                ClearingBroker?: import("./sologenic/com-fs-order-model/broker").ClearingBroker | undefined;
+                ClearingBroker?: import("./broker").ClearingBroker | undefined;
             } | undefined;
             ProcessInfo?: {
-                ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                ProcessState?: import("./util").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
@@ -1705,10 +1705,10 @@ export declare const Orders: {
                 AssetID?: string | undefined;
                 Symbol?: string | undefined;
                 AssetClass?: import("./sologenic/com-fs-asset-model/asset").AssetType | undefined;
-                OrderClass?: import("./sologenic/com-fs-order-model/broker").OrderClass | undefined;
-                Type?: import("./sologenic/com-fs-order-model/broker").TradeType | undefined;
+                OrderClass?: import("./broker").OrderClass | undefined;
+                Type?: import("./broker").TradeType | undefined;
                 Side?: OrderType | undefined;
-                TimeInForce?: import("./sologenic/com-fs-order-model/broker").TimeInForce | undefined;
+                TimeInForce?: import("./broker").TimeInForce | undefined;
                 Notional?: {
                     Value?: number | undefined;
                     Exp?: number | undefined;
@@ -1748,7 +1748,7 @@ export declare const Orders: {
                 ExtendedHours?: boolean | undefined;
                 CreatedAt?: Date | undefined;
                 UpdatedAt?: Date | undefined;
-                Status?: import("./sologenic/com-fs-order-model/broker").BrokerOrderStatus | undefined;
+                Status?: import("./broker").BrokerOrderStatus | undefined;
                 TotalPosition?: {
                     Value?: number | undefined;
                     Exp?: number | undefined;
@@ -1762,11 +1762,11 @@ export declare const Orders: {
                     Exp?: number | undefined;
                 } | undefined;
                 ProcessInfo?: {
-                    ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                    ProcessState?: import("./util").ProcessState | undefined;
                     ProcessedAt?: Date | undefined;
                 } | undefined;
                 InstanceID?: string | undefined;
-                ClearingBroker?: import("./sologenic/com-fs-order-model/broker").ClearingBroker | undefined;
+                ClearingBroker?: import("./broker").ClearingBroker | undefined;
             } & {
                 BrokerAssignedID?: string | undefined;
                 ClientOrderID?: ({
@@ -1777,7 +1777,7 @@ export declare const Orders: {
                     Network?: Network | undefined;
                     SmartContractAddr?: string | undefined;
                     OrderID?: number | undefined;
-                } & { [K_4 in Exclude<keyof I["Orders"][number]["BrokerOrderDetails"]["ClientOrderID"], keyof import("./sologenic/com-fs-order-model/broker").ClientOrderID>]: never; }) | undefined;
+                } & { [K_4 in Exclude<keyof I["Orders"][number]["BrokerOrderDetails"]["ClientOrderID"], keyof import("./broker").ClientOrderID>]: never; }) | undefined;
                 SubmittedAt?: Date | undefined;
                 FilledAt?: Date | undefined;
                 ExpiredAt?: Date | undefined;
@@ -1786,10 +1786,10 @@ export declare const Orders: {
                 AssetID?: string | undefined;
                 Symbol?: string | undefined;
                 AssetClass?: import("./sologenic/com-fs-asset-model/asset").AssetType | undefined;
-                OrderClass?: import("./sologenic/com-fs-order-model/broker").OrderClass | undefined;
-                Type?: import("./sologenic/com-fs-order-model/broker").TradeType | undefined;
+                OrderClass?: import("./broker").OrderClass | undefined;
+                Type?: import("./broker").TradeType | undefined;
                 Side?: OrderType | undefined;
-                TimeInForce?: import("./sologenic/com-fs-order-model/broker").TimeInForce | undefined;
+                TimeInForce?: import("./broker").TimeInForce | undefined;
                 Notional?: ({
                     Value?: number | undefined;
                     Exp?: number | undefined;
@@ -1856,7 +1856,7 @@ export declare const Orders: {
                 ExtendedHours?: boolean | undefined;
                 CreatedAt?: Date | undefined;
                 UpdatedAt?: Date | undefined;
-                Status?: import("./sologenic/com-fs-order-model/broker").BrokerOrderStatus | undefined;
+                Status?: import("./broker").BrokerOrderStatus | undefined;
                 TotalPosition?: ({
                     Value?: number | undefined;
                     Exp?: number | undefined;
@@ -1879,20 +1879,20 @@ export declare const Orders: {
                     Exp?: number | undefined;
                 } & { [K_16 in Exclude<keyof I["Orders"][number]["BrokerOrderDetails"]["PartialQty"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
                 ProcessInfo?: ({
-                    ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                    ProcessState?: import("./util").ProcessState | undefined;
                     ProcessedAt?: Date | undefined;
                 } & {
-                    ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                    ProcessState?: import("./util").ProcessState | undefined;
                     ProcessedAt?: Date | undefined;
                 } & { [K_17 in Exclude<keyof I["Orders"][number]["BrokerOrderDetails"]["ProcessInfo"], keyof ProcessInfo>]: never; }) | undefined;
                 InstanceID?: string | undefined;
-                ClearingBroker?: import("./sologenic/com-fs-order-model/broker").ClearingBroker | undefined;
+                ClearingBroker?: import("./broker").ClearingBroker | undefined;
             } & { [K_18 in Exclude<keyof I["Orders"][number]["BrokerOrderDetails"], keyof BrokerOrderDetails>]: never; }) | undefined;
             ProcessInfo?: ({
-                ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                ProcessState?: import("./util").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
             } & {
-                ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                ProcessState?: import("./util").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
             } & { [K_19 in Exclude<keyof I["Orders"][number]["ProcessInfo"], keyof ProcessInfo>]: never; }) | undefined;
             InstanceID?: string | undefined;
@@ -1960,10 +1960,10 @@ export declare const Orders: {
                 AssetID?: string | undefined;
                 Symbol?: string | undefined;
                 AssetClass?: import("./sologenic/com-fs-asset-model/asset").AssetType | undefined;
-                OrderClass?: import("./sologenic/com-fs-order-model/broker").OrderClass | undefined;
-                Type?: import("./sologenic/com-fs-order-model/broker").TradeType | undefined;
+                OrderClass?: import("./broker").OrderClass | undefined;
+                Type?: import("./broker").TradeType | undefined;
                 Side?: OrderType | undefined;
-                TimeInForce?: import("./sologenic/com-fs-order-model/broker").TimeInForce | undefined;
+                TimeInForce?: import("./broker").TimeInForce | undefined;
                 Notional?: {
                     Value?: number | undefined;
                     Exp?: number | undefined;
@@ -2003,7 +2003,7 @@ export declare const Orders: {
                 ExtendedHours?: boolean | undefined;
                 CreatedAt?: Date | undefined;
                 UpdatedAt?: Date | undefined;
-                Status?: import("./sologenic/com-fs-order-model/broker").BrokerOrderStatus | undefined;
+                Status?: import("./broker").BrokerOrderStatus | undefined;
                 TotalPosition?: {
                     Value?: number | undefined;
                     Exp?: number | undefined;
@@ -2017,14 +2017,14 @@ export declare const Orders: {
                     Exp?: number | undefined;
                 } | undefined;
                 ProcessInfo?: {
-                    ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                    ProcessState?: import("./util").ProcessState | undefined;
                     ProcessedAt?: Date | undefined;
                 } | undefined;
                 InstanceID?: string | undefined;
-                ClearingBroker?: import("./sologenic/com-fs-order-model/broker").ClearingBroker | undefined;
+                ClearingBroker?: import("./broker").ClearingBroker | undefined;
             } | undefined;
             ProcessInfo?: {
-                ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                ProcessState?: import("./util").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
@@ -2096,10 +2096,10 @@ export declare const Orders: {
                 AssetID?: string | undefined;
                 Symbol?: string | undefined;
                 AssetClass?: import("./sologenic/com-fs-asset-model/asset").AssetType | undefined;
-                OrderClass?: import("./sologenic/com-fs-order-model/broker").OrderClass | undefined;
-                Type?: import("./sologenic/com-fs-order-model/broker").TradeType | undefined;
+                OrderClass?: import("./broker").OrderClass | undefined;
+                Type?: import("./broker").TradeType | undefined;
                 Side?: OrderType | undefined;
-                TimeInForce?: import("./sologenic/com-fs-order-model/broker").TimeInForce | undefined;
+                TimeInForce?: import("./broker").TimeInForce | undefined;
                 Notional?: {
                     Value?: number | undefined;
                     Exp?: number | undefined;
@@ -2139,7 +2139,7 @@ export declare const Orders: {
                 ExtendedHours?: boolean | undefined;
                 CreatedAt?: Date | undefined;
                 UpdatedAt?: Date | undefined;
-                Status?: import("./sologenic/com-fs-order-model/broker").BrokerOrderStatus | undefined;
+                Status?: import("./broker").BrokerOrderStatus | undefined;
                 TotalPosition?: {
                     Value?: number | undefined;
                     Exp?: number | undefined;
@@ -2153,14 +2153,14 @@ export declare const Orders: {
                     Exp?: number | undefined;
                 } | undefined;
                 ProcessInfo?: {
-                    ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                    ProcessState?: import("./util").ProcessState | undefined;
                     ProcessedAt?: Date | undefined;
                 } | undefined;
                 InstanceID?: string | undefined;
-                ClearingBroker?: import("./sologenic/com-fs-order-model/broker").ClearingBroker | undefined;
+                ClearingBroker?: import("./broker").ClearingBroker | undefined;
             } | undefined;
             ProcessInfo?: {
-                ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                ProcessState?: import("./util").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
@@ -2231,10 +2231,10 @@ export declare const Orders: {
                 AssetID?: string | undefined;
                 Symbol?: string | undefined;
                 AssetClass?: import("./sologenic/com-fs-asset-model/asset").AssetType | undefined;
-                OrderClass?: import("./sologenic/com-fs-order-model/broker").OrderClass | undefined;
-                Type?: import("./sologenic/com-fs-order-model/broker").TradeType | undefined;
+                OrderClass?: import("./broker").OrderClass | undefined;
+                Type?: import("./broker").TradeType | undefined;
                 Side?: OrderType | undefined;
-                TimeInForce?: import("./sologenic/com-fs-order-model/broker").TimeInForce | undefined;
+                TimeInForce?: import("./broker").TimeInForce | undefined;
                 Notional?: {
                     Value?: number | undefined;
                     Exp?: number | undefined;
@@ -2274,7 +2274,7 @@ export declare const Orders: {
                 ExtendedHours?: boolean | undefined;
                 CreatedAt?: Date | undefined;
                 UpdatedAt?: Date | undefined;
-                Status?: import("./sologenic/com-fs-order-model/broker").BrokerOrderStatus | undefined;
+                Status?: import("./broker").BrokerOrderStatus | undefined;
                 TotalPosition?: {
                     Value?: number | undefined;
                     Exp?: number | undefined;
@@ -2288,14 +2288,14 @@ export declare const Orders: {
                     Exp?: number | undefined;
                 } | undefined;
                 ProcessInfo?: {
-                    ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                    ProcessState?: import("./util").ProcessState | undefined;
                     ProcessedAt?: Date | undefined;
                 } | undefined;
                 InstanceID?: string | undefined;
-                ClearingBroker?: import("./sologenic/com-fs-order-model/broker").ClearingBroker | undefined;
+                ClearingBroker?: import("./broker").ClearingBroker | undefined;
             } | undefined;
             ProcessInfo?: {
-                ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                ProcessState?: import("./util").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
@@ -2363,10 +2363,10 @@ export declare const Orders: {
                 AssetID?: string | undefined;
                 Symbol?: string | undefined;
                 AssetClass?: import("./sologenic/com-fs-asset-model/asset").AssetType | undefined;
-                OrderClass?: import("./sologenic/com-fs-order-model/broker").OrderClass | undefined;
-                Type?: import("./sologenic/com-fs-order-model/broker").TradeType | undefined;
+                OrderClass?: import("./broker").OrderClass | undefined;
+                Type?: import("./broker").TradeType | undefined;
                 Side?: OrderType | undefined;
-                TimeInForce?: import("./sologenic/com-fs-order-model/broker").TimeInForce | undefined;
+                TimeInForce?: import("./broker").TimeInForce | undefined;
                 Notional?: {
                     Value?: number | undefined;
                     Exp?: number | undefined;
@@ -2406,7 +2406,7 @@ export declare const Orders: {
                 ExtendedHours?: boolean | undefined;
                 CreatedAt?: Date | undefined;
                 UpdatedAt?: Date | undefined;
-                Status?: import("./sologenic/com-fs-order-model/broker").BrokerOrderStatus | undefined;
+                Status?: import("./broker").BrokerOrderStatus | undefined;
                 TotalPosition?: {
                     Value?: number | undefined;
                     Exp?: number | undefined;
@@ -2420,14 +2420,14 @@ export declare const Orders: {
                     Exp?: number | undefined;
                 } | undefined;
                 ProcessInfo?: {
-                    ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                    ProcessState?: import("./util").ProcessState | undefined;
                     ProcessedAt?: Date | undefined;
                 } | undefined;
                 InstanceID?: string | undefined;
-                ClearingBroker?: import("./sologenic/com-fs-order-model/broker").ClearingBroker | undefined;
+                ClearingBroker?: import("./broker").ClearingBroker | undefined;
             } | undefined;
             ProcessInfo?: {
-                ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                ProcessState?: import("./util").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
@@ -2537,10 +2537,10 @@ export declare const Orders: {
                 AssetID?: string | undefined;
                 Symbol?: string | undefined;
                 AssetClass?: import("./sologenic/com-fs-asset-model/asset").AssetType | undefined;
-                OrderClass?: import("./sologenic/com-fs-order-model/broker").OrderClass | undefined;
-                Type?: import("./sologenic/com-fs-order-model/broker").TradeType | undefined;
+                OrderClass?: import("./broker").OrderClass | undefined;
+                Type?: import("./broker").TradeType | undefined;
                 Side?: OrderType | undefined;
-                TimeInForce?: import("./sologenic/com-fs-order-model/broker").TimeInForce | undefined;
+                TimeInForce?: import("./broker").TimeInForce | undefined;
                 Notional?: {
                     Value?: number | undefined;
                     Exp?: number | undefined;
@@ -2580,7 +2580,7 @@ export declare const Orders: {
                 ExtendedHours?: boolean | undefined;
                 CreatedAt?: Date | undefined;
                 UpdatedAt?: Date | undefined;
-                Status?: import("./sologenic/com-fs-order-model/broker").BrokerOrderStatus | undefined;
+                Status?: import("./broker").BrokerOrderStatus | undefined;
                 TotalPosition?: {
                     Value?: number | undefined;
                     Exp?: number | undefined;
@@ -2594,11 +2594,11 @@ export declare const Orders: {
                     Exp?: number | undefined;
                 } | undefined;
                 ProcessInfo?: {
-                    ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                    ProcessState?: import("./util").ProcessState | undefined;
                     ProcessedAt?: Date | undefined;
                 } | undefined;
                 InstanceID?: string | undefined;
-                ClearingBroker?: import("./sologenic/com-fs-order-model/broker").ClearingBroker | undefined;
+                ClearingBroker?: import("./broker").ClearingBroker | undefined;
             } & {
                 BrokerAssignedID?: string | undefined;
                 ClientOrderID?: ({
@@ -2609,7 +2609,7 @@ export declare const Orders: {
                     Network?: Network | undefined;
                     SmartContractAddr?: string | undefined;
                     OrderID?: number | undefined;
-                } & { [K_27 in Exclude<keyof I_1["Orders"][number]["BrokerOrderDetails"]["ClientOrderID"], keyof import("./sologenic/com-fs-order-model/broker").ClientOrderID>]: never; }) | undefined;
+                } & { [K_27 in Exclude<keyof I_1["Orders"][number]["BrokerOrderDetails"]["ClientOrderID"], keyof import("./broker").ClientOrderID>]: never; }) | undefined;
                 SubmittedAt?: Date | undefined;
                 FilledAt?: Date | undefined;
                 ExpiredAt?: Date | undefined;
@@ -2618,10 +2618,10 @@ export declare const Orders: {
                 AssetID?: string | undefined;
                 Symbol?: string | undefined;
                 AssetClass?: import("./sologenic/com-fs-asset-model/asset").AssetType | undefined;
-                OrderClass?: import("./sologenic/com-fs-order-model/broker").OrderClass | undefined;
-                Type?: import("./sologenic/com-fs-order-model/broker").TradeType | undefined;
+                OrderClass?: import("./broker").OrderClass | undefined;
+                Type?: import("./broker").TradeType | undefined;
                 Side?: OrderType | undefined;
-                TimeInForce?: import("./sologenic/com-fs-order-model/broker").TimeInForce | undefined;
+                TimeInForce?: import("./broker").TimeInForce | undefined;
                 Notional?: ({
                     Value?: number | undefined;
                     Exp?: number | undefined;
@@ -2688,7 +2688,7 @@ export declare const Orders: {
                 ExtendedHours?: boolean | undefined;
                 CreatedAt?: Date | undefined;
                 UpdatedAt?: Date | undefined;
-                Status?: import("./sologenic/com-fs-order-model/broker").BrokerOrderStatus | undefined;
+                Status?: import("./broker").BrokerOrderStatus | undefined;
                 TotalPosition?: ({
                     Value?: number | undefined;
                     Exp?: number | undefined;
@@ -2711,20 +2711,20 @@ export declare const Orders: {
                     Exp?: number | undefined;
                 } & { [K_39 in Exclude<keyof I_1["Orders"][number]["BrokerOrderDetails"]["PartialQty"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
                 ProcessInfo?: ({
-                    ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                    ProcessState?: import("./util").ProcessState | undefined;
                     ProcessedAt?: Date | undefined;
                 } & {
-                    ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                    ProcessState?: import("./util").ProcessState | undefined;
                     ProcessedAt?: Date | undefined;
                 } & { [K_40 in Exclude<keyof I_1["Orders"][number]["BrokerOrderDetails"]["ProcessInfo"], keyof ProcessInfo>]: never; }) | undefined;
                 InstanceID?: string | undefined;
-                ClearingBroker?: import("./sologenic/com-fs-order-model/broker").ClearingBroker | undefined;
+                ClearingBroker?: import("./broker").ClearingBroker | undefined;
             } & { [K_41 in Exclude<keyof I_1["Orders"][number]["BrokerOrderDetails"], keyof BrokerOrderDetails>]: never; }) | undefined;
             ProcessInfo?: ({
-                ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                ProcessState?: import("./util").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
             } & {
-                ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                ProcessState?: import("./util").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
             } & { [K_42 in Exclude<keyof I_1["Orders"][number]["ProcessInfo"], keyof ProcessInfo>]: never; }) | undefined;
             InstanceID?: string | undefined;
@@ -2792,10 +2792,10 @@ export declare const Orders: {
                 AssetID?: string | undefined;
                 Symbol?: string | undefined;
                 AssetClass?: import("./sologenic/com-fs-asset-model/asset").AssetType | undefined;
-                OrderClass?: import("./sologenic/com-fs-order-model/broker").OrderClass | undefined;
-                Type?: import("./sologenic/com-fs-order-model/broker").TradeType | undefined;
+                OrderClass?: import("./broker").OrderClass | undefined;
+                Type?: import("./broker").TradeType | undefined;
                 Side?: OrderType | undefined;
-                TimeInForce?: import("./sologenic/com-fs-order-model/broker").TimeInForce | undefined;
+                TimeInForce?: import("./broker").TimeInForce | undefined;
                 Notional?: {
                     Value?: number | undefined;
                     Exp?: number | undefined;
@@ -2835,7 +2835,7 @@ export declare const Orders: {
                 ExtendedHours?: boolean | undefined;
                 CreatedAt?: Date | undefined;
                 UpdatedAt?: Date | undefined;
-                Status?: import("./sologenic/com-fs-order-model/broker").BrokerOrderStatus | undefined;
+                Status?: import("./broker").BrokerOrderStatus | undefined;
                 TotalPosition?: {
                     Value?: number | undefined;
                     Exp?: number | undefined;
@@ -2849,14 +2849,14 @@ export declare const Orders: {
                     Exp?: number | undefined;
                 } | undefined;
                 ProcessInfo?: {
-                    ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                    ProcessState?: import("./util").ProcessState | undefined;
                     ProcessedAt?: Date | undefined;
                 } | undefined;
                 InstanceID?: string | undefined;
-                ClearingBroker?: import("./sologenic/com-fs-order-model/broker").ClearingBroker | undefined;
+                ClearingBroker?: import("./broker").ClearingBroker | undefined;
             } | undefined;
             ProcessInfo?: {
-                ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
+                ProcessState?: import("./util").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
