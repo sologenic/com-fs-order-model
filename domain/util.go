@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/alpacahq/alpaca-trade-api-go/v3/alpaca"
+	assetgrpc "github.com/sologenic/com-fs-asset-model"
 	ordergrpc "github.com/sologenic/com-fs-order-model"
 	dutils "github.com/sologenic/com-fs-utils-lib/go/decimal"
 	metadatagrpc "github.com/sologenic/com-fs-utils-lib/models/metadata"
@@ -121,14 +122,14 @@ func ParseStrClientOrderIDToInternal(clientOrderIDString string) (*ordergrpc.Cli
 }
 
 // Maps the Alpaca AssetClass string enum to the internal AssetClass int enum
-func mapAssetClass(assetClass alpaca.AssetClass) ordergrpc.AssetClass {
+func mapAssetClass(assetClass alpaca.AssetClass) assetgrpc.AssetType {
 	switch assetClass {
 	case alpaca.USEquity:
-		return ordergrpc.AssetClass_US_EQUITY
+		return assetgrpc.AssetType_STOCKS
 	case alpaca.Crypto:
-		return ordergrpc.AssetClass_CRYPTO
+		return assetgrpc.AssetType_CRYPTO
 	default:
-		return ordergrpc.AssetClass_NOT_USED_ASSET_CLASS
+		return assetgrpc.AssetType_ASSET_TYPE_DO_NOT_USE
 	}
 }
 
@@ -168,15 +169,15 @@ func mapTimeInForce(timeInForce alpaca.TimeInForce) ordergrpc.TimeInForce {
 	case alpaca.Day:
 		return ordergrpc.TimeInForce_DAY
 	case alpaca.GTC:
-		return ordergrpc.TimeInForce_GTC
+		return ordergrpc.TimeInForce_GOOD_TIL_CANCELED
 	case alpaca.OPG:
-		return ordergrpc.TimeInForce_OPG
+		return ordergrpc.TimeInForce_AT_THE_OPENING
 	case alpaca.IOC:
-		return ordergrpc.TimeInForce_IOC
+		return ordergrpc.TimeInForce_IMMEDIATE_OR_CANCEL
 	case alpaca.FOK:
-		return ordergrpc.TimeInForce_FOK
+		return ordergrpc.TimeInForce_FILL_OR_KILL
 	case alpaca.CLS:
-		return ordergrpc.TimeInForce_CLS
+		return ordergrpc.TimeInForce_AT_THE_CLOSE
 	default:
 		return ordergrpc.TimeInForce_NOT_USED_TIME_IN_FORCE
 	}
@@ -213,7 +214,7 @@ func mapStatus(status string) ordergrpc.BrokerOrderStatus {
 	case "calculated":
 		return ordergrpc.BrokerOrderStatus_CALCULATED
 	default:
-		return ordergrpc.BrokerOrderStatus_NOT_USED_ALPACA_ORDER_STATUS
+		return ordergrpc.BrokerOrderStatus_NOT_USED_ORDER_STATUS
 	}
 }
 
@@ -224,9 +225,9 @@ func mapOrderClass(oc alpaca.OrderClass) ordergrpc.OrderClass {
 	case alpaca.Bracket:
 		return ordergrpc.OrderClass_ORDER_CLASS_BRACKET
 	case alpaca.OCO:
-		return ordergrpc.OrderClass_ORDER_CLASS_OCO
+		return ordergrpc.OrderClass_ORDER_CLASS_ONE_CANCELS_OTHER
 	case alpaca.OTO:
-		return ordergrpc.OrderClass_ORDER_CLASS_OTO
+		return ordergrpc.OrderClass_ORDER_CLASS_ONE_TRIGGERS_OTHER
 	default:
 		return ordergrpc.OrderClass_NOT_USED_ORDER_CLASS
 	}

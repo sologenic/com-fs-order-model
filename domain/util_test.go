@@ -11,6 +11,7 @@ import (
 	"github.com/alpacahq/alpaca-trade-api-go/v3/alpaca"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
+	assetgrpc "github.com/sologenic/com-fs-asset-model"
 	ordergrpc "github.com/sologenic/com-fs-order-model"
 	utildecimal "github.com/sologenic/com-fs-utils-lib/go/decimal"
 	"github.com/sologenic/com-fs-utils-lib/go/unittest"
@@ -123,7 +124,7 @@ func TestMapAlpacaOrderToInternal(t *testing.T) {
 					UpdatedAt:      timestamppb.New(time.Unix(0, 0)),
 					AssetID:        "80e04a93-e1a8-4503-ab61-2ef1992650b4",
 					Symbol:         "PLTR",
-					AssetClass:     ordergrpc.AssetClass_US_EQUITY,
+					AssetClass:     assetgrpc.AssetType_STOCKS,
 					OrderClass:     ordergrpc.OrderClass_NOT_USED_ORDER_CLASS,
 					Type:           ordergrpc.TradeType_MARKET,
 					Side:           ordergrpc.OrderType_ORDER_TYPE_PURCHASE,
@@ -179,7 +180,7 @@ func TestMapAlpacaOrderToInternal(t *testing.T) {
 					UpdatedAt:      timestamppb.New(time.Unix(0, 0)),
 					AssetID:        "80e04a93-e1a8-4503-ab61-2ef1992650b4",
 					Symbol:         "PLTR",
-					AssetClass:     ordergrpc.AssetClass_US_EQUITY,
+					AssetClass:     assetgrpc.AssetType_STOCKS,
 					OrderClass:     ordergrpc.OrderClass_NOT_USED_ORDER_CLASS,
 					Type:           ordergrpc.TradeType_MARKET,
 					Side:           ordergrpc.OrderType_ORDER_TYPE_PURCHASE,
@@ -235,7 +236,7 @@ func TestMapAlpacaOrderToInternal(t *testing.T) {
 					UpdatedAt:      timestamppb.New(time.Unix(0, 0)),
 					AssetID:        "80e04a93-e1a8-4503-ab61-2ef1992650b4",
 					Symbol:         "PLTR",
-					AssetClass:     ordergrpc.AssetClass_US_EQUITY,
+					AssetClass:     assetgrpc.AssetType_STOCKS,
 					OrderClass:     ordergrpc.OrderClass_NOT_USED_ORDER_CLASS,
 					Type:           ordergrpc.TradeType_MARKET,
 					Side:           ordergrpc.OrderType_ORDER_TYPE_PURCHASE,
@@ -291,7 +292,7 @@ func TestMapAlpacaOrderToInternal(t *testing.T) {
 					UpdatedAt:      timestamppb.New(time.Unix(0, 0)),
 					AssetID:        "80e04a93-e1a8-4503-ab61-2ef1992650b4",
 					Symbol:         "PLTR",
-					AssetClass:     ordergrpc.AssetClass_US_EQUITY,
+					AssetClass:     assetgrpc.AssetType_STOCKS,
 					OrderClass:     ordergrpc.OrderClass_NOT_USED_ORDER_CLASS,
 					Type:           ordergrpc.TradeType_MARKET,
 					Side:           ordergrpc.OrderType_ORDER_TYPE_PURCHASE,
@@ -347,7 +348,7 @@ func TestMapAlpacaOrderToInternal(t *testing.T) {
 					UpdatedAt:      timestamppb.New(time.Unix(0, 0)),
 					AssetID:        "80e04a93-e1a8-4503-ab61-2ef1992650b4",
 					Symbol:         "PLTR",
-					AssetClass:     ordergrpc.AssetClass_US_EQUITY,
+					AssetClass:     assetgrpc.AssetType_STOCKS,
 					OrderClass:     ordergrpc.OrderClass_NOT_USED_ORDER_CLASS,
 					Type:           ordergrpc.TradeType_MARKET,
 					Side:           ordergrpc.OrderType_ORDER_TYPE_SELL,
@@ -403,7 +404,7 @@ func TestMapAlpacaOrderToInternal(t *testing.T) {
 					UpdatedAt:      timestamppb.New(time.Unix(0, 0)),
 					AssetID:        "80e04a93-e1a8-4503-ab61-2ef1992650b4",
 					Symbol:         "PLTR",
-					AssetClass:     ordergrpc.AssetClass_US_EQUITY,
+					AssetClass:     assetgrpc.AssetType_STOCKS,
 					OrderClass:     ordergrpc.OrderClass_NOT_USED_ORDER_CLASS,
 					Type:           ordergrpc.TradeType_MARKET,
 					Side:           ordergrpc.OrderType_ORDER_TYPE_PURCHASE,
