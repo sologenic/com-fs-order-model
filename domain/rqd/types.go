@@ -280,3 +280,22 @@ type GetOrderResponse struct {
 	Currency          string `json:"currency,omitempty"`          // Currency code (USD)
 	OriginalComment   string `json:"originalComment,omitempty"`   // Original comment from order submission
 }
+
+// ACHRequest represents a request for ACH deposit
+type ACHFundTransferRequest struct {
+	Corr              string  `json:"corr"`
+	Office            string  `json:"office"`
+	AccountNumber     string  `json:"acct_no"`
+	AccountType       string  `json:"acct_type"`
+	CashieringProfile string  `json:"cashiering_Profile"`
+	ValueDate         string  `json:"value_dt"`
+	Amount            float64 `json:"amount"`
+	Comment           string  `json:"comment,omitempty"`
+}
+
+// ACHRequestResponse represents the response from ACH request
+type ACHFundTransferResponse struct {
+	BaseResponse
+	CashID        string `json:"cashID"`
+	ExternalRefID string `json:"externalRefID"`
+}
