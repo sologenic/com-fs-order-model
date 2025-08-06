@@ -50,11 +50,12 @@ func NewClient() *Client {
 		Transport: transport,
 	}
 	return &Client{
-		BaseURL:    config.BaseURL,
-		APIKey:     config.APIKey,
-		MPID:       config.MPID,
-		OfficeID:   config.OfficeID,
-		httpClient: httpCl,
+		BaseURL:     config.BaseURL,
+		APIKey:      config.APIKey,
+		MPID:        config.MPID,
+		OfficeID:    config.OfficeID,
+		Destination: Destination(config.Destination),
+		httpClient:  httpCl,
 	}
 }
 
