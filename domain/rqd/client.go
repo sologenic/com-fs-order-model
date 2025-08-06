@@ -1,8 +1,12 @@
 package rqd
 
 import (
+	"bytes"
+	"context"
 	"crypto/tls"
 	"encoding/json"
+	"fmt"
+	"io"
 	"net/http"
 	"os"
 	"strings"
@@ -58,6 +62,47 @@ func NewClient() *Client {
 		OfficeID:   config.OfficeID,
 		httpClient: httpCl,
 	}
+}
+
+// DoRequest performs an HTTP request with authentication and error handling
+func (c *Client) DoRequest(ctx context.Context, method, endpoint string, body interface{}) (*http.Response, error) {
+	var reqBody io.Reader
+
+	if body != nil {
+		jsonData, err := json.Marshal(body)
+		if err != nil {
+			return nil, fmt.Errorf("failed to marshal request body: %w", err)
+		}
+		reqBody = bytes.NewBuffer(jsonData)
+	}
+
+	// Ensure BaseURL has proper scheme
+	baseURL := c.BaseURL
+	if !strings.HasPrefix(baseURL, "http://") && !strings.HasPrefix(baseURL, "https://") {
+		baseURL = "https://" + baseURL
+	}
+
+	req, err := http.NewRequestWithContext(ctx, method, baseURL+endpoint, reqBody)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create request: %w", err)
+	}
+
+	// Set authentication header
+	req.Header.Set("Ocp-Apim-Subscription-Key", c.APIKey)
+	// req.Header.Set("Content-Type", "application/json")
+
+	// Handle SSH tunnel - set Host header for tunneled requests
+	if req.URL.Host == "localhost:8443" || req.URL.Host == "127.0.0.1:8443" {
+		req.Host = "api-uat.rqdclearing.com"
+		req.Header.Set("Host", "api-uat.rqdclearing.com")
+	}
+
+	resp, err := c.httpClient.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("request failed: %w", err)
+	}
+
+	return resp, nil
 }
 
 func ParseRQDConfig() *RQDConfig {
