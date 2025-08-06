@@ -17,26 +17,20 @@ import (
 
 // Client represents an RQD API client
 type Client struct {
-	BaseURL    string
-	APIKey     string
-	MPID       string
-	OfficeID   string
-	httpClient *http.Client
-}
-
-// Config holds configuration for the RQD client
-type Config struct {
-	BaseURL string
-	APIKey  string
-	Timeout time.Duration
+	BaseURL     string
+	APIKey      string
+	MPID        string
+	OfficeID    string
+	Destination Destination
+	httpClient  *http.Client
 }
 
 type RQDConfig struct {
 	APIKey      string `json:"APIKey"`
 	BaseURL     string `json:"BaseURL"`
-	MPID        string `json:"MPID"`                  // Correspondent identifier
-	OfficeID    string `json:"OfficeID"`              // Office identifier
-	Destination string `json:"Destination,omitempty"` // Destination
+	MPID        string `json:"MPID"`        // Correspondent identifier
+	OfficeID    string `json:"OfficeID"`    // Office identifier
+	Destination string `json:"Destination"` // Destination
 }
 
 // NewClient creates a new RQD API client
@@ -113,6 +107,14 @@ func ParseRQDConfig() *RQDConfig {
 	v := &RQDConfig{}
 	if err := json.Unmarshal([]byte(conf), v); err != nil {
 		logger.Fatalf("failed to parse RQD_CONFIG: %v", err)
+	}
+
+	if v.Destination != "" {
+		switch d := Destination(v.Destination); d {
+		case EquitySimulator, RQDRoute, RQDRoute2, Manual:
+		default:
+			logger.Fatalf("invalid destination in RQD_CONFIG: %s", v.Destination)
+		}
 	}
 	return v
 }
