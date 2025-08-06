@@ -1,5 +1,63 @@
 package rqd
 
+// AccountType represents the type of brokerage account
+type AccountType string
+
+const (
+	Cash              AccountType = "C"  // Cash account
+	Margin            AccountType = "M"  // Margin account
+	PortfolioMargin   AccountType = "P"  // Portfolio Margin account
+	GeneralLedger     AccountType = "G"  // General Ledger account
+	DVPRVP            AccountType = "D"  // DVP/RVP account
+	CorrespondentFlip AccountType = "F"  // Correspondent Flip account
+	HouseFirm         AccountType = "H"  // House/Firm account
+	FullyPaidLending  AccountType = "L"  // Fully paid lending account
+	FullyPaidOmnibus  AccountType = "LS" // Fully paid lending (omnibus) account
+)
+
+type TradeType string
+
+const (
+	Buy         TradeType = "B"  // Buy
+	BuyToClose  TradeType = "CB" // Buy to close (options only)
+	SellToClose TradeType = "CS" // Sell to close (options only)
+	BuyToOpen   TradeType = "OB" // Buy to open (options only)
+	SellToOpen  TradeType = "OS" // Sell to open (options only)
+	Sell        TradeType = "S"  // Sell
+	Short       TradeType = "SS" // Sell short
+)
+
+type OrderType string
+
+const (
+	Market OrderType = "MARKET" // Market order - fill immediately at best available price
+	Limit  OrderType = "LIMIT"  // Limit order - fill only at limit price or better
+)
+
+type TimeInForce string
+
+const (
+	Day TimeInForce = "DAY" // Day order - active until end of trading day
+	GTC TimeInForce = "GTC" // Good Till Canceled - active until manually cancelled
+)
+
+type Destination string
+
+const (
+	EquitySimulator Destination = "EQ_SIM"    // Equity simulator (UAT environment only)
+	RQDRoute        Destination = "RQDROUTE"  // RQD primary routing rules (production)
+	RQDRoute2       Destination = "RQDROUTE2" // RQD alternate routing rules
+	Manual          Destination = "MANUAL"    // Manual staging for trade desk handling
+)
+
+type ResponseStatus string
+
+const (
+	OK           ResponseStatus = "OK"           // Successful response
+	FAILED       ResponseStatus = "FAILED"       // Failed response
+	UNAUTHORIZED ResponseStatus = "UNAUTHORIZED" // Unauthorized access
+)
+
 // Common response fields used across RQD API endpoints
 type BaseResponse struct {
 	RequestID       string `json:"requestID"`
@@ -156,4 +214,69 @@ type GetAccountsResponse struct {
 	AnnualIncome float64 `json:"annual_inc,omitempty"`
 	NetWorth     float64 `json:"net_worth,omitempty"`
 	NetWorthLiq  float64 `json:"net_worth_liq,omitempty"`
+}
+
+type AddOrderRequest struct {
+	// Required fields
+	MPID        string      `json:"corr"`        // Required: MPID (Correspondent identifier)
+	Office      string      `json:"office"`      // Required: Office identifier
+	AccountNo   string      `json:"acct_no"`     // Required: Account number
+	AccountType AccountType `json:"acct_type"`   // Required: Account type
+	Side        TradeType   `json:"side"`        // Required: Trade type
+	Symbol      string      `json:"symbol"`      // Required: Stock ticker in CMS symbology
+	OrderType   OrderType   `json:"orderType"`   // Required: Order type
+	TimeInForce TimeInForce `json:"tif"`         // Required: Time-in-force
+	Destination Destination `json:"destination"` // Required: Destination
+
+	// Optional quantity/notional (specify either qty OR notional, not both)
+	Qty      *float64 `json:"qty,omitempty"`      // Quantity to buy/sell (can be fractional)
+	Notional *float64 `json:"notional,omitempty"` // Dollar value to buy/sell (min $0.01, initial purchases min $1)
+
+	// Optional fields
+	LimitPrice      *float64 `json:"limitPrice,omitempty"`      // Limit price (required when OrderType is LIMIT)
+	Comment         string   `json:"comment,omitempty"`         // Comment to carry through to order
+	OrderAcceptTime string   `json:"orderAcceptTime,omitempty"` // Customer order acceptance time (Eastern Time, for CAT reporting)
+}
+
+type AddOrderResponse struct {
+	BaseResponse
+	OrderID string `json:"orderID,omitempty"` // Unique order identifier for tracking
+}
+
+type CancelOrderRequest struct {
+	OrderID string `json:"orderID"` // Required: Order ID
+	Account string `json:"account"` // Required: RQD account in the format "TXTR-001-USER123-C"
+}
+
+type GetOrderResponse struct {
+	BaseResponse
+
+	// Order identification
+	OrderID     string `json:"orderID,omitempty"`     // Order ID from AddOrder endpoint
+	OMSOrderID  string `json:"omsOrderID,omitempty"`  // Order management system ID
+	Account     string `json:"account,omitempty"`     // OMS account identifier
+	Corr        string `json:"corr,omitempty"`        // OMS correspondent ID
+	Destination string `json:"destination,omitempty"` // Destination/route order was sent to
+
+	// Order details
+	Status string `json:"status,omitempty"` // Order status (NEW, OPEN, FILLED, CANCELLED, etc.)
+	Side   string `json:"side,omitempty"`   // Trade side (B, S, SS, etc.)
+	Symbol string `json:"symbol,omitempty"` // Stock ticker
+	TIF    string `json:"tif,omitempty"`    // Time-in-force (DAY, GTC)
+
+	// Quantity and pricing
+	OrderQty      float64 `json:"orderQty,omitempty"`      // Original order quantity
+	ExecutedQty   float64 `json:"executedQty,omitempty"`   // Total executed quantity
+	ExecutedPrice string  `json:"executedPrice,omitempty"` // Average execution price
+	LeavesQty     float64 `json:"leavesQty,omitempty"`     // Remaining quantity working
+
+	// Notional order fields
+	IsNotional          bool    `json:"isNotional,omitempty"`          // Is this a notional (dollar-based) order?
+	OriginalNotionalAmt float64 `json:"originalNotionalAmt,omitempty"` // Original notional amount if applicable
+
+	// Additional information
+	OrderCreationTime string `json:"orderCreationTime,omitempty"` // Time order was accepted in OMS
+	OrderMessage      string `json:"orderMessage,omitempty"`      // Order-related messages including rejects
+	Currency          string `json:"currency,omitempty"`          // Currency code (USD)
+	OriginalComment   string `json:"originalComment,omitempty"`   // Original comment from order submission
 }
