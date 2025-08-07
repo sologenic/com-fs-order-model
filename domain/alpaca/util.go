@@ -75,10 +75,6 @@ func MapAlpacaOrderToInternal(ar *AlpacaResponse) (*ordergrpc.BrokerOrderDetails
 	return aod, nil
 }
 
-func ParseInternalClientOrderIDToStr(bod *ordergrpc.ClientOrderID) string {
-	return fmt.Sprintf("%d-%s-%d", bod.OrderID, bod.SmartContractAddr, bod.Network)
-}
-
 // Parse ClientOrderID string into the GRPC struct
 // format: orderID-SmartContractAddr-network
 func ParseStrClientOrderIDToInternal(clientOrderIDString string) (*ordergrpc.ClientOrderID, error) {

@@ -14,6 +14,7 @@ import (
 	assetgrpc "github.com/sologenic/com-fs-asset-model"
 	ordergrpc "github.com/sologenic/com-fs-order-model"
 	dmn "github.com/sologenic/com-fs-order-model/domain"
+	ordergrpcdmn "github.com/sologenic/com-fs-order-model/domain"
 	utildecimal "github.com/sologenic/com-fs-utils-lib/go/decimal"
 	"github.com/sologenic/com-fs-utils-lib/go/unittest"
 	metadatagrpc "github.com/sologenic/com-fs-utils-lib/models/metadata"
@@ -442,7 +443,7 @@ func TestParseInternalClientOrderIDToStr(t *testing.T) {
 					SmartContractAddr: "testcore1cek95pl0zralsf43u4uply0g9nmxnj7fyt9yfy74spch7fpq3f8j0e",
 					Network:           metadatagrpc.Network_TESTNET,
 				}
-				result := ParseInternalClientOrderIDToStr(clientOrderID)
+				result := ordergrpcdmn.ParseInternalClientOrderIDToStr(clientOrderID)
 				expected := "12345-testcore1cek95pl0zralsf43u4uply0g9nmxnj7fyt9yfy74spch7fpq3f8j0e-2"
 				assert.Equal(t, expected, result)
 			},
@@ -451,7 +452,7 @@ func TestParseInternalClientOrderIDToStr(t *testing.T) {
 			Name: "Nil ClientOrderID",
 			Test: func(t *testing.T) {
 				assert.Panics(t, func() {
-					ParseInternalClientOrderIDToStr(nil)
+					ordergrpcdmn.ParseInternalClientOrderIDToStr(nil)
 				}, "The code did not panic")
 			},
 		},

@@ -56,11 +56,7 @@ The following fields are to be derived from somewhere:
   - TrailPercent
   - HWM
 */
-func RQDOrderToInternalBrokerOrderDetails(o *GetOrderResponse, t *GetTransactionsResponse, network metadata.Network) *ordergrpc.BrokerOrderDetails {
-	if o == nil {
-		return nil
-	}
-
+func RQDOrderToInternalBrokerOrderDetails(o GetOrderResponse, t GetTransactionsResponse, network metadata.Network) *ordergrpc.BrokerOrderDetails {
 	coID, _ := ordergrpcdmn.ParseStrClientOrderIDToInternal(o.OriginalComment)
 	bod := &ordergrpc.BrokerOrderDetails{
 		BrokerAssignedID: o.OrderID,

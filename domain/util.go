@@ -50,3 +50,7 @@ func ParseStrClientOrderIDToInternal(clientOrderIDString string) (*ordergrpc.Cli
 		Network:           metadata.Network(networkInt),
 	}, nil
 }
+
+func ParseInternalClientOrderIDToStr(bod *ordergrpc.ClientOrderID) string {
+	return fmt.Sprintf("%d-%s-%d", bod.OrderID, bod.SmartContractAddr, bod.Network)
+}
