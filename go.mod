@@ -6,7 +6,7 @@ require (
 	github.com/alpacahq/alpaca-trade-api-go/v3 v3.6.0
 	github.com/google/go-cmp v0.7.0
 	github.com/sologenic/com-fs-asset-model v0.0.0-20250716180737-c98a6368a431
-	github.com/sologenic/com-fs-utils-lib/go/decimal v0.0.0-20241028230612-350dd06f24af
+	github.com/sologenic/com-fs-utils-lib/go/decimal v0.0.0-20250731190227-eba0dc415460
 	github.com/sologenic/com-fs-utils-lib/go/grpc-client v0.0.0-20241030223317-5bff63a9ee29
 	github.com/sologenic/com-fs-utils-lib/go/logger v0.0.0-20240906214824-8118c42c5b35
 	github.com/sologenic/com-fs-utils-lib/go/unittest v0.0.0-20250131210530-7306ae3e5762

@@ -59,8 +59,8 @@ github.com/shopspring/decimal v1.4.0 h1:bxl37RwXBklmTi0C79JfXCEBD1cqqHt0bbgBAGFp
 github.com/shopspring/decimal v1.4.0/go.mod h1:gawqmDU56v4yIKSwfBSFip1HdCCXN8/+DMd9qYNcwME=
 github.com/sologenic/com-fs-asset-model v0.0.0-20250716180737-c98a6368a431 h1:vHYrdozHmzwykEvQZiSvsYAEVq6sMD4dap1so3DK0Xk=
 github.com/sologenic/com-fs-asset-model v0.0.0-20250716180737-c98a6368a431/go.mod h1:uIn+NGmyhBvUFgmWZ26vHzhmrGdWUcWoIoHEV+XgiL0=
-github.com/sologenic/com-fs-utils-lib/go/decimal v0.0.0-20241028230612-350dd06f24af h1:wX1PXvfjztWMMGfInnt9p+ZDqkmnkZZbclo5dSmk+1I=
-github.com/sologenic/com-fs-utils-lib/go/decimal v0.0.0-20241028230612-350dd06f24af/go.mod h1:O8hYbKdTOUeMtakuSV33cEVtEKpWF/yYAqp7DQq2yhw=
+github.com/sologenic/com-fs-utils-lib/go/decimal v0.0.0-20250731190227-eba0dc415460 h1:JyXePUUkdG7fu4c42h4lc7zJi9q45pq+aAoxW83L3ZE=
+github.com/sologenic/com-fs-utils-lib/go/decimal v0.0.0-20250731190227-eba0dc415460/go.mod h1:gujN2PaQ7sbIrj8Jzq7Ub5uwoKgJlfiDDba/V/amnR0=
 github.com/sologenic/com-fs-utils-lib/go/grpc-client v0.0.0-20241030223317-5bff63a9ee29 h1:mLDAb6ZcDf8/kEzqDgBhP3jwiKzh+mQxftcwoNtt2fo=
 github.com/sologenic/com-fs-utils-lib/go/grpc-client v0.0.0-20241030223317-5bff63a9ee29/go.mod h1:CP73V5ZmuGgngRuQbBTmVNusvVmF7kRKeRz85P61o8M=
 github.com/sologenic/com-fs-utils-lib/go/logger v0.0.0-20240906214824-8118c42c5b35 h1:zIv/s+nyS0WREsCCVMY0dTbSRjs8+nkS/B3eFqJI7uk=

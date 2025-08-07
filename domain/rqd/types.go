@@ -30,6 +30,18 @@ const (
 type OrderType string
 
 const (
+	Open          = "OPEN"
+	Filled        = "FILLED"
+	Rejected      = "REJECTED"
+	Cxld          = "CXLD" // Same as cancelled
+	Acknowledged  = "ACKED"
+	Sent          = "SENT"
+	Expired       = "EXPIRED"
+	Cancelled     = "CANCELLED"
+	PartialFilled = "PARTIALLY_FILLED"
+)
+
+const (
 	Market OrderType = "MARKET" // Market order - fill immediately at best available price
 	Limit  OrderType = "LIMIT"  // Limit order - fill only at limit price or better
 )
@@ -298,4 +310,113 @@ type ACHFundTransferResponse struct {
 	BaseResponse
 	CashID        string `json:"cashID"`
 	ExternalRefID string `json:"externalRefID"`
+}
+
+// GetTransactionsResponse represents the response from GetTransactions endpoint
+type GetTransactionsResponse struct {
+	BaseResponse
+
+	// Transaction identification
+	TransactionNumber float64 `json:"tr_no"`      // Unique identifier for transactions in RQD's transaction ledger
+	SourceCode        string  `json:"src_cd"`     // Source of transaction
+	EntryType         string  `json:"entry_type"` // Transaction entry type (e.g., ACATC, ACATS, ACHFEE, CADJ, etc.)
+	TradeType         string  `json:"trd_type"`   // Type of trade (e.g., B(buy), S(sell), CB(buy to close), SS(sell short), etc.)
+
+	// Account identification
+	CorrespondentID  string `json:"corr"`   // Correspondent identifier, usually MPID
+	OfficeID         string `json:"office"` // Office identifier - a subdivision of the correspondent, unique per corr
+	AccountNumber    string `json:"acct_no"`
+	SubAccountNumber string `json:"sub_acct_no"`
+	AccountType      string `json:"acct_type"` // Types of accounts (e.g., C(cash), M(margin), P(portfolio margin), etc.)
+
+	// Contra account identification
+	ContraCorr             string `json:"contra_corr"`        // Contra-side identifier, usually MPID
+	ContraOffice           string `json:"contra_office"`      // Contra-side office identifier, unique per contra_corr
+	ContraAccountNumber    string `json:"contra_acct_no"`     // Contra-side account number, unique per corr and office
+	ContraSubAccountNumber string `json:"contra_sub_acct_no"` // Contra-side sub-account identifier
+	ContraAccountType      string `json:"contra_acct_type"`   // Types of accounts (same as AccountType)
+
+	// Dates
+	SystemDate    string `json:"system_dt"` // Processing/system date in the RQD system (represents business date for each transaction)
+	EntryDate     string `json:"entry_dt"`  // Date when the transaction was entered
+	TradeDate     string `json:"trade_dt"`
+	SettleDate    string `json:"settle_dt"`
+	AvailableDate string `json:"avail_dt"` // Date that this trade is included as part of the available cash balance
+	ExecutionDate string `json:"exec_dt"`  // Official timestamp of the execution of the transaction
+
+	// Security information
+	Symbol         string `json:"symbol"`
+	SymbolNumber   int32  `json:"sym_no"` // Unique identifier for security in RQD system
+	SecurityNumber string `json:"sec_no"` // Global identifier for security (e.g., CUSIP, ISIN)
+
+	// Transaction amounts
+	Quantity    float64 `json:"qty"`   // Quantity of transaction
+	Price       float64 `json:"price"` // Price of transaction
+	GrossAmount float64 `json:"g_amt"` // Gross amount (quantity * price)
+	NetAmount   float64 `json:"n_amt"` // Net amount (gross amount +/- any additional fees or charges)
+
+	// Fees
+	Commission  float64 `json:"comm"`    // Commission amount
+	SecurityFee float64 `json:"sec_fee"` // Section 31/SEC fees
+	ExchangeFee float64 `json:"exch_fee"`
+	ClearingFee float64 `json:"clr_fee"`
+	ECNFee      float64 `json:"ecn_fee"`
+	BrokerFee   float64 `json:"brk_fee"`
+	OCCFee      float64 `json:"occ_fee"`
+	OtherFee    float64 `json:"oth_fee"`
+
+	// Custom fees
+	MFee1Code string  `json:"m_fee1_cd"`   // Custom Fee Code
+	MFee1DBCR string  `json:"m_fee1_dbcr"` // Custom Fee Debit/Credit
+	MFee1     float64 `json:"m_fee1"`      // Custom fee Value
+	MFee2Code string  `json:"m_fee2_cd"`
+	MFee2DBCR string  `json:"m_fee2_dbcr"`
+	MFee2     float64 `json:"m_fee2"`
+	MFee3Code string  `json:"m_fee3_cd"`
+	MFee3DBCR string  `json:"m_fee3_dbcr"`
+	MFee3     float64 `json:"m_fee3"`
+	MFee4Code string  `json:"m_fee4_cd"`
+	MFee4DBCR string  `json:"m_fee4_dbcr"`
+	MFee4     float64 `json:"m_fee4"`
+	MFee5Code string  `json:"m_fee5_cd"`
+	MFee5DBCR string  `json:"m_fee5_dbcr"`
+	MFee5     float64 `json:"m_fee5"`
+	MFee6Code string  `json:"m_fee6_cd"`
+	MFee6DBCR string  `json:"m_fee6_dbcr"`
+	MFee6     float64 `json:"m_fee6"`
+
+	// Additional information
+	Currency        string `json:"currency"`
+	Capacity        string `json:"capacity"`  // Order Capacity (Principal vs. Agent)
+	SolicitedUnsold string `json:"sol_unsol"` // Was order solicited?
+	Settled         string `json:"settled"`   // Has trade settled?
+	Availed         string `json:"availed"`   // Is cash from transaction available?
+	Posted          string `json:"posted"`    // Has transaction been posted to positions and balances?
+
+	// Transaction status
+	// R - Transaction has been successfully processed, not cancelled and/or corrected.
+	// X - Transaction has been cancelled. Status is updated form R to X after being cancelled.
+	// C - Transaction represents a cancellation offset. This record offsets another transaction with status of X. Can be identified as the tr_no of the original transaction + 0.000001
+	// P - Transaction is pending processing to the RQD ledger. To include pending transactions, use the 'Pending' query parameter in the GetTransactions endpoint with value of true.
+	Status string `json:"status"`
+
+	// Order and execution information
+	TradeTag          string `json:"trd_tag"` // Client-specified tag to indicate transaction grouping
+	ClientOrderID     string `json:"cl_order_id"`
+	OrderID           string `json:"order_id"` // Order ID with added suffix "RQDCU"
+	ExecutionID       string `json:"exec_id"`  // Order ID with added suffix "RQDCU2"
+	ReferenceID       string `json:"ref_id"`   // RQD internal message reference ID
+	FillID            string `json:"fill_id"`  // RQD internal execution reference ID
+	Route             string `json:"route"`
+	Liquidity         string `json:"liquidity"`          // Liquidity indicator
+	ExecutionExchange string `json:"exec_exch"`          // Execution venue
+	SecondaryOrderID  string `json:"secondary_order_id"` // Secondary Order ID (typically FIX tag 198). For trades routed via LiquidityBook, this is the original ClientOrderId provided on inbound FIX orders.
+
+	// Miscellaneous
+	Description          string `json:"descr"` // Miscellaneous description
+	Memo1                string `json:"memo1"`
+	Memo2                string `json:"memo2"`
+	Memo3                string `json:"memo3"`
+	TaxLot               string `json:"tax_lot"`   // Tax Lot identifier
+	LotTransactionNumber string `json:"lot_tr_no"` // Tax Lot transaction number
 }
