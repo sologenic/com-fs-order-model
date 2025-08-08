@@ -26,11 +26,11 @@ type Client struct {
 }
 
 type RQDConfig struct {
-	APIKey      string `json:"APIKey"`
-	BaseURL     string `json:"BaseURL"`
-	MPID        string `json:"MPID"`        // Correspondent identifier
-	OfficeID    string `json:"OfficeID"`    // Office identifier
-	Destination string `json:"Destination"` // Destination
+	APIKey      string
+	BaseURL     string
+	MPID        string // Correspondent identifier
+	OfficeID    string // Office identifier
+	Destination string // Destination
 }
 
 // NewClient creates a new RQD API client

@@ -5,7 +5,6 @@ import (
 	"strings"
 	"time"
 
-	assetgrpc "github.com/sologenic/com-fs-asset-model"
 	ordergrpc "github.com/sologenic/com-fs-order-model"
 	ordergrpcdmn "github.com/sologenic/com-fs-order-model/domain"
 	utilsdecimal "github.com/sologenic/com-fs-utils-lib/go/decimal"
@@ -47,7 +46,8 @@ func ParseBrokerAccountDetails(accStr string) (*RQDAccountDetails, error) {
 
 /*
 TODO:
-The following fields are to be derived from somewhere:
+The following fields are to be derived from somewhere (or from RQD):
+  - AssetClass
   - OrderClass
   - Type
   - LimitPrice
@@ -64,9 +64,9 @@ func RQDOrderToInternalBrokerOrderDetails(o GetOrderResponse, t GetTransactionsR
 		SubmittedAt:      strTimeToTimestamppb(o.OrderCreationTime),
 		AssetID:          fmt.Sprintf("%d", t.SymbolNumber),
 		Symbol:           o.Symbol,
-		AssetClass:       mapAssetClass(t.SecurityNumber), // TODO: questionable if this is correct
-		OrderClass:       0,                               // TODO: do we need to derive this?
-		Type:             0,                               // TODO: do we need to derive this?
+		OrderClass:       ordergrpc.OrderClass_ORDER_CLASS_SIMPLE, // RQD only supports simple orders
+		AssetClass:       0,                                       // TODO: request RQD to provide this?
+		Type:             0,                                       // TODO: request RQD to provide this?
 		Side:             mapSide(o.Side),
 		TimeInForce:      mapTIF(o.TIF),
 		OrderQty:         utilsdecimal.FromFloat64(o.OrderQty),
@@ -103,26 +103,6 @@ func strTimeToTimestamppb(t string) *timestamppb.Timestamp {
 		return nil
 	}
 	return timestamppb.New(ts)
-}
-
-func mapAssetClass(cusip string) assetgrpc.AssetType {
-	if len(cusip) != 9 {
-		return assetgrpc.AssetType_ASSET_TYPE_DO_NOT_USE
-	}
-
-	// 7th character (index 6) indicates security type
-	securityType := cusip[6]
-
-	switch securityType {
-	case '0', '1', '2', '3', '4', '5', '6', '7', '8', '9':
-		return assetgrpc.AssetType_STOCKS // Common stocks
-	case 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P':
-		return assetgrpc.AssetType_BONDS // A - K are corporate bonds, L - P are municipal bonds
-	case 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z':
-		return assetgrpc.AssetType_OPTIONS // Options
-	default:
-		return assetgrpc.AssetType_ASSET_TYPE_DO_NOT_USE // Unknown or unsupported asset type
-	}
 }
 
 func mapSide(side string) ordergrpc.OrderType {

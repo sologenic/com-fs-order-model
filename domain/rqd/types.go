@@ -404,7 +404,7 @@ type GetTransactionsResponse struct {
 	TradeTag          string `json:"trd_tag"` // Client-specified tag to indicate transaction grouping
 	ClientOrderID     string `json:"cl_order_id"`
 	OrderID           string `json:"order_id"` // Order ID with added suffix "RQDCU"
-	ExecutionID       string `json:"exec_id"`  // Order ID with added suffix "RQDCU2"
+	ExecutionID       string `json:"exec_id"`  // Order ID with added suffix "RQDCU#" where # is some kind of number
 	ReferenceID       string `json:"ref_id"`   // RQD internal message reference ID
 	FillID            string `json:"fill_id"`  // RQD internal execution reference ID
 	Route             string `json:"route"`
