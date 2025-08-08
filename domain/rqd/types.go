@@ -420,3 +420,38 @@ type GetTransactionsResponse struct {
 	TaxLot               string `json:"tax_lot"`   // Tax Lot identifier
 	LotTransactionNumber string `json:"lot_tr_no"` // Tax Lot transaction number
 }
+
+// ACHProfileRequest represents the request for adding ACH profile
+type ACHProfileRequest struct {
+	Corr                           string `json:"corr"`
+	Office                         string `json:"office"`
+	AccountNumber                  string `json:"acct_no"`
+	AccountType                    string `json:"acct_type"`
+	CashieringProfile              string `json:"cashiering_Profile"`
+	AccountName                    string `json:"accountName"`
+	ABA                            string `json:"aba"`
+	BankAccountNumber              string `json:"accountNumber"`
+	ThirdPartyVerification         bool   `json:"thirdPartyVerification,omitempty"`
+	ThirdPartyVerificationReviewer string `json:"thirdPartyVerificationReviewer,omitempty"`
+}
+
+// GetACHProfileRequest represents the request for getting ACH profile
+type GetACHProfileRequest struct {
+	Corr              string `json:"corr"`
+	Office            string `json:"office"`
+	AccountNumber     string `json:"acct_no"`
+	AccountType       string `json:"acct_type"`
+	CashieringProfile string `json:"cashiering_Profile"`
+}
+
+// ACHProfile represents the response from GetACHProfile endpoint
+type ACHProfile struct {
+	RequestID         string `json:"requestID"`
+	Office            string `json:"office"`
+	AccountNumber     string `json:"acct_no"`
+	AccountType       string `json:"acct_type"`
+	CashieringProfile string `json:"cashiering_Profile"`
+	AccountName       string `json:"accountName"`
+	BankAccountNumber string `json:"accountNumber"`
+	ABA               string `json:"aba"`
+}
