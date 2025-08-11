@@ -1,4 +1,4 @@
-package domain
+package alpaca
 
 import (
 	"encoding/json"
@@ -13,6 +13,8 @@ import (
 	"github.com/google/go-cmp/cmp/cmpopts"
 	assetgrpc "github.com/sologenic/com-fs-asset-model"
 	ordergrpc "github.com/sologenic/com-fs-order-model"
+	dmn "github.com/sologenic/com-fs-order-model/domain"
+	ordergrpcdmn "github.com/sologenic/com-fs-order-model/domain"
 	utildecimal "github.com/sologenic/com-fs-utils-lib/go/decimal"
 	"github.com/sologenic/com-fs-utils-lib/go/unittest"
 	metadatagrpc "github.com/sologenic/com-fs-utils-lib/models/metadata"
@@ -35,7 +37,7 @@ func TestGetOrderKeyStrFromOrder(t *testing.T) {
 					SmartContractAddr: "0xABC123",
 					Network:           metadatagrpc.Network_MAINNET,
 				}
-				result := GetOrderKeyStrFromOrder(order)
+				result := dmn.GetOrderKeyStrFromOrder(order)
 				expected := "12345-0xABC123-1"
 				assert.Equal(t, expected, result)
 			},
@@ -50,7 +52,7 @@ func TestGetOrderKeyStrFromOrder(t *testing.T) {
 					SmartContractAddr: "",
 					Network:           metadatagrpc.Network_TESTNET,
 				}
-				result := GetOrderKeyStrFromOrder(order)
+				result := dmn.GetOrderKeyStrFromOrder(order)
 				expected := "67890--2"
 				assert.Equal(t, expected, result)
 			},
@@ -65,7 +67,7 @@ func TestGetOrderKeyStrFromOrder(t *testing.T) {
 					SmartContractAddr: "0xDEF456",
 					Network:           metadatagrpc.Network_NETWORK_DO_NOT_USE,
 				}
-				result := GetOrderKeyStrFromOrder(order)
+				result := dmn.GetOrderKeyStrFromOrder(order)
 				expected := "11111-0xDEF456-0"
 				assert.Equal(t, expected, result)
 			},
@@ -80,7 +82,7 @@ func TestGetOrderKeyStrFromOrder(t *testing.T) {
 					SmartContractAddr: "0xGHI789",
 					Network:           metadatagrpc.Network_DEVNET,
 				}
-				result := GetOrderKeyStrFromOrder(order)
+				result := dmn.GetOrderKeyStrFromOrder(order)
 				expected := "22222-0xGHI789-3"
 				assert.Equal(t, expected, result)
 			},
@@ -441,7 +443,7 @@ func TestParseInternalClientOrderIDToStr(t *testing.T) {
 					SmartContractAddr: "testcore1cek95pl0zralsf43u4uply0g9nmxnj7fyt9yfy74spch7fpq3f8j0e",
 					Network:           metadatagrpc.Network_TESTNET,
 				}
-				result := ParseInternalClientOrderIDToStr(clientOrderID)
+				result := ordergrpcdmn.ParseInternalClientOrderIDToStr(clientOrderID)
 				expected := "12345-testcore1cek95pl0zralsf43u4uply0g9nmxnj7fyt9yfy74spch7fpq3f8j0e-2"
 				assert.Equal(t, expected, result)
 			},
@@ -450,7 +452,7 @@ func TestParseInternalClientOrderIDToStr(t *testing.T) {
 			Name: "Nil ClientOrderID",
 			Test: func(t *testing.T) {
 				assert.Panics(t, func() {
-					ParseInternalClientOrderIDToStr(nil)
+					ordergrpcdmn.ParseInternalClientOrderIDToStr(nil)
 				}, "The code did not panic")
 			},
 		},
