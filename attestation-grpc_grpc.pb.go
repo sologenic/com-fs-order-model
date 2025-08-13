@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             v5.29.1
-// source: attestation-grpc.proto
+// source: sologenic/com-fs-order-model/attestation-grpc.proto
 
 package order
 
@@ -215,5 +215,5 @@ var AttestationService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "attestation-grpc.proto",
+	Metadata: "sologenic/com-fs-order-model/attestation-grpc.proto",
 }

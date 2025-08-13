@@ -2,14 +2,14 @@
 // versions:
 //   protoc-gen-ts_proto  v1.181.2
 //   protoc               v5.29.1
-// source: order.proto
+// source: sologenic/com-fs-order-model/order.proto
 
 /* eslint-disable */
 import Long from "long";
 import _m0 from "protobufjs/minimal";
+import { Timestamp } from "../../google/protobuf/timestamp";
+import { Network, networkFromJSON, networkToJSON } from "../com-fs-utils-lib/models/metadata/metadata";
 import { BrokerOrderDetails } from "./broker";
-import { Timestamp } from "./google/protobuf/timestamp";
-import { Network, networkFromJSON, networkToJSON } from "./sologenic/com-fs-utils-lib/models/metadata/metadata";
 import { OrderType, orderTypeFromJSON, orderTypeToJSON, ProcessInfo } from "./util";
 
 export const protobufPackage = "order";

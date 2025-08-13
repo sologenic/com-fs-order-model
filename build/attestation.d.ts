@@ -1,6 +1,6 @@
 import _m0 from "protobufjs/minimal";
-import { Decimal } from "./sologenic/com-fs-utils-lib/go/decimal/decimal";
-import { Network } from "./sologenic/com-fs-utils-lib/models/metadata/metadata";
+import { Decimal } from "../com-fs-utils-lib/go/decimal/decimal";
+import { Network } from "../com-fs-utils-lib/models/metadata/metadata";
 export declare const protobufPackage = "order";
 /** key: Denom-SmartContractAddr-Network-BlockHeight */
 export interface Attestation {
@@ -26,14 +26,8 @@ export declare const Attestation: {
         Network?: Network | undefined;
         SmartContractAddr?: string | undefined;
         Denom?: string | undefined;
-        BrokerQuantity?: {
-            Value?: number | undefined;
-            Exp?: number | undefined;
-        } | undefined;
-        ChainQuantity?: {
-            Value?: number | undefined;
-            Exp?: number | undefined;
-        } | undefined;
+        BrokerQuantity?: Decimal | undefined;
+        ChainQuantity?: Decimal | undefined;
         BlockHeight?: number | undefined;
         Timestamp?: Date | undefined;
         ReattestationBlockHeight?: number | undefined;
@@ -41,36 +35,18 @@ export declare const Attestation: {
         Network?: Network | undefined;
         SmartContractAddr?: string | undefined;
         Denom?: string | undefined;
-        BrokerQuantity?: ({
-            Value?: number | undefined;
-            Exp?: number | undefined;
-        } & {
-            Value?: number | undefined;
-            Exp?: number | undefined;
-        } & { [K in Exclude<keyof I["BrokerQuantity"], keyof Decimal>]: never; }) | undefined;
-        ChainQuantity?: ({
-            Value?: number | undefined;
-            Exp?: number | undefined;
-        } & {
-            Value?: number | undefined;
-            Exp?: number | undefined;
-        } & { [K_1 in Exclude<keyof I["ChainQuantity"], keyof Decimal>]: never; }) | undefined;
+        BrokerQuantity?: Decimal | undefined;
+        ChainQuantity?: Decimal | undefined;
         BlockHeight?: number | undefined;
         Timestamp?: Date | undefined;
         ReattestationBlockHeight?: number | undefined;
-    } & { [K_2 in Exclude<keyof I, keyof Attestation>]: never; }>(base?: I | undefined): Attestation;
+    } & { [K in Exclude<keyof I, keyof Attestation>]: never; }>(base?: I | undefined): Attestation;
     fromPartial<I_1 extends {
         Network?: Network | undefined;
         SmartContractAddr?: string | undefined;
         Denom?: string | undefined;
-        BrokerQuantity?: {
-            Value?: number | undefined;
-            Exp?: number | undefined;
-        } | undefined;
-        ChainQuantity?: {
-            Value?: number | undefined;
-            Exp?: number | undefined;
-        } | undefined;
+        BrokerQuantity?: Decimal | undefined;
+        ChainQuantity?: Decimal | undefined;
         BlockHeight?: number | undefined;
         Timestamp?: Date | undefined;
         ReattestationBlockHeight?: number | undefined;
@@ -78,24 +54,12 @@ export declare const Attestation: {
         Network?: Network | undefined;
         SmartContractAddr?: string | undefined;
         Denom?: string | undefined;
-        BrokerQuantity?: ({
-            Value?: number | undefined;
-            Exp?: number | undefined;
-        } & {
-            Value?: number | undefined;
-            Exp?: number | undefined;
-        } & { [K_3 in Exclude<keyof I_1["BrokerQuantity"], keyof Decimal>]: never; }) | undefined;
-        ChainQuantity?: ({
-            Value?: number | undefined;
-            Exp?: number | undefined;
-        } & {
-            Value?: number | undefined;
-            Exp?: number | undefined;
-        } & { [K_4 in Exclude<keyof I_1["ChainQuantity"], keyof Decimal>]: never; }) | undefined;
+        BrokerQuantity?: Decimal | undefined;
+        ChainQuantity?: Decimal | undefined;
         BlockHeight?: number | undefined;
         Timestamp?: Date | undefined;
         ReattestationBlockHeight?: number | undefined;
-    } & { [K_5 in Exclude<keyof I_1, keyof Attestation>]: never; }>(object: I_1): Attestation;
+    } & { [K_1 in Exclude<keyof I_1, keyof Attestation>]: never; }>(object: I_1): Attestation;
 };
 export declare const Attestations: {
     encode(message: Attestations, writer?: _m0.Writer): _m0.Writer;
@@ -107,14 +71,8 @@ export declare const Attestations: {
             Network?: Network | undefined;
             SmartContractAddr?: string | undefined;
             Denom?: string | undefined;
-            BrokerQuantity?: {
-                Value?: number | undefined;
-                Exp?: number | undefined;
-            } | undefined;
-            ChainQuantity?: {
-                Value?: number | undefined;
-                Exp?: number | undefined;
-            } | undefined;
+            BrokerQuantity?: Decimal | undefined;
+            ChainQuantity?: Decimal | undefined;
             BlockHeight?: number | undefined;
             Timestamp?: Date | undefined;
             ReattestationBlockHeight?: number | undefined;
@@ -125,14 +83,8 @@ export declare const Attestations: {
             Network?: Network | undefined;
             SmartContractAddr?: string | undefined;
             Denom?: string | undefined;
-            BrokerQuantity?: {
-                Value?: number | undefined;
-                Exp?: number | undefined;
-            } | undefined;
-            ChainQuantity?: {
-                Value?: number | undefined;
-                Exp?: number | undefined;
-            } | undefined;
+            BrokerQuantity?: Decimal | undefined;
+            ChainQuantity?: Decimal | undefined;
             BlockHeight?: number | undefined;
             Timestamp?: Date | undefined;
             ReattestationBlockHeight?: number | undefined;
@@ -140,14 +92,8 @@ export declare const Attestations: {
             Network?: Network | undefined;
             SmartContractAddr?: string | undefined;
             Denom?: string | undefined;
-            BrokerQuantity?: {
-                Value?: number | undefined;
-                Exp?: number | undefined;
-            } | undefined;
-            ChainQuantity?: {
-                Value?: number | undefined;
-                Exp?: number | undefined;
-            } | undefined;
+            BrokerQuantity?: Decimal | undefined;
+            ChainQuantity?: Decimal | undefined;
             BlockHeight?: number | undefined;
             Timestamp?: Date | undefined;
             ReattestationBlockHeight?: number | undefined;
@@ -155,54 +101,30 @@ export declare const Attestations: {
             Network?: Network | undefined;
             SmartContractAddr?: string | undefined;
             Denom?: string | undefined;
-            BrokerQuantity?: ({
-                Value?: number | undefined;
-                Exp?: number | undefined;
-            } & {
-                Value?: number | undefined;
-                Exp?: number | undefined;
-            } & { [K in Exclude<keyof I["Attestations"][number]["BrokerQuantity"], keyof Decimal>]: never; }) | undefined;
-            ChainQuantity?: ({
-                Value?: number | undefined;
-                Exp?: number | undefined;
-            } & {
-                Value?: number | undefined;
-                Exp?: number | undefined;
-            } & { [K_1 in Exclude<keyof I["Attestations"][number]["ChainQuantity"], keyof Decimal>]: never; }) | undefined;
+            BrokerQuantity?: Decimal | undefined;
+            ChainQuantity?: Decimal | undefined;
             BlockHeight?: number | undefined;
             Timestamp?: Date | undefined;
             ReattestationBlockHeight?: number | undefined;
-        } & { [K_2 in Exclude<keyof I["Attestations"][number], keyof Attestation>]: never; })[] & { [K_3 in Exclude<keyof I["Attestations"], keyof {
+        } & { [K in Exclude<keyof I["Attestations"][number], keyof Attestation>]: never; })[] & { [K_1 in Exclude<keyof I["Attestations"], keyof {
             Network?: Network | undefined;
             SmartContractAddr?: string | undefined;
             Denom?: string | undefined;
-            BrokerQuantity?: {
-                Value?: number | undefined;
-                Exp?: number | undefined;
-            } | undefined;
-            ChainQuantity?: {
-                Value?: number | undefined;
-                Exp?: number | undefined;
-            } | undefined;
+            BrokerQuantity?: Decimal | undefined;
+            ChainQuantity?: Decimal | undefined;
             BlockHeight?: number | undefined;
             Timestamp?: Date | undefined;
             ReattestationBlockHeight?: number | undefined;
         }[]>]: never; }) | undefined;
         Offset?: number | undefined;
-    } & { [K_4 in Exclude<keyof I, keyof Attestations>]: never; }>(base?: I | undefined): Attestations;
+    } & { [K_2 in Exclude<keyof I, keyof Attestations>]: never; }>(base?: I | undefined): Attestations;
     fromPartial<I_1 extends {
         Attestations?: {
             Network?: Network | undefined;
             SmartContractAddr?: string | undefined;
             Denom?: string | undefined;
-            BrokerQuantity?: {
-                Value?: number | undefined;
-                Exp?: number | undefined;
-            } | undefined;
-            ChainQuantity?: {
-                Value?: number | undefined;
-                Exp?: number | undefined;
-            } | undefined;
+            BrokerQuantity?: Decimal | undefined;
+            ChainQuantity?: Decimal | undefined;
             BlockHeight?: number | undefined;
             Timestamp?: Date | undefined;
             ReattestationBlockHeight?: number | undefined;
@@ -213,14 +135,8 @@ export declare const Attestations: {
             Network?: Network | undefined;
             SmartContractAddr?: string | undefined;
             Denom?: string | undefined;
-            BrokerQuantity?: {
-                Value?: number | undefined;
-                Exp?: number | undefined;
-            } | undefined;
-            ChainQuantity?: {
-                Value?: number | undefined;
-                Exp?: number | undefined;
-            } | undefined;
+            BrokerQuantity?: Decimal | undefined;
+            ChainQuantity?: Decimal | undefined;
             BlockHeight?: number | undefined;
             Timestamp?: Date | undefined;
             ReattestationBlockHeight?: number | undefined;
@@ -228,14 +144,8 @@ export declare const Attestations: {
             Network?: Network | undefined;
             SmartContractAddr?: string | undefined;
             Denom?: string | undefined;
-            BrokerQuantity?: {
-                Value?: number | undefined;
-                Exp?: number | undefined;
-            } | undefined;
-            ChainQuantity?: {
-                Value?: number | undefined;
-                Exp?: number | undefined;
-            } | undefined;
+            BrokerQuantity?: Decimal | undefined;
+            ChainQuantity?: Decimal | undefined;
             BlockHeight?: number | undefined;
             Timestamp?: Date | undefined;
             ReattestationBlockHeight?: number | undefined;
@@ -243,41 +153,23 @@ export declare const Attestations: {
             Network?: Network | undefined;
             SmartContractAddr?: string | undefined;
             Denom?: string | undefined;
-            BrokerQuantity?: ({
-                Value?: number | undefined;
-                Exp?: number | undefined;
-            } & {
-                Value?: number | undefined;
-                Exp?: number | undefined;
-            } & { [K_5 in Exclude<keyof I_1["Attestations"][number]["BrokerQuantity"], keyof Decimal>]: never; }) | undefined;
-            ChainQuantity?: ({
-                Value?: number | undefined;
-                Exp?: number | undefined;
-            } & {
-                Value?: number | undefined;
-                Exp?: number | undefined;
-            } & { [K_6 in Exclude<keyof I_1["Attestations"][number]["ChainQuantity"], keyof Decimal>]: never; }) | undefined;
+            BrokerQuantity?: Decimal | undefined;
+            ChainQuantity?: Decimal | undefined;
             BlockHeight?: number | undefined;
             Timestamp?: Date | undefined;
             ReattestationBlockHeight?: number | undefined;
-        } & { [K_7 in Exclude<keyof I_1["Attestations"][number], keyof Attestation>]: never; })[] & { [K_8 in Exclude<keyof I_1["Attestations"], keyof {
+        } & { [K_3 in Exclude<keyof I_1["Attestations"][number], keyof Attestation>]: never; })[] & { [K_4 in Exclude<keyof I_1["Attestations"], keyof {
             Network?: Network | undefined;
             SmartContractAddr?: string | undefined;
             Denom?: string | undefined;
-            BrokerQuantity?: {
-                Value?: number | undefined;
-                Exp?: number | undefined;
-            } | undefined;
-            ChainQuantity?: {
-                Value?: number | undefined;
-                Exp?: number | undefined;
-            } | undefined;
+            BrokerQuantity?: Decimal | undefined;
+            ChainQuantity?: Decimal | undefined;
             BlockHeight?: number | undefined;
             Timestamp?: Date | undefined;
             ReattestationBlockHeight?: number | undefined;
         }[]>]: never; }) | undefined;
         Offset?: number | undefined;
-    } & { [K_9 in Exclude<keyof I_1, keyof Attestations>]: never; }>(object: I_1): Attestations;
+    } & { [K_5 in Exclude<keyof I_1, keyof Attestations>]: never; }>(object: I_1): Attestations;
 };
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 export type DeepPartial<T> = T extends Builtin ? T : T extends globalThis.Array<infer U> ? globalThis.Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>> : T extends {} ? {

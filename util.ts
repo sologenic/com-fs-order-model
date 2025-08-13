@@ -2,11 +2,11 @@
 // versions:
 //   protoc-gen-ts_proto  v1.181.2
 //   protoc               v5.29.1
-// source: util.proto
+// source: sologenic/com-fs-order-model/util.proto
 
 /* eslint-disable */
 import _m0 from "protobufjs/minimal";
-import { Timestamp } from "./google/protobuf/timestamp";
+import { Timestamp } from "../../google/protobuf/timestamp";
 
 export const protobufPackage = "order";
 

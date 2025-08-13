@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             v5.29.1
-// source: order-grpc.proto
+// source: sologenic/com-fs-order-model/order-grpc.proto
 
 package order
 
@@ -293,5 +293,5 @@ var OrderService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "order-grpc.proto",
+	Metadata: "sologenic/com-fs-order-model/order-grpc.proto",
 }

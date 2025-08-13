@@ -2,13 +2,13 @@
 // versions:
 //   protoc-gen-ts_proto  v1.181.2
 //   protoc               v5.29.1
-// source: order.proto
+// source: sologenic/com-fs-order-model/order.proto
 /* eslint-disable */
 import Long from "long";
 import _m0 from "protobufjs/minimal";
+import { Timestamp } from "../../google/protobuf/timestamp";
+import { networkFromJSON, networkToJSON } from "../com-fs-utils-lib/models/metadata/metadata";
 import { BrokerOrderDetails } from "./broker";
-import { Timestamp } from "./google/protobuf/timestamp";
-import { networkFromJSON, networkToJSON } from "./sologenic/com-fs-utils-lib/models/metadata/metadata";
 import { orderTypeFromJSON, orderTypeToJSON, ProcessInfo } from "./util";
 export const protobufPackage = "order";
 /** Execution type(action) of the transaction against the smart contract */
@@ -443,6 +443,7 @@ function createBaseOrder() {
         Sequence: 0,
         OrganizationID: "",
         UserID: "",
+        AssetID: "",
     };
 }
 export const Order = {
@@ -503,6 +504,9 @@ export const Order = {
         }
         if (message.UserID !== "") {
             writer.uint32(154).string(message.UserID);
+        }
+        if (message.AssetID !== "") {
+            writer.uint32(162).string(message.AssetID);
         }
         return writer;
     },
@@ -627,6 +631,12 @@ export const Order = {
                     }
                     message.UserID = reader.string();
                     continue;
+                case 20:
+                    if (tag !== 162) {
+                        break;
+                    }
+                    message.AssetID = reader.string();
+                    continue;
             }
             if ((tag & 7) === 4 || tag === 0) {
                 break;
@@ -658,6 +668,7 @@ export const Order = {
             Sequence: isSet(object.Sequence) ? globalThis.Number(object.Sequence) : 0,
             OrganizationID: isSet(object.OrganizationID) ? globalThis.String(object.OrganizationID) : "",
             UserID: isSet(object.UserID) ? globalThis.String(object.UserID) : "",
+            AssetID: isSet(object.AssetID) ? globalThis.String(object.AssetID) : "",
         };
     },
     toJSON(message) {
@@ -719,13 +730,16 @@ export const Order = {
         if (message.UserID !== "") {
             obj.UserID = message.UserID;
         }
+        if (message.AssetID !== "") {
+            obj.AssetID = message.AssetID;
+        }
         return obj;
     },
     create(base) {
         return Order.fromPartial(base !== null && base !== void 0 ? base : {});
     },
     fromPartial(object) {
-        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r;
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s;
         const message = createBaseOrder();
         message.Network = (_a = object.Network) !== null && _a !== void 0 ? _a : 0;
         message.SmartContractAddr = (_b = object.SmartContractAddr) !== null && _b !== void 0 ? _b : "";
@@ -752,6 +766,7 @@ export const Order = {
         message.Sequence = (_p = object.Sequence) !== null && _p !== void 0 ? _p : 0;
         message.OrganizationID = (_q = object.OrganizationID) !== null && _q !== void 0 ? _q : "";
         message.UserID = (_r = object.UserID) !== null && _r !== void 0 ? _r : "";
+        message.AssetID = (_s = object.AssetID) !== null && _s !== void 0 ? _s : "";
         return message;
     },
 };

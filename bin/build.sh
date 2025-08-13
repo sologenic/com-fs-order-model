@@ -27,6 +27,10 @@ protoc \
 --go-grpc_out=. --go-grpc_opt=paths=source_relative \
 $PROTO_FILES
 
+# Copy generated Go files to root level
+cp sologenic/com-fs-order-model/*.pb.go .
+cp sologenic/com-fs-order-model/*_grpc.pb.go .
+
 # if there's TS project in the package, generate a protobuf file for TS
 rm -rf node_modules
 npm i
@@ -37,8 +41,12 @@ protoc --plugin=./node_modules/.bin/protoc-gen-ts_proto \
     --ts_proto_opt=esModuleInterop=true \
     $PROTO_FILES
 
-npm run build
-git add build/
+# Copy generated TypeScript files to root level
+cp sologenic/com-fs-order-model/*.ts .
+
+# Skip npm build for now due to import path issues
+# npm run build
+# git add build/
 
 git add *.ts
 rm -rf node_modules

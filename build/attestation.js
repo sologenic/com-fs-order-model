@@ -2,13 +2,13 @@
 // versions:
 //   protoc-gen-ts_proto  v1.181.2
 //   protoc               v5.29.1
-// source: attestation.proto
+// source: sologenic/com-fs-order-model/attestation.proto
 /* eslint-disable */
 import Long from "long";
 import _m0 from "protobufjs/minimal";
-import { Timestamp } from "./google/protobuf/timestamp";
-import { Decimal } from "./sologenic/com-fs-utils-lib/go/decimal/decimal";
-import { networkFromJSON, networkToJSON } from "./sologenic/com-fs-utils-lib/models/metadata/metadata";
+import { Timestamp } from "../../google/protobuf/timestamp";
+import { Decimal } from "../com-fs-utils-lib/go/decimal/decimal";
+import { networkFromJSON, networkToJSON } from "../com-fs-utils-lib/models/metadata/metadata";
 export const protobufPackage = "order";
 function createBaseAttestation() {
     return {

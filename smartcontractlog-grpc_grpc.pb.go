@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             v5.29.1
-// source: smartcontractlog-grpc.proto
+// source: sologenic/com-fs-order-model/smartcontractlog-grpc.proto
 
 package order
 
@@ -221,5 +221,5 @@ var SmartContractLogService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "smartcontractlog-grpc.proto",
+	Metadata: "sologenic/com-fs-order-model/smartcontractlog-grpc.proto",
 }
