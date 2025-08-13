@@ -38,7 +38,7 @@ message BrokerOrderDetails {
     optional decimal.Decimal TrailPrice = 21;
     optional decimal.Decimal TrailPercent = 22;
     optional decimal.Decimal HWM = 23; // High Water Mark, used for trailing stop orders
-    bool ExtendedHours = 24; // defaults to false TODO: needs explanation
+    bool ExtendedHours = 24; // defaults to false, High Water Mark is used for trailing stop orders
     google.protobuf.Timestamp CreatedAt = 25;
     optional google.protobuf.Timestamp UpdatedAt = 26;
     BrokerOrderStatus Status = 27; // status of the order in exchange

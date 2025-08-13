@@ -59,7 +59,7 @@ The following fields are to be derived from somewhere (or from RQD):
 func RQDOrderToInternalBrokerOrderDetails(o GetOrderResponse, t GetTransactionsResponse, network metadata.Network) *ordergrpc.BrokerOrderDetails {
 	coID, _ := ordergrpcdmn.ParseStrClientOrderIDToInternal(o.OriginalComment)
 	bod := &ordergrpc.BrokerOrderDetails{
-		BrokerAssignedID: o.OrderID,
+		BrokerAssignedID: o.OMSOrderID,
 		ClientOrderID:    coID,
 		SubmittedAt:      strTimeToTimestamppb(o.OrderCreationTime),
 		AssetID:          fmt.Sprintf("%d", t.SymbolNumber),
@@ -129,24 +129,25 @@ func mapTIF(tif string) ordergrpc.TimeInForce {
 
 func mapOrderStatus(s string) ordergrpc.BrokerOrderStatus {
 	switch s {
-	case Open:
+	// From RQD docs:
+	// 	"OPEN" means order is "working in the market"
+	// 	"SENT" means order is "routed to the market"
+	// Since both represent working orders, we can map them to NEW
+	case Open, Sent:
 		return ordergrpc.BrokerOrderStatus_NEW
-	case Filled:
-		return ordergrpc.BrokerOrderStatus_FILLED
-	case Rejected:
-		return ordergrpc.BrokerOrderStatus_REJECTED
-	case Cxld:
-		return ordergrpc.BrokerOrderStatus_CANCELED
 	case Acknowledged:
 		return ordergrpc.BrokerOrderStatus_ACCEPTED
-	case Sent:
-		return ordergrpc.BrokerOrderStatus_PENDING_NEW
-	case Expired:
-		return ordergrpc.BrokerOrderStatus_EXPIRED
-	case Cancelled:
-		return ordergrpc.BrokerOrderStatus_CANCELED
 	case PartialFilled:
 		return ordergrpc.BrokerOrderStatus_PARTIALLY_FILLED
+	case Filled:
+		return ordergrpc.BrokerOrderStatus_FILLED
+	// Both have the description "Order was cancelled and is not working in the market." in RQD docs
+	case Cxld, Cancelled:
+		return ordergrpc.BrokerOrderStatus_CANCELED
+	case Rejected:
+		return ordergrpc.BrokerOrderStatus_REJECTED
+	case Expired:
+		return ordergrpc.BrokerOrderStatus_EXPIRED
 	default:
 		return ordergrpc.BrokerOrderStatus_NOT_USED_ORDER_STATUS
 	}
