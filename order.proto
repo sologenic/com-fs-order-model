@@ -37,6 +37,7 @@ message Order {
     int64 Sequence = 17; // Sequence
     string OrganizationID = 18;
     string UserID = 19;
+    string AssetID = 20; // Internal asset ID(key) in the datastore
 }
 
 // Execution type(action) of the transaction against the smart contract
