@@ -494,7 +494,9 @@ export interface OrderInstruction {
   AmountExp: number;
   LimitPrice: number;
   LimitPriceExp: number;
-  TimeInForce: TimeInForce;
+  TimeInForce?:
+    | TimeInForce
+    | undefined;
   /** In ISO-8601 Zulu format (e.g., "2024-02-29T23:59:59Z") */
   ExpiresAt?: string | undefined;
   OrderDetailType: OrderDetailType;
@@ -898,7 +900,7 @@ function createBaseOrderInstruction(): OrderInstruction {
     AmountExp: 0,
     LimitPrice: 0,
     LimitPriceExp: 0,
-    TimeInForce: 0,
+    TimeInForce: undefined,
     ExpiresAt: undefined,
     OrderDetailType: 0,
     Hold: undefined,
@@ -938,7 +940,7 @@ export const OrderInstruction = {
     if (message.LimitPriceExp !== 0) {
       writer.uint32(56).int32(message.LimitPriceExp);
     }
-    if (message.TimeInForce !== 0) {
+    if (message.TimeInForce !== undefined) {
       writer.uint32(64).int32(message.TimeInForce);
     }
     if (message.ExpiresAt !== undefined) {
@@ -1155,7 +1157,7 @@ export const OrderInstruction = {
       AmountExp: isSet(object.AmountExp) ? globalThis.Number(object.AmountExp) : 0,
       LimitPrice: isSet(object.LimitPrice) ? globalThis.Number(object.LimitPrice) : 0,
       LimitPriceExp: isSet(object.LimitPriceExp) ? globalThis.Number(object.LimitPriceExp) : 0,
-      TimeInForce: isSet(object.TimeInForce) ? timeInForceFromJSON(object.TimeInForce) : 0,
+      TimeInForce: isSet(object.TimeInForce) ? timeInForceFromJSON(object.TimeInForce) : undefined,
       ExpiresAt: isSet(object.ExpiresAt) ? globalThis.String(object.ExpiresAt) : undefined,
       OrderDetailType: isSet(object.OrderDetailType) ? orderDetailTypeFromJSON(object.OrderDetailType) : 0,
       Hold: isSet(object.Hold) ? Hold.fromJSON(object.Hold) : undefined,
@@ -1195,7 +1197,7 @@ export const OrderInstruction = {
     if (message.LimitPriceExp !== 0) {
       obj.LimitPriceExp = Math.round(message.LimitPriceExp);
     }
-    if (message.TimeInForce !== 0) {
+    if (message.TimeInForce !== undefined) {
       obj.TimeInForce = timeInForceToJSON(message.TimeInForce);
     }
     if (message.ExpiresAt !== undefined) {
@@ -1252,7 +1254,7 @@ export const OrderInstruction = {
     message.AmountExp = object.AmountExp ?? 0;
     message.LimitPrice = object.LimitPrice ?? 0;
     message.LimitPriceExp = object.LimitPriceExp ?? 0;
-    message.TimeInForce = object.TimeInForce ?? 0;
+    message.TimeInForce = object.TimeInForce ?? undefined;
     message.ExpiresAt = object.ExpiresAt ?? undefined;
     message.OrderDetailType = object.OrderDetailType ?? 0;
     message.Hold = (object.Hold !== undefined && object.Hold !== null) ? Hold.fromPartial(object.Hold) : undefined;

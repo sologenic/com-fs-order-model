@@ -60,7 +60,7 @@ message OrderInstruction {
 
     int64 LimitPrice = 6;
     int32 LimitPriceExp = 7;
-    TimeInForce TimeInForce = 8;
+    optional TimeInForce TimeInForce = 8;
     optional string ExpiresAt = 9; // In ISO-8601 Zulu format (e.g., "2024-02-29T23:59:59Z")
     OrderDetailType OrderDetailType = 10;
 
