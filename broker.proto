@@ -78,17 +78,6 @@ message BrokerOrderDetailsList {
     repeated BrokerOrderDetails BrokerOrderDetailsList = 1;
 }
 
-enum TimeInForce {
-    NOT_USED_TIME_IN_FORCE = 0;
-    DAY = 1;
-    GOOD_TIL_CANCELED = 2; // GTC
-    AT_THE_OPENING = 3; // OPG
-    AT_THE_CLOSE = 4; // CLS
-    IMMEDIATE_OR_CANCEL = 5; // IOC
-    FILL_OR_KILL = 6; // FOK
-    GOOD_TIL_TIME = 7; // GTT
-}
-
 enum TradeType {
     NOT_USED_TRADE_TYPE = 0;
     MARKET = 1;
