@@ -494,9 +494,8 @@ export interface OrderInstruction {
   AmountExp: number;
   LimitPrice: number;
   LimitPriceExp: number;
-  TimeInForce?:
-    | TimeInForce
-    | undefined;
+  /** DEPRECATED: Use TimeInForce instead as it's more flexible and RQD does not support it (2025-08-18) */
+  FillOrKill: boolean;
   /** In ISO-8601 Zulu format (e.g., "2024-02-29T23:59:59Z") */
   ExpiresAt?: string | undefined;
   OrderDetailType: OrderDetailType;
@@ -511,6 +510,7 @@ export interface OrderInstruction {
   UsedFundsAmountExp?: number | undefined;
   Costs?: number | undefined;
   CostsExp?: number | undefined;
+  TimeInForce?: TimeInForce | undefined;
 }
 
 export interface Orders {
@@ -900,7 +900,7 @@ function createBaseOrderInstruction(): OrderInstruction {
     AmountExp: 0,
     LimitPrice: 0,
     LimitPriceExp: 0,
-    TimeInForce: undefined,
+    FillOrKill: false,
     ExpiresAt: undefined,
     OrderDetailType: 0,
     Hold: undefined,
@@ -914,6 +914,7 @@ function createBaseOrderInstruction(): OrderInstruction {
     UsedFundsAmountExp: undefined,
     Costs: undefined,
     CostsExp: undefined,
+    TimeInForce: undefined,
   };
 }
 
@@ -940,8 +941,8 @@ export const OrderInstruction = {
     if (message.LimitPriceExp !== 0) {
       writer.uint32(56).int32(message.LimitPriceExp);
     }
-    if (message.TimeInForce !== undefined) {
-      writer.uint32(64).int32(message.TimeInForce);
+    if (message.FillOrKill !== false) {
+      writer.uint32(64).bool(message.FillOrKill);
     }
     if (message.ExpiresAt !== undefined) {
       writer.uint32(74).string(message.ExpiresAt);
@@ -981,6 +982,9 @@ export const OrderInstruction = {
     }
     if (message.CostsExp !== undefined) {
       writer.uint32(168).int32(message.CostsExp);
+    }
+    if (message.TimeInForce !== undefined) {
+      writer.uint32(176).int32(message.TimeInForce);
     }
     return writer;
   },
@@ -1046,7 +1050,7 @@ export const OrderInstruction = {
             break;
           }
 
-          message.TimeInForce = reader.int32() as any;
+          message.FillOrKill = reader.bool();
           continue;
         case 9:
           if (tag !== 74) {
@@ -1139,6 +1143,13 @@ export const OrderInstruction = {
 
           message.CostsExp = reader.int32();
           continue;
+        case 22:
+          if (tag !== 176) {
+            break;
+          }
+
+          message.TimeInForce = reader.int32() as any;
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -1157,7 +1168,7 @@ export const OrderInstruction = {
       AmountExp: isSet(object.AmountExp) ? globalThis.Number(object.AmountExp) : 0,
       LimitPrice: isSet(object.LimitPrice) ? globalThis.Number(object.LimitPrice) : 0,
       LimitPriceExp: isSet(object.LimitPriceExp) ? globalThis.Number(object.LimitPriceExp) : 0,
-      TimeInForce: isSet(object.TimeInForce) ? timeInForceFromJSON(object.TimeInForce) : undefined,
+      FillOrKill: isSet(object.FillOrKill) ? globalThis.Boolean(object.FillOrKill) : false,
       ExpiresAt: isSet(object.ExpiresAt) ? globalThis.String(object.ExpiresAt) : undefined,
       OrderDetailType: isSet(object.OrderDetailType) ? orderDetailTypeFromJSON(object.OrderDetailType) : 0,
       Hold: isSet(object.Hold) ? Hold.fromJSON(object.Hold) : undefined,
@@ -1171,6 +1182,7 @@ export const OrderInstruction = {
       UsedFundsAmountExp: isSet(object.UsedFundsAmountExp) ? globalThis.Number(object.UsedFundsAmountExp) : undefined,
       Costs: isSet(object.Costs) ? globalThis.Number(object.Costs) : undefined,
       CostsExp: isSet(object.CostsExp) ? globalThis.Number(object.CostsExp) : undefined,
+      TimeInForce: isSet(object.TimeInForce) ? timeInForceFromJSON(object.TimeInForce) : undefined,
     };
   },
 
@@ -1197,8 +1209,8 @@ export const OrderInstruction = {
     if (message.LimitPriceExp !== 0) {
       obj.LimitPriceExp = Math.round(message.LimitPriceExp);
     }
-    if (message.TimeInForce !== undefined) {
-      obj.TimeInForce = timeInForceToJSON(message.TimeInForce);
+    if (message.FillOrKill !== false) {
+      obj.FillOrKill = message.FillOrKill;
     }
     if (message.ExpiresAt !== undefined) {
       obj.ExpiresAt = message.ExpiresAt;
@@ -1239,6 +1251,9 @@ export const OrderInstruction = {
     if (message.CostsExp !== undefined) {
       obj.CostsExp = Math.round(message.CostsExp);
     }
+    if (message.TimeInForce !== undefined) {
+      obj.TimeInForce = timeInForceToJSON(message.TimeInForce);
+    }
     return obj;
   },
 
@@ -1254,7 +1269,7 @@ export const OrderInstruction = {
     message.AmountExp = object.AmountExp ?? 0;
     message.LimitPrice = object.LimitPrice ?? 0;
     message.LimitPriceExp = object.LimitPriceExp ?? 0;
-    message.TimeInForce = object.TimeInForce ?? undefined;
+    message.FillOrKill = object.FillOrKill ?? false;
     message.ExpiresAt = object.ExpiresAt ?? undefined;
     message.OrderDetailType = object.OrderDetailType ?? 0;
     message.Hold = (object.Hold !== undefined && object.Hold !== null) ? Hold.fromPartial(object.Hold) : undefined;
@@ -1272,6 +1287,7 @@ export const OrderInstruction = {
     message.UsedFundsAmountExp = object.UsedFundsAmountExp ?? undefined;
     message.Costs = object.Costs ?? undefined;
     message.CostsExp = object.CostsExp ?? undefined;
+    message.TimeInForce = object.TimeInForce ?? undefined;
     return message;
   },
 };
