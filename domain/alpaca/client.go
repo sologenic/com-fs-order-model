@@ -21,8 +21,8 @@ type Client struct {
 }
 
 type AlpacaBrokerConfig struct {
-	ApiKey    string
-	ApiSecret string
+	APIKey    string
+	APISecret string
 	BaseURL   string
 }
 
