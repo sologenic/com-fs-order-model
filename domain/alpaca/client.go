@@ -38,8 +38,8 @@ func NewClient(config *AlpacaBrokerConfig) *Client {
 	}
 	return &Client{
 		BaseURL:    config.BaseURL,
-		Key:        config.ApiKey,
-		Secret:     config.ApiSecret,
+		Key:        config.APIKey,
+		Secret:     config.APISecret,
 		httpClient: httpClient,
 	}
 }
