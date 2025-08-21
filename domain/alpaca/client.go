@@ -20,14 +20,8 @@ type Client struct {
 	httpClient *http.Client
 }
 
-type AlpacaBrokerConfig struct {
-	APIKey    string
-	APISecret string
-	BaseURL   string
-}
-
 // NewClient creates a new Alpaca Broker API client
-func NewClient(config *AlpacaBrokerConfig) *Client {
+func NewClient(baseURL, key, secret string) *Client {
 	httpClient := &http.Client{
 		Timeout: time.Second * 30,
 		Transport: &http.Transport{
@@ -37,9 +31,9 @@ func NewClient(config *AlpacaBrokerConfig) *Client {
 		},
 	}
 	return &Client{
-		BaseURL:    config.BaseURL,
-		Key:        config.APIKey,
-		Secret:     config.APISecret,
+		BaseURL:    baseURL,
+		Key:        key,
+		Secret:     secret,
 		httpClient: httpClient,
 	}
 }
