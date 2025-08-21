@@ -56,7 +56,7 @@ func (c *Client) DoRequest(ctx context.Context, method, path string, body interf
 	}
 
 	// Construct final URL: BaseURL/path
-	// Example: "https://paper-api.alpaca.markets/v2/trading/accounts/123/orders"
+	// Example: "https://broker-api.sandbox.alpaca.markets/v1/trading/accounts/123/orders"
 	u, err := url.Parse(fmt.Sprintf("%s/%s", c.BaseURL, strings.TrimPrefix(path, "/")))
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse URL: %w", err)
