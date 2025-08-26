@@ -323,6 +323,54 @@ export function brokerOrderStatusToJSON(object: BrokerOrderStatus): string {
   }
 }
 
+export enum CommissionType {
+  NOT_USED_COMMISSION_TYPE = 0,
+  /** NOTIONAL - Charge commission on a per order basis (default) */
+  NOTIONAL = 1,
+  /** QTY - Charge commission on a per qty/contract basis, pro rated */
+  QTY = 2,
+  /** BPS - Commission expressed in basis points (percent), converted to notional amount for purposes of calculating commission(max two decimal places) */
+  BPS = 3,
+  UNRECOGNIZED = -1,
+}
+
+export function commissionTypeFromJSON(object: any): CommissionType {
+  switch (object) {
+    case 0:
+    case "NOT_USED_COMMISSION_TYPE":
+      return CommissionType.NOT_USED_COMMISSION_TYPE;
+    case 1:
+    case "NOTIONAL":
+      return CommissionType.NOTIONAL;
+    case 2:
+    case "QTY":
+      return CommissionType.QTY;
+    case 3:
+    case "BPS":
+      return CommissionType.BPS;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return CommissionType.UNRECOGNIZED;
+  }
+}
+
+export function commissionTypeToJSON(object: CommissionType): string {
+  switch (object) {
+    case CommissionType.NOT_USED_COMMISSION_TYPE:
+      return "NOT_USED_COMMISSION_TYPE";
+    case CommissionType.NOTIONAL:
+      return "NOTIONAL";
+    case CommissionType.QTY:
+      return "QTY";
+    case CommissionType.BPS:
+      return "BPS";
+    case CommissionType.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
+
 /** Key orderID-SmartContractAddr-network (is as unique identifier for the order in message to the broker) */
 export interface BrokerOrderDetails {
   /** auto generated ID from the broker */
@@ -396,6 +444,12 @@ export interface BrokerOrderDetails {
     | undefined;
   /** Broker that cleared the order, e.g. Alpaca, RQD, etc. */
   ClearingBroker: ClearingBroker;
+  /** Broker API specific commission fields */
+  Commission?:
+    | Decimal
+    | undefined;
+  /** How commission field value is calculated */
+  CommissionType?: CommissionType | undefined;
 }
 
 export interface ClientOrderID {
@@ -443,6 +497,8 @@ function createBaseBrokerOrderDetails(): BrokerOrderDetails {
     ProcessInfo: undefined,
     InstanceID: undefined,
     ClearingBroker: 0,
+    Commission: undefined,
+    CommissionType: undefined,
   };
 }
 
@@ -546,6 +602,12 @@ export const BrokerOrderDetails = {
     }
     if (message.ClearingBroker !== 0) {
       writer.uint32(264).int32(message.ClearingBroker);
+    }
+    if (message.Commission !== undefined) {
+      Decimal.encode(message.Commission, writer.uint32(274).fork()).ldelim();
+    }
+    if (message.CommissionType !== undefined) {
+      writer.uint32(280).int32(message.CommissionType);
     }
     return writer;
   },
@@ -788,6 +850,20 @@ export const BrokerOrderDetails = {
 
           message.ClearingBroker = reader.int32() as any;
           continue;
+        case 34:
+          if (tag !== 274) {
+            break;
+          }
+
+          message.Commission = Decimal.decode(reader, reader.uint32());
+          continue;
+        case 35:
+          if (tag !== 280) {
+            break;
+          }
+
+          message.CommissionType = reader.int32() as any;
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -832,6 +908,8 @@ export const BrokerOrderDetails = {
       ProcessInfo: isSet(object.ProcessInfo) ? ProcessInfo.fromJSON(object.ProcessInfo) : undefined,
       InstanceID: isSet(object.InstanceID) ? globalThis.String(object.InstanceID) : undefined,
       ClearingBroker: isSet(object.ClearingBroker) ? clearingBrokerFromJSON(object.ClearingBroker) : 0,
+      Commission: isSet(object.Commission) ? Decimal.fromJSON(object.Commission) : undefined,
+      CommissionType: isSet(object.CommissionType) ? commissionTypeFromJSON(object.CommissionType) : undefined,
     };
   },
 
@@ -936,6 +1014,12 @@ export const BrokerOrderDetails = {
     if (message.ClearingBroker !== 0) {
       obj.ClearingBroker = clearingBrokerToJSON(message.ClearingBroker);
     }
+    if (message.Commission !== undefined) {
+      obj.Commission = Decimal.toJSON(message.Commission);
+    }
+    if (message.CommissionType !== undefined) {
+      obj.CommissionType = commissionTypeToJSON(message.CommissionType);
+    }
     return obj;
   },
 
@@ -1003,6 +1087,10 @@ export const BrokerOrderDetails = {
       : undefined;
     message.InstanceID = object.InstanceID ?? undefined;
     message.ClearingBroker = object.ClearingBroker ?? 0;
+    message.Commission = (object.Commission !== undefined && object.Commission !== null)
+      ? Decimal.fromPartial(object.Commission)
+      : undefined;
+    message.CommissionType = object.CommissionType ?? undefined;
     return message;
   },
 };
