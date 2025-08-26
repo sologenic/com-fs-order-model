@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/alpacahq/alpaca-trade-api-go/v3/alpaca"
+	"github.com/samber/lo"
 	assetgrpc "github.com/sologenic/com-fs-asset-model"
 	ordergrpc "github.com/sologenic/com-fs-order-model"
 	dutils "github.com/sologenic/com-fs-utils-lib/go/decimal"
@@ -17,6 +18,10 @@ import (
 type AlpacaResponse struct {
 	Order       *alpaca.Order
 	TradeUpdate *alpaca.TradeUpdate
+}
+
+type BrokerResponse struct {
+	BrokerOrder *BrokerOrder
 }
 
 // Map Alpaca responses to our AlpacaOrderDetails model
@@ -73,6 +78,53 @@ func MapAlpacaOrderToInternal(ar *AlpacaResponse) (*ordergrpc.BrokerOrderDetails
 		aod.PartialQty = dutils.DecimalToInternalDecimal(tu.Qty)
 	}
 	return aod, nil
+}
+
+// Map Broker API BrokerOrder response to our internal BrokerOrderDetails model
+func MapBrokerOrderToInternal(br *BrokerResponse) (*ordergrpc.BrokerOrderDetails, error) {
+	if br.BrokerOrder == nil {
+		return nil, fmt.Errorf("BrokerOrder is nil")
+	}
+
+	bo := br.BrokerOrder
+
+	coID, err := ParseStrClientOrderIDToInternal(bo.ClientOrderID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse ClientOrderID: %v", err)
+	}
+
+	bod := &ordergrpc.BrokerOrderDetails{
+		BrokerAssignedID: bo.ID,
+		ClientOrderID:    coID,
+		SubmittedAt:      convertTimeToTimestamp(&bo.SubmittedAt),
+		FilledAt:         convertTimeToTimestamp(bo.FilledAt),
+		ExpiredAt:        convertTimeToTimestamp(bo.ExpiredAt),
+		CancelledAt:      convertTimeToTimestamp(bo.CanceledAt),
+		FailedAt:         convertTimeToTimestamp(bo.FailedAt),
+		AssetID:          bo.AssetID,
+		Symbol:           bo.Symbol,
+		AssetClass:       mapAssetClass(bo.AssetClass),
+		OrderClass:       mapOrderClass(bo.OrderClass),
+		Type:             mapTradeType(bo.Type),
+		Side:             mapSide(bo.Side),
+		TimeInForce:      mapTimeInForce(bo.TimeInForce),
+		Notional:         dutils.DecimalToInternalDecimal(bo.Notional),
+		OrderQty:         dutils.DecimalToInternalDecimal(bo.Qty),
+		FilledQty:        dutils.DecimalToInternalDecimal(&bo.FilledQty),
+		FilledAvgPrice:   dutils.DecimalToInternalDecimal(bo.FilledAvgPrice),
+		LimitPrice:       dutils.DecimalToInternalDecimal(bo.LimitPrice),
+		StopPrice:        dutils.DecimalToInternalDecimal(bo.StopPrice),
+		TrailPrice:       dutils.DecimalToInternalDecimal(bo.TrailPrice),
+		TrailPercent:     dutils.DecimalToInternalDecimal(bo.TrailPercent),
+		HWM:              dutils.DecimalToInternalDecimal(bo.HWM),
+		ExtendedHours:    bo.ExtendedHours,
+		CreatedAt:        convertTimeToTimestamp(&bo.CreatedAt),
+		UpdatedAt:        convertTimeToTimestamp(&bo.UpdatedAt),
+		Status:           mapStatus(bo.Status),
+		Commission:       dutils.DecimalToInternalDecimal(bo.Commission),
+		CommissionType:   mapCommissionType(bo.CommissionType),
+	}
+	return bod, nil
 }
 
 // Parse ClientOrderID string into the GRPC struct
@@ -219,17 +271,22 @@ func mapOrderClass(oc alpaca.OrderClass) ordergrpc.OrderClass {
 	}
 }
 
+func mapCommissionType(ct string) *ordergrpc.CommissionType {
+	switch ct {
+	case "notional":
+		return lo.ToPtr(ordergrpc.CommissionType_NOTIONAL)
+	case "qty":
+		return lo.ToPtr(ordergrpc.CommissionType_QTY)
+	case "bps":
+		return lo.ToPtr(ordergrpc.CommissionType_BPS)
+	default:
+		return nil
+	}
+}
+
 func convertTimeToTimestamp(time *time.Time) *timestamppb.Timestamp {
 	if time == nil {
 		return nil
 	}
 	return timestamppb.New(*time)
-}
-
-func mapNetworkStrToGRPC(networkStr string) (metadatagrpc.Network, error) {
-	v, exists := metadatagrpc.Network_value[strings.ToUpper(networkStr)]
-	if !exists {
-		return metadatagrpc.Network_NETWORK_DO_NOT_USE, fmt.Errorf("invalid network: %s", networkStr)
-	}
-	return metadatagrpc.Network(v), nil
 }
