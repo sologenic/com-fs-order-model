@@ -10,30 +10,30 @@ import (
 // Source: https://docs.alpaca.markets/reference/createorderforaccount
 // Note: import Alpaca trading SDK types for common fields for both trade and broker APIs
 type PlaceOrderRequest struct {
-	Symbol         string                `json:"symbol"`
-	Qty            *decimal.Decimal      `json:"qty"`
-	Notional       *decimal.Decimal      `json:"notional"`
-	Side           alpaca.Side           `json:"side"`
-	Type           alpaca.OrderType      `json:"type"`
-	TimeInForce    alpaca.TimeInForce    `json:"time_in_force"`
-	LimitPrice     *decimal.Decimal      `json:"limit_price"`
-	StopPrice      *decimal.Decimal      `json:"stop_price"`
-	TrailPrice     *decimal.Decimal      `json:"trail_price"`
-	TrailPercent   *decimal.Decimal      `json:"trail_percent"`
-	ExtendedHours  bool                  `json:"extended_hours"`
-	ClientOrderID  string                `json:"client_order_id"`
-	OrderClass     alpaca.OrderClass     `json:"order_class"`
-	TakeProfit     *alpaca.TakeProfit    `json:"take_profit"`
-	StopLoss       *alpaca.StopLoss      `json:"stop_loss"`
-	PositionIntent alpaca.PositionIntent `json:"position_intent"`
+	Symbol         string                 `json:"symbol"`
+	Qty            *decimal.Decimal       `json:"qty,omitempty"`
+	Notional       *decimal.Decimal       `json:"notional,omitempty"`
+	Side           alpaca.Side            `json:"side"`
+	Type           alpaca.OrderType       `json:"type"`
+	TimeInForce    alpaca.TimeInForce     `json:"time_in_force"`
+	LimitPrice     *decimal.Decimal       `json:"limit_price,omitempty"`
+	StopPrice      *decimal.Decimal       `json:"stop_price,omitempty"`
+	TrailPrice     *decimal.Decimal       `json:"trail_price,omitempty"`
+	TrailPercent   *decimal.Decimal       `json:"trail_percent,omitempty"`
+	ExtendedHours  *bool                  `json:"extended_hours,omitempty"`
+	ClientOrderID  string                 `json:"client_order_id"`
+	OrderClass     *alpaca.OrderClass     `json:"order_class,omitempty"`
+	TakeProfit     *alpaca.TakeProfit     `json:"take_profit,omitempty"`
+	StopLoss       *alpaca.StopLoss       `json:"stop_loss,omitempty"`
+	PositionIntent *alpaca.PositionIntent `json:"position_intent,omitempty"`
 
 	// Broker-only order-level fields
-	Commission     *decimal.Decimal `json:"commission"`
-	CommissionType string           `json:"commission_type"`
-	Source         string           `json:"source"`
-	Instructions   string           `json:"instructions"`
-	Subtag         string           `json:"subtag"`
-	SwapFeeBPS     string           `json:"swap_fee_bps"`
+	Commission     *decimal.Decimal `json:"commission,omitempty"`
+	CommissionType *string          `json:"commission_type,omitempty"`
+	Source         *string          `json:"source,omitempty"`
+	Instructions   *string          `json:"instructions,omitempty"`
+	Subtag         *string          `json:"subtag,omitempty"`
+	SwapFeeBPS     *string          `json:"swap_fee_bps,omitempty"`
 }
 
 type BrokerOrder struct {

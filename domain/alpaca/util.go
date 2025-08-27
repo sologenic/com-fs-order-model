@@ -121,6 +121,7 @@ func MapBrokerOrderToInternal(br *BrokerResponse) (*ordergrpc.BrokerOrderDetails
 		CreatedAt:        convertTimeToTimestamp(&bo.CreatedAt),
 		UpdatedAt:        convertTimeToTimestamp(&bo.UpdatedAt),
 		Status:           mapStatus(bo.Status),
+		ClearingBroker:   ordergrpc.ClearingBroker_ALPACA,
 		Commission:       dutils.DecimalToInternalDecimal(bo.Commission),
 		CommissionType:   mapCommissionType(bo.CommissionType),
 	}
