@@ -449,7 +449,15 @@ export interface BrokerOrderDetails {
     | Decimal
     | undefined;
   /** How commission field value is calculated */
-  CommissionType?: CommissionType | undefined;
+  CommissionType?:
+    | CommissionType
+    | undefined;
+  /** SSE Event tracking fields for superior recovery */
+  EventID?:
+    | string
+    | undefined;
+  /** Event timestamp for this specific event */
+  EventTime?: Date | undefined;
 }
 
 export interface ClientOrderID {
@@ -499,6 +507,8 @@ function createBaseBrokerOrderDetails(): BrokerOrderDetails {
     ClearingBroker: 0,
     Commission: undefined,
     CommissionType: undefined,
+    EventID: undefined,
+    EventTime: undefined,
   };
 }
 
@@ -608,6 +618,12 @@ export const BrokerOrderDetails = {
     }
     if (message.CommissionType !== undefined) {
       writer.uint32(280).int32(message.CommissionType);
+    }
+    if (message.EventID !== undefined) {
+      writer.uint32(290).string(message.EventID);
+    }
+    if (message.EventTime !== undefined) {
+      Timestamp.encode(toTimestamp(message.EventTime), writer.uint32(298).fork()).ldelim();
     }
     return writer;
   },
@@ -864,6 +880,20 @@ export const BrokerOrderDetails = {
 
           message.CommissionType = reader.int32() as any;
           continue;
+        case 36:
+          if (tag !== 290) {
+            break;
+          }
+
+          message.EventID = reader.string();
+          continue;
+        case 37:
+          if (tag !== 298) {
+            break;
+          }
+
+          message.EventTime = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -910,6 +940,8 @@ export const BrokerOrderDetails = {
       ClearingBroker: isSet(object.ClearingBroker) ? clearingBrokerFromJSON(object.ClearingBroker) : 0,
       Commission: isSet(object.Commission) ? Decimal.fromJSON(object.Commission) : undefined,
       CommissionType: isSet(object.CommissionType) ? commissionTypeFromJSON(object.CommissionType) : undefined,
+      EventID: isSet(object.EventID) ? globalThis.String(object.EventID) : undefined,
+      EventTime: isSet(object.EventTime) ? fromJsonTimestamp(object.EventTime) : undefined,
     };
   },
 
@@ -1020,6 +1052,12 @@ export const BrokerOrderDetails = {
     if (message.CommissionType !== undefined) {
       obj.CommissionType = commissionTypeToJSON(message.CommissionType);
     }
+    if (message.EventID !== undefined) {
+      obj.EventID = message.EventID;
+    }
+    if (message.EventTime !== undefined) {
+      obj.EventTime = message.EventTime.toISOString();
+    }
     return obj;
   },
 
@@ -1091,6 +1129,8 @@ export const BrokerOrderDetails = {
       ? Decimal.fromPartial(object.Commission)
       : undefined;
     message.CommissionType = object.CommissionType ?? undefined;
+    message.EventID = object.EventID ?? undefined;
+    message.EventTime = object.EventTime ?? undefined;
     return message;
   },
 };
