@@ -452,11 +452,12 @@ export interface BrokerOrderDetails {
   CommissionType?:
     | CommissionType
     | undefined;
-  /** SSE Event tracking fields for superior recovery */
-  EventID?:
-    | string
-    | undefined;
-  /** Event timestamp for this specific event */
+  /**
+   * SSE Event tracking fields for precise event recovery using since_id parameter
+   * Enables seamless subscription from past point-in-time to real-time pushes
+   * EventID can be used with Alpaca SSE since_id parameter for reliable event replay
+   */
+  EventID?: string | undefined;
   EventTime?: Date | undefined;
 }
 
