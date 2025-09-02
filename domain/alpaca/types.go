@@ -78,3 +78,16 @@ type BrokerOrder struct {
 	Subtag         *string          `json:"subtag"`
 	ExpiresAt      *time.Time       `json:"expires_at"`
 }
+
+// BrokerTradeEvent represents the SSE event structure from Alpaca Broker API
+// Based on the documentation at https://docs.alpaca.markets/reference/subscribetotradev2sse
+type BrokerTradeEvent struct {
+	AccountID           string      `json:"account_id"`
+	At                  time.Time   `json:"at"`
+	Event               string      `json:"event"`
+	EventID             string      `json:"event_id"`
+	ExecutionID         string      `json:"execution_id"`
+	PreviousExecutionID string      `json:"previous_execution_id"`
+	Order               BrokerOrder `json:"order"`
+	Timestamp           time.Time   `json:"timestamp"`
+}
