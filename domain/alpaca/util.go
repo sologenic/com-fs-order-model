@@ -15,78 +15,27 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-type AlpacaResponse struct {
-	Order       *alpaca.Order
-	TradeUpdate *alpaca.TradeUpdate
-}
-
 type BrokerResponse struct {
-	BrokerOrder *BrokerOrder
+	BrokerOrder      *BrokerOrder
+	BrokerTradeEvent *BrokerTradeEvent
 }
 
-// Map Alpaca responses to our AlpacaOrderDetails model
-// Two types of responses are handled: Order(SDK response) and TradeUpdate(Update event via websocket)
-func MapAlpacaOrderToInternal(ar *AlpacaResponse) (*ordergrpc.BrokerOrderDetails, error) {
-	var o alpaca.Order
-	var tu *alpaca.TradeUpdate
-
-	if ar.TradeUpdate != nil {
-		o = ar.TradeUpdate.Order
-		tu = ar.TradeUpdate
-	}
-	if ar.Order != nil {
-		o = *ar.Order
-	}
-
-	coID, err := ParseStrClientOrderIDToInternal(o.ClientOrderID)
-	if err != nil {
-		return nil, fmt.Errorf("failed to parse ClientOrderID: %v", err)
-	}
-	aod := &ordergrpc.BrokerOrderDetails{
-		BrokerAssignedID: o.ID,
-		ClientOrderID:    coID,
-		SubmittedAt:      convertTimeToTimestamp(&o.SubmittedAt),
-		FilledAt:         convertTimeToTimestamp(o.FilledAt),
-		ExpiredAt:        convertTimeToTimestamp(o.ExpiredAt),
-		CancelledAt:      convertTimeToTimestamp(o.CanceledAt),
-		FailedAt:         convertTimeToTimestamp(o.FailedAt),
-		AssetID:          o.AssetID,
-		Symbol:           o.Symbol,
-		AssetClass:       mapAssetClass(o.AssetClass),
-		OrderClass:       mapOrderClass(o.OrderClass),
-		Type:             mapTradeType(o.Type),
-		Side:             mapSide(o.Side),
-		TimeInForce:      mapTimeInForce(o.TimeInForce),
-		Notional:         dutils.DecimalToInternalDecimal(o.Notional),
-		OrderQty:         dutils.DecimalToInternalDecimal(o.Qty),
-		FilledQty:        dutils.DecimalToInternalDecimal(&o.FilledQty),
-		FilledAvgPrice:   dutils.DecimalToInternalDecimal(o.FilledAvgPrice),
-		LimitPrice:       dutils.DecimalToInternalDecimal(o.LimitPrice),
-		StopPrice:        dutils.DecimalToInternalDecimal(o.StopPrice),
-		TrailPrice:       dutils.DecimalToInternalDecimal(o.TrailPrice),
-		TrailPercent:     dutils.DecimalToInternalDecimal(o.TrailPercent),
-		HWM:              dutils.DecimalToInternalDecimal(o.HWM),
-		ExtendedHours:    o.ExtendedHours,
-		CreatedAt:        convertTimeToTimestamp(&o.CreatedAt),
-		UpdatedAt:        convertTimeToTimestamp(&o.UpdatedAt),
-		Status:           mapStatus(o.Status),
-	}
-
-	if tu != nil {
-		aod.TotalPosition = dutils.DecimalToInternalDecimal(tu.PositionQty)
-		aod.PartialPrice = dutils.DecimalToInternalDecimal(tu.Price)
-		aod.PartialQty = dutils.DecimalToInternalDecimal(tu.Qty)
-	}
-	return aod, nil
-}
-
-// Map Broker API BrokerOrder response to our internal BrokerOrderDetails model
+// Map Broker API responses to our internal BrokerOrderDetails model
+// Two types of responses are handled: BrokerOrder(API response) and BrokerTradeEvent(SSE event)
 func MapBrokerOrderToInternal(br *BrokerResponse) (*ordergrpc.BrokerOrderDetails, error) {
-	if br.BrokerOrder == nil {
-		return nil, fmt.Errorf("BrokerOrder is nil")
-	}
+	var bo *BrokerOrder
+	var bte *BrokerTradeEvent
 
-	bo := br.BrokerOrder
+	if br.BrokerTradeEvent != nil {
+		bo = &br.BrokerTradeEvent.Order
+		bte = br.BrokerTradeEvent
+	}
+	if br.BrokerOrder != nil {
+		bo = br.BrokerOrder
+	}
+	if bo == nil {
+		return nil, fmt.Errorf("neither BrokerOrder nor BrokerTradeEvent is provided")
+	}
 
 	coID, err := ParseStrClientOrderIDToInternal(bo.ClientOrderID)
 	if err != nil {
@@ -124,6 +73,12 @@ func MapBrokerOrderToInternal(br *BrokerResponse) (*ordergrpc.BrokerOrderDetails
 		ClearingBroker:   ordergrpc.ClearingBroker_ALPACA,
 		Commission:       dutils.DecimalToInternalDecimal(bo.Commission),
 		CommissionType:   mapCommissionType(bo.CommissionType),
+	}
+
+	// Add SSE Event tracking fields if this is a trade event
+	if bte != nil {
+		bod.EventID = &bte.EventID
+		bod.EventTime = convertTimeToTimestamp(&bte.At)
 	}
 	return bod, nil
 }
