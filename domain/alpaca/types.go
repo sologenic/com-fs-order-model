@@ -82,12 +82,15 @@ type BrokerOrder struct {
 // BrokerTradeEvent represents the SSE event structure from Alpaca Broker API
 // Based on the documentation at https://docs.alpaca.markets/reference/subscribetotradev2sse
 type BrokerTradeEvent struct {
-	AccountID           string      `json:"account_id"`
-	At                  time.Time   `json:"at"`
-	Event               string      `json:"event"`
-	EventID             string      `json:"event_id"`
-	ExecutionID         string      `json:"execution_id"`
-	PreviousExecutionID string      `json:"previous_execution_id"`
-	Order               BrokerOrder `json:"order"`
-	Timestamp           time.Time   `json:"timestamp"`
+	AccountID           string           `json:"account_id"`
+	At                  time.Time        `json:"at"`
+	EventID             string           `json:"event_id"`
+	Event               string           `json:"event"`
+	Timestamp           time.Time        `json:"timestamp"`
+	Order               BrokerOrder      `json:"order"`
+	Price               *decimal.Decimal `json:"price,omitempty"`
+	Qty                 *decimal.Decimal `json:"qty,omitempty"`
+	PositionQty         *decimal.Decimal `json:"position_qty,omitempty"`
+	ExecutionID         string           `json:"execution_id"`
+	PreviousExecutionID string           `json:"previous_execution_id"`
 }

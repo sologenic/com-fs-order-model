@@ -75,8 +75,10 @@ func MapBrokerOrderToInternal(br *BrokerResponse) (*ordergrpc.BrokerOrderDetails
 		CommissionType:   mapCommissionType(bo.CommissionType),
 	}
 
-	// Add SSE Event tracking fields if this is a trade event
 	if bte != nil {
+		bod.TotalPosition = dutils.DecimalToInternalDecimal(bte.PositionQty)
+		bod.PartialPrice = dutils.DecimalToInternalDecimal(bte.Price)
+		bod.PartialQty = dutils.DecimalToInternalDecimal(bte.Qty)
 		bod.EventID = &bte.EventID
 		bod.EventTime = convertTimeToTimestamp(&bte.At)
 	}
