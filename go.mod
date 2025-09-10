@@ -5,6 +5,8 @@ go 1.24.4
 require (
 	github.com/alpacahq/alpaca-trade-api-go/v3 v3.6.0
 	github.com/google/go-cmp v0.7.0
+	github.com/samber/lo v1.51.0
+	github.com/shopspring/decimal v1.4.0
 	github.com/sologenic/com-fs-asset-model v0.0.0-20250716180737-c98a6368a431
 	github.com/sologenic/com-fs-utils-lib/go/decimal v0.0.0-20250731190227-eba0dc415460
 	github.com/sologenic/com-fs-utils-lib/go/grpc-client v0.0.0-20241030223317-5bff63a9ee29
@@ -35,7 +37,6 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rs/zerolog v1.34.0 // indirect
-	github.com/shopspring/decimal v1.4.0 // indirect
 	github.com/sologenic/com-fs-utils-lib/models/audit v0.0.0-20250709230730-743382da78ab // indirect
 	go.opentelemetry.io/auto/sdk v1.1.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.62.0 // indirect

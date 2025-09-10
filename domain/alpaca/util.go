@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/alpacahq/alpaca-trade-api-go/v3/alpaca"
+	"github.com/samber/lo"
 	assetgrpc "github.com/sologenic/com-fs-asset-model"
 	ordergrpc "github.com/sologenic/com-fs-order-model"
 	dutils "github.com/sologenic/com-fs-utils-lib/go/decimal"
@@ -14,65 +15,74 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-type AlpacaResponse struct {
-	Order       *alpaca.Order
-	TradeUpdate *alpaca.TradeUpdate
+type BrokerResponse struct {
+	BrokerOrder      *BrokerOrder
+	BrokerTradeEvent *BrokerTradeEvent
 }
 
-// Map Alpaca responses to our AlpacaOrderDetails model
-// Two types of responses are handled: Order(SDK response) and TradeUpdate(Update event via websocket)
-func MapAlpacaOrderToInternal(ar *AlpacaResponse) (*ordergrpc.BrokerOrderDetails, error) {
-	var o alpaca.Order
-	var tu *alpaca.TradeUpdate
+// Map Broker API responses to our internal BrokerOrderDetails model
+// Two types of responses are handled: BrokerOrder(API response) and BrokerTradeEvent(SSE event)
+func MapBrokerOrderToInternal(br *BrokerResponse) (*ordergrpc.BrokerOrderDetails, error) {
+	var bo *BrokerOrder
+	var bte *BrokerTradeEvent
 
-	if ar.TradeUpdate != nil {
-		o = ar.TradeUpdate.Order
-		tu = ar.TradeUpdate
+	if br.BrokerTradeEvent != nil {
+		bo = &br.BrokerTradeEvent.Order
+		bte = br.BrokerTradeEvent
 	}
-	if ar.Order != nil {
-		o = *ar.Order
+	if br.BrokerOrder != nil {
+		bo = br.BrokerOrder
+	}
+	if bo == nil {
+		return nil, fmt.Errorf("neither BrokerOrder nor BrokerTradeEvent is provided")
 	}
 
-	coID, err := ParseStrClientOrderIDToInternal(o.ClientOrderID)
+	coID, err := ParseStrClientOrderIDToInternal(bo.ClientOrderID)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse ClientOrderID: %v", err)
 	}
-	aod := &ordergrpc.BrokerOrderDetails{
-		BrokerAssignedID: o.ID,
+
+	bod := &ordergrpc.BrokerOrderDetails{
+		BrokerAssignedID: bo.ID,
 		ClientOrderID:    coID,
-		SubmittedAt:      convertTimeToTimestamp(&o.SubmittedAt),
-		FilledAt:         convertTimeToTimestamp(o.FilledAt),
-		ExpiredAt:        convertTimeToTimestamp(o.ExpiredAt),
-		CancelledAt:      convertTimeToTimestamp(o.CanceledAt),
-		FailedAt:         convertTimeToTimestamp(o.FailedAt),
-		AssetID:          o.AssetID,
-		Symbol:           o.Symbol,
-		AssetClass:       mapAssetClass(o.AssetClass),
-		OrderClass:       mapOrderClass(o.OrderClass),
-		Type:             mapTradeType(o.Type),
-		Side:             mapSide(o.Side),
-		TimeInForce:      mapTimeInForce(o.TimeInForce),
-		Notional:         dutils.DecimalToInternalDecimal(o.Notional),
-		OrderQty:         dutils.DecimalToInternalDecimal(o.Qty),
-		FilledQty:        dutils.DecimalToInternalDecimal(&o.FilledQty),
-		FilledAvgPrice:   dutils.DecimalToInternalDecimal(o.FilledAvgPrice),
-		LimitPrice:       dutils.DecimalToInternalDecimal(o.LimitPrice),
-		StopPrice:        dutils.DecimalToInternalDecimal(o.StopPrice),
-		TrailPrice:       dutils.DecimalToInternalDecimal(o.TrailPrice),
-		TrailPercent:     dutils.DecimalToInternalDecimal(o.TrailPercent),
-		HWM:              dutils.DecimalToInternalDecimal(o.HWM),
-		ExtendedHours:    o.ExtendedHours,
-		CreatedAt:        convertTimeToTimestamp(&o.CreatedAt),
-		UpdatedAt:        convertTimeToTimestamp(&o.UpdatedAt),
-		Status:           mapStatus(o.Status),
+		SubmittedAt:      convertTimeToTimestamp(&bo.SubmittedAt),
+		FilledAt:         convertTimeToTimestamp(bo.FilledAt),
+		ExpiredAt:        convertTimeToTimestamp(bo.ExpiredAt),
+		CancelledAt:      convertTimeToTimestamp(bo.CanceledAt),
+		FailedAt:         convertTimeToTimestamp(bo.FailedAt),
+		AssetID:          bo.AssetID,
+		Symbol:           bo.Symbol,
+		AssetClass:       mapAssetClass(bo.AssetClass),
+		OrderClass:       mapOrderClass(bo.OrderClass),
+		Type:             mapTradeType(bo.Type),
+		Side:             mapSide(bo.Side),
+		TimeInForce:      mapTimeInForce(bo.TimeInForce),
+		Notional:         dutils.DecimalToInternalDecimal(bo.Notional),
+		OrderQty:         dutils.DecimalToInternalDecimal(bo.Qty),
+		FilledQty:        dutils.DecimalToInternalDecimal(&bo.FilledQty),
+		FilledAvgPrice:   dutils.DecimalToInternalDecimal(bo.FilledAvgPrice),
+		LimitPrice:       dutils.DecimalToInternalDecimal(bo.LimitPrice),
+		StopPrice:        dutils.DecimalToInternalDecimal(bo.StopPrice),
+		TrailPrice:       dutils.DecimalToInternalDecimal(bo.TrailPrice),
+		TrailPercent:     dutils.DecimalToInternalDecimal(bo.TrailPercent),
+		HWM:              dutils.DecimalToInternalDecimal(bo.HWM),
+		ExtendedHours:    bo.ExtendedHours,
+		CreatedAt:        convertTimeToTimestamp(&bo.CreatedAt),
+		UpdatedAt:        convertTimeToTimestamp(&bo.UpdatedAt),
+		Status:           mapStatus(bo.Status),
+		ClearingBroker:   ordergrpc.ClearingBroker_ALPACA,
+		Commission:       dutils.DecimalToInternalDecimal(bo.Commission),
+		CommissionType:   mapCommissionType(bo.CommissionType),
 	}
 
-	if tu != nil {
-		aod.TotalPosition = dutils.DecimalToInternalDecimal(tu.PositionQty)
-		aod.PartialPrice = dutils.DecimalToInternalDecimal(tu.Price)
-		aod.PartialQty = dutils.DecimalToInternalDecimal(tu.Qty)
+	if bte != nil {
+		bod.TotalPosition = dutils.DecimalToInternalDecimal(bte.PositionQty)
+		bod.PartialPrice = dutils.DecimalToInternalDecimal(bte.Price)
+		bod.PartialQty = dutils.DecimalToInternalDecimal(bte.Qty)
+		bod.EventID = &bte.EventID
+		bod.EventTime = convertTimeToTimestamp(&bte.At)
 	}
-	return aod, nil
+	return bod, nil
 }
 
 // Parse ClientOrderID string into the GRPC struct
@@ -219,17 +229,22 @@ func mapOrderClass(oc alpaca.OrderClass) ordergrpc.OrderClass {
 	}
 }
 
+func mapCommissionType(ct string) *ordergrpc.CommissionType {
+	switch ct {
+	case "notional":
+		return lo.ToPtr(ordergrpc.CommissionType_NOTIONAL)
+	case "qty":
+		return lo.ToPtr(ordergrpc.CommissionType_QTY)
+	case "bps":
+		return lo.ToPtr(ordergrpc.CommissionType_BPS)
+	default:
+		return nil
+	}
+}
+
 func convertTimeToTimestamp(time *time.Time) *timestamppb.Timestamp {
 	if time == nil {
 		return nil
 	}
 	return timestamppb.New(*time)
-}
-
-func mapNetworkStrToGRPC(networkStr string) (metadatagrpc.Network, error) {
-	v, exists := metadatagrpc.Network_value[strings.ToUpper(networkStr)]
-	if !exists {
-		return metadatagrpc.Network_NETWORK_DO_NOT_USE, fmt.Errorf("invalid network: %s", networkStr)
-	}
-	return metadatagrpc.Network(v), nil
 }
