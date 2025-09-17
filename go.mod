@@ -8,14 +8,15 @@ require (
 	github.com/samber/lo v1.51.0
 	github.com/shopspring/decimal v1.4.0
 	github.com/sologenic/com-fs-asset-model v0.0.0-20250716180737-c98a6368a431
-	github.com/sologenic/com-fs-utils-lib/go/decimal v0.0.0-20250731190227-eba0dc415460
+	github.com/sologenic/com-fs-utils-lib/go/decimal v0.0.0-20250915133913-34ed554e333f
 	github.com/sologenic/com-fs-utils-lib/go/grpc-client v0.0.0-20241030223317-5bff63a9ee29
 	github.com/sologenic/com-fs-utils-lib/go/logger v0.0.0-20240906214824-8118c42c5b35
 	github.com/sologenic/com-fs-utils-lib/go/unittest v0.0.0-20250131210530-7306ae3e5762
+	github.com/sologenic/com-fs-utils-lib/models/commission v0.0.0-20250917193130-a63d775c7b6d
 	github.com/sologenic/com-fs-utils-lib/models/metadata v0.0.0-20250709230730-743382da78ab
 	github.com/stretchr/testify v1.10.0
 	google.golang.org/grpc v1.73.0
-	google.golang.org/protobuf v1.36.6
+	google.golang.org/protobuf v1.36.9
 )
 
 require (

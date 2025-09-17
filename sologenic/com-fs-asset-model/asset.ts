@@ -7,20 +7,136 @@
 /* eslint-disable */
 import _m0 from "protobufjs/minimal";
 import { Audit } from "../com-fs-utils-lib/models/audit/audit";
-import { MetaData } from "../com-fs-utils-lib/models/metadata/metadata";
+import { MetaData, Network, networkFromJSON, networkToJSON } from "../com-fs-utils-lib/models/metadata/metadata";
 import { Denom } from "./domain/denom/denom";
 
 export const protobufPackage = "asset";
 
+export enum LinkType {
+  LINK_TYPE_DO_NOT_USE = 0,
+  WEBSITE = 1,
+  GITHUB = 2,
+  WHITEPAPER = 3,
+  DOCS = 4,
+  EXPLORER = 5,
+  GOVERNANCE = 6,
+  UNRECOGNIZED = -1,
+}
+
+export function linkTypeFromJSON(object: any): LinkType {
+  switch (object) {
+    case 0:
+    case "LINK_TYPE_DO_NOT_USE":
+      return LinkType.LINK_TYPE_DO_NOT_USE;
+    case 1:
+    case "WEBSITE":
+      return LinkType.WEBSITE;
+    case 2:
+    case "GITHUB":
+      return LinkType.GITHUB;
+    case 3:
+    case "WHITEPAPER":
+      return LinkType.WHITEPAPER;
+    case 4:
+    case "DOCS":
+      return LinkType.DOCS;
+    case 5:
+    case "EXPLORER":
+      return LinkType.EXPLORER;
+    case 6:
+    case "GOVERNANCE":
+      return LinkType.GOVERNANCE;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return LinkType.UNRECOGNIZED;
+  }
+}
+
+export function linkTypeToJSON(object: LinkType): string {
+  switch (object) {
+    case LinkType.LINK_TYPE_DO_NOT_USE:
+      return "LINK_TYPE_DO_NOT_USE";
+    case LinkType.WEBSITE:
+      return "WEBSITE";
+    case LinkType.GITHUB:
+      return "GITHUB";
+    case LinkType.WHITEPAPER:
+      return "WHITEPAPER";
+    case LinkType.DOCS:
+      return "DOCS";
+    case LinkType.EXPLORER:
+      return "EXPLORER";
+    case LinkType.GOVERNANCE:
+      return "GOVERNANCE";
+    case LinkType.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
+
+export enum SocialMediaType {
+  SOCIAL_MEDIA_TYPE_DO_NOT_USE = 0,
+  TWITTER = 1,
+  TELEGRAM = 2,
+  DISCORD = 3,
+  MEDIUM = 4,
+  LINKEDIN = 5,
+  UNRECOGNIZED = -1,
+}
+
+export function socialMediaTypeFromJSON(object: any): SocialMediaType {
+  switch (object) {
+    case 0:
+    case "SOCIAL_MEDIA_TYPE_DO_NOT_USE":
+      return SocialMediaType.SOCIAL_MEDIA_TYPE_DO_NOT_USE;
+    case 1:
+    case "TWITTER":
+      return SocialMediaType.TWITTER;
+    case 2:
+    case "TELEGRAM":
+      return SocialMediaType.TELEGRAM;
+    case 3:
+    case "DISCORD":
+      return SocialMediaType.DISCORD;
+    case 4:
+    case "MEDIUM":
+      return SocialMediaType.MEDIUM;
+    case 5:
+    case "LINKEDIN":
+      return SocialMediaType.LINKEDIN;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return SocialMediaType.UNRECOGNIZED;
+  }
+}
+
+export function socialMediaTypeToJSON(object: SocialMediaType): string {
+  switch (object) {
+    case SocialMediaType.SOCIAL_MEDIA_TYPE_DO_NOT_USE:
+      return "SOCIAL_MEDIA_TYPE_DO_NOT_USE";
+    case SocialMediaType.TWITTER:
+      return "TWITTER";
+    case SocialMediaType.TELEGRAM:
+      return "TELEGRAM";
+    case SocialMediaType.DISCORD:
+      return "DISCORD";
+    case SocialMediaType.MEDIUM:
+      return "MEDIUM";
+    case SocialMediaType.LINKEDIN:
+      return "LINKEDIN";
+    case SocialMediaType.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
+
 export enum AssetStatus {
   ASSET_STATUS_DO_NOT_USE = 0,
-  /** DO_NOT_LIST - BROKER_ASSET_ADMINISTRATOR only */
   DO_NOT_LIST = 1,
-  /** REQUEST_LISTING - BROKER_ASSET_ADMINISTRATOR only */
   REQUEST_LISTING = 2,
-  /** LISTED - ORGANIZATION_ASSET_ADMINISTRATOR only */
   LISTED = 3,
-  /** ORGANIZATION_ADMIN_DO_NOT_LIST - ORGANIZATION_ASSET_ADMINISTRATOR only */
   ORGANIZATION_ADMIN_DO_NOT_LIST = 4,
   OUTDATED_ASSET_VERSION = 5,
   UNRECOGNIZED = -1,
@@ -118,17 +234,17 @@ export function reasonToJSON(object: Reason): string {
   }
 }
 
-/** TODO: to have shared between order */
 export enum AssetType {
   ASSET_TYPE_DO_NOT_USE = 0,
-  STOCKS = 1,
-  BONDS = 2,
-  /** WRAPPED_STABLECOIN - Represents a stablecoin that is wrapped for internal use within the system, such as WUSDC. */
+  FUNDS_AND_INVESTMENT_PRODUCT = 1,
+  COMMODITY = 2,
   WRAPPED_STABLECOIN = 3,
   CRYPTO = 4,
-  FOREX = 5,
-  FUTURES = 6,
-  OPTIONS = 7,
+  COLLECTIBLE = 5,
+  VEHICLE_INDUSTRIAL_EQUIPMENT = 6,
+  INTELLECTUAL_PROPERTY = 7,
+  REAL_ESTATE = 8,
+  EQUITY = 9,
   UNRECOGNIZED = -1,
 }
 
@@ -138,11 +254,11 @@ export function assetTypeFromJSON(object: any): AssetType {
     case "ASSET_TYPE_DO_NOT_USE":
       return AssetType.ASSET_TYPE_DO_NOT_USE;
     case 1:
-    case "STOCKS":
-      return AssetType.STOCKS;
+    case "FUNDS_AND_INVESTMENT_PRODUCT":
+      return AssetType.FUNDS_AND_INVESTMENT_PRODUCT;
     case 2:
-    case "BONDS":
-      return AssetType.BONDS;
+    case "COMMODITY":
+      return AssetType.COMMODITY;
     case 3:
     case "WRAPPED_STABLECOIN":
       return AssetType.WRAPPED_STABLECOIN;
@@ -150,14 +266,20 @@ export function assetTypeFromJSON(object: any): AssetType {
     case "CRYPTO":
       return AssetType.CRYPTO;
     case 5:
-    case "FOREX":
-      return AssetType.FOREX;
+    case "COLLECTIBLE":
+      return AssetType.COLLECTIBLE;
     case 6:
-    case "FUTURES":
-      return AssetType.FUTURES;
+    case "VEHICLE_INDUSTRIAL_EQUIPMENT":
+      return AssetType.VEHICLE_INDUSTRIAL_EQUIPMENT;
     case 7:
-    case "OPTIONS":
-      return AssetType.OPTIONS;
+    case "INTELLECTUAL_PROPERTY":
+      return AssetType.INTELLECTUAL_PROPERTY;
+    case 8:
+    case "REAL_ESTATE":
+      return AssetType.REAL_ESTATE;
+    case 9:
+    case "EQUITY":
+      return AssetType.EQUITY;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -169,20 +291,24 @@ export function assetTypeToJSON(object: AssetType): string {
   switch (object) {
     case AssetType.ASSET_TYPE_DO_NOT_USE:
       return "ASSET_TYPE_DO_NOT_USE";
-    case AssetType.STOCKS:
-      return "STOCKS";
-    case AssetType.BONDS:
-      return "BONDS";
+    case AssetType.FUNDS_AND_INVESTMENT_PRODUCT:
+      return "FUNDS_AND_INVESTMENT_PRODUCT";
+    case AssetType.COMMODITY:
+      return "COMMODITY";
     case AssetType.WRAPPED_STABLECOIN:
       return "WRAPPED_STABLECOIN";
     case AssetType.CRYPTO:
       return "CRYPTO";
-    case AssetType.FOREX:
-      return "FOREX";
-    case AssetType.FUTURES:
-      return "FUTURES";
-    case AssetType.OPTIONS:
-      return "OPTIONS";
+    case AssetType.COLLECTIBLE:
+      return "COLLECTIBLE";
+    case AssetType.VEHICLE_INDUSTRIAL_EQUIPMENT:
+      return "VEHICLE_INDUSTRIAL_EQUIPMENT";
+    case AssetType.INTELLECTUAL_PROPERTY:
+      return "INTELLECTUAL_PROPERTY";
+    case AssetType.REAL_ESTATE:
+      return "REAL_ESTATE";
+    case AssetType.EQUITY:
+      return "EQUITY";
     case AssetType.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
@@ -240,221 +366,54 @@ export function userAssetStatusToJSON(object: UserAssetStatus): string {
   }
 }
 
-export enum Exchange {
-  EXCHANGE_DO_NOT_USE = 0,
-  NASDAQ = 1,
-  NYSE = 2,
-  /** ONCHAIN - On‑chain token/cryptocurrency markets, e.g. wrapped USDC */
-  ONCHAIN = 3,
-  UNRECOGNIZED = -1,
-}
-
-export function exchangeFromJSON(object: any): Exchange {
-  switch (object) {
-    case 0:
-    case "EXCHANGE_DO_NOT_USE":
-      return Exchange.EXCHANGE_DO_NOT_USE;
-    case 1:
-    case "NASDAQ":
-      return Exchange.NASDAQ;
-    case 2:
-    case "NYSE":
-      return Exchange.NYSE;
-    case 3:
-    case "ONCHAIN":
-      return Exchange.ONCHAIN;
-    case -1:
-    case "UNRECOGNIZED":
-    default:
-      return Exchange.UNRECOGNIZED;
-  }
-}
-
-export function exchangeToJSON(object: Exchange): string {
-  switch (object) {
-    case Exchange.EXCHANGE_DO_NOT_USE:
-      return "EXCHANGE_DO_NOT_USE";
-    case Exchange.NASDAQ:
-      return "NASDAQ";
-    case Exchange.NYSE:
-      return "NYSE";
-    case Exchange.ONCHAIN:
-      return "ONCHAIN";
-    case Exchange.UNRECOGNIZED:
-    default:
-      return "UNRECOGNIZED";
-  }
-}
-
-/**
- * Global Industry Classification Standard (GICS®) 11 sectors
- * Source: https://www.msci.com/our-solutions/indexes/gics
- */
-export enum Industry {
-  INDUSTRY_DO_NOT_USE = 0,
-  ENERGY = 1,
-  MATERIALS = 2,
-  INDUSTRIALS = 3,
-  CONSUMER_DISCRETIONARY = 4,
-  CONSUMER_STAPLES = 5,
-  HEALTH_CARE = 6,
-  FINANCIALS = 7,
-  INFORMATION_TECHNOLOGY = 8,
-  COMMUNICATION_SERVICES = 9,
-  UTILITIES = 10,
-  REAL_ESTATE = 11,
-  UNRECOGNIZED = -1,
-}
-
-export function industryFromJSON(object: any): Industry {
-  switch (object) {
-    case 0:
-    case "INDUSTRY_DO_NOT_USE":
-      return Industry.INDUSTRY_DO_NOT_USE;
-    case 1:
-    case "ENERGY":
-      return Industry.ENERGY;
-    case 2:
-    case "MATERIALS":
-      return Industry.MATERIALS;
-    case 3:
-    case "INDUSTRIALS":
-      return Industry.INDUSTRIALS;
-    case 4:
-    case "CONSUMER_DISCRETIONARY":
-      return Industry.CONSUMER_DISCRETIONARY;
-    case 5:
-    case "CONSUMER_STAPLES":
-      return Industry.CONSUMER_STAPLES;
-    case 6:
-    case "HEALTH_CARE":
-      return Industry.HEALTH_CARE;
-    case 7:
-    case "FINANCIALS":
-      return Industry.FINANCIALS;
-    case 8:
-    case "INFORMATION_TECHNOLOGY":
-      return Industry.INFORMATION_TECHNOLOGY;
-    case 9:
-    case "COMMUNICATION_SERVICES":
-      return Industry.COMMUNICATION_SERVICES;
-    case 10:
-    case "UTILITIES":
-      return Industry.UTILITIES;
-    case 11:
-    case "REAL_ESTATE":
-      return Industry.REAL_ESTATE;
-    case -1:
-    case "UNRECOGNIZED":
-    default:
-      return Industry.UNRECOGNIZED;
-  }
-}
-
-export function industryToJSON(object: Industry): string {
-  switch (object) {
-    case Industry.INDUSTRY_DO_NOT_USE:
-      return "INDUSTRY_DO_NOT_USE";
-    case Industry.ENERGY:
-      return "ENERGY";
-    case Industry.MATERIALS:
-      return "MATERIALS";
-    case Industry.INDUSTRIALS:
-      return "INDUSTRIALS";
-    case Industry.CONSUMER_DISCRETIONARY:
-      return "CONSUMER_DISCRETIONARY";
-    case Industry.CONSUMER_STAPLES:
-      return "CONSUMER_STAPLES";
-    case Industry.HEALTH_CARE:
-      return "HEALTH_CARE";
-    case Industry.FINANCIALS:
-      return "FINANCIALS";
-    case Industry.INFORMATION_TECHNOLOGY:
-      return "INFORMATION_TECHNOLOGY";
-    case Industry.COMMUNICATION_SERVICES:
-      return "COMMUNICATION_SERVICES";
-    case Industry.UTILITIES:
-      return "UTILITIES";
-    case Industry.REAL_ESTATE:
-      return "REAL_ESTATE";
-    case Industry.UNRECOGNIZED:
-    default:
-      return "UNRECOGNIZED";
-  }
-}
-
 export interface AssetDetails {
-  /** Key combination: Currency_OrganizationID_SmartContractIssuerAddr e.g "appl_1_72c4c072-2fe4-4f72-ae9d-d9d52a05fd71_testcore1et29c..." */
+  /** Key string to prevent composing the key all the time and reduce errors */
   ID: string;
-  /** External entity (broker) that owns this asset */
   OrganizationID: string;
   Status: AssetStatus;
-  Reason?:
-    | Reason
-    | undefined;
-  /** list of jurisdictionIDs where this asset is allowed to be traded */
-  JurisdictionIDs: string[];
+  Reason?: Reason | undefined;
   Type: AssetType;
-  /** Asset specific properties */
-  Name: string;
-  ExchangeTickerSymbol: string;
-  Exchange: Exchange;
-  /** Description for internal use, not for on-chain */
-  InternalDescription: string;
-  MinTransactionAmount: number;
-  /**
-   * TradingMarginPercentage is required additional margin as a percentage of the order value that buyers must provide.
-   * Value should be between 0.0 and 1.0 (0% to 100%)
-   * Example: If TradingMarginPercentage = 0.1 (10%) and order value is $100:
-   *  - Buyer must provide $110 total ($100 asset cost + $10 margin)
-   *  - $5 (5%, cost) is kept for transaction costs
-   *  - $5 (5%, refundable) is returned to the buyer after execution
-   */
-  TradingMarginPercentage: number;
-  LogoFile:
-    | LogoFile
-    | undefined;
-  /** Global Industry Classification Standard (GICS®) sector */
-  Industry: Industry;
-  /**
-   * Margin percentage specific to the asset. This is the asset's individual margin percentage used to calculate buying power.
-   * Buying Power = AvailableFunds(On-chain) + (Σ Assets(non-stablecoin)  × AssetMarginPercentage)
-   * Asset Margin Percentage: represents the collateral value of the asset (e.g., 50% → 10,000BTC → 10,000BTC → 5,000 buying power contribution)
-   */
-  AssetMarginPercentage: number;
-  /** On-chain properties */
-  Denom:
-    | Denom
-    | undefined;
-  /** Flag to indicate if the asset is issued in the smart contract */
+  Denom: Denom | undefined;
   IsIssuedInSmartContract: boolean;
-  /** Issuer address of the smart contract (distinct from Denom.Issuer which is the smart contract address that minted the token) */
   SmartContractIssuerAddr: string;
+  RealEstateDetails?: RealEstate | undefined;
+  StableCoinDetails?: StableCoin | undefined;
+  CommodityDetails?: Commodity | undefined;
+  CollectibleDetails?: Collectible | undefined;
+  VehicleDetails?: Vehicle | undefined;
+  IntellectualPropertyDetails?: IntellectualProperty | undefined;
+  InvestmentFundDetails?: InvestmentFund | undefined;
+  EquityDetails?:
+    | Equity
+    | undefined;
+  /** Financial-specific properties */
+  FinancialProperties?:
+    | FinancialProperties
+    | undefined;
+  /** Human-readable descriptive properties */
+  Description?:
+    | Description
+    | undefined;
+  /** External links and resources */
+  ExternalResources?: ExternalResources | undefined;
 }
 
 export interface Asset {
   AssetDetails: AssetDetails | undefined;
   MetaData: MetaData | undefined;
   Audit: Audit | undefined;
+  IssuerDetails: IssuerDetails | undefined;
 }
 
 export interface Assets {
   Assets: Asset[];
-}
-
-export interface LogoFile {
-  /** The reference to the file */
-  Reference: string;
-  Extension: string;
-  /** User defined name of the file, used as a "description" and not to reference the file */
-  Name?: string | undefined;
+  /** If there is more data, this is the offset to pass to the next call */
+  Offset?: number | undefined;
 }
 
 export interface UserAssetList {
-  /** Key combination: Currency-OrganizationID-AccountID-Wallet (AssetKey-AccountID-Wallet) */
   AccountID: string;
   Wallet: string;
-  /** Currency-OrganizationID */
   AssetKey: string;
   Status: UserAssetStatus;
   MetaData: MetaData | undefined;
@@ -465,26 +424,209 @@ export interface UserAssetLists {
   UserAssetLists: UserAssetList[];
 }
 
+export interface RealEstate {
+  Address: string;
+  Bathrooms?: number | undefined;
+  Bedrooms?: number | undefined;
+  Latitude: number;
+  Longitude: number;
+  OwnershipType?: string | undefined;
+  PropertyType: string;
+  RiskRating?: string | undefined;
+  SquareFootage?: number | undefined;
+  TenancyStatus?: string | undefined;
+  YearBuilt?: number | undefined;
+  YieldPercent: number[];
+}
+
+export interface StableCoin {
+  Version?: string | undefined;
+  PegType?: string | undefined;
+  PegRatio?: number | undefined;
+  BackingAsset?: string | undefined;
+  ExchangeTickerSymbol?: string | undefined;
+  Exchange?: string | undefined;
+  MinTransactionAmount?: number | undefined;
+  TradingMarginPercentage?: number | undefined;
+  AssetMarginPercentage?: number | undefined;
+}
+
+export interface Commodity {
+  Category: string;
+  Quality?: string | undefined;
+  UnitOfMeasure: string;
+  Quantity?: number | undefined;
+  OriginCountry?: string | undefined;
+  ExchangeTickerSymbol?: string | undefined;
+  Exchange?: string | undefined;
+  MinTransactionAmount?: number | undefined;
+  StorageLocation?: string | undefined;
+  ContractType?: string | undefined;
+  DeliveryDate?: string | undefined;
+}
+
+export interface Collectible {
+  Category: string;
+  CollectionName?: string | undefined;
+  TokenStandard?: string | undefined;
+  TokenID?: string | undefined;
+  MetadataURI?: string | undefined;
+  Creator?: string | undefined;
+  OwnershipHistory: string[];
+  CurrentOwner: string;
+}
+
+export interface Vehicle {
+  Category: string;
+  Manufacturer: string;
+  Model: string;
+  SerialNumber: string;
+  Year?: number | undefined;
+  Specifications?: string | undefined;
+  FuelType?: string | undefined;
+  UsageHours?: number | undefined;
+  Mileage?: number | undefined;
+  Condition: string;
+  CurrentOwner: string;
+  Location?: string | undefined;
+}
+
+export interface IntellectualProperty {
+  Category: string;
+  Owner: string;
+  RegistrationNumber?: string | undefined;
+  FilingDate?: string | undefined;
+  ExpirationDate?: string | undefined;
+  IPJurisdictionIDs: string[];
+  LicenseType?: string | undefined;
+  LicenseTerms?: string | undefined;
+  Value?: number | undefined;
+}
+
+export interface InvestmentFund {
+  FundType: string;
+  Exchange: string;
+  ISIN?: string | undefined;
+  NAV?: number | undefined;
+  InceptionDate?: string | undefined;
+  Manager?: string | undefined;
+  ExpenseRatio?: number | undefined;
+  Holdings: string[];
+}
+
+export interface Equity {
+  ExchangeTickerSymbol?: string | undefined;
+  Exchange?: string | undefined;
+  MinTransactionAmount: string;
+  ExtraPercentage: string;
+  AssetMarginPercentage: string;
+}
+
+export interface FinancialProperties {
+  Symbol: string;
+  Issuer: string;
+  JurisdictionIDs: string[];
+  JurisdictionRestrictions?: string | undefined;
+  RedemptionTerms?: string | undefined;
+  ComplianceRequired?: boolean | undefined;
+  Type: string;
+  TradeAllowances: string[];
+  Transferable: boolean;
+  Platform: string;
+  PlatformType: string;
+  ContractAddress?: string | undefined;
+  Fractional: boolean;
+  TotalSupply: number;
+  DecimalPlacesSupply: number;
+  Subunit?: string | undefined;
+  Price?: number | undefined;
+  DecimalPlacesPrice: number;
+  Currency: string;
+  InitialValuation: number;
+  CurrentValuation: number;
+  ValuationDate?: string | undefined;
+  Network: Network;
+  Status: string;
+}
+
+export interface Description {
+  Name: string;
+  Description: string;
+  Image?: string | undefined;
+  AssetID: string;
+  URL: string;
+  Country: string;
+  Documents: string[];
+  Images: string[];
+  Vertical: string;
+  CreatedAt?: string | undefined;
+  UpdatedAt?: string | undefined;
+}
+
+export interface ExternalResources {
+  /** Flexible list of links with type and URL */
+  Links: Link[];
+  /** Flexible list of social media with type and URL */
+  Socials: SocialMedia[];
+}
+
+export interface Link {
+  /** Type of link (e.g., "website", "github", "whitepaper", "docs", "explorer", "governance", etc.) */
+  Type: LinkType;
+  /** The actual URL */
+  URL: string;
+}
+
+export interface SocialMedia {
+  /** Type of social media (e.g., "twitter", "telegram", "discord", "medium", "linkedin", etc.) */
+  Type: SocialMediaType;
+  /** The actual URL */
+  URL: string;
+}
+
+export interface IssuerDetails {
+  Name: string;
+  Description: string;
+  Image: string;
+  ExternalUrl: string;
+  AddressLine1: string;
+  AddressLine2?: string | undefined;
+  City: string;
+  Region?: string | undefined;
+  PostalCode?: string | undefined;
+  Country: string;
+  YearFounded: number;
+  Licensed: boolean;
+  LicenseCountry?: string | undefined;
+  LicenseNumber?: string | undefined;
+  Phone?: string | undefined;
+  Email?: string | undefined;
+  SocialMediaLinks: string[];
+  KeyClients?: string | undefined;
+  Press?: string | undefined;
+}
+
 function createBaseAssetDetails(): AssetDetails {
   return {
     ID: "",
     OrganizationID: "",
     Status: 0,
     Reason: undefined,
-    JurisdictionIDs: [],
     Type: 0,
-    Name: "",
-    ExchangeTickerSymbol: "",
-    Exchange: 0,
-    InternalDescription: "",
-    MinTransactionAmount: 0,
-    TradingMarginPercentage: 0,
-    LogoFile: undefined,
-    Industry: 0,
-    AssetMarginPercentage: 0,
     Denom: undefined,
     IsIssuedInSmartContract: false,
     SmartContractIssuerAddr: "",
+    RealEstateDetails: undefined,
+    StableCoinDetails: undefined,
+    CommodityDetails: undefined,
+    CollectibleDetails: undefined,
+    VehicleDetails: undefined,
+    IntellectualPropertyDetails: undefined,
+    InvestmentFundDetails: undefined,
+    EquityDetails: undefined,
+    FinancialProperties: undefined,
+    Description: undefined,
+    ExternalResources: undefined,
   };
 }
 
@@ -502,38 +644,8 @@ export const AssetDetails = {
     if (message.Reason !== undefined) {
       writer.uint32(32).int32(message.Reason);
     }
-    for (const v of message.JurisdictionIDs) {
-      writer.uint32(42).string(v!);
-    }
     if (message.Type !== 0) {
       writer.uint32(48).int32(message.Type);
-    }
-    if (message.Name !== "") {
-      writer.uint32(58).string(message.Name);
-    }
-    if (message.ExchangeTickerSymbol !== "") {
-      writer.uint32(66).string(message.ExchangeTickerSymbol);
-    }
-    if (message.Exchange !== 0) {
-      writer.uint32(72).int32(message.Exchange);
-    }
-    if (message.InternalDescription !== "") {
-      writer.uint32(82).string(message.InternalDescription);
-    }
-    if (message.MinTransactionAmount !== 0) {
-      writer.uint32(89).double(message.MinTransactionAmount);
-    }
-    if (message.TradingMarginPercentage !== 0) {
-      writer.uint32(97).double(message.TradingMarginPercentage);
-    }
-    if (message.LogoFile !== undefined) {
-      LogoFile.encode(message.LogoFile, writer.uint32(106).fork()).ldelim();
-    }
-    if (message.Industry !== 0) {
-      writer.uint32(112).int32(message.Industry);
-    }
-    if (message.AssetMarginPercentage !== 0) {
-      writer.uint32(121).double(message.AssetMarginPercentage);
     }
     if (message.Denom !== undefined) {
       Denom.encode(message.Denom, writer.uint32(138).fork()).ldelim();
@@ -543,6 +655,39 @@ export const AssetDetails = {
     }
     if (message.SmartContractIssuerAddr !== "") {
       writer.uint32(154).string(message.SmartContractIssuerAddr);
+    }
+    if (message.RealEstateDetails !== undefined) {
+      RealEstate.encode(message.RealEstateDetails, writer.uint32(162).fork()).ldelim();
+    }
+    if (message.StableCoinDetails !== undefined) {
+      StableCoin.encode(message.StableCoinDetails, writer.uint32(170).fork()).ldelim();
+    }
+    if (message.CommodityDetails !== undefined) {
+      Commodity.encode(message.CommodityDetails, writer.uint32(178).fork()).ldelim();
+    }
+    if (message.CollectibleDetails !== undefined) {
+      Collectible.encode(message.CollectibleDetails, writer.uint32(186).fork()).ldelim();
+    }
+    if (message.VehicleDetails !== undefined) {
+      Vehicle.encode(message.VehicleDetails, writer.uint32(194).fork()).ldelim();
+    }
+    if (message.IntellectualPropertyDetails !== undefined) {
+      IntellectualProperty.encode(message.IntellectualPropertyDetails, writer.uint32(202).fork()).ldelim();
+    }
+    if (message.InvestmentFundDetails !== undefined) {
+      InvestmentFund.encode(message.InvestmentFundDetails, writer.uint32(210).fork()).ldelim();
+    }
+    if (message.EquityDetails !== undefined) {
+      Equity.encode(message.EquityDetails, writer.uint32(234).fork()).ldelim();
+    }
+    if (message.FinancialProperties !== undefined) {
+      FinancialProperties.encode(message.FinancialProperties, writer.uint32(218).fork()).ldelim();
+    }
+    if (message.Description !== undefined) {
+      Description.encode(message.Description, writer.uint32(226).fork()).ldelim();
+    }
+    if (message.ExternalResources !== undefined) {
+      ExternalResources.encode(message.ExternalResources, writer.uint32(242).fork()).ldelim();
     }
     return writer;
   },
@@ -582,82 +727,12 @@ export const AssetDetails = {
 
           message.Reason = reader.int32() as any;
           continue;
-        case 5:
-          if (tag !== 42) {
-            break;
-          }
-
-          message.JurisdictionIDs.push(reader.string());
-          continue;
         case 6:
           if (tag !== 48) {
             break;
           }
 
           message.Type = reader.int32() as any;
-          continue;
-        case 7:
-          if (tag !== 58) {
-            break;
-          }
-
-          message.Name = reader.string();
-          continue;
-        case 8:
-          if (tag !== 66) {
-            break;
-          }
-
-          message.ExchangeTickerSymbol = reader.string();
-          continue;
-        case 9:
-          if (tag !== 72) {
-            break;
-          }
-
-          message.Exchange = reader.int32() as any;
-          continue;
-        case 10:
-          if (tag !== 82) {
-            break;
-          }
-
-          message.InternalDescription = reader.string();
-          continue;
-        case 11:
-          if (tag !== 89) {
-            break;
-          }
-
-          message.MinTransactionAmount = reader.double();
-          continue;
-        case 12:
-          if (tag !== 97) {
-            break;
-          }
-
-          message.TradingMarginPercentage = reader.double();
-          continue;
-        case 13:
-          if (tag !== 106) {
-            break;
-          }
-
-          message.LogoFile = LogoFile.decode(reader, reader.uint32());
-          continue;
-        case 14:
-          if (tag !== 112) {
-            break;
-          }
-
-          message.Industry = reader.int32() as any;
-          continue;
-        case 15:
-          if (tag !== 121) {
-            break;
-          }
-
-          message.AssetMarginPercentage = reader.double();
           continue;
         case 17:
           if (tag !== 138) {
@@ -680,6 +755,83 @@ export const AssetDetails = {
 
           message.SmartContractIssuerAddr = reader.string();
           continue;
+        case 20:
+          if (tag !== 162) {
+            break;
+          }
+
+          message.RealEstateDetails = RealEstate.decode(reader, reader.uint32());
+          continue;
+        case 21:
+          if (tag !== 170) {
+            break;
+          }
+
+          message.StableCoinDetails = StableCoin.decode(reader, reader.uint32());
+          continue;
+        case 22:
+          if (tag !== 178) {
+            break;
+          }
+
+          message.CommodityDetails = Commodity.decode(reader, reader.uint32());
+          continue;
+        case 23:
+          if (tag !== 186) {
+            break;
+          }
+
+          message.CollectibleDetails = Collectible.decode(reader, reader.uint32());
+          continue;
+        case 24:
+          if (tag !== 194) {
+            break;
+          }
+
+          message.VehicleDetails = Vehicle.decode(reader, reader.uint32());
+          continue;
+        case 25:
+          if (tag !== 202) {
+            break;
+          }
+
+          message.IntellectualPropertyDetails = IntellectualProperty.decode(reader, reader.uint32());
+          continue;
+        case 26:
+          if (tag !== 210) {
+            break;
+          }
+
+          message.InvestmentFundDetails = InvestmentFund.decode(reader, reader.uint32());
+          continue;
+        case 29:
+          if (tag !== 234) {
+            break;
+          }
+
+          message.EquityDetails = Equity.decode(reader, reader.uint32());
+          continue;
+        case 27:
+          if (tag !== 218) {
+            break;
+          }
+
+          message.FinancialProperties = FinancialProperties.decode(reader, reader.uint32());
+          continue;
+        case 28:
+          if (tag !== 226) {
+            break;
+          }
+
+          message.Description = Description.decode(reader, reader.uint32());
+          continue;
+        case 30:
+          if (tag !== 242) {
+            break;
+          }
+
+          message.ExternalResources = ExternalResources.decode(reader, reader.uint32());
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -695,21 +847,7 @@ export const AssetDetails = {
       OrganizationID: isSet(object.OrganizationID) ? globalThis.String(object.OrganizationID) : "",
       Status: isSet(object.Status) ? assetStatusFromJSON(object.Status) : 0,
       Reason: isSet(object.Reason) ? reasonFromJSON(object.Reason) : undefined,
-      JurisdictionIDs: globalThis.Array.isArray(object?.JurisdictionIDs)
-        ? object.JurisdictionIDs.map((e: any) => globalThis.String(e))
-        : [],
       Type: isSet(object.Type) ? assetTypeFromJSON(object.Type) : 0,
-      Name: isSet(object.Name) ? globalThis.String(object.Name) : "",
-      ExchangeTickerSymbol: isSet(object.ExchangeTickerSymbol) ? globalThis.String(object.ExchangeTickerSymbol) : "",
-      Exchange: isSet(object.Exchange) ? exchangeFromJSON(object.Exchange) : 0,
-      InternalDescription: isSet(object.InternalDescription) ? globalThis.String(object.InternalDescription) : "",
-      MinTransactionAmount: isSet(object.MinTransactionAmount) ? globalThis.Number(object.MinTransactionAmount) : 0,
-      TradingMarginPercentage: isSet(object.TradingMarginPercentage)
-        ? globalThis.Number(object.TradingMarginPercentage)
-        : 0,
-      LogoFile: isSet(object.LogoFile) ? LogoFile.fromJSON(object.LogoFile) : undefined,
-      Industry: isSet(object.Industry) ? industryFromJSON(object.Industry) : 0,
-      AssetMarginPercentage: isSet(object.AssetMarginPercentage) ? globalThis.Number(object.AssetMarginPercentage) : 0,
       Denom: isSet(object.Denom) ? Denom.fromJSON(object.Denom) : undefined,
       IsIssuedInSmartContract: isSet(object.IsIssuedInSmartContract)
         ? globalThis.Boolean(object.IsIssuedInSmartContract)
@@ -717,6 +855,27 @@ export const AssetDetails = {
       SmartContractIssuerAddr: isSet(object.SmartContractIssuerAddr)
         ? globalThis.String(object.SmartContractIssuerAddr)
         : "",
+      RealEstateDetails: isSet(object.RealEstateDetails) ? RealEstate.fromJSON(object.RealEstateDetails) : undefined,
+      StableCoinDetails: isSet(object.StableCoinDetails) ? StableCoin.fromJSON(object.StableCoinDetails) : undefined,
+      CommodityDetails: isSet(object.CommodityDetails) ? Commodity.fromJSON(object.CommodityDetails) : undefined,
+      CollectibleDetails: isSet(object.CollectibleDetails)
+        ? Collectible.fromJSON(object.CollectibleDetails)
+        : undefined,
+      VehicleDetails: isSet(object.VehicleDetails) ? Vehicle.fromJSON(object.VehicleDetails) : undefined,
+      IntellectualPropertyDetails: isSet(object.IntellectualPropertyDetails)
+        ? IntellectualProperty.fromJSON(object.IntellectualPropertyDetails)
+        : undefined,
+      InvestmentFundDetails: isSet(object.InvestmentFundDetails)
+        ? InvestmentFund.fromJSON(object.InvestmentFundDetails)
+        : undefined,
+      EquityDetails: isSet(object.EquityDetails) ? Equity.fromJSON(object.EquityDetails) : undefined,
+      FinancialProperties: isSet(object.FinancialProperties)
+        ? FinancialProperties.fromJSON(object.FinancialProperties)
+        : undefined,
+      Description: isSet(object.Description) ? Description.fromJSON(object.Description) : undefined,
+      ExternalResources: isSet(object.ExternalResources)
+        ? ExternalResources.fromJSON(object.ExternalResources)
+        : undefined,
     };
   },
 
@@ -734,38 +893,8 @@ export const AssetDetails = {
     if (message.Reason !== undefined) {
       obj.Reason = reasonToJSON(message.Reason);
     }
-    if (message.JurisdictionIDs?.length) {
-      obj.JurisdictionIDs = message.JurisdictionIDs;
-    }
     if (message.Type !== 0) {
       obj.Type = assetTypeToJSON(message.Type);
-    }
-    if (message.Name !== "") {
-      obj.Name = message.Name;
-    }
-    if (message.ExchangeTickerSymbol !== "") {
-      obj.ExchangeTickerSymbol = message.ExchangeTickerSymbol;
-    }
-    if (message.Exchange !== 0) {
-      obj.Exchange = exchangeToJSON(message.Exchange);
-    }
-    if (message.InternalDescription !== "") {
-      obj.InternalDescription = message.InternalDescription;
-    }
-    if (message.MinTransactionAmount !== 0) {
-      obj.MinTransactionAmount = message.MinTransactionAmount;
-    }
-    if (message.TradingMarginPercentage !== 0) {
-      obj.TradingMarginPercentage = message.TradingMarginPercentage;
-    }
-    if (message.LogoFile !== undefined) {
-      obj.LogoFile = LogoFile.toJSON(message.LogoFile);
-    }
-    if (message.Industry !== 0) {
-      obj.Industry = industryToJSON(message.Industry);
-    }
-    if (message.AssetMarginPercentage !== 0) {
-      obj.AssetMarginPercentage = message.AssetMarginPercentage;
     }
     if (message.Denom !== undefined) {
       obj.Denom = Denom.toJSON(message.Denom);
@@ -775,6 +904,39 @@ export const AssetDetails = {
     }
     if (message.SmartContractIssuerAddr !== "") {
       obj.SmartContractIssuerAddr = message.SmartContractIssuerAddr;
+    }
+    if (message.RealEstateDetails !== undefined) {
+      obj.RealEstateDetails = RealEstate.toJSON(message.RealEstateDetails);
+    }
+    if (message.StableCoinDetails !== undefined) {
+      obj.StableCoinDetails = StableCoin.toJSON(message.StableCoinDetails);
+    }
+    if (message.CommodityDetails !== undefined) {
+      obj.CommodityDetails = Commodity.toJSON(message.CommodityDetails);
+    }
+    if (message.CollectibleDetails !== undefined) {
+      obj.CollectibleDetails = Collectible.toJSON(message.CollectibleDetails);
+    }
+    if (message.VehicleDetails !== undefined) {
+      obj.VehicleDetails = Vehicle.toJSON(message.VehicleDetails);
+    }
+    if (message.IntellectualPropertyDetails !== undefined) {
+      obj.IntellectualPropertyDetails = IntellectualProperty.toJSON(message.IntellectualPropertyDetails);
+    }
+    if (message.InvestmentFundDetails !== undefined) {
+      obj.InvestmentFundDetails = InvestmentFund.toJSON(message.InvestmentFundDetails);
+    }
+    if (message.EquityDetails !== undefined) {
+      obj.EquityDetails = Equity.toJSON(message.EquityDetails);
+    }
+    if (message.FinancialProperties !== undefined) {
+      obj.FinancialProperties = FinancialProperties.toJSON(message.FinancialProperties);
+    }
+    if (message.Description !== undefined) {
+      obj.Description = Description.toJSON(message.Description);
+    }
+    if (message.ExternalResources !== undefined) {
+      obj.ExternalResources = ExternalResources.toJSON(message.ExternalResources);
     }
     return obj;
   },
@@ -788,28 +950,51 @@ export const AssetDetails = {
     message.OrganizationID = object.OrganizationID ?? "";
     message.Status = object.Status ?? 0;
     message.Reason = object.Reason ?? undefined;
-    message.JurisdictionIDs = object.JurisdictionIDs?.map((e) => e) || [];
     message.Type = object.Type ?? 0;
-    message.Name = object.Name ?? "";
-    message.ExchangeTickerSymbol = object.ExchangeTickerSymbol ?? "";
-    message.Exchange = object.Exchange ?? 0;
-    message.InternalDescription = object.InternalDescription ?? "";
-    message.MinTransactionAmount = object.MinTransactionAmount ?? 0;
-    message.TradingMarginPercentage = object.TradingMarginPercentage ?? 0;
-    message.LogoFile = (object.LogoFile !== undefined && object.LogoFile !== null)
-      ? LogoFile.fromPartial(object.LogoFile)
-      : undefined;
-    message.Industry = object.Industry ?? 0;
-    message.AssetMarginPercentage = object.AssetMarginPercentage ?? 0;
     message.Denom = (object.Denom !== undefined && object.Denom !== null) ? Denom.fromPartial(object.Denom) : undefined;
     message.IsIssuedInSmartContract = object.IsIssuedInSmartContract ?? false;
     message.SmartContractIssuerAddr = object.SmartContractIssuerAddr ?? "";
+    message.RealEstateDetails = (object.RealEstateDetails !== undefined && object.RealEstateDetails !== null)
+      ? RealEstate.fromPartial(object.RealEstateDetails)
+      : undefined;
+    message.StableCoinDetails = (object.StableCoinDetails !== undefined && object.StableCoinDetails !== null)
+      ? StableCoin.fromPartial(object.StableCoinDetails)
+      : undefined;
+    message.CommodityDetails = (object.CommodityDetails !== undefined && object.CommodityDetails !== null)
+      ? Commodity.fromPartial(object.CommodityDetails)
+      : undefined;
+    message.CollectibleDetails = (object.CollectibleDetails !== undefined && object.CollectibleDetails !== null)
+      ? Collectible.fromPartial(object.CollectibleDetails)
+      : undefined;
+    message.VehicleDetails = (object.VehicleDetails !== undefined && object.VehicleDetails !== null)
+      ? Vehicle.fromPartial(object.VehicleDetails)
+      : undefined;
+    message.IntellectualPropertyDetails =
+      (object.IntellectualPropertyDetails !== undefined && object.IntellectualPropertyDetails !== null)
+        ? IntellectualProperty.fromPartial(object.IntellectualPropertyDetails)
+        : undefined;
+    message.InvestmentFundDetails =
+      (object.InvestmentFundDetails !== undefined && object.InvestmentFundDetails !== null)
+        ? InvestmentFund.fromPartial(object.InvestmentFundDetails)
+        : undefined;
+    message.EquityDetails = (object.EquityDetails !== undefined && object.EquityDetails !== null)
+      ? Equity.fromPartial(object.EquityDetails)
+      : undefined;
+    message.FinancialProperties = (object.FinancialProperties !== undefined && object.FinancialProperties !== null)
+      ? FinancialProperties.fromPartial(object.FinancialProperties)
+      : undefined;
+    message.Description = (object.Description !== undefined && object.Description !== null)
+      ? Description.fromPartial(object.Description)
+      : undefined;
+    message.ExternalResources = (object.ExternalResources !== undefined && object.ExternalResources !== null)
+      ? ExternalResources.fromPartial(object.ExternalResources)
+      : undefined;
     return message;
   },
 };
 
 function createBaseAsset(): Asset {
-  return { AssetDetails: undefined, MetaData: undefined, Audit: undefined };
+  return { AssetDetails: undefined, MetaData: undefined, Audit: undefined, IssuerDetails: undefined };
 }
 
 export const Asset = {
@@ -822,6 +1007,9 @@ export const Asset = {
     }
     if (message.Audit !== undefined) {
       Audit.encode(message.Audit, writer.uint32(26).fork()).ldelim();
+    }
+    if (message.IssuerDetails !== undefined) {
+      IssuerDetails.encode(message.IssuerDetails, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -854,6 +1042,13 @@ export const Asset = {
 
           message.Audit = Audit.decode(reader, reader.uint32());
           continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.IssuerDetails = IssuerDetails.decode(reader, reader.uint32());
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -868,6 +1063,7 @@ export const Asset = {
       AssetDetails: isSet(object.AssetDetails) ? AssetDetails.fromJSON(object.AssetDetails) : undefined,
       MetaData: isSet(object.MetaData) ? MetaData.fromJSON(object.MetaData) : undefined,
       Audit: isSet(object.Audit) ? Audit.fromJSON(object.Audit) : undefined,
+      IssuerDetails: isSet(object.IssuerDetails) ? IssuerDetails.fromJSON(object.IssuerDetails) : undefined,
     };
   },
 
@@ -881,6 +1077,9 @@ export const Asset = {
     }
     if (message.Audit !== undefined) {
       obj.Audit = Audit.toJSON(message.Audit);
+    }
+    if (message.IssuerDetails !== undefined) {
+      obj.IssuerDetails = IssuerDetails.toJSON(message.IssuerDetails);
     }
     return obj;
   },
@@ -897,18 +1096,24 @@ export const Asset = {
       ? MetaData.fromPartial(object.MetaData)
       : undefined;
     message.Audit = (object.Audit !== undefined && object.Audit !== null) ? Audit.fromPartial(object.Audit) : undefined;
+    message.IssuerDetails = (object.IssuerDetails !== undefined && object.IssuerDetails !== null)
+      ? IssuerDetails.fromPartial(object.IssuerDetails)
+      : undefined;
     return message;
   },
 };
 
 function createBaseAssets(): Assets {
-  return { Assets: [] };
+  return { Assets: [], Offset: undefined };
 }
 
 export const Assets = {
   encode(message: Assets, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.Assets) {
       Asset.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.Offset !== undefined) {
+      writer.uint32(16).int32(message.Offset);
     }
     return writer;
   },
@@ -927,6 +1132,13 @@ export const Assets = {
 
           message.Assets.push(Asset.decode(reader, reader.uint32()));
           continue;
+        case 2:
+          if (tag !== 16) {
+            break;
+          }
+
+          message.Offset = reader.int32();
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -937,13 +1149,19 @@ export const Assets = {
   },
 
   fromJSON(object: any): Assets {
-    return { Assets: globalThis.Array.isArray(object?.Assets) ? object.Assets.map((e: any) => Asset.fromJSON(e)) : [] };
+    return {
+      Assets: globalThis.Array.isArray(object?.Assets) ? object.Assets.map((e: any) => Asset.fromJSON(e)) : [],
+      Offset: isSet(object.Offset) ? globalThis.Number(object.Offset) : undefined,
+    };
   },
 
   toJSON(message: Assets): unknown {
     const obj: any = {};
     if (message.Assets?.length) {
       obj.Assets = message.Assets.map((e) => Asset.toJSON(e));
+    }
+    if (message.Offset !== undefined) {
+      obj.Offset = Math.round(message.Offset);
     }
     return obj;
   },
@@ -954,95 +1172,7 @@ export const Assets = {
   fromPartial<I extends Exact<DeepPartial<Assets>, I>>(object: I): Assets {
     const message = createBaseAssets();
     message.Assets = object.Assets?.map((e) => Asset.fromPartial(e)) || [];
-    return message;
-  },
-};
-
-function createBaseLogoFile(): LogoFile {
-  return { Reference: "", Extension: "", Name: undefined };
-}
-
-export const LogoFile = {
-  encode(message: LogoFile, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.Reference !== "") {
-      writer.uint32(10).string(message.Reference);
-    }
-    if (message.Extension !== "") {
-      writer.uint32(18).string(message.Extension);
-    }
-    if (message.Name !== undefined) {
-      writer.uint32(26).string(message.Name);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): LogoFile {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseLogoFile();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 10) {
-            break;
-          }
-
-          message.Reference = reader.string();
-          continue;
-        case 2:
-          if (tag !== 18) {
-            break;
-          }
-
-          message.Extension = reader.string();
-          continue;
-        case 3:
-          if (tag !== 26) {
-            break;
-          }
-
-          message.Name = reader.string();
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): LogoFile {
-    return {
-      Reference: isSet(object.Reference) ? globalThis.String(object.Reference) : "",
-      Extension: isSet(object.Extension) ? globalThis.String(object.Extension) : "",
-      Name: isSet(object.Name) ? globalThis.String(object.Name) : undefined,
-    };
-  },
-
-  toJSON(message: LogoFile): unknown {
-    const obj: any = {};
-    if (message.Reference !== "") {
-      obj.Reference = message.Reference;
-    }
-    if (message.Extension !== "") {
-      obj.Extension = message.Extension;
-    }
-    if (message.Name !== undefined) {
-      obj.Name = message.Name;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<LogoFile>, I>>(base?: I): LogoFile {
-    return LogoFile.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<LogoFile>, I>>(object: I): LogoFile {
-    const message = createBaseLogoFile();
-    message.Reference = object.Reference ?? "";
-    message.Extension = object.Extension ?? "";
-    message.Name = object.Name ?? undefined;
+    message.Offset = object.Offset ?? undefined;
     return message;
   },
 };
@@ -1240,6 +1370,2813 @@ export const UserAssetLists = {
   fromPartial<I extends Exact<DeepPartial<UserAssetLists>, I>>(object: I): UserAssetLists {
     const message = createBaseUserAssetLists();
     message.UserAssetLists = object.UserAssetLists?.map((e) => UserAssetList.fromPartial(e)) || [];
+    return message;
+  },
+};
+
+function createBaseRealEstate(): RealEstate {
+  return {
+    Address: "",
+    Bathrooms: undefined,
+    Bedrooms: undefined,
+    Latitude: 0,
+    Longitude: 0,
+    OwnershipType: undefined,
+    PropertyType: "",
+    RiskRating: undefined,
+    SquareFootage: undefined,
+    TenancyStatus: undefined,
+    YearBuilt: undefined,
+    YieldPercent: [],
+  };
+}
+
+export const RealEstate = {
+  encode(message: RealEstate, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.Address !== "") {
+      writer.uint32(10).string(message.Address);
+    }
+    if (message.Bathrooms !== undefined) {
+      writer.uint32(16).int32(message.Bathrooms);
+    }
+    if (message.Bedrooms !== undefined) {
+      writer.uint32(24).int32(message.Bedrooms);
+    }
+    if (message.Latitude !== 0) {
+      writer.uint32(37).float(message.Latitude);
+    }
+    if (message.Longitude !== 0) {
+      writer.uint32(45).float(message.Longitude);
+    }
+    if (message.OwnershipType !== undefined) {
+      writer.uint32(50).string(message.OwnershipType);
+    }
+    if (message.PropertyType !== "") {
+      writer.uint32(58).string(message.PropertyType);
+    }
+    if (message.RiskRating !== undefined) {
+      writer.uint32(66).string(message.RiskRating);
+    }
+    if (message.SquareFootage !== undefined) {
+      writer.uint32(77).float(message.SquareFootage);
+    }
+    if (message.TenancyStatus !== undefined) {
+      writer.uint32(82).string(message.TenancyStatus);
+    }
+    if (message.YearBuilt !== undefined) {
+      writer.uint32(88).int32(message.YearBuilt);
+    }
+    writer.uint32(98).fork();
+    for (const v of message.YieldPercent) {
+      writer.float(v);
+    }
+    writer.ldelim();
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): RealEstate {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRealEstate();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.Address = reader.string();
+          continue;
+        case 2:
+          if (tag !== 16) {
+            break;
+          }
+
+          message.Bathrooms = reader.int32();
+          continue;
+        case 3:
+          if (tag !== 24) {
+            break;
+          }
+
+          message.Bedrooms = reader.int32();
+          continue;
+        case 4:
+          if (tag !== 37) {
+            break;
+          }
+
+          message.Latitude = reader.float();
+          continue;
+        case 5:
+          if (tag !== 45) {
+            break;
+          }
+
+          message.Longitude = reader.float();
+          continue;
+        case 6:
+          if (tag !== 50) {
+            break;
+          }
+
+          message.OwnershipType = reader.string();
+          continue;
+        case 7:
+          if (tag !== 58) {
+            break;
+          }
+
+          message.PropertyType = reader.string();
+          continue;
+        case 8:
+          if (tag !== 66) {
+            break;
+          }
+
+          message.RiskRating = reader.string();
+          continue;
+        case 9:
+          if (tag !== 77) {
+            break;
+          }
+
+          message.SquareFootage = reader.float();
+          continue;
+        case 10:
+          if (tag !== 82) {
+            break;
+          }
+
+          message.TenancyStatus = reader.string();
+          continue;
+        case 11:
+          if (tag !== 88) {
+            break;
+          }
+
+          message.YearBuilt = reader.int32();
+          continue;
+        case 12:
+          if (tag === 101) {
+            message.YieldPercent.push(reader.float());
+
+            continue;
+          }
+
+          if (tag === 98) {
+            const end2 = reader.uint32() + reader.pos;
+            while (reader.pos < end2) {
+              message.YieldPercent.push(reader.float());
+            }
+
+            continue;
+          }
+
+          break;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): RealEstate {
+    return {
+      Address: isSet(object.Address) ? globalThis.String(object.Address) : "",
+      Bathrooms: isSet(object.Bathrooms) ? globalThis.Number(object.Bathrooms) : undefined,
+      Bedrooms: isSet(object.Bedrooms) ? globalThis.Number(object.Bedrooms) : undefined,
+      Latitude: isSet(object.Latitude) ? globalThis.Number(object.Latitude) : 0,
+      Longitude: isSet(object.Longitude) ? globalThis.Number(object.Longitude) : 0,
+      OwnershipType: isSet(object.OwnershipType) ? globalThis.String(object.OwnershipType) : undefined,
+      PropertyType: isSet(object.PropertyType) ? globalThis.String(object.PropertyType) : "",
+      RiskRating: isSet(object.RiskRating) ? globalThis.String(object.RiskRating) : undefined,
+      SquareFootage: isSet(object.SquareFootage) ? globalThis.Number(object.SquareFootage) : undefined,
+      TenancyStatus: isSet(object.TenancyStatus) ? globalThis.String(object.TenancyStatus) : undefined,
+      YearBuilt: isSet(object.YearBuilt) ? globalThis.Number(object.YearBuilt) : undefined,
+      YieldPercent: globalThis.Array.isArray(object?.YieldPercent)
+        ? object.YieldPercent.map((e: any) => globalThis.Number(e))
+        : [],
+    };
+  },
+
+  toJSON(message: RealEstate): unknown {
+    const obj: any = {};
+    if (message.Address !== "") {
+      obj.Address = message.Address;
+    }
+    if (message.Bathrooms !== undefined) {
+      obj.Bathrooms = Math.round(message.Bathrooms);
+    }
+    if (message.Bedrooms !== undefined) {
+      obj.Bedrooms = Math.round(message.Bedrooms);
+    }
+    if (message.Latitude !== 0) {
+      obj.Latitude = message.Latitude;
+    }
+    if (message.Longitude !== 0) {
+      obj.Longitude = message.Longitude;
+    }
+    if (message.OwnershipType !== undefined) {
+      obj.OwnershipType = message.OwnershipType;
+    }
+    if (message.PropertyType !== "") {
+      obj.PropertyType = message.PropertyType;
+    }
+    if (message.RiskRating !== undefined) {
+      obj.RiskRating = message.RiskRating;
+    }
+    if (message.SquareFootage !== undefined) {
+      obj.SquareFootage = message.SquareFootage;
+    }
+    if (message.TenancyStatus !== undefined) {
+      obj.TenancyStatus = message.TenancyStatus;
+    }
+    if (message.YearBuilt !== undefined) {
+      obj.YearBuilt = Math.round(message.YearBuilt);
+    }
+    if (message.YieldPercent?.length) {
+      obj.YieldPercent = message.YieldPercent;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<RealEstate>, I>>(base?: I): RealEstate {
+    return RealEstate.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<RealEstate>, I>>(object: I): RealEstate {
+    const message = createBaseRealEstate();
+    message.Address = object.Address ?? "";
+    message.Bathrooms = object.Bathrooms ?? undefined;
+    message.Bedrooms = object.Bedrooms ?? undefined;
+    message.Latitude = object.Latitude ?? 0;
+    message.Longitude = object.Longitude ?? 0;
+    message.OwnershipType = object.OwnershipType ?? undefined;
+    message.PropertyType = object.PropertyType ?? "";
+    message.RiskRating = object.RiskRating ?? undefined;
+    message.SquareFootage = object.SquareFootage ?? undefined;
+    message.TenancyStatus = object.TenancyStatus ?? undefined;
+    message.YearBuilt = object.YearBuilt ?? undefined;
+    message.YieldPercent = object.YieldPercent?.map((e) => e) || [];
+    return message;
+  },
+};
+
+function createBaseStableCoin(): StableCoin {
+  return {
+    Version: undefined,
+    PegType: undefined,
+    PegRatio: undefined,
+    BackingAsset: undefined,
+    ExchangeTickerSymbol: undefined,
+    Exchange: undefined,
+    MinTransactionAmount: undefined,
+    TradingMarginPercentage: undefined,
+    AssetMarginPercentage: undefined,
+  };
+}
+
+export const StableCoin = {
+  encode(message: StableCoin, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.Version !== undefined) {
+      writer.uint32(10).string(message.Version);
+    }
+    if (message.PegType !== undefined) {
+      writer.uint32(18).string(message.PegType);
+    }
+    if (message.PegRatio !== undefined) {
+      writer.uint32(29).float(message.PegRatio);
+    }
+    if (message.BackingAsset !== undefined) {
+      writer.uint32(34).string(message.BackingAsset);
+    }
+    if (message.ExchangeTickerSymbol !== undefined) {
+      writer.uint32(42).string(message.ExchangeTickerSymbol);
+    }
+    if (message.Exchange !== undefined) {
+      writer.uint32(50).string(message.Exchange);
+    }
+    if (message.MinTransactionAmount !== undefined) {
+      writer.uint32(61).float(message.MinTransactionAmount);
+    }
+    if (message.TradingMarginPercentage !== undefined) {
+      writer.uint32(69).float(message.TradingMarginPercentage);
+    }
+    if (message.AssetMarginPercentage !== undefined) {
+      writer.uint32(77).float(message.AssetMarginPercentage);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): StableCoin {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseStableCoin();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.Version = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.PegType = reader.string();
+          continue;
+        case 3:
+          if (tag !== 29) {
+            break;
+          }
+
+          message.PegRatio = reader.float();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.BackingAsset = reader.string();
+          continue;
+        case 5:
+          if (tag !== 42) {
+            break;
+          }
+
+          message.ExchangeTickerSymbol = reader.string();
+          continue;
+        case 6:
+          if (tag !== 50) {
+            break;
+          }
+
+          message.Exchange = reader.string();
+          continue;
+        case 7:
+          if (tag !== 61) {
+            break;
+          }
+
+          message.MinTransactionAmount = reader.float();
+          continue;
+        case 8:
+          if (tag !== 69) {
+            break;
+          }
+
+          message.TradingMarginPercentage = reader.float();
+          continue;
+        case 9:
+          if (tag !== 77) {
+            break;
+          }
+
+          message.AssetMarginPercentage = reader.float();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): StableCoin {
+    return {
+      Version: isSet(object.Version) ? globalThis.String(object.Version) : undefined,
+      PegType: isSet(object.PegType) ? globalThis.String(object.PegType) : undefined,
+      PegRatio: isSet(object.PegRatio) ? globalThis.Number(object.PegRatio) : undefined,
+      BackingAsset: isSet(object.BackingAsset) ? globalThis.String(object.BackingAsset) : undefined,
+      ExchangeTickerSymbol: isSet(object.ExchangeTickerSymbol)
+        ? globalThis.String(object.ExchangeTickerSymbol)
+        : undefined,
+      Exchange: isSet(object.Exchange) ? globalThis.String(object.Exchange) : undefined,
+      MinTransactionAmount: isSet(object.MinTransactionAmount)
+        ? globalThis.Number(object.MinTransactionAmount)
+        : undefined,
+      TradingMarginPercentage: isSet(object.TradingMarginPercentage)
+        ? globalThis.Number(object.TradingMarginPercentage)
+        : undefined,
+      AssetMarginPercentage: isSet(object.AssetMarginPercentage)
+        ? globalThis.Number(object.AssetMarginPercentage)
+        : undefined,
+    };
+  },
+
+  toJSON(message: StableCoin): unknown {
+    const obj: any = {};
+    if (message.Version !== undefined) {
+      obj.Version = message.Version;
+    }
+    if (message.PegType !== undefined) {
+      obj.PegType = message.PegType;
+    }
+    if (message.PegRatio !== undefined) {
+      obj.PegRatio = message.PegRatio;
+    }
+    if (message.BackingAsset !== undefined) {
+      obj.BackingAsset = message.BackingAsset;
+    }
+    if (message.ExchangeTickerSymbol !== undefined) {
+      obj.ExchangeTickerSymbol = message.ExchangeTickerSymbol;
+    }
+    if (message.Exchange !== undefined) {
+      obj.Exchange = message.Exchange;
+    }
+    if (message.MinTransactionAmount !== undefined) {
+      obj.MinTransactionAmount = message.MinTransactionAmount;
+    }
+    if (message.TradingMarginPercentage !== undefined) {
+      obj.TradingMarginPercentage = message.TradingMarginPercentage;
+    }
+    if (message.AssetMarginPercentage !== undefined) {
+      obj.AssetMarginPercentage = message.AssetMarginPercentage;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<StableCoin>, I>>(base?: I): StableCoin {
+    return StableCoin.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<StableCoin>, I>>(object: I): StableCoin {
+    const message = createBaseStableCoin();
+    message.Version = object.Version ?? undefined;
+    message.PegType = object.PegType ?? undefined;
+    message.PegRatio = object.PegRatio ?? undefined;
+    message.BackingAsset = object.BackingAsset ?? undefined;
+    message.ExchangeTickerSymbol = object.ExchangeTickerSymbol ?? undefined;
+    message.Exchange = object.Exchange ?? undefined;
+    message.MinTransactionAmount = object.MinTransactionAmount ?? undefined;
+    message.TradingMarginPercentage = object.TradingMarginPercentage ?? undefined;
+    message.AssetMarginPercentage = object.AssetMarginPercentage ?? undefined;
+    return message;
+  },
+};
+
+function createBaseCommodity(): Commodity {
+  return {
+    Category: "",
+    Quality: undefined,
+    UnitOfMeasure: "",
+    Quantity: undefined,
+    OriginCountry: undefined,
+    ExchangeTickerSymbol: undefined,
+    Exchange: undefined,
+    MinTransactionAmount: undefined,
+    StorageLocation: undefined,
+    ContractType: undefined,
+    DeliveryDate: undefined,
+  };
+}
+
+export const Commodity = {
+  encode(message: Commodity, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.Category !== "") {
+      writer.uint32(10).string(message.Category);
+    }
+    if (message.Quality !== undefined) {
+      writer.uint32(18).string(message.Quality);
+    }
+    if (message.UnitOfMeasure !== "") {
+      writer.uint32(26).string(message.UnitOfMeasure);
+    }
+    if (message.Quantity !== undefined) {
+      writer.uint32(37).float(message.Quantity);
+    }
+    if (message.OriginCountry !== undefined) {
+      writer.uint32(42).string(message.OriginCountry);
+    }
+    if (message.ExchangeTickerSymbol !== undefined) {
+      writer.uint32(50).string(message.ExchangeTickerSymbol);
+    }
+    if (message.Exchange !== undefined) {
+      writer.uint32(58).string(message.Exchange);
+    }
+    if (message.MinTransactionAmount !== undefined) {
+      writer.uint32(69).float(message.MinTransactionAmount);
+    }
+    if (message.StorageLocation !== undefined) {
+      writer.uint32(74).string(message.StorageLocation);
+    }
+    if (message.ContractType !== undefined) {
+      writer.uint32(82).string(message.ContractType);
+    }
+    if (message.DeliveryDate !== undefined) {
+      writer.uint32(90).string(message.DeliveryDate);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): Commodity {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCommodity();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.Category = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.Quality = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.UnitOfMeasure = reader.string();
+          continue;
+        case 4:
+          if (tag !== 37) {
+            break;
+          }
+
+          message.Quantity = reader.float();
+          continue;
+        case 5:
+          if (tag !== 42) {
+            break;
+          }
+
+          message.OriginCountry = reader.string();
+          continue;
+        case 6:
+          if (tag !== 50) {
+            break;
+          }
+
+          message.ExchangeTickerSymbol = reader.string();
+          continue;
+        case 7:
+          if (tag !== 58) {
+            break;
+          }
+
+          message.Exchange = reader.string();
+          continue;
+        case 8:
+          if (tag !== 69) {
+            break;
+          }
+
+          message.MinTransactionAmount = reader.float();
+          continue;
+        case 9:
+          if (tag !== 74) {
+            break;
+          }
+
+          message.StorageLocation = reader.string();
+          continue;
+        case 10:
+          if (tag !== 82) {
+            break;
+          }
+
+          message.ContractType = reader.string();
+          continue;
+        case 11:
+          if (tag !== 90) {
+            break;
+          }
+
+          message.DeliveryDate = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): Commodity {
+    return {
+      Category: isSet(object.Category) ? globalThis.String(object.Category) : "",
+      Quality: isSet(object.Quality) ? globalThis.String(object.Quality) : undefined,
+      UnitOfMeasure: isSet(object.UnitOfMeasure) ? globalThis.String(object.UnitOfMeasure) : "",
+      Quantity: isSet(object.Quantity) ? globalThis.Number(object.Quantity) : undefined,
+      OriginCountry: isSet(object.OriginCountry) ? globalThis.String(object.OriginCountry) : undefined,
+      ExchangeTickerSymbol: isSet(object.ExchangeTickerSymbol)
+        ? globalThis.String(object.ExchangeTickerSymbol)
+        : undefined,
+      Exchange: isSet(object.Exchange) ? globalThis.String(object.Exchange) : undefined,
+      MinTransactionAmount: isSet(object.MinTransactionAmount)
+        ? globalThis.Number(object.MinTransactionAmount)
+        : undefined,
+      StorageLocation: isSet(object.StorageLocation) ? globalThis.String(object.StorageLocation) : undefined,
+      ContractType: isSet(object.ContractType) ? globalThis.String(object.ContractType) : undefined,
+      DeliveryDate: isSet(object.DeliveryDate) ? globalThis.String(object.DeliveryDate) : undefined,
+    };
+  },
+
+  toJSON(message: Commodity): unknown {
+    const obj: any = {};
+    if (message.Category !== "") {
+      obj.Category = message.Category;
+    }
+    if (message.Quality !== undefined) {
+      obj.Quality = message.Quality;
+    }
+    if (message.UnitOfMeasure !== "") {
+      obj.UnitOfMeasure = message.UnitOfMeasure;
+    }
+    if (message.Quantity !== undefined) {
+      obj.Quantity = message.Quantity;
+    }
+    if (message.OriginCountry !== undefined) {
+      obj.OriginCountry = message.OriginCountry;
+    }
+    if (message.ExchangeTickerSymbol !== undefined) {
+      obj.ExchangeTickerSymbol = message.ExchangeTickerSymbol;
+    }
+    if (message.Exchange !== undefined) {
+      obj.Exchange = message.Exchange;
+    }
+    if (message.MinTransactionAmount !== undefined) {
+      obj.MinTransactionAmount = message.MinTransactionAmount;
+    }
+    if (message.StorageLocation !== undefined) {
+      obj.StorageLocation = message.StorageLocation;
+    }
+    if (message.ContractType !== undefined) {
+      obj.ContractType = message.ContractType;
+    }
+    if (message.DeliveryDate !== undefined) {
+      obj.DeliveryDate = message.DeliveryDate;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<Commodity>, I>>(base?: I): Commodity {
+    return Commodity.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<Commodity>, I>>(object: I): Commodity {
+    const message = createBaseCommodity();
+    message.Category = object.Category ?? "";
+    message.Quality = object.Quality ?? undefined;
+    message.UnitOfMeasure = object.UnitOfMeasure ?? "";
+    message.Quantity = object.Quantity ?? undefined;
+    message.OriginCountry = object.OriginCountry ?? undefined;
+    message.ExchangeTickerSymbol = object.ExchangeTickerSymbol ?? undefined;
+    message.Exchange = object.Exchange ?? undefined;
+    message.MinTransactionAmount = object.MinTransactionAmount ?? undefined;
+    message.StorageLocation = object.StorageLocation ?? undefined;
+    message.ContractType = object.ContractType ?? undefined;
+    message.DeliveryDate = object.DeliveryDate ?? undefined;
+    return message;
+  },
+};
+
+function createBaseCollectible(): Collectible {
+  return {
+    Category: "",
+    CollectionName: undefined,
+    TokenStandard: undefined,
+    TokenID: undefined,
+    MetadataURI: undefined,
+    Creator: undefined,
+    OwnershipHistory: [],
+    CurrentOwner: "",
+  };
+}
+
+export const Collectible = {
+  encode(message: Collectible, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.Category !== "") {
+      writer.uint32(10).string(message.Category);
+    }
+    if (message.CollectionName !== undefined) {
+      writer.uint32(18).string(message.CollectionName);
+    }
+    if (message.TokenStandard !== undefined) {
+      writer.uint32(26).string(message.TokenStandard);
+    }
+    if (message.TokenID !== undefined) {
+      writer.uint32(34).string(message.TokenID);
+    }
+    if (message.MetadataURI !== undefined) {
+      writer.uint32(42).string(message.MetadataURI);
+    }
+    if (message.Creator !== undefined) {
+      writer.uint32(50).string(message.Creator);
+    }
+    for (const v of message.OwnershipHistory) {
+      writer.uint32(58).string(v!);
+    }
+    if (message.CurrentOwner !== "") {
+      writer.uint32(66).string(message.CurrentOwner);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): Collectible {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCollectible();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.Category = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.CollectionName = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.TokenStandard = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.TokenID = reader.string();
+          continue;
+        case 5:
+          if (tag !== 42) {
+            break;
+          }
+
+          message.MetadataURI = reader.string();
+          continue;
+        case 6:
+          if (tag !== 50) {
+            break;
+          }
+
+          message.Creator = reader.string();
+          continue;
+        case 7:
+          if (tag !== 58) {
+            break;
+          }
+
+          message.OwnershipHistory.push(reader.string());
+          continue;
+        case 8:
+          if (tag !== 66) {
+            break;
+          }
+
+          message.CurrentOwner = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): Collectible {
+    return {
+      Category: isSet(object.Category) ? globalThis.String(object.Category) : "",
+      CollectionName: isSet(object.CollectionName) ? globalThis.String(object.CollectionName) : undefined,
+      TokenStandard: isSet(object.TokenStandard) ? globalThis.String(object.TokenStandard) : undefined,
+      TokenID: isSet(object.TokenID) ? globalThis.String(object.TokenID) : undefined,
+      MetadataURI: isSet(object.MetadataURI) ? globalThis.String(object.MetadataURI) : undefined,
+      Creator: isSet(object.Creator) ? globalThis.String(object.Creator) : undefined,
+      OwnershipHistory: globalThis.Array.isArray(object?.OwnershipHistory)
+        ? object.OwnershipHistory.map((e: any) => globalThis.String(e))
+        : [],
+      CurrentOwner: isSet(object.CurrentOwner) ? globalThis.String(object.CurrentOwner) : "",
+    };
+  },
+
+  toJSON(message: Collectible): unknown {
+    const obj: any = {};
+    if (message.Category !== "") {
+      obj.Category = message.Category;
+    }
+    if (message.CollectionName !== undefined) {
+      obj.CollectionName = message.CollectionName;
+    }
+    if (message.TokenStandard !== undefined) {
+      obj.TokenStandard = message.TokenStandard;
+    }
+    if (message.TokenID !== undefined) {
+      obj.TokenID = message.TokenID;
+    }
+    if (message.MetadataURI !== undefined) {
+      obj.MetadataURI = message.MetadataURI;
+    }
+    if (message.Creator !== undefined) {
+      obj.Creator = message.Creator;
+    }
+    if (message.OwnershipHistory?.length) {
+      obj.OwnershipHistory = message.OwnershipHistory;
+    }
+    if (message.CurrentOwner !== "") {
+      obj.CurrentOwner = message.CurrentOwner;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<Collectible>, I>>(base?: I): Collectible {
+    return Collectible.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<Collectible>, I>>(object: I): Collectible {
+    const message = createBaseCollectible();
+    message.Category = object.Category ?? "";
+    message.CollectionName = object.CollectionName ?? undefined;
+    message.TokenStandard = object.TokenStandard ?? undefined;
+    message.TokenID = object.TokenID ?? undefined;
+    message.MetadataURI = object.MetadataURI ?? undefined;
+    message.Creator = object.Creator ?? undefined;
+    message.OwnershipHistory = object.OwnershipHistory?.map((e) => e) || [];
+    message.CurrentOwner = object.CurrentOwner ?? "";
+    return message;
+  },
+};
+
+function createBaseVehicle(): Vehicle {
+  return {
+    Category: "",
+    Manufacturer: "",
+    Model: "",
+    SerialNumber: "",
+    Year: undefined,
+    Specifications: undefined,
+    FuelType: undefined,
+    UsageHours: undefined,
+    Mileage: undefined,
+    Condition: "",
+    CurrentOwner: "",
+    Location: undefined,
+  };
+}
+
+export const Vehicle = {
+  encode(message: Vehicle, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.Category !== "") {
+      writer.uint32(10).string(message.Category);
+    }
+    if (message.Manufacturer !== "") {
+      writer.uint32(18).string(message.Manufacturer);
+    }
+    if (message.Model !== "") {
+      writer.uint32(26).string(message.Model);
+    }
+    if (message.SerialNumber !== "") {
+      writer.uint32(34).string(message.SerialNumber);
+    }
+    if (message.Year !== undefined) {
+      writer.uint32(40).int32(message.Year);
+    }
+    if (message.Specifications !== undefined) {
+      writer.uint32(50).string(message.Specifications);
+    }
+    if (message.FuelType !== undefined) {
+      writer.uint32(58).string(message.FuelType);
+    }
+    if (message.UsageHours !== undefined) {
+      writer.uint32(69).float(message.UsageHours);
+    }
+    if (message.Mileage !== undefined) {
+      writer.uint32(77).float(message.Mileage);
+    }
+    if (message.Condition !== "") {
+      writer.uint32(82).string(message.Condition);
+    }
+    if (message.CurrentOwner !== "") {
+      writer.uint32(90).string(message.CurrentOwner);
+    }
+    if (message.Location !== undefined) {
+      writer.uint32(98).string(message.Location);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): Vehicle {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseVehicle();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.Category = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.Manufacturer = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.Model = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.SerialNumber = reader.string();
+          continue;
+        case 5:
+          if (tag !== 40) {
+            break;
+          }
+
+          message.Year = reader.int32();
+          continue;
+        case 6:
+          if (tag !== 50) {
+            break;
+          }
+
+          message.Specifications = reader.string();
+          continue;
+        case 7:
+          if (tag !== 58) {
+            break;
+          }
+
+          message.FuelType = reader.string();
+          continue;
+        case 8:
+          if (tag !== 69) {
+            break;
+          }
+
+          message.UsageHours = reader.float();
+          continue;
+        case 9:
+          if (tag !== 77) {
+            break;
+          }
+
+          message.Mileage = reader.float();
+          continue;
+        case 10:
+          if (tag !== 82) {
+            break;
+          }
+
+          message.Condition = reader.string();
+          continue;
+        case 11:
+          if (tag !== 90) {
+            break;
+          }
+
+          message.CurrentOwner = reader.string();
+          continue;
+        case 12:
+          if (tag !== 98) {
+            break;
+          }
+
+          message.Location = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): Vehicle {
+    return {
+      Category: isSet(object.Category) ? globalThis.String(object.Category) : "",
+      Manufacturer: isSet(object.Manufacturer) ? globalThis.String(object.Manufacturer) : "",
+      Model: isSet(object.Model) ? globalThis.String(object.Model) : "",
+      SerialNumber: isSet(object.SerialNumber) ? globalThis.String(object.SerialNumber) : "",
+      Year: isSet(object.Year) ? globalThis.Number(object.Year) : undefined,
+      Specifications: isSet(object.Specifications) ? globalThis.String(object.Specifications) : undefined,
+      FuelType: isSet(object.FuelType) ? globalThis.String(object.FuelType) : undefined,
+      UsageHours: isSet(object.UsageHours) ? globalThis.Number(object.UsageHours) : undefined,
+      Mileage: isSet(object.Mileage) ? globalThis.Number(object.Mileage) : undefined,
+      Condition: isSet(object.Condition) ? globalThis.String(object.Condition) : "",
+      CurrentOwner: isSet(object.CurrentOwner) ? globalThis.String(object.CurrentOwner) : "",
+      Location: isSet(object.Location) ? globalThis.String(object.Location) : undefined,
+    };
+  },
+
+  toJSON(message: Vehicle): unknown {
+    const obj: any = {};
+    if (message.Category !== "") {
+      obj.Category = message.Category;
+    }
+    if (message.Manufacturer !== "") {
+      obj.Manufacturer = message.Manufacturer;
+    }
+    if (message.Model !== "") {
+      obj.Model = message.Model;
+    }
+    if (message.SerialNumber !== "") {
+      obj.SerialNumber = message.SerialNumber;
+    }
+    if (message.Year !== undefined) {
+      obj.Year = Math.round(message.Year);
+    }
+    if (message.Specifications !== undefined) {
+      obj.Specifications = message.Specifications;
+    }
+    if (message.FuelType !== undefined) {
+      obj.FuelType = message.FuelType;
+    }
+    if (message.UsageHours !== undefined) {
+      obj.UsageHours = message.UsageHours;
+    }
+    if (message.Mileage !== undefined) {
+      obj.Mileage = message.Mileage;
+    }
+    if (message.Condition !== "") {
+      obj.Condition = message.Condition;
+    }
+    if (message.CurrentOwner !== "") {
+      obj.CurrentOwner = message.CurrentOwner;
+    }
+    if (message.Location !== undefined) {
+      obj.Location = message.Location;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<Vehicle>, I>>(base?: I): Vehicle {
+    return Vehicle.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<Vehicle>, I>>(object: I): Vehicle {
+    const message = createBaseVehicle();
+    message.Category = object.Category ?? "";
+    message.Manufacturer = object.Manufacturer ?? "";
+    message.Model = object.Model ?? "";
+    message.SerialNumber = object.SerialNumber ?? "";
+    message.Year = object.Year ?? undefined;
+    message.Specifications = object.Specifications ?? undefined;
+    message.FuelType = object.FuelType ?? undefined;
+    message.UsageHours = object.UsageHours ?? undefined;
+    message.Mileage = object.Mileage ?? undefined;
+    message.Condition = object.Condition ?? "";
+    message.CurrentOwner = object.CurrentOwner ?? "";
+    message.Location = object.Location ?? undefined;
+    return message;
+  },
+};
+
+function createBaseIntellectualProperty(): IntellectualProperty {
+  return {
+    Category: "",
+    Owner: "",
+    RegistrationNumber: undefined,
+    FilingDate: undefined,
+    ExpirationDate: undefined,
+    IPJurisdictionIDs: [],
+    LicenseType: undefined,
+    LicenseTerms: undefined,
+    Value: undefined,
+  };
+}
+
+export const IntellectualProperty = {
+  encode(message: IntellectualProperty, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.Category !== "") {
+      writer.uint32(10).string(message.Category);
+    }
+    if (message.Owner !== "") {
+      writer.uint32(18).string(message.Owner);
+    }
+    if (message.RegistrationNumber !== undefined) {
+      writer.uint32(26).string(message.RegistrationNumber);
+    }
+    if (message.FilingDate !== undefined) {
+      writer.uint32(34).string(message.FilingDate);
+    }
+    if (message.ExpirationDate !== undefined) {
+      writer.uint32(42).string(message.ExpirationDate);
+    }
+    for (const v of message.IPJurisdictionIDs) {
+      writer.uint32(50).string(v!);
+    }
+    if (message.LicenseType !== undefined) {
+      writer.uint32(58).string(message.LicenseType);
+    }
+    if (message.LicenseTerms !== undefined) {
+      writer.uint32(66).string(message.LicenseTerms);
+    }
+    if (message.Value !== undefined) {
+      writer.uint32(77).float(message.Value);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): IntellectualProperty {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseIntellectualProperty();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.Category = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.Owner = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.RegistrationNumber = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.FilingDate = reader.string();
+          continue;
+        case 5:
+          if (tag !== 42) {
+            break;
+          }
+
+          message.ExpirationDate = reader.string();
+          continue;
+        case 6:
+          if (tag !== 50) {
+            break;
+          }
+
+          message.IPJurisdictionIDs.push(reader.string());
+          continue;
+        case 7:
+          if (tag !== 58) {
+            break;
+          }
+
+          message.LicenseType = reader.string();
+          continue;
+        case 8:
+          if (tag !== 66) {
+            break;
+          }
+
+          message.LicenseTerms = reader.string();
+          continue;
+        case 9:
+          if (tag !== 77) {
+            break;
+          }
+
+          message.Value = reader.float();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): IntellectualProperty {
+    return {
+      Category: isSet(object.Category) ? globalThis.String(object.Category) : "",
+      Owner: isSet(object.Owner) ? globalThis.String(object.Owner) : "",
+      RegistrationNumber: isSet(object.RegistrationNumber) ? globalThis.String(object.RegistrationNumber) : undefined,
+      FilingDate: isSet(object.FilingDate) ? globalThis.String(object.FilingDate) : undefined,
+      ExpirationDate: isSet(object.ExpirationDate) ? globalThis.String(object.ExpirationDate) : undefined,
+      IPJurisdictionIDs: globalThis.Array.isArray(object?.IPJurisdictionIDs)
+        ? object.IPJurisdictionIDs.map((e: any) => globalThis.String(e))
+        : [],
+      LicenseType: isSet(object.LicenseType) ? globalThis.String(object.LicenseType) : undefined,
+      LicenseTerms: isSet(object.LicenseTerms) ? globalThis.String(object.LicenseTerms) : undefined,
+      Value: isSet(object.Value) ? globalThis.Number(object.Value) : undefined,
+    };
+  },
+
+  toJSON(message: IntellectualProperty): unknown {
+    const obj: any = {};
+    if (message.Category !== "") {
+      obj.Category = message.Category;
+    }
+    if (message.Owner !== "") {
+      obj.Owner = message.Owner;
+    }
+    if (message.RegistrationNumber !== undefined) {
+      obj.RegistrationNumber = message.RegistrationNumber;
+    }
+    if (message.FilingDate !== undefined) {
+      obj.FilingDate = message.FilingDate;
+    }
+    if (message.ExpirationDate !== undefined) {
+      obj.ExpirationDate = message.ExpirationDate;
+    }
+    if (message.IPJurisdictionIDs?.length) {
+      obj.IPJurisdictionIDs = message.IPJurisdictionIDs;
+    }
+    if (message.LicenseType !== undefined) {
+      obj.LicenseType = message.LicenseType;
+    }
+    if (message.LicenseTerms !== undefined) {
+      obj.LicenseTerms = message.LicenseTerms;
+    }
+    if (message.Value !== undefined) {
+      obj.Value = message.Value;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<IntellectualProperty>, I>>(base?: I): IntellectualProperty {
+    return IntellectualProperty.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<IntellectualProperty>, I>>(object: I): IntellectualProperty {
+    const message = createBaseIntellectualProperty();
+    message.Category = object.Category ?? "";
+    message.Owner = object.Owner ?? "";
+    message.RegistrationNumber = object.RegistrationNumber ?? undefined;
+    message.FilingDate = object.FilingDate ?? undefined;
+    message.ExpirationDate = object.ExpirationDate ?? undefined;
+    message.IPJurisdictionIDs = object.IPJurisdictionIDs?.map((e) => e) || [];
+    message.LicenseType = object.LicenseType ?? undefined;
+    message.LicenseTerms = object.LicenseTerms ?? undefined;
+    message.Value = object.Value ?? undefined;
+    return message;
+  },
+};
+
+function createBaseInvestmentFund(): InvestmentFund {
+  return {
+    FundType: "",
+    Exchange: "",
+    ISIN: undefined,
+    NAV: undefined,
+    InceptionDate: undefined,
+    Manager: undefined,
+    ExpenseRatio: undefined,
+    Holdings: [],
+  };
+}
+
+export const InvestmentFund = {
+  encode(message: InvestmentFund, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.FundType !== "") {
+      writer.uint32(10).string(message.FundType);
+    }
+    if (message.Exchange !== "") {
+      writer.uint32(18).string(message.Exchange);
+    }
+    if (message.ISIN !== undefined) {
+      writer.uint32(26).string(message.ISIN);
+    }
+    if (message.NAV !== undefined) {
+      writer.uint32(37).float(message.NAV);
+    }
+    if (message.InceptionDate !== undefined) {
+      writer.uint32(42).string(message.InceptionDate);
+    }
+    if (message.Manager !== undefined) {
+      writer.uint32(50).string(message.Manager);
+    }
+    if (message.ExpenseRatio !== undefined) {
+      writer.uint32(61).float(message.ExpenseRatio);
+    }
+    for (const v of message.Holdings) {
+      writer.uint32(66).string(v!);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): InvestmentFund {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseInvestmentFund();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.FundType = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.Exchange = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.ISIN = reader.string();
+          continue;
+        case 4:
+          if (tag !== 37) {
+            break;
+          }
+
+          message.NAV = reader.float();
+          continue;
+        case 5:
+          if (tag !== 42) {
+            break;
+          }
+
+          message.InceptionDate = reader.string();
+          continue;
+        case 6:
+          if (tag !== 50) {
+            break;
+          }
+
+          message.Manager = reader.string();
+          continue;
+        case 7:
+          if (tag !== 61) {
+            break;
+          }
+
+          message.ExpenseRatio = reader.float();
+          continue;
+        case 8:
+          if (tag !== 66) {
+            break;
+          }
+
+          message.Holdings.push(reader.string());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): InvestmentFund {
+    return {
+      FundType: isSet(object.FundType) ? globalThis.String(object.FundType) : "",
+      Exchange: isSet(object.Exchange) ? globalThis.String(object.Exchange) : "",
+      ISIN: isSet(object.ISIN) ? globalThis.String(object.ISIN) : undefined,
+      NAV: isSet(object.NAV) ? globalThis.Number(object.NAV) : undefined,
+      InceptionDate: isSet(object.InceptionDate) ? globalThis.String(object.InceptionDate) : undefined,
+      Manager: isSet(object.Manager) ? globalThis.String(object.Manager) : undefined,
+      ExpenseRatio: isSet(object.ExpenseRatio) ? globalThis.Number(object.ExpenseRatio) : undefined,
+      Holdings: globalThis.Array.isArray(object?.Holdings) ? object.Holdings.map((e: any) => globalThis.String(e)) : [],
+    };
+  },
+
+  toJSON(message: InvestmentFund): unknown {
+    const obj: any = {};
+    if (message.FundType !== "") {
+      obj.FundType = message.FundType;
+    }
+    if (message.Exchange !== "") {
+      obj.Exchange = message.Exchange;
+    }
+    if (message.ISIN !== undefined) {
+      obj.ISIN = message.ISIN;
+    }
+    if (message.NAV !== undefined) {
+      obj.NAV = message.NAV;
+    }
+    if (message.InceptionDate !== undefined) {
+      obj.InceptionDate = message.InceptionDate;
+    }
+    if (message.Manager !== undefined) {
+      obj.Manager = message.Manager;
+    }
+    if (message.ExpenseRatio !== undefined) {
+      obj.ExpenseRatio = message.ExpenseRatio;
+    }
+    if (message.Holdings?.length) {
+      obj.Holdings = message.Holdings;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<InvestmentFund>, I>>(base?: I): InvestmentFund {
+    return InvestmentFund.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<InvestmentFund>, I>>(object: I): InvestmentFund {
+    const message = createBaseInvestmentFund();
+    message.FundType = object.FundType ?? "";
+    message.Exchange = object.Exchange ?? "";
+    message.ISIN = object.ISIN ?? undefined;
+    message.NAV = object.NAV ?? undefined;
+    message.InceptionDate = object.InceptionDate ?? undefined;
+    message.Manager = object.Manager ?? undefined;
+    message.ExpenseRatio = object.ExpenseRatio ?? undefined;
+    message.Holdings = object.Holdings?.map((e) => e) || [];
+    return message;
+  },
+};
+
+function createBaseEquity(): Equity {
+  return {
+    ExchangeTickerSymbol: undefined,
+    Exchange: undefined,
+    MinTransactionAmount: "",
+    ExtraPercentage: "",
+    AssetMarginPercentage: "",
+  };
+}
+
+export const Equity = {
+  encode(message: Equity, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.ExchangeTickerSymbol !== undefined) {
+      writer.uint32(10).string(message.ExchangeTickerSymbol);
+    }
+    if (message.Exchange !== undefined) {
+      writer.uint32(18).string(message.Exchange);
+    }
+    if (message.MinTransactionAmount !== "") {
+      writer.uint32(26).string(message.MinTransactionAmount);
+    }
+    if (message.ExtraPercentage !== "") {
+      writer.uint32(34).string(message.ExtraPercentage);
+    }
+    if (message.AssetMarginPercentage !== "") {
+      writer.uint32(42).string(message.AssetMarginPercentage);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): Equity {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseEquity();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.ExchangeTickerSymbol = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.Exchange = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.MinTransactionAmount = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.ExtraPercentage = reader.string();
+          continue;
+        case 5:
+          if (tag !== 42) {
+            break;
+          }
+
+          message.AssetMarginPercentage = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): Equity {
+    return {
+      ExchangeTickerSymbol: isSet(object.ExchangeTickerSymbol)
+        ? globalThis.String(object.ExchangeTickerSymbol)
+        : undefined,
+      Exchange: isSet(object.Exchange) ? globalThis.String(object.Exchange) : undefined,
+      MinTransactionAmount: isSet(object.MinTransactionAmount) ? globalThis.String(object.MinTransactionAmount) : "",
+      ExtraPercentage: isSet(object.ExtraPercentage) ? globalThis.String(object.ExtraPercentage) : "",
+      AssetMarginPercentage: isSet(object.AssetMarginPercentage) ? globalThis.String(object.AssetMarginPercentage) : "",
+    };
+  },
+
+  toJSON(message: Equity): unknown {
+    const obj: any = {};
+    if (message.ExchangeTickerSymbol !== undefined) {
+      obj.ExchangeTickerSymbol = message.ExchangeTickerSymbol;
+    }
+    if (message.Exchange !== undefined) {
+      obj.Exchange = message.Exchange;
+    }
+    if (message.MinTransactionAmount !== "") {
+      obj.MinTransactionAmount = message.MinTransactionAmount;
+    }
+    if (message.ExtraPercentage !== "") {
+      obj.ExtraPercentage = message.ExtraPercentage;
+    }
+    if (message.AssetMarginPercentage !== "") {
+      obj.AssetMarginPercentage = message.AssetMarginPercentage;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<Equity>, I>>(base?: I): Equity {
+    return Equity.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<Equity>, I>>(object: I): Equity {
+    const message = createBaseEquity();
+    message.ExchangeTickerSymbol = object.ExchangeTickerSymbol ?? undefined;
+    message.Exchange = object.Exchange ?? undefined;
+    message.MinTransactionAmount = object.MinTransactionAmount ?? "";
+    message.ExtraPercentage = object.ExtraPercentage ?? "";
+    message.AssetMarginPercentage = object.AssetMarginPercentage ?? "";
+    return message;
+  },
+};
+
+function createBaseFinancialProperties(): FinancialProperties {
+  return {
+    Symbol: "",
+    Issuer: "",
+    JurisdictionIDs: [],
+    JurisdictionRestrictions: undefined,
+    RedemptionTerms: undefined,
+    ComplianceRequired: undefined,
+    Type: "",
+    TradeAllowances: [],
+    Transferable: false,
+    Platform: "",
+    PlatformType: "",
+    ContractAddress: undefined,
+    Fractional: false,
+    TotalSupply: 0,
+    DecimalPlacesSupply: 0,
+    Subunit: undefined,
+    Price: undefined,
+    DecimalPlacesPrice: 0,
+    Currency: "",
+    InitialValuation: 0,
+    CurrentValuation: 0,
+    ValuationDate: undefined,
+    Network: 0,
+    Status: "",
+  };
+}
+
+export const FinancialProperties = {
+  encode(message: FinancialProperties, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.Symbol !== "") {
+      writer.uint32(10).string(message.Symbol);
+    }
+    if (message.Issuer !== "") {
+      writer.uint32(18).string(message.Issuer);
+    }
+    for (const v of message.JurisdictionIDs) {
+      writer.uint32(26).string(v!);
+    }
+    if (message.JurisdictionRestrictions !== undefined) {
+      writer.uint32(34).string(message.JurisdictionRestrictions);
+    }
+    if (message.RedemptionTerms !== undefined) {
+      writer.uint32(42).string(message.RedemptionTerms);
+    }
+    if (message.ComplianceRequired !== undefined) {
+      writer.uint32(48).bool(message.ComplianceRequired);
+    }
+    if (message.Type !== "") {
+      writer.uint32(58).string(message.Type);
+    }
+    for (const v of message.TradeAllowances) {
+      writer.uint32(66).string(v!);
+    }
+    if (message.Transferable !== false) {
+      writer.uint32(72).bool(message.Transferable);
+    }
+    if (message.Platform !== "") {
+      writer.uint32(82).string(message.Platform);
+    }
+    if (message.PlatformType !== "") {
+      writer.uint32(90).string(message.PlatformType);
+    }
+    if (message.ContractAddress !== undefined) {
+      writer.uint32(98).string(message.ContractAddress);
+    }
+    if (message.Fractional !== false) {
+      writer.uint32(104).bool(message.Fractional);
+    }
+    if (message.TotalSupply !== 0) {
+      writer.uint32(112).int32(message.TotalSupply);
+    }
+    if (message.DecimalPlacesSupply !== 0) {
+      writer.uint32(120).int32(message.DecimalPlacesSupply);
+    }
+    if (message.Subunit !== undefined) {
+      writer.uint32(130).string(message.Subunit);
+    }
+    if (message.Price !== undefined) {
+      writer.uint32(141).float(message.Price);
+    }
+    if (message.DecimalPlacesPrice !== 0) {
+      writer.uint32(144).int32(message.DecimalPlacesPrice);
+    }
+    if (message.Currency !== "") {
+      writer.uint32(154).string(message.Currency);
+    }
+    if (message.InitialValuation !== 0) {
+      writer.uint32(165).float(message.InitialValuation);
+    }
+    if (message.CurrentValuation !== 0) {
+      writer.uint32(173).float(message.CurrentValuation);
+    }
+    if (message.ValuationDate !== undefined) {
+      writer.uint32(178).string(message.ValuationDate);
+    }
+    if (message.Network !== 0) {
+      writer.uint32(184).int32(message.Network);
+    }
+    if (message.Status !== "") {
+      writer.uint32(194).string(message.Status);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): FinancialProperties {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseFinancialProperties();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.Symbol = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.Issuer = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.JurisdictionIDs.push(reader.string());
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.JurisdictionRestrictions = reader.string();
+          continue;
+        case 5:
+          if (tag !== 42) {
+            break;
+          }
+
+          message.RedemptionTerms = reader.string();
+          continue;
+        case 6:
+          if (tag !== 48) {
+            break;
+          }
+
+          message.ComplianceRequired = reader.bool();
+          continue;
+        case 7:
+          if (tag !== 58) {
+            break;
+          }
+
+          message.Type = reader.string();
+          continue;
+        case 8:
+          if (tag !== 66) {
+            break;
+          }
+
+          message.TradeAllowances.push(reader.string());
+          continue;
+        case 9:
+          if (tag !== 72) {
+            break;
+          }
+
+          message.Transferable = reader.bool();
+          continue;
+        case 10:
+          if (tag !== 82) {
+            break;
+          }
+
+          message.Platform = reader.string();
+          continue;
+        case 11:
+          if (tag !== 90) {
+            break;
+          }
+
+          message.PlatformType = reader.string();
+          continue;
+        case 12:
+          if (tag !== 98) {
+            break;
+          }
+
+          message.ContractAddress = reader.string();
+          continue;
+        case 13:
+          if (tag !== 104) {
+            break;
+          }
+
+          message.Fractional = reader.bool();
+          continue;
+        case 14:
+          if (tag !== 112) {
+            break;
+          }
+
+          message.TotalSupply = reader.int32();
+          continue;
+        case 15:
+          if (tag !== 120) {
+            break;
+          }
+
+          message.DecimalPlacesSupply = reader.int32();
+          continue;
+        case 16:
+          if (tag !== 130) {
+            break;
+          }
+
+          message.Subunit = reader.string();
+          continue;
+        case 17:
+          if (tag !== 141) {
+            break;
+          }
+
+          message.Price = reader.float();
+          continue;
+        case 18:
+          if (tag !== 144) {
+            break;
+          }
+
+          message.DecimalPlacesPrice = reader.int32();
+          continue;
+        case 19:
+          if (tag !== 154) {
+            break;
+          }
+
+          message.Currency = reader.string();
+          continue;
+        case 20:
+          if (tag !== 165) {
+            break;
+          }
+
+          message.InitialValuation = reader.float();
+          continue;
+        case 21:
+          if (tag !== 173) {
+            break;
+          }
+
+          message.CurrentValuation = reader.float();
+          continue;
+        case 22:
+          if (tag !== 178) {
+            break;
+          }
+
+          message.ValuationDate = reader.string();
+          continue;
+        case 23:
+          if (tag !== 184) {
+            break;
+          }
+
+          message.Network = reader.int32() as any;
+          continue;
+        case 24:
+          if (tag !== 194) {
+            break;
+          }
+
+          message.Status = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): FinancialProperties {
+    return {
+      Symbol: isSet(object.Symbol) ? globalThis.String(object.Symbol) : "",
+      Issuer: isSet(object.Issuer) ? globalThis.String(object.Issuer) : "",
+      JurisdictionIDs: globalThis.Array.isArray(object?.JurisdictionIDs)
+        ? object.JurisdictionIDs.map((e: any) => globalThis.String(e))
+        : [],
+      JurisdictionRestrictions: isSet(object.JurisdictionRestrictions)
+        ? globalThis.String(object.JurisdictionRestrictions)
+        : undefined,
+      RedemptionTerms: isSet(object.RedemptionTerms) ? globalThis.String(object.RedemptionTerms) : undefined,
+      ComplianceRequired: isSet(object.ComplianceRequired) ? globalThis.Boolean(object.ComplianceRequired) : undefined,
+      Type: isSet(object.Type) ? globalThis.String(object.Type) : "",
+      TradeAllowances: globalThis.Array.isArray(object?.TradeAllowances)
+        ? object.TradeAllowances.map((e: any) => globalThis.String(e))
+        : [],
+      Transferable: isSet(object.Transferable) ? globalThis.Boolean(object.Transferable) : false,
+      Platform: isSet(object.Platform) ? globalThis.String(object.Platform) : "",
+      PlatformType: isSet(object.PlatformType) ? globalThis.String(object.PlatformType) : "",
+      ContractAddress: isSet(object.ContractAddress) ? globalThis.String(object.ContractAddress) : undefined,
+      Fractional: isSet(object.Fractional) ? globalThis.Boolean(object.Fractional) : false,
+      TotalSupply: isSet(object.TotalSupply) ? globalThis.Number(object.TotalSupply) : 0,
+      DecimalPlacesSupply: isSet(object.DecimalPlacesSupply) ? globalThis.Number(object.DecimalPlacesSupply) : 0,
+      Subunit: isSet(object.Subunit) ? globalThis.String(object.Subunit) : undefined,
+      Price: isSet(object.Price) ? globalThis.Number(object.Price) : undefined,
+      DecimalPlacesPrice: isSet(object.DecimalPlacesPrice) ? globalThis.Number(object.DecimalPlacesPrice) : 0,
+      Currency: isSet(object.Currency) ? globalThis.String(object.Currency) : "",
+      InitialValuation: isSet(object.InitialValuation) ? globalThis.Number(object.InitialValuation) : 0,
+      CurrentValuation: isSet(object.CurrentValuation) ? globalThis.Number(object.CurrentValuation) : 0,
+      ValuationDate: isSet(object.ValuationDate) ? globalThis.String(object.ValuationDate) : undefined,
+      Network: isSet(object.Network) ? networkFromJSON(object.Network) : 0,
+      Status: isSet(object.Status) ? globalThis.String(object.Status) : "",
+    };
+  },
+
+  toJSON(message: FinancialProperties): unknown {
+    const obj: any = {};
+    if (message.Symbol !== "") {
+      obj.Symbol = message.Symbol;
+    }
+    if (message.Issuer !== "") {
+      obj.Issuer = message.Issuer;
+    }
+    if (message.JurisdictionIDs?.length) {
+      obj.JurisdictionIDs = message.JurisdictionIDs;
+    }
+    if (message.JurisdictionRestrictions !== undefined) {
+      obj.JurisdictionRestrictions = message.JurisdictionRestrictions;
+    }
+    if (message.RedemptionTerms !== undefined) {
+      obj.RedemptionTerms = message.RedemptionTerms;
+    }
+    if (message.ComplianceRequired !== undefined) {
+      obj.ComplianceRequired = message.ComplianceRequired;
+    }
+    if (message.Type !== "") {
+      obj.Type = message.Type;
+    }
+    if (message.TradeAllowances?.length) {
+      obj.TradeAllowances = message.TradeAllowances;
+    }
+    if (message.Transferable !== false) {
+      obj.Transferable = message.Transferable;
+    }
+    if (message.Platform !== "") {
+      obj.Platform = message.Platform;
+    }
+    if (message.PlatformType !== "") {
+      obj.PlatformType = message.PlatformType;
+    }
+    if (message.ContractAddress !== undefined) {
+      obj.ContractAddress = message.ContractAddress;
+    }
+    if (message.Fractional !== false) {
+      obj.Fractional = message.Fractional;
+    }
+    if (message.TotalSupply !== 0) {
+      obj.TotalSupply = Math.round(message.TotalSupply);
+    }
+    if (message.DecimalPlacesSupply !== 0) {
+      obj.DecimalPlacesSupply = Math.round(message.DecimalPlacesSupply);
+    }
+    if (message.Subunit !== undefined) {
+      obj.Subunit = message.Subunit;
+    }
+    if (message.Price !== undefined) {
+      obj.Price = message.Price;
+    }
+    if (message.DecimalPlacesPrice !== 0) {
+      obj.DecimalPlacesPrice = Math.round(message.DecimalPlacesPrice);
+    }
+    if (message.Currency !== "") {
+      obj.Currency = message.Currency;
+    }
+    if (message.InitialValuation !== 0) {
+      obj.InitialValuation = message.InitialValuation;
+    }
+    if (message.CurrentValuation !== 0) {
+      obj.CurrentValuation = message.CurrentValuation;
+    }
+    if (message.ValuationDate !== undefined) {
+      obj.ValuationDate = message.ValuationDate;
+    }
+    if (message.Network !== 0) {
+      obj.Network = networkToJSON(message.Network);
+    }
+    if (message.Status !== "") {
+      obj.Status = message.Status;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<FinancialProperties>, I>>(base?: I): FinancialProperties {
+    return FinancialProperties.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<FinancialProperties>, I>>(object: I): FinancialProperties {
+    const message = createBaseFinancialProperties();
+    message.Symbol = object.Symbol ?? "";
+    message.Issuer = object.Issuer ?? "";
+    message.JurisdictionIDs = object.JurisdictionIDs?.map((e) => e) || [];
+    message.JurisdictionRestrictions = object.JurisdictionRestrictions ?? undefined;
+    message.RedemptionTerms = object.RedemptionTerms ?? undefined;
+    message.ComplianceRequired = object.ComplianceRequired ?? undefined;
+    message.Type = object.Type ?? "";
+    message.TradeAllowances = object.TradeAllowances?.map((e) => e) || [];
+    message.Transferable = object.Transferable ?? false;
+    message.Platform = object.Platform ?? "";
+    message.PlatformType = object.PlatformType ?? "";
+    message.ContractAddress = object.ContractAddress ?? undefined;
+    message.Fractional = object.Fractional ?? false;
+    message.TotalSupply = object.TotalSupply ?? 0;
+    message.DecimalPlacesSupply = object.DecimalPlacesSupply ?? 0;
+    message.Subunit = object.Subunit ?? undefined;
+    message.Price = object.Price ?? undefined;
+    message.DecimalPlacesPrice = object.DecimalPlacesPrice ?? 0;
+    message.Currency = object.Currency ?? "";
+    message.InitialValuation = object.InitialValuation ?? 0;
+    message.CurrentValuation = object.CurrentValuation ?? 0;
+    message.ValuationDate = object.ValuationDate ?? undefined;
+    message.Network = object.Network ?? 0;
+    message.Status = object.Status ?? "";
+    return message;
+  },
+};
+
+function createBaseDescription(): Description {
+  return {
+    Name: "",
+    Description: "",
+    Image: undefined,
+    AssetID: "",
+    URL: "",
+    Country: "",
+    Documents: [],
+    Images: [],
+    Vertical: "",
+    CreatedAt: undefined,
+    UpdatedAt: undefined,
+  };
+}
+
+export const Description = {
+  encode(message: Description, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.Name !== "") {
+      writer.uint32(10).string(message.Name);
+    }
+    if (message.Description !== "") {
+      writer.uint32(18).string(message.Description);
+    }
+    if (message.Image !== undefined) {
+      writer.uint32(26).string(message.Image);
+    }
+    if (message.AssetID !== "") {
+      writer.uint32(34).string(message.AssetID);
+    }
+    if (message.URL !== "") {
+      writer.uint32(42).string(message.URL);
+    }
+    if (message.Country !== "") {
+      writer.uint32(50).string(message.Country);
+    }
+    for (const v of message.Documents) {
+      writer.uint32(58).string(v!);
+    }
+    for (const v of message.Images) {
+      writer.uint32(66).string(v!);
+    }
+    if (message.Vertical !== "") {
+      writer.uint32(74).string(message.Vertical);
+    }
+    if (message.CreatedAt !== undefined) {
+      writer.uint32(82).string(message.CreatedAt);
+    }
+    if (message.UpdatedAt !== undefined) {
+      writer.uint32(90).string(message.UpdatedAt);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): Description {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseDescription();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.Name = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.Description = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.Image = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.AssetID = reader.string();
+          continue;
+        case 5:
+          if (tag !== 42) {
+            break;
+          }
+
+          message.URL = reader.string();
+          continue;
+        case 6:
+          if (tag !== 50) {
+            break;
+          }
+
+          message.Country = reader.string();
+          continue;
+        case 7:
+          if (tag !== 58) {
+            break;
+          }
+
+          message.Documents.push(reader.string());
+          continue;
+        case 8:
+          if (tag !== 66) {
+            break;
+          }
+
+          message.Images.push(reader.string());
+          continue;
+        case 9:
+          if (tag !== 74) {
+            break;
+          }
+
+          message.Vertical = reader.string();
+          continue;
+        case 10:
+          if (tag !== 82) {
+            break;
+          }
+
+          message.CreatedAt = reader.string();
+          continue;
+        case 11:
+          if (tag !== 90) {
+            break;
+          }
+
+          message.UpdatedAt = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): Description {
+    return {
+      Name: isSet(object.Name) ? globalThis.String(object.Name) : "",
+      Description: isSet(object.Description) ? globalThis.String(object.Description) : "",
+      Image: isSet(object.Image) ? globalThis.String(object.Image) : undefined,
+      AssetID: isSet(object.AssetID) ? globalThis.String(object.AssetID) : "",
+      URL: isSet(object.URL) ? globalThis.String(object.URL) : "",
+      Country: isSet(object.Country) ? globalThis.String(object.Country) : "",
+      Documents: globalThis.Array.isArray(object?.Documents)
+        ? object.Documents.map((e: any) => globalThis.String(e))
+        : [],
+      Images: globalThis.Array.isArray(object?.Images) ? object.Images.map((e: any) => globalThis.String(e)) : [],
+      Vertical: isSet(object.Vertical) ? globalThis.String(object.Vertical) : "",
+      CreatedAt: isSet(object.CreatedAt) ? globalThis.String(object.CreatedAt) : undefined,
+      UpdatedAt: isSet(object.UpdatedAt) ? globalThis.String(object.UpdatedAt) : undefined,
+    };
+  },
+
+  toJSON(message: Description): unknown {
+    const obj: any = {};
+    if (message.Name !== "") {
+      obj.Name = message.Name;
+    }
+    if (message.Description !== "") {
+      obj.Description = message.Description;
+    }
+    if (message.Image !== undefined) {
+      obj.Image = message.Image;
+    }
+    if (message.AssetID !== "") {
+      obj.AssetID = message.AssetID;
+    }
+    if (message.URL !== "") {
+      obj.URL = message.URL;
+    }
+    if (message.Country !== "") {
+      obj.Country = message.Country;
+    }
+    if (message.Documents?.length) {
+      obj.Documents = message.Documents;
+    }
+    if (message.Images?.length) {
+      obj.Images = message.Images;
+    }
+    if (message.Vertical !== "") {
+      obj.Vertical = message.Vertical;
+    }
+    if (message.CreatedAt !== undefined) {
+      obj.CreatedAt = message.CreatedAt;
+    }
+    if (message.UpdatedAt !== undefined) {
+      obj.UpdatedAt = message.UpdatedAt;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<Description>, I>>(base?: I): Description {
+    return Description.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<Description>, I>>(object: I): Description {
+    const message = createBaseDescription();
+    message.Name = object.Name ?? "";
+    message.Description = object.Description ?? "";
+    message.Image = object.Image ?? undefined;
+    message.AssetID = object.AssetID ?? "";
+    message.URL = object.URL ?? "";
+    message.Country = object.Country ?? "";
+    message.Documents = object.Documents?.map((e) => e) || [];
+    message.Images = object.Images?.map((e) => e) || [];
+    message.Vertical = object.Vertical ?? "";
+    message.CreatedAt = object.CreatedAt ?? undefined;
+    message.UpdatedAt = object.UpdatedAt ?? undefined;
+    return message;
+  },
+};
+
+function createBaseExternalResources(): ExternalResources {
+  return { Links: [], Socials: [] };
+}
+
+export const ExternalResources = {
+  encode(message: ExternalResources, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    for (const v of message.Links) {
+      Link.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    for (const v of message.Socials) {
+      SocialMedia.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): ExternalResources {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseExternalResources();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.Links.push(Link.decode(reader, reader.uint32()));
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.Socials.push(SocialMedia.decode(reader, reader.uint32()));
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): ExternalResources {
+    return {
+      Links: globalThis.Array.isArray(object?.Links) ? object.Links.map((e: any) => Link.fromJSON(e)) : [],
+      Socials: globalThis.Array.isArray(object?.Socials) ? object.Socials.map((e: any) => SocialMedia.fromJSON(e)) : [],
+    };
+  },
+
+  toJSON(message: ExternalResources): unknown {
+    const obj: any = {};
+    if (message.Links?.length) {
+      obj.Links = message.Links.map((e) => Link.toJSON(e));
+    }
+    if (message.Socials?.length) {
+      obj.Socials = message.Socials.map((e) => SocialMedia.toJSON(e));
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<ExternalResources>, I>>(base?: I): ExternalResources {
+    return ExternalResources.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<ExternalResources>, I>>(object: I): ExternalResources {
+    const message = createBaseExternalResources();
+    message.Links = object.Links?.map((e) => Link.fromPartial(e)) || [];
+    message.Socials = object.Socials?.map((e) => SocialMedia.fromPartial(e)) || [];
+    return message;
+  },
+};
+
+function createBaseLink(): Link {
+  return { Type: 0, URL: "" };
+}
+
+export const Link = {
+  encode(message: Link, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.Type !== 0) {
+      writer.uint32(8).int32(message.Type);
+    }
+    if (message.URL !== "") {
+      writer.uint32(18).string(message.URL);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): Link {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseLink();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.Type = reader.int32() as any;
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.URL = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): Link {
+    return {
+      Type: isSet(object.Type) ? linkTypeFromJSON(object.Type) : 0,
+      URL: isSet(object.URL) ? globalThis.String(object.URL) : "",
+    };
+  },
+
+  toJSON(message: Link): unknown {
+    const obj: any = {};
+    if (message.Type !== 0) {
+      obj.Type = linkTypeToJSON(message.Type);
+    }
+    if (message.URL !== "") {
+      obj.URL = message.URL;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<Link>, I>>(base?: I): Link {
+    return Link.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<Link>, I>>(object: I): Link {
+    const message = createBaseLink();
+    message.Type = object.Type ?? 0;
+    message.URL = object.URL ?? "";
+    return message;
+  },
+};
+
+function createBaseSocialMedia(): SocialMedia {
+  return { Type: 0, URL: "" };
+}
+
+export const SocialMedia = {
+  encode(message: SocialMedia, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.Type !== 0) {
+      writer.uint32(8).int32(message.Type);
+    }
+    if (message.URL !== "") {
+      writer.uint32(18).string(message.URL);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): SocialMedia {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSocialMedia();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.Type = reader.int32() as any;
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.URL = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SocialMedia {
+    return {
+      Type: isSet(object.Type) ? socialMediaTypeFromJSON(object.Type) : 0,
+      URL: isSet(object.URL) ? globalThis.String(object.URL) : "",
+    };
+  },
+
+  toJSON(message: SocialMedia): unknown {
+    const obj: any = {};
+    if (message.Type !== 0) {
+      obj.Type = socialMediaTypeToJSON(message.Type);
+    }
+    if (message.URL !== "") {
+      obj.URL = message.URL;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<SocialMedia>, I>>(base?: I): SocialMedia {
+    return SocialMedia.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<SocialMedia>, I>>(object: I): SocialMedia {
+    const message = createBaseSocialMedia();
+    message.Type = object.Type ?? 0;
+    message.URL = object.URL ?? "";
+    return message;
+  },
+};
+
+function createBaseIssuerDetails(): IssuerDetails {
+  return {
+    Name: "",
+    Description: "",
+    Image: "",
+    ExternalUrl: "",
+    AddressLine1: "",
+    AddressLine2: undefined,
+    City: "",
+    Region: undefined,
+    PostalCode: undefined,
+    Country: "",
+    YearFounded: 0,
+    Licensed: false,
+    LicenseCountry: undefined,
+    LicenseNumber: undefined,
+    Phone: undefined,
+    Email: undefined,
+    SocialMediaLinks: [],
+    KeyClients: undefined,
+    Press: undefined,
+  };
+}
+
+export const IssuerDetails = {
+  encode(message: IssuerDetails, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.Name !== "") {
+      writer.uint32(10).string(message.Name);
+    }
+    if (message.Description !== "") {
+      writer.uint32(18).string(message.Description);
+    }
+    if (message.Image !== "") {
+      writer.uint32(26).string(message.Image);
+    }
+    if (message.ExternalUrl !== "") {
+      writer.uint32(34).string(message.ExternalUrl);
+    }
+    if (message.AddressLine1 !== "") {
+      writer.uint32(42).string(message.AddressLine1);
+    }
+    if (message.AddressLine2 !== undefined) {
+      writer.uint32(50).string(message.AddressLine2);
+    }
+    if (message.City !== "") {
+      writer.uint32(58).string(message.City);
+    }
+    if (message.Region !== undefined) {
+      writer.uint32(66).string(message.Region);
+    }
+    if (message.PostalCode !== undefined) {
+      writer.uint32(74).string(message.PostalCode);
+    }
+    if (message.Country !== "") {
+      writer.uint32(82).string(message.Country);
+    }
+    if (message.YearFounded !== 0) {
+      writer.uint32(88).int32(message.YearFounded);
+    }
+    if (message.Licensed !== false) {
+      writer.uint32(96).bool(message.Licensed);
+    }
+    if (message.LicenseCountry !== undefined) {
+      writer.uint32(106).string(message.LicenseCountry);
+    }
+    if (message.LicenseNumber !== undefined) {
+      writer.uint32(114).string(message.LicenseNumber);
+    }
+    if (message.Phone !== undefined) {
+      writer.uint32(122).string(message.Phone);
+    }
+    if (message.Email !== undefined) {
+      writer.uint32(130).string(message.Email);
+    }
+    for (const v of message.SocialMediaLinks) {
+      writer.uint32(138).string(v!);
+    }
+    if (message.KeyClients !== undefined) {
+      writer.uint32(146).string(message.KeyClients);
+    }
+    if (message.Press !== undefined) {
+      writer.uint32(154).string(message.Press);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): IssuerDetails {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseIssuerDetails();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.Name = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.Description = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.Image = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.ExternalUrl = reader.string();
+          continue;
+        case 5:
+          if (tag !== 42) {
+            break;
+          }
+
+          message.AddressLine1 = reader.string();
+          continue;
+        case 6:
+          if (tag !== 50) {
+            break;
+          }
+
+          message.AddressLine2 = reader.string();
+          continue;
+        case 7:
+          if (tag !== 58) {
+            break;
+          }
+
+          message.City = reader.string();
+          continue;
+        case 8:
+          if (tag !== 66) {
+            break;
+          }
+
+          message.Region = reader.string();
+          continue;
+        case 9:
+          if (tag !== 74) {
+            break;
+          }
+
+          message.PostalCode = reader.string();
+          continue;
+        case 10:
+          if (tag !== 82) {
+            break;
+          }
+
+          message.Country = reader.string();
+          continue;
+        case 11:
+          if (tag !== 88) {
+            break;
+          }
+
+          message.YearFounded = reader.int32();
+          continue;
+        case 12:
+          if (tag !== 96) {
+            break;
+          }
+
+          message.Licensed = reader.bool();
+          continue;
+        case 13:
+          if (tag !== 106) {
+            break;
+          }
+
+          message.LicenseCountry = reader.string();
+          continue;
+        case 14:
+          if (tag !== 114) {
+            break;
+          }
+
+          message.LicenseNumber = reader.string();
+          continue;
+        case 15:
+          if (tag !== 122) {
+            break;
+          }
+
+          message.Phone = reader.string();
+          continue;
+        case 16:
+          if (tag !== 130) {
+            break;
+          }
+
+          message.Email = reader.string();
+          continue;
+        case 17:
+          if (tag !== 138) {
+            break;
+          }
+
+          message.SocialMediaLinks.push(reader.string());
+          continue;
+        case 18:
+          if (tag !== 146) {
+            break;
+          }
+
+          message.KeyClients = reader.string();
+          continue;
+        case 19:
+          if (tag !== 154) {
+            break;
+          }
+
+          message.Press = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): IssuerDetails {
+    return {
+      Name: isSet(object.Name) ? globalThis.String(object.Name) : "",
+      Description: isSet(object.Description) ? globalThis.String(object.Description) : "",
+      Image: isSet(object.Image) ? globalThis.String(object.Image) : "",
+      ExternalUrl: isSet(object.ExternalUrl) ? globalThis.String(object.ExternalUrl) : "",
+      AddressLine1: isSet(object.AddressLine1) ? globalThis.String(object.AddressLine1) : "",
+      AddressLine2: isSet(object.AddressLine2) ? globalThis.String(object.AddressLine2) : undefined,
+      City: isSet(object.City) ? globalThis.String(object.City) : "",
+      Region: isSet(object.Region) ? globalThis.String(object.Region) : undefined,
+      PostalCode: isSet(object.PostalCode) ? globalThis.String(object.PostalCode) : undefined,
+      Country: isSet(object.Country) ? globalThis.String(object.Country) : "",
+      YearFounded: isSet(object.YearFounded) ? globalThis.Number(object.YearFounded) : 0,
+      Licensed: isSet(object.Licensed) ? globalThis.Boolean(object.Licensed) : false,
+      LicenseCountry: isSet(object.LicenseCountry) ? globalThis.String(object.LicenseCountry) : undefined,
+      LicenseNumber: isSet(object.LicenseNumber) ? globalThis.String(object.LicenseNumber) : undefined,
+      Phone: isSet(object.Phone) ? globalThis.String(object.Phone) : undefined,
+      Email: isSet(object.Email) ? globalThis.String(object.Email) : undefined,
+      SocialMediaLinks: globalThis.Array.isArray(object?.SocialMediaLinks)
+        ? object.SocialMediaLinks.map((e: any) => globalThis.String(e))
+        : [],
+      KeyClients: isSet(object.KeyClients) ? globalThis.String(object.KeyClients) : undefined,
+      Press: isSet(object.Press) ? globalThis.String(object.Press) : undefined,
+    };
+  },
+
+  toJSON(message: IssuerDetails): unknown {
+    const obj: any = {};
+    if (message.Name !== "") {
+      obj.Name = message.Name;
+    }
+    if (message.Description !== "") {
+      obj.Description = message.Description;
+    }
+    if (message.Image !== "") {
+      obj.Image = message.Image;
+    }
+    if (message.ExternalUrl !== "") {
+      obj.ExternalUrl = message.ExternalUrl;
+    }
+    if (message.AddressLine1 !== "") {
+      obj.AddressLine1 = message.AddressLine1;
+    }
+    if (message.AddressLine2 !== undefined) {
+      obj.AddressLine2 = message.AddressLine2;
+    }
+    if (message.City !== "") {
+      obj.City = message.City;
+    }
+    if (message.Region !== undefined) {
+      obj.Region = message.Region;
+    }
+    if (message.PostalCode !== undefined) {
+      obj.PostalCode = message.PostalCode;
+    }
+    if (message.Country !== "") {
+      obj.Country = message.Country;
+    }
+    if (message.YearFounded !== 0) {
+      obj.YearFounded = Math.round(message.YearFounded);
+    }
+    if (message.Licensed !== false) {
+      obj.Licensed = message.Licensed;
+    }
+    if (message.LicenseCountry !== undefined) {
+      obj.LicenseCountry = message.LicenseCountry;
+    }
+    if (message.LicenseNumber !== undefined) {
+      obj.LicenseNumber = message.LicenseNumber;
+    }
+    if (message.Phone !== undefined) {
+      obj.Phone = message.Phone;
+    }
+    if (message.Email !== undefined) {
+      obj.Email = message.Email;
+    }
+    if (message.SocialMediaLinks?.length) {
+      obj.SocialMediaLinks = message.SocialMediaLinks;
+    }
+    if (message.KeyClients !== undefined) {
+      obj.KeyClients = message.KeyClients;
+    }
+    if (message.Press !== undefined) {
+      obj.Press = message.Press;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<IssuerDetails>, I>>(base?: I): IssuerDetails {
+    return IssuerDetails.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<IssuerDetails>, I>>(object: I): IssuerDetails {
+    const message = createBaseIssuerDetails();
+    message.Name = object.Name ?? "";
+    message.Description = object.Description ?? "";
+    message.Image = object.Image ?? "";
+    message.ExternalUrl = object.ExternalUrl ?? "";
+    message.AddressLine1 = object.AddressLine1 ?? "";
+    message.AddressLine2 = object.AddressLine2 ?? undefined;
+    message.City = object.City ?? "";
+    message.Region = object.Region ?? undefined;
+    message.PostalCode = object.PostalCode ?? undefined;
+    message.Country = object.Country ?? "";
+    message.YearFounded = object.YearFounded ?? 0;
+    message.Licensed = object.Licensed ?? false;
+    message.LicenseCountry = object.LicenseCountry ?? undefined;
+    message.LicenseNumber = object.LicenseNumber ?? undefined;
+    message.Phone = object.Phone ?? undefined;
+    message.Email = object.Email ?? undefined;
+    message.SocialMediaLinks = object.SocialMediaLinks?.map((e) => e) || [];
+    message.KeyClients = object.KeyClients ?? undefined;
+    message.Press = object.Press ?? undefined;
     return message;
   },
 };
