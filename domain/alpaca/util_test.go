@@ -16,6 +16,7 @@ import (
 	ordergrpcdmn "github.com/sologenic/com-fs-order-model/domain"
 	utildecimal "github.com/sologenic/com-fs-utils-lib/go/decimal"
 	"github.com/sologenic/com-fs-utils-lib/go/unittest"
+	"github.com/sologenic/com-fs-utils-lib/models/commission"
 	metadatagrpc "github.com/sologenic/com-fs-utils-lib/models/metadata"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -91,6 +92,7 @@ func TestGetOrderKeyStrFromOrder(t *testing.T) {
 }
 
 func TestMapBrokerOrderToInternal(t *testing.T) {
+	commissionType := commission.CommissionType_BPS
 	tests := []unittest.TestBase{
 		{
 			Name: "SDK Response - Pending New Order",
@@ -136,12 +138,15 @@ func TestMapBrokerOrderToInternal(t *testing.T) {
 					HWM:            nil,
 					ExtendedHours:  false,
 					ClearingBroker: ordergrpc.ClearingBroker_ALPACA,
-					Commission:     &utildecimal.Decimal{Value: 0, Exp: 0},
-					EventID:        &eventID,
-					EventTime:      actual.EventTime,
-					TotalPosition:  nil,
-					PartialPrice:   nil,
-					PartialQty:     nil,
+					CommissionSettings: &commission.CommissionSettings{
+						Commission:     &utildecimal.Decimal{Value: 0, Exp: 0},
+						CommissionType: &commissionType,
+					},
+					EventID:       &eventID,
+					EventTime:     actual.EventTime,
+					TotalPosition: nil,
+					PartialPrice:  nil,
+					PartialQty:    nil,
 				}
 				assertEventsEquality(t, expected, actual)
 			},
@@ -190,12 +195,15 @@ func TestMapBrokerOrderToInternal(t *testing.T) {
 					HWM:            nil,
 					ExtendedHours:  false,
 					ClearingBroker: ordergrpc.ClearingBroker_ALPACA,
-					Commission:     &utildecimal.Decimal{Value: 0, Exp: 0},
-					EventID:        &eventID,
-					EventTime:      actual.EventTime,
-					TotalPosition:  nil,
-					PartialPrice:   nil,
-					PartialQty:     nil,
+					CommissionSettings: &commission.CommissionSettings{
+						Commission:     &utildecimal.Decimal{Value: 0, Exp: 0},
+						CommissionType: &commissionType,
+					},
+					EventID:       &eventID,
+					EventTime:     actual.EventTime,
+					TotalPosition: nil,
+					PartialPrice:  nil,
+					PartialQty:    nil,
 				}
 				assertEventsEquality(t, expected, actual)
 			},
@@ -244,12 +252,15 @@ func TestMapBrokerOrderToInternal(t *testing.T) {
 					HWM:            nil,
 					ExtendedHours:  false,
 					ClearingBroker: ordergrpc.ClearingBroker_ALPACA,
-					Commission:     &utildecimal.Decimal{Value: 0, Exp: 0},
-					EventID:        &eventID,
-					EventTime:      actual.EventTime,
-					TotalPosition:  nil,
-					PartialPrice:   nil,
-					PartialQty:     nil,
+					CommissionSettings: &commission.CommissionSettings{
+						Commission:     &utildecimal.Decimal{Value: 0, Exp: 0},
+						CommissionType: &commissionType,
+					},
+					EventID:       &eventID,
+					EventTime:     actual.EventTime,
+					TotalPosition: nil,
+					PartialPrice:  nil,
+					PartialQty:    nil,
 				}
 				assertEventsEquality(t, expected, actual)
 			},
@@ -298,12 +309,15 @@ func TestMapBrokerOrderToInternal(t *testing.T) {
 					HWM:            nil,
 					ExtendedHours:  false,
 					ClearingBroker: ordergrpc.ClearingBroker_ALPACA,
-					Commission:     &utildecimal.Decimal{Value: 0, Exp: 0},
-					EventID:        &eventID,
-					EventTime:      actual.EventTime,
-					TotalPosition:  &utildecimal.Decimal{Value: 13, Exp: 0},
-					PartialPrice:   &utildecimal.Decimal{Value: 22461, Exp: -2},
-					PartialQty:     &utildecimal.Decimal{Value: 1, Exp: 0},
+					CommissionSettings: &commission.CommissionSettings{
+						Commission:     &utildecimal.Decimal{Value: 0, Exp: 0},
+						CommissionType: &commissionType,
+					},
+					EventID:       &eventID,
+					EventTime:     actual.EventTime,
+					TotalPosition: &utildecimal.Decimal{Value: 13, Exp: 0},
+					PartialPrice:  &utildecimal.Decimal{Value: 22461, Exp: -2},
+					PartialQty:    &utildecimal.Decimal{Value: 1, Exp: 0},
 				}
 				assertEventsEquality(t, expected, actual)
 			},
@@ -352,12 +366,15 @@ func TestMapBrokerOrderToInternal(t *testing.T) {
 					HWM:            nil,
 					ExtendedHours:  false,
 					ClearingBroker: ordergrpc.ClearingBroker_ALPACA,
-					Commission:     &utildecimal.Decimal{Value: 0, Exp: 0},
-					EventID:        &eventID,
-					EventTime:      actual.EventTime,
-					TotalPosition:  &utildecimal.Decimal{Value: 14, Exp: 0},
-					PartialPrice:   &utildecimal.Decimal{Value: 22518, Exp: -2},
-					PartialQty:     &utildecimal.Decimal{Value: 1, Exp: 0},
+					CommissionSettings: &commission.CommissionSettings{
+						Commission:     &utildecimal.Decimal{Value: 0, Exp: 0},
+						CommissionType: &commissionType,
+					},
+					EventID:       &eventID,
+					EventTime:     actual.EventTime,
+					TotalPosition: &utildecimal.Decimal{Value: 14, Exp: 0},
+					PartialPrice:  &utildecimal.Decimal{Value: 22518, Exp: -2},
+					PartialQty:    &utildecimal.Decimal{Value: 1, Exp: 0},
 				}
 				assertEventsEquality(t, expected, actual)
 			},
@@ -406,12 +423,15 @@ func TestMapBrokerOrderToInternal(t *testing.T) {
 					HWM:            nil,
 					ExtendedHours:  false,
 					ClearingBroker: ordergrpc.ClearingBroker_ALPACA,
-					Commission:     &utildecimal.Decimal{Value: 0, Exp: 0},
-					EventID:        &eventID,
-					EventTime:      actual.EventTime,
-					TotalPosition:  nil,
-					PartialPrice:   nil,
-					PartialQty:     nil,
+					CommissionSettings: &commission.CommissionSettings{
+						Commission:     &utildecimal.Decimal{Value: 0, Exp: 0},
+						CommissionType: &commissionType,
+					},
+					EventID:       &eventID,
+					EventTime:     actual.EventTime,
+					TotalPosition: nil,
+					PartialPrice:  nil,
+					PartialQty:    nil,
 				}
 				assertEventsEquality(t, expected, actual)
 			},

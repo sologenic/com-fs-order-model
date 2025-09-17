@@ -11,6 +11,7 @@ import (
 	assetgrpc "github.com/sologenic/com-fs-asset-model"
 	ordergrpc "github.com/sologenic/com-fs-order-model"
 	dutils "github.com/sologenic/com-fs-utils-lib/go/decimal"
+	"github.com/sologenic/com-fs-utils-lib/models/commission"
 	metadatagrpc "github.com/sologenic/com-fs-utils-lib/models/metadata"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
@@ -71,8 +72,10 @@ func MapBrokerOrderToInternal(br *BrokerResponse) (*ordergrpc.BrokerOrderDetails
 		UpdatedAt:        convertTimeToTimestamp(&bo.UpdatedAt),
 		Status:           mapStatus(bo.Status),
 		ClearingBroker:   ordergrpc.ClearingBroker_ALPACA,
-		Commission:       dutils.DecimalToInternalDecimal(bo.Commission),
-		CommissionType:   mapCommissionType(bo.CommissionType),
+		CommissionSettings: &commission.CommissionSettings{
+			Commission:     dutils.DecimalToInternalDecimal(bo.Commission),
+			CommissionType: mapCommissionType(bo.CommissionType),
+		},
 	}
 
 	if bte != nil {
@@ -229,14 +232,14 @@ func mapOrderClass(oc alpaca.OrderClass) ordergrpc.OrderClass {
 	}
 }
 
-func mapCommissionType(ct string) *ordergrpc.CommissionType {
+func mapCommissionType(ct string) *commission.CommissionType {
 	switch ct {
 	case "notional":
-		return lo.ToPtr(ordergrpc.CommissionType_NOTIONAL)
+		return lo.ToPtr(commission.CommissionType_NOTIONAL)
 	case "qty":
-		return lo.ToPtr(ordergrpc.CommissionType_QTY)
+		return lo.ToPtr(commission.CommissionType_QTY)
 	case "bps":
-		return lo.ToPtr(ordergrpc.CommissionType_BPS)
+		return lo.ToPtr(commission.CommissionType_BPS)
 	default:
 		return nil
 	}
