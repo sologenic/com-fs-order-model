@@ -58,8 +58,8 @@ message OrderInstruction {
     int64 Amount = 4;
     int32 AmountExp = 5;
 
-    int64 LimitPrice = 6;
-    int32 LimitPriceExp = 7;
+    int64 LimitPrice = 6; // DEPRECATED: Use LimitPriceFloat instead for new smart contract format
+    int32 LimitPriceExp = 7; // DEPRECATED: Use LimitPriceFloat instead for new smart contract format
     bool FillOrKill = 8; // DEPRECATED: Use TimeInForce instead as it's more flexible and RQD does not support it (2025-08-18)
     optional string ExpiresAt = 9; // In ISO-8601 Zulu format (e.g., "2024-02-29T23:59:59Z")
     OrderDetailType OrderDetailType = 10;
@@ -77,6 +77,8 @@ message OrderInstruction {
     optional int32 CostsExp = 21;
 
     optional TimeInForce TimeInForce = 22;
+    
+    optional double LimitPriceFloat = 23; // Direct float price from smart contract (e.g., 26.25)
 }
 
 message Orders {
