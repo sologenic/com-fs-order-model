@@ -492,7 +492,9 @@ export interface OrderInstruction {
   Denom: string;
   Amount: number;
   AmountExp: number;
+  /** DEPRECATED: Use LimitPriceFloat instead for new smart contract format */
   LimitPrice: number;
+  /** DEPRECATED: Use LimitPriceFloat instead for new smart contract format */
   LimitPriceExp: number;
   /** DEPRECATED: Use TimeInForce instead as it's more flexible and RQD does not support it (2025-08-18) */
   FillOrKill: boolean;
@@ -510,7 +512,11 @@ export interface OrderInstruction {
   UsedFundsAmountExp?: number | undefined;
   Costs?: number | undefined;
   CostsExp?: number | undefined;
-  TimeInForce?: TimeInForce | undefined;
+  TimeInForce?:
+    | TimeInForce
+    | undefined;
+  /** Direct float price from smart contract (e.g., 26.25) */
+  LimitPriceFloat?: number | undefined;
 }
 
 export interface Orders {
@@ -915,6 +921,7 @@ function createBaseOrderInstruction(): OrderInstruction {
     Costs: undefined,
     CostsExp: undefined,
     TimeInForce: undefined,
+    LimitPriceFloat: undefined,
   };
 }
 
@@ -985,6 +992,9 @@ export const OrderInstruction = {
     }
     if (message.TimeInForce !== undefined) {
       writer.uint32(176).int32(message.TimeInForce);
+    }
+    if (message.LimitPriceFloat !== undefined) {
+      writer.uint32(185).double(message.LimitPriceFloat);
     }
     return writer;
   },
@@ -1150,6 +1160,13 @@ export const OrderInstruction = {
 
           message.TimeInForce = reader.int32() as any;
           continue;
+        case 23:
+          if (tag !== 185) {
+            break;
+          }
+
+          message.LimitPriceFloat = reader.double();
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -1183,6 +1200,7 @@ export const OrderInstruction = {
       Costs: isSet(object.Costs) ? globalThis.Number(object.Costs) : undefined,
       CostsExp: isSet(object.CostsExp) ? globalThis.Number(object.CostsExp) : undefined,
       TimeInForce: isSet(object.TimeInForce) ? timeInForceFromJSON(object.TimeInForce) : undefined,
+      LimitPriceFloat: isSet(object.LimitPriceFloat) ? globalThis.Number(object.LimitPriceFloat) : undefined,
     };
   },
 
@@ -1254,6 +1272,9 @@ export const OrderInstruction = {
     if (message.TimeInForce !== undefined) {
       obj.TimeInForce = timeInForceToJSON(message.TimeInForce);
     }
+    if (message.LimitPriceFloat !== undefined) {
+      obj.LimitPriceFloat = message.LimitPriceFloat;
+    }
     return obj;
   },
 
@@ -1288,6 +1309,7 @@ export const OrderInstruction = {
     message.Costs = object.Costs ?? undefined;
     message.CostsExp = object.CostsExp ?? undefined;
     message.TimeInForce = object.TimeInForce ?? undefined;
+    message.LimitPriceFloat = object.LimitPriceFloat ?? undefined;
     return message;
   },
 };

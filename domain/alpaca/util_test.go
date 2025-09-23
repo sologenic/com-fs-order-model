@@ -92,7 +92,6 @@ func TestGetOrderKeyStrFromOrder(t *testing.T) {
 }
 
 func TestMapBrokerOrderToInternal(t *testing.T) {
-	commissionType := commission.CommissionType_BPS
 	tests := []unittest.TestBase{
 		{
 			Name: "SDK Response - Pending New Order",
@@ -121,7 +120,7 @@ func TestMapBrokerOrderToInternal(t *testing.T) {
 					UpdatedAt:      actual.UpdatedAt,
 					AssetID:        "80e04a93-e1a8-4503-ab61-2ef1992650b4",
 					Symbol:         "PLTR",
-					AssetClass:     assetgrpc.AssetType_STOCKS,
+					AssetClass:     assetgrpc.AssetType_EQUITY,
 					OrderClass:     ordergrpc.OrderClass_NOT_USED_ORDER_CLASS,
 					Type:           ordergrpc.TradeType_MARKET,
 					Side:           ordergrpc.OrderType_ORDER_TYPE_PURCHASE,
@@ -140,7 +139,7 @@ func TestMapBrokerOrderToInternal(t *testing.T) {
 					ClearingBroker: ordergrpc.ClearingBroker_ALPACA,
 					CommissionSettings: &commission.CommissionSettings{
 						Commission:     &utildecimal.Decimal{Value: 0, Exp: 0},
-						CommissionType: &commissionType,
+						CommissionType: nil,
 					},
 					EventID:       &eventID,
 					EventTime:     actual.EventTime,
@@ -178,7 +177,7 @@ func TestMapBrokerOrderToInternal(t *testing.T) {
 					UpdatedAt:      actual.UpdatedAt,
 					AssetID:        "f801f835-bfe6-4a9d-a6b1-ccbb84bfd75f",
 					Symbol:         "AMZN",
-					AssetClass:     assetgrpc.AssetType_STOCKS,
+					AssetClass:     assetgrpc.AssetType_EQUITY,
 					OrderClass:     ordergrpc.OrderClass_NOT_USED_ORDER_CLASS,
 					Type:           ordergrpc.TradeType_MARKET,
 					Side:           ordergrpc.OrderType_ORDER_TYPE_SELL,
@@ -197,7 +196,7 @@ func TestMapBrokerOrderToInternal(t *testing.T) {
 					ClearingBroker: ordergrpc.ClearingBroker_ALPACA,
 					CommissionSettings: &commission.CommissionSettings{
 						Commission:     &utildecimal.Decimal{Value: 0, Exp: 0},
-						CommissionType: &commissionType,
+						CommissionType: nil,
 					},
 					EventID:       &eventID,
 					EventTime:     actual.EventTime,
@@ -235,7 +234,7 @@ func TestMapBrokerOrderToInternal(t *testing.T) {
 					UpdatedAt:      actual.UpdatedAt,
 					AssetID:        "f801f835-bfe6-4a9d-a6b1-ccbb84bfd75f",
 					Symbol:         "AMZN",
-					AssetClass:     assetgrpc.AssetType_STOCKS,
+					AssetClass:     assetgrpc.AssetType_EQUITY,
 					OrderClass:     ordergrpc.OrderClass_NOT_USED_ORDER_CLASS,
 					Type:           ordergrpc.TradeType_MARKET,
 					Side:           ordergrpc.OrderType_ORDER_TYPE_SELL,
@@ -254,7 +253,7 @@ func TestMapBrokerOrderToInternal(t *testing.T) {
 					ClearingBroker: ordergrpc.ClearingBroker_ALPACA,
 					CommissionSettings: &commission.CommissionSettings{
 						Commission:     &utildecimal.Decimal{Value: 0, Exp: 0},
-						CommissionType: &commissionType,
+						CommissionType: nil,
 					},
 					EventID:       &eventID,
 					EventTime:     actual.EventTime,
@@ -292,7 +291,7 @@ func TestMapBrokerOrderToInternal(t *testing.T) {
 					UpdatedAt:      actual.UpdatedAt,
 					AssetID:        "f801f835-bfe6-4a9d-a6b1-ccbb84bfd75f",
 					Symbol:         "AMZN",
-					AssetClass:     assetgrpc.AssetType_STOCKS,
+					AssetClass:     assetgrpc.AssetType_EQUITY,
 					OrderClass:     ordergrpc.OrderClass_NOT_USED_ORDER_CLASS,
 					Type:           ordergrpc.TradeType_MARKET,
 					Side:           ordergrpc.OrderType_ORDER_TYPE_PURCHASE,
@@ -311,7 +310,7 @@ func TestMapBrokerOrderToInternal(t *testing.T) {
 					ClearingBroker: ordergrpc.ClearingBroker_ALPACA,
 					CommissionSettings: &commission.CommissionSettings{
 						Commission:     &utildecimal.Decimal{Value: 0, Exp: 0},
-						CommissionType: &commissionType,
+						CommissionType: nil,
 					},
 					EventID:       &eventID,
 					EventTime:     actual.EventTime,
@@ -349,7 +348,7 @@ func TestMapBrokerOrderToInternal(t *testing.T) {
 					UpdatedAt:      actual.UpdatedAt,
 					AssetID:        "f801f835-bfe6-4a9d-a6b1-ccbb84bfd75f",
 					Symbol:         "AMZN",
-					AssetClass:     assetgrpc.AssetType_STOCKS,
+					AssetClass:     assetgrpc.AssetType_EQUITY,
 					OrderClass:     ordergrpc.OrderClass_NOT_USED_ORDER_CLASS,
 					Type:           ordergrpc.TradeType_MARKET,
 					Side:           ordergrpc.OrderType_ORDER_TYPE_PURCHASE,
@@ -368,7 +367,7 @@ func TestMapBrokerOrderToInternal(t *testing.T) {
 					ClearingBroker: ordergrpc.ClearingBroker_ALPACA,
 					CommissionSettings: &commission.CommissionSettings{
 						Commission:     &utildecimal.Decimal{Value: 0, Exp: 0},
-						CommissionType: &commissionType,
+						CommissionType: nil,
 					},
 					EventID:       &eventID,
 					EventTime:     actual.EventTime,
@@ -406,7 +405,7 @@ func TestMapBrokerOrderToInternal(t *testing.T) {
 					UpdatedAt:      actual.UpdatedAt,
 					AssetID:        "80e04a93-e1a8-4503-ab61-2ef1992650b4",
 					Symbol:         "PLTR",
-					AssetClass:     assetgrpc.AssetType_STOCKS,
+					AssetClass:     assetgrpc.AssetType_EQUITY,
 					OrderClass:     ordergrpc.OrderClass_NOT_USED_ORDER_CLASS,
 					Type:           ordergrpc.TradeType_MARKET,
 					Side:           ordergrpc.OrderType_ORDER_TYPE_PURCHASE,
@@ -425,7 +424,7 @@ func TestMapBrokerOrderToInternal(t *testing.T) {
 					ClearingBroker: ordergrpc.ClearingBroker_ALPACA,
 					CommissionSettings: &commission.CommissionSettings{
 						Commission:     &utildecimal.Decimal{Value: 0, Exp: 0},
-						CommissionType: &commissionType,
+						CommissionType: nil,
 					},
 					EventID:       &eventID,
 					EventTime:     actual.EventTime,
@@ -528,6 +527,7 @@ func assertEventsEquality[T any](t *testing.T, expected, actual T) {
 			ordergrpc.ClientOrderID{},
 			timestamppb.Timestamp{},
 			utildecimal.Decimal{},
+			commission.CommissionSettings{},
 		),
 	}
 
