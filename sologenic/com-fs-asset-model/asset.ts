@@ -6,7 +6,6 @@
 
 /* eslint-disable */
 import _m0 from "protobufjs/minimal";
-import { Decimal } from "../com-fs-utils-lib/go/decimal/decimal";
 import { Audit } from "../com-fs-utils-lib/models/audit/audit";
 import { MetaData, Network, networkFromJSON, networkToJSON } from "../com-fs-utils-lib/models/metadata/metadata";
 import { Denom } from "./domain/denom/denom";
@@ -367,54 +366,6 @@ export function userAssetStatusToJSON(object: UserAssetStatus): string {
   }
 }
 
-export enum CommissionType {
-  NOT_USED_COMMISSION_TYPE = 0,
-  /** NOTIONAL - Charge commission on a per order basis (default) */
-  NOTIONAL = 1,
-  /** QTY - Charge commission on a per qty/contract basis, pro rated */
-  QTY = 2,
-  /** BPS - Commission expressed in basis points (percent), converted to notional amount for purposes of calculating commission(max two decimal places) */
-  BPS = 3,
-  UNRECOGNIZED = -1,
-}
-
-export function commissionTypeFromJSON(object: any): CommissionType {
-  switch (object) {
-    case 0:
-    case "NOT_USED_COMMISSION_TYPE":
-      return CommissionType.NOT_USED_COMMISSION_TYPE;
-    case 1:
-    case "NOTIONAL":
-      return CommissionType.NOTIONAL;
-    case 2:
-    case "QTY":
-      return CommissionType.QTY;
-    case 3:
-    case "BPS":
-      return CommissionType.BPS;
-    case -1:
-    case "UNRECOGNIZED":
-    default:
-      return CommissionType.UNRECOGNIZED;
-  }
-}
-
-export function commissionTypeToJSON(object: CommissionType): string {
-  switch (object) {
-    case CommissionType.NOT_USED_COMMISSION_TYPE:
-      return "NOT_USED_COMMISSION_TYPE";
-    case CommissionType.NOTIONAL:
-      return "NOTIONAL";
-    case CommissionType.QTY:
-      return "QTY";
-    case CommissionType.BPS:
-      return "BPS";
-    case CommissionType.UNRECOGNIZED:
-    default:
-      return "UNRECOGNIZED";
-  }
-}
-
 export interface AssetDetails {
   /** Key string to prevent composing the key all the time and reduce errors */
   ID: string;
@@ -585,8 +536,7 @@ export interface FinancialProperties {
   PlatformType: string;
   ContractAddress?: string | undefined;
   Fractional: boolean;
-  TotalSupply: number;
-  DecimalPlacesSupply: number;
+  TotalSupply?: number | undefined;
   Subunit?: string | undefined;
   Price?: number | undefined;
   DecimalPlacesPrice: number;
@@ -596,21 +546,15 @@ export interface FinancialProperties {
   ValuationDate?: string | undefined;
   Network: Network;
   Status: string;
-  /** Broker API specific commission fields */
-  Commission?:
-    | Decimal
-    | undefined;
-  /** How commission field value is calculated */
-  CommissionType?: CommissionType | undefined;
 }
 
 export interface Description {
   Name: string;
   Description: string;
-  Image?: string | undefined;
+  Logo: LogoFile | undefined;
   AssetID: string;
   URL: string;
-  Country: string;
+  Country: string[];
   Documents: string[];
   Images: string[];
   Vertical: string;
@@ -659,6 +603,14 @@ export interface IssuerDetails {
   SocialMediaLinks: string[];
   KeyClients?: string | undefined;
   Press?: string | undefined;
+}
+
+export interface LogoFile {
+  /** The reference to the file */
+  Reference: string;
+  Extension: string;
+  /** User defined name of the file, used as a "description" and not to reference the file */
+  Name?: string | undefined;
 }
 
 function createBaseAssetDetails(): AssetDetails {
@@ -3020,8 +2972,7 @@ function createBaseFinancialProperties(): FinancialProperties {
     PlatformType: "",
     ContractAddress: undefined,
     Fractional: false,
-    TotalSupply: 0,
-    DecimalPlacesSupply: 0,
+    TotalSupply: undefined,
     Subunit: undefined,
     Price: undefined,
     DecimalPlacesPrice: 0,
@@ -3031,8 +2982,6 @@ function createBaseFinancialProperties(): FinancialProperties {
     ValuationDate: undefined,
     Network: 0,
     Status: "",
-    Commission: undefined,
-    CommissionType: undefined,
   };
 }
 
@@ -3077,44 +3026,35 @@ export const FinancialProperties = {
     if (message.Fractional !== false) {
       writer.uint32(104).bool(message.Fractional);
     }
-    if (message.TotalSupply !== 0) {
+    if (message.TotalSupply !== undefined) {
       writer.uint32(112).int32(message.TotalSupply);
     }
-    if (message.DecimalPlacesSupply !== 0) {
-      writer.uint32(120).int32(message.DecimalPlacesSupply);
-    }
     if (message.Subunit !== undefined) {
-      writer.uint32(130).string(message.Subunit);
+      writer.uint32(122).string(message.Subunit);
     }
     if (message.Price !== undefined) {
-      writer.uint32(141).float(message.Price);
+      writer.uint32(133).float(message.Price);
     }
     if (message.DecimalPlacesPrice !== 0) {
-      writer.uint32(144).int32(message.DecimalPlacesPrice);
+      writer.uint32(136).int32(message.DecimalPlacesPrice);
     }
     if (message.Currency !== "") {
-      writer.uint32(154).string(message.Currency);
+      writer.uint32(146).string(message.Currency);
     }
     if (message.InitialValuation !== 0) {
-      writer.uint32(165).float(message.InitialValuation);
+      writer.uint32(157).float(message.InitialValuation);
     }
     if (message.CurrentValuation !== 0) {
-      writer.uint32(173).float(message.CurrentValuation);
+      writer.uint32(165).float(message.CurrentValuation);
     }
     if (message.ValuationDate !== undefined) {
-      writer.uint32(178).string(message.ValuationDate);
+      writer.uint32(170).string(message.ValuationDate);
     }
     if (message.Network !== 0) {
-      writer.uint32(184).int32(message.Network);
+      writer.uint32(176).int32(message.Network);
     }
     if (message.Status !== "") {
-      writer.uint32(194).string(message.Status);
-    }
-    if (message.Commission !== undefined) {
-      Decimal.encode(message.Commission, writer.uint32(202).fork()).ldelim();
-    }
-    if (message.CommissionType !== undefined) {
-      writer.uint32(208).int32(message.CommissionType);
+      writer.uint32(186).string(message.Status);
     }
     return writer;
   },
@@ -3225,88 +3165,67 @@ export const FinancialProperties = {
           message.TotalSupply = reader.int32();
           continue;
         case 15:
-          if (tag !== 120) {
-            break;
-          }
-
-          message.DecimalPlacesSupply = reader.int32();
-          continue;
-        case 16:
-          if (tag !== 130) {
+          if (tag !== 122) {
             break;
           }
 
           message.Subunit = reader.string();
           continue;
-        case 17:
-          if (tag !== 141) {
+        case 16:
+          if (tag !== 133) {
             break;
           }
 
           message.Price = reader.float();
           continue;
-        case 18:
-          if (tag !== 144) {
+        case 17:
+          if (tag !== 136) {
             break;
           }
 
           message.DecimalPlacesPrice = reader.int32();
           continue;
-        case 19:
-          if (tag !== 154) {
+        case 18:
+          if (tag !== 146) {
             break;
           }
 
           message.Currency = reader.string();
+          continue;
+        case 19:
+          if (tag !== 157) {
+            break;
+          }
+
+          message.InitialValuation = reader.float();
           continue;
         case 20:
           if (tag !== 165) {
             break;
           }
 
-          message.InitialValuation = reader.float();
-          continue;
-        case 21:
-          if (tag !== 173) {
-            break;
-          }
-
           message.CurrentValuation = reader.float();
           continue;
-        case 22:
-          if (tag !== 178) {
+        case 21:
+          if (tag !== 170) {
             break;
           }
 
           message.ValuationDate = reader.string();
           continue;
-        case 23:
-          if (tag !== 184) {
+        case 22:
+          if (tag !== 176) {
             break;
           }
 
           message.Network = reader.int32() as any;
           continue;
-        case 24:
-          if (tag !== 194) {
+        case 23:
+          if (tag !== 186) {
             break;
           }
 
           message.Status = reader.string();
-          continue;
-        case 25:
-          if (tag !== 202) {
-            break;
-          }
-
-          message.Commission = Decimal.decode(reader, reader.uint32());
-          continue;
-        case 26:
-          if (tag !== 208) {
-            break;
-          }
-
-          message.CommissionType = reader.int32() as any;
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -3338,8 +3257,7 @@ export const FinancialProperties = {
       PlatformType: isSet(object.PlatformType) ? globalThis.String(object.PlatformType) : "",
       ContractAddress: isSet(object.ContractAddress) ? globalThis.String(object.ContractAddress) : undefined,
       Fractional: isSet(object.Fractional) ? globalThis.Boolean(object.Fractional) : false,
-      TotalSupply: isSet(object.TotalSupply) ? globalThis.Number(object.TotalSupply) : 0,
-      DecimalPlacesSupply: isSet(object.DecimalPlacesSupply) ? globalThis.Number(object.DecimalPlacesSupply) : 0,
+      TotalSupply: isSet(object.TotalSupply) ? globalThis.Number(object.TotalSupply) : undefined,
       Subunit: isSet(object.Subunit) ? globalThis.String(object.Subunit) : undefined,
       Price: isSet(object.Price) ? globalThis.Number(object.Price) : undefined,
       DecimalPlacesPrice: isSet(object.DecimalPlacesPrice) ? globalThis.Number(object.DecimalPlacesPrice) : 0,
@@ -3349,8 +3267,6 @@ export const FinancialProperties = {
       ValuationDate: isSet(object.ValuationDate) ? globalThis.String(object.ValuationDate) : undefined,
       Network: isSet(object.Network) ? networkFromJSON(object.Network) : 0,
       Status: isSet(object.Status) ? globalThis.String(object.Status) : "",
-      Commission: isSet(object.Commission) ? Decimal.fromJSON(object.Commission) : undefined,
-      CommissionType: isSet(object.CommissionType) ? commissionTypeFromJSON(object.CommissionType) : undefined,
     };
   },
 
@@ -3395,11 +3311,8 @@ export const FinancialProperties = {
     if (message.Fractional !== false) {
       obj.Fractional = message.Fractional;
     }
-    if (message.TotalSupply !== 0) {
+    if (message.TotalSupply !== undefined) {
       obj.TotalSupply = Math.round(message.TotalSupply);
-    }
-    if (message.DecimalPlacesSupply !== 0) {
-      obj.DecimalPlacesSupply = Math.round(message.DecimalPlacesSupply);
     }
     if (message.Subunit !== undefined) {
       obj.Subunit = message.Subunit;
@@ -3428,12 +3341,6 @@ export const FinancialProperties = {
     if (message.Status !== "") {
       obj.Status = message.Status;
     }
-    if (message.Commission !== undefined) {
-      obj.Commission = Decimal.toJSON(message.Commission);
-    }
-    if (message.CommissionType !== undefined) {
-      obj.CommissionType = commissionTypeToJSON(message.CommissionType);
-    }
     return obj;
   },
 
@@ -3455,8 +3362,7 @@ export const FinancialProperties = {
     message.PlatformType = object.PlatformType ?? "";
     message.ContractAddress = object.ContractAddress ?? undefined;
     message.Fractional = object.Fractional ?? false;
-    message.TotalSupply = object.TotalSupply ?? 0;
-    message.DecimalPlacesSupply = object.DecimalPlacesSupply ?? 0;
+    message.TotalSupply = object.TotalSupply ?? undefined;
     message.Subunit = object.Subunit ?? undefined;
     message.Price = object.Price ?? undefined;
     message.DecimalPlacesPrice = object.DecimalPlacesPrice ?? 0;
@@ -3466,10 +3372,6 @@ export const FinancialProperties = {
     message.ValuationDate = object.ValuationDate ?? undefined;
     message.Network = object.Network ?? 0;
     message.Status = object.Status ?? "";
-    message.Commission = (object.Commission !== undefined && object.Commission !== null)
-      ? Decimal.fromPartial(object.Commission)
-      : undefined;
-    message.CommissionType = object.CommissionType ?? undefined;
     return message;
   },
 };
@@ -3478,10 +3380,10 @@ function createBaseDescription(): Description {
   return {
     Name: "",
     Description: "",
-    Image: undefined,
+    Logo: undefined,
     AssetID: "",
     URL: "",
-    Country: "",
+    Country: [],
     Documents: [],
     Images: [],
     Vertical: "",
@@ -3498,8 +3400,8 @@ export const Description = {
     if (message.Description !== "") {
       writer.uint32(18).string(message.Description);
     }
-    if (message.Image !== undefined) {
-      writer.uint32(26).string(message.Image);
+    if (message.Logo !== undefined) {
+      LogoFile.encode(message.Logo, writer.uint32(26).fork()).ldelim();
     }
     if (message.AssetID !== "") {
       writer.uint32(34).string(message.AssetID);
@@ -3507,8 +3409,8 @@ export const Description = {
     if (message.URL !== "") {
       writer.uint32(42).string(message.URL);
     }
-    if (message.Country !== "") {
-      writer.uint32(50).string(message.Country);
+    for (const v of message.Country) {
+      writer.uint32(50).string(v!);
     }
     for (const v of message.Documents) {
       writer.uint32(58).string(v!);
@@ -3554,7 +3456,7 @@ export const Description = {
             break;
           }
 
-          message.Image = reader.string();
+          message.Logo = LogoFile.decode(reader, reader.uint32());
           continue;
         case 4:
           if (tag !== 34) {
@@ -3575,7 +3477,7 @@ export const Description = {
             break;
           }
 
-          message.Country = reader.string();
+          message.Country.push(reader.string());
           continue;
         case 7:
           if (tag !== 58) {
@@ -3625,10 +3527,10 @@ export const Description = {
     return {
       Name: isSet(object.Name) ? globalThis.String(object.Name) : "",
       Description: isSet(object.Description) ? globalThis.String(object.Description) : "",
-      Image: isSet(object.Image) ? globalThis.String(object.Image) : undefined,
+      Logo: isSet(object.Logo) ? LogoFile.fromJSON(object.Logo) : undefined,
       AssetID: isSet(object.AssetID) ? globalThis.String(object.AssetID) : "",
       URL: isSet(object.URL) ? globalThis.String(object.URL) : "",
-      Country: isSet(object.Country) ? globalThis.String(object.Country) : "",
+      Country: globalThis.Array.isArray(object?.Country) ? object.Country.map((e: any) => globalThis.String(e)) : [],
       Documents: globalThis.Array.isArray(object?.Documents)
         ? object.Documents.map((e: any) => globalThis.String(e))
         : [],
@@ -3647,8 +3549,8 @@ export const Description = {
     if (message.Description !== "") {
       obj.Description = message.Description;
     }
-    if (message.Image !== undefined) {
-      obj.Image = message.Image;
+    if (message.Logo !== undefined) {
+      obj.Logo = LogoFile.toJSON(message.Logo);
     }
     if (message.AssetID !== "") {
       obj.AssetID = message.AssetID;
@@ -3656,7 +3558,7 @@ export const Description = {
     if (message.URL !== "") {
       obj.URL = message.URL;
     }
-    if (message.Country !== "") {
+    if (message.Country?.length) {
       obj.Country = message.Country;
     }
     if (message.Documents?.length) {
@@ -3684,10 +3586,10 @@ export const Description = {
     const message = createBaseDescription();
     message.Name = object.Name ?? "";
     message.Description = object.Description ?? "";
-    message.Image = object.Image ?? undefined;
+    message.Logo = (object.Logo !== undefined && object.Logo !== null) ? LogoFile.fromPartial(object.Logo) : undefined;
     message.AssetID = object.AssetID ?? "";
     message.URL = object.URL ?? "";
-    message.Country = object.Country ?? "";
+    message.Country = object.Country?.map((e) => e) || [];
     message.Documents = object.Documents?.map((e) => e) || [];
     message.Images = object.Images?.map((e) => e) || [];
     message.Vertical = object.Vertical ?? "";
@@ -4266,6 +4168,95 @@ export const IssuerDetails = {
     message.SocialMediaLinks = object.SocialMediaLinks?.map((e) => e) || [];
     message.KeyClients = object.KeyClients ?? undefined;
     message.Press = object.Press ?? undefined;
+    return message;
+  },
+};
+
+function createBaseLogoFile(): LogoFile {
+  return { Reference: "", Extension: "", Name: undefined };
+}
+
+export const LogoFile = {
+  encode(message: LogoFile, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.Reference !== "") {
+      writer.uint32(10).string(message.Reference);
+    }
+    if (message.Extension !== "") {
+      writer.uint32(18).string(message.Extension);
+    }
+    if (message.Name !== undefined) {
+      writer.uint32(26).string(message.Name);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): LogoFile {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseLogoFile();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.Reference = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.Extension = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.Name = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): LogoFile {
+    return {
+      Reference: isSet(object.Reference) ? globalThis.String(object.Reference) : "",
+      Extension: isSet(object.Extension) ? globalThis.String(object.Extension) : "",
+      Name: isSet(object.Name) ? globalThis.String(object.Name) : undefined,
+    };
+  },
+
+  toJSON(message: LogoFile): unknown {
+    const obj: any = {};
+    if (message.Reference !== "") {
+      obj.Reference = message.Reference;
+    }
+    if (message.Extension !== "") {
+      obj.Extension = message.Extension;
+    }
+    if (message.Name !== undefined) {
+      obj.Name = message.Name;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<LogoFile>, I>>(base?: I): LogoFile {
+    return LogoFile.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<LogoFile>, I>>(object: I): LogoFile {
+    const message = createBaseLogoFile();
+    message.Reference = object.Reference ?? "";
+    message.Extension = object.Extension ?? "";
+    message.Name = object.Name ?? undefined;
     return message;
   },
 };
