@@ -30,6 +30,8 @@ import "sologenic/com-fs-order-model/broker.proto";
 
 When external projects try to import our protobuf definitions, they expect the generated Go functions to match the full import path.
 
+======> DOUBTFUL THAT THIS IS TRUE: OTHER USAGES DID SO FAR NOT SHOW THIS ISSUE AND IT WAS CAUSING A TON OF PROBLEMS IN COM-FE-ATG-WEBAPP.
+
 ### Our Special Solution
 
 This build script uses a **two-step approach**:

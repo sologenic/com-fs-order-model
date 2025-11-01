@@ -5,8 +5,8 @@ package order;
 option go_package = "github.com/sologenic/com-fs-order-model;order";
 
 import "google/protobuf/empty.proto";
-import "sologenic/com-fs-order-model/order.proto";
-import "sologenic/com-fs-order-model/util.proto";
+import "order.proto";
+import "util.proto";
 import "sologenic/com-fs-utils-lib/models/metadata/metadata.proto";
 
 service OrderService {

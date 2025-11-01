@@ -5,6 +5,10 @@ set -e
 rd=$(git rev-parse --show-toplevel)
 cd $rd
 
+rm -rf node_modules
+rm -rf sologenic
+rm -rf build
+
 # Generate Go code for normal proto files (without gRPC)
 protoc \
     --proto_path=. "order.proto" \
@@ -56,7 +60,6 @@ protoc \
     "--go-grpc_out=." --go-grpc_opt=paths=source_relative
 
 # Generate TypeScript code for normal proto files only (NOT for -grpc files)
-rm -rf node_modules
 npm i
 
 protoc --plugin=./node_modules/.bin/protoc-gen-ts_proto \

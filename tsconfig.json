@@ -10,6 +10,6 @@
     "moduleResolution": "node",
     "resolveJsonModule": true
   },
-  "include": ["*.ts", "sologenic/com-fs-user-model/user.ts"],
-  "exclude": ["node_modules/**", "client/**"]
+  "include": ["*.ts"],
+  "exclude": ["node_modules/**", "client/**","sologenic/**"]
 }

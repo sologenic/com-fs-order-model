@@ -6,10 +6,10 @@
 /* eslint-disable */
 import Long from "long";
 import _m0 from "protobufjs/minimal";
+import { BrokerOrderDetails } from "./broker";
 import { Timestamp } from "./google/protobuf/timestamp";
-import { BrokerOrderDetails } from "./sologenic/com-fs-order-model/broker";
-import { orderTypeFromJSON, orderTypeToJSON, ProcessInfo, timeInForceFromJSON, timeInForceToJSON, } from "./sologenic/com-fs-order-model/util";
 import { networkFromJSON, networkToJSON } from "./sologenic/com-fs-utils-lib/models/metadata/metadata";
+import { orderTypeFromJSON, orderTypeToJSON, ProcessInfo, timeInForceFromJSON, timeInForceToJSON, } from "./util";
 export const protobufPackage = "order";
 /** Execution type(action) of the transaction against the smart contract */
 export var TransactionType;
