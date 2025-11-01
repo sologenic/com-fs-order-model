@@ -2,15 +2,16 @@
   "name": "com-fs-order-model",
   "version": "1.1.0",
   "description": "Full stack model for Order",
-  "main": "build/index.js",
+  "main": "build/order.js",
   "scripts": {
-    "build": "rm -rf ./build && npx tsc -p tsconfig.json"  
+    "build": "rm -rf ./build && npx tsc -p tsconfig.json"
   },
   "devDependencies": {
     "@types/node": "^20.12.12",
     "typescript": "^4.9.5"
   },
   "dependencies": {
+    "@grpc/grpc-js": "^1.8.12",
     "protoc-gen-ts": "^0.8.5",
     "ts-proto": "^1.141.0"
   }

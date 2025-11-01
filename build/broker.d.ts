@@ -1,8 +1,9 @@
 import _m0 from "protobufjs/minimal";
-import { AssetType } from "../com-fs-asset-model/asset";
-import { Decimal } from "../com-fs-utils-lib/go/decimal/decimal";
-import { Network } from "../com-fs-utils-lib/models/metadata/metadata";
-import { OrderType, ProcessInfo } from "./util";
+import { AssetType } from "./sologenic/com-fs-asset-model/asset";
+import { OrderType, ProcessInfo, TimeInForce } from "./sologenic/com-fs-order-model/util";
+import { Decimal } from "./sologenic/com-fs-utils-lib/go/decimal/decimal";
+import { CommissionSettings } from "./sologenic/com-fs-utils-lib/models/commission/commission";
+import { Network } from "./sologenic/com-fs-utils-lib/models/metadata/metadata";
 export declare const protobufPackage = "order";
 export declare enum ClearingBroker {
     NOT_USED_CLEARING_BROKER = 0,
@@ -12,25 +13,6 @@ export declare enum ClearingBroker {
 }
 export declare function clearingBrokerFromJSON(object: any): ClearingBroker;
 export declare function clearingBrokerToJSON(object: ClearingBroker): string;
-export declare enum TimeInForce {
-    NOT_USED_TIME_IN_FORCE = 0,
-    DAY = 1,
-    /** GOOD_TIL_CANCELED - GTC */
-    GOOD_TIL_CANCELED = 2,
-    /** AT_THE_OPENING - OPG */
-    AT_THE_OPENING = 3,
-    /** AT_THE_CLOSE - CLS */
-    AT_THE_CLOSE = 4,
-    /** IMMEDIATE_OR_CANCEL - IOC */
-    IMMEDIATE_OR_CANCEL = 5,
-    /** FILL_OR_KILL - FOK */
-    FILL_OR_KILL = 6,
-    /** GOOD_TIL_TIME - GTT */
-    GOOD_TIL_TIME = 7,
-    UNRECOGNIZED = -1
-}
-export declare function timeInForceFromJSON(object: any): TimeInForce;
-export declare function timeInForceToJSON(object: TimeInForce): string;
 export declare enum TradeType {
     NOT_USED_TRADE_TYPE = 0,
     MARKET = 1,
@@ -149,6 +131,15 @@ export interface BrokerOrderDetails {
     InstanceID?: string | undefined;
     /** Broker that cleared the order, e.g. Alpaca, RQD, etc. */
     ClearingBroker: ClearingBroker;
+    /**
+     * SSE Event tracking fields for precise event recovery using since_id parameter
+     * Enables seamless subscription from past point-in-time to real-time pushes
+     * EventID can be used with Alpaca SSE since_id parameter for reliable event replay
+     */
+    EventID?: string | undefined;
+    EventTime?: Date | undefined;
+    /** Broker API specific commission */
+    CommissionSettings?: CommissionSettings | undefined;
 }
 export interface ClientOrderID {
     Network: Network;
@@ -182,28 +173,73 @@ export declare const BrokerOrderDetails: {
         Type?: TradeType | undefined;
         Side?: OrderType | undefined;
         TimeInForce?: TimeInForce | undefined;
-        Notional?: Decimal | undefined;
-        OrderQty?: Decimal | undefined;
-        FilledQty?: Decimal | undefined;
-        FilledAvgPrice?: Decimal | undefined;
-        LimitPrice?: Decimal | undefined;
-        StopPrice?: Decimal | undefined;
-        TrailPrice?: Decimal | undefined;
-        TrailPercent?: Decimal | undefined;
-        HWM?: Decimal | undefined;
+        Notional?: {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } | undefined;
+        OrderQty?: {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } | undefined;
+        FilledQty?: {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } | undefined;
+        FilledAvgPrice?: {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } | undefined;
+        LimitPrice?: {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } | undefined;
+        StopPrice?: {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } | undefined;
+        TrailPrice?: {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } | undefined;
+        TrailPercent?: {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } | undefined;
+        HWM?: {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } | undefined;
         ExtendedHours?: boolean | undefined;
         CreatedAt?: Date | undefined;
         UpdatedAt?: Date | undefined;
         Status?: BrokerOrderStatus | undefined;
-        TotalPosition?: Decimal | undefined;
-        PartialPrice?: Decimal | undefined;
-        PartialQty?: Decimal | undefined;
+        TotalPosition?: {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } | undefined;
+        PartialPrice?: {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } | undefined;
+        PartialQty?: {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } | undefined;
         ProcessInfo?: {
-            ProcessState?: import("./util").ProcessState | undefined;
+            ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
             ProcessedAt?: Date | undefined;
         } | undefined;
         InstanceID?: string | undefined;
         ClearingBroker?: ClearingBroker | undefined;
+        EventID?: string | undefined;
+        EventTime?: Date | undefined;
+        CommissionSettings?: {
+            Commission?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            CommissionType?: import("./sologenic/com-fs-utils-lib/models/commission/commission").CommissionType | undefined;
+        } | undefined;
     } & {
         BrokerAssignedID?: string | undefined;
         ClientOrderID?: ({
@@ -227,32 +263,122 @@ export declare const BrokerOrderDetails: {
         Type?: TradeType | undefined;
         Side?: OrderType | undefined;
         TimeInForce?: TimeInForce | undefined;
-        Notional?: Decimal | undefined;
-        OrderQty?: Decimal | undefined;
-        FilledQty?: Decimal | undefined;
-        FilledAvgPrice?: Decimal | undefined;
-        LimitPrice?: Decimal | undefined;
-        StopPrice?: Decimal | undefined;
-        TrailPrice?: Decimal | undefined;
-        TrailPercent?: Decimal | undefined;
-        HWM?: Decimal | undefined;
+        Notional?: ({
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & { [K_1 in Exclude<keyof I["Notional"], keyof Decimal>]: never; }) | undefined;
+        OrderQty?: ({
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & { [K_2 in Exclude<keyof I["OrderQty"], keyof Decimal>]: never; }) | undefined;
+        FilledQty?: ({
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & { [K_3 in Exclude<keyof I["FilledQty"], keyof Decimal>]: never; }) | undefined;
+        FilledAvgPrice?: ({
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & { [K_4 in Exclude<keyof I["FilledAvgPrice"], keyof Decimal>]: never; }) | undefined;
+        LimitPrice?: ({
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & { [K_5 in Exclude<keyof I["LimitPrice"], keyof Decimal>]: never; }) | undefined;
+        StopPrice?: ({
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & { [K_6 in Exclude<keyof I["StopPrice"], keyof Decimal>]: never; }) | undefined;
+        TrailPrice?: ({
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & { [K_7 in Exclude<keyof I["TrailPrice"], keyof Decimal>]: never; }) | undefined;
+        TrailPercent?: ({
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & { [K_8 in Exclude<keyof I["TrailPercent"], keyof Decimal>]: never; }) | undefined;
+        HWM?: ({
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & { [K_9 in Exclude<keyof I["HWM"], keyof Decimal>]: never; }) | undefined;
         ExtendedHours?: boolean | undefined;
         CreatedAt?: Date | undefined;
         UpdatedAt?: Date | undefined;
         Status?: BrokerOrderStatus | undefined;
-        TotalPosition?: Decimal | undefined;
-        PartialPrice?: Decimal | undefined;
-        PartialQty?: Decimal | undefined;
+        TotalPosition?: ({
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & { [K_10 in Exclude<keyof I["TotalPosition"], keyof Decimal>]: never; }) | undefined;
+        PartialPrice?: ({
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & { [K_11 in Exclude<keyof I["PartialPrice"], keyof Decimal>]: never; }) | undefined;
+        PartialQty?: ({
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & { [K_12 in Exclude<keyof I["PartialQty"], keyof Decimal>]: never; }) | undefined;
         ProcessInfo?: ({
-            ProcessState?: import("./util").ProcessState | undefined;
+            ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
             ProcessedAt?: Date | undefined;
         } & {
-            ProcessState?: import("./util").ProcessState | undefined;
+            ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
             ProcessedAt?: Date | undefined;
-        } & { [K_1 in Exclude<keyof I["ProcessInfo"], keyof ProcessInfo>]: never; }) | undefined;
+        } & { [K_13 in Exclude<keyof I["ProcessInfo"], keyof ProcessInfo>]: never; }) | undefined;
         InstanceID?: string | undefined;
         ClearingBroker?: ClearingBroker | undefined;
-    } & { [K_2 in Exclude<keyof I, keyof BrokerOrderDetails>]: never; }>(base?: I | undefined): BrokerOrderDetails;
+        EventID?: string | undefined;
+        EventTime?: Date | undefined;
+        CommissionSettings?: ({
+            Commission?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            CommissionType?: import("./sologenic/com-fs-utils-lib/models/commission/commission").CommissionType | undefined;
+        } & {
+            Commission?: ({
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & { [K_14 in Exclude<keyof I["CommissionSettings"]["Commission"], keyof Decimal>]: never; }) | undefined;
+            CommissionType?: import("./sologenic/com-fs-utils-lib/models/commission/commission").CommissionType | undefined;
+        } & { [K_15 in Exclude<keyof I["CommissionSettings"], keyof CommissionSettings>]: never; }) | undefined;
+    } & { [K_16 in Exclude<keyof I, keyof BrokerOrderDetails>]: never; }>(base?: I | undefined): BrokerOrderDetails;
     fromPartial<I_1 extends {
         BrokerAssignedID?: string | undefined;
         ClientOrderID?: {
@@ -272,28 +398,73 @@ export declare const BrokerOrderDetails: {
         Type?: TradeType | undefined;
         Side?: OrderType | undefined;
         TimeInForce?: TimeInForce | undefined;
-        Notional?: Decimal | undefined;
-        OrderQty?: Decimal | undefined;
-        FilledQty?: Decimal | undefined;
-        FilledAvgPrice?: Decimal | undefined;
-        LimitPrice?: Decimal | undefined;
-        StopPrice?: Decimal | undefined;
-        TrailPrice?: Decimal | undefined;
-        TrailPercent?: Decimal | undefined;
-        HWM?: Decimal | undefined;
+        Notional?: {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } | undefined;
+        OrderQty?: {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } | undefined;
+        FilledQty?: {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } | undefined;
+        FilledAvgPrice?: {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } | undefined;
+        LimitPrice?: {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } | undefined;
+        StopPrice?: {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } | undefined;
+        TrailPrice?: {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } | undefined;
+        TrailPercent?: {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } | undefined;
+        HWM?: {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } | undefined;
         ExtendedHours?: boolean | undefined;
         CreatedAt?: Date | undefined;
         UpdatedAt?: Date | undefined;
         Status?: BrokerOrderStatus | undefined;
-        TotalPosition?: Decimal | undefined;
-        PartialPrice?: Decimal | undefined;
-        PartialQty?: Decimal | undefined;
+        TotalPosition?: {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } | undefined;
+        PartialPrice?: {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } | undefined;
+        PartialQty?: {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } | undefined;
         ProcessInfo?: {
-            ProcessState?: import("./util").ProcessState | undefined;
+            ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
             ProcessedAt?: Date | undefined;
         } | undefined;
         InstanceID?: string | undefined;
         ClearingBroker?: ClearingBroker | undefined;
+        EventID?: string | undefined;
+        EventTime?: Date | undefined;
+        CommissionSettings?: {
+            Commission?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            CommissionType?: import("./sologenic/com-fs-utils-lib/models/commission/commission").CommissionType | undefined;
+        } | undefined;
     } & {
         BrokerAssignedID?: string | undefined;
         ClientOrderID?: ({
@@ -304,7 +475,7 @@ export declare const BrokerOrderDetails: {
             Network?: Network | undefined;
             SmartContractAddr?: string | undefined;
             OrderID?: number | undefined;
-        } & { [K_3 in Exclude<keyof I_1["ClientOrderID"], keyof ClientOrderID>]: never; }) | undefined;
+        } & { [K_17 in Exclude<keyof I_1["ClientOrderID"], keyof ClientOrderID>]: never; }) | undefined;
         SubmittedAt?: Date | undefined;
         FilledAt?: Date | undefined;
         ExpiredAt?: Date | undefined;
@@ -317,32 +488,122 @@ export declare const BrokerOrderDetails: {
         Type?: TradeType | undefined;
         Side?: OrderType | undefined;
         TimeInForce?: TimeInForce | undefined;
-        Notional?: Decimal | undefined;
-        OrderQty?: Decimal | undefined;
-        FilledQty?: Decimal | undefined;
-        FilledAvgPrice?: Decimal | undefined;
-        LimitPrice?: Decimal | undefined;
-        StopPrice?: Decimal | undefined;
-        TrailPrice?: Decimal | undefined;
-        TrailPercent?: Decimal | undefined;
-        HWM?: Decimal | undefined;
+        Notional?: ({
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & { [K_18 in Exclude<keyof I_1["Notional"], keyof Decimal>]: never; }) | undefined;
+        OrderQty?: ({
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & { [K_19 in Exclude<keyof I_1["OrderQty"], keyof Decimal>]: never; }) | undefined;
+        FilledQty?: ({
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & { [K_20 in Exclude<keyof I_1["FilledQty"], keyof Decimal>]: never; }) | undefined;
+        FilledAvgPrice?: ({
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & { [K_21 in Exclude<keyof I_1["FilledAvgPrice"], keyof Decimal>]: never; }) | undefined;
+        LimitPrice?: ({
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & { [K_22 in Exclude<keyof I_1["LimitPrice"], keyof Decimal>]: never; }) | undefined;
+        StopPrice?: ({
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & { [K_23 in Exclude<keyof I_1["StopPrice"], keyof Decimal>]: never; }) | undefined;
+        TrailPrice?: ({
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & { [K_24 in Exclude<keyof I_1["TrailPrice"], keyof Decimal>]: never; }) | undefined;
+        TrailPercent?: ({
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & { [K_25 in Exclude<keyof I_1["TrailPercent"], keyof Decimal>]: never; }) | undefined;
+        HWM?: ({
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & { [K_26 in Exclude<keyof I_1["HWM"], keyof Decimal>]: never; }) | undefined;
         ExtendedHours?: boolean | undefined;
         CreatedAt?: Date | undefined;
         UpdatedAt?: Date | undefined;
         Status?: BrokerOrderStatus | undefined;
-        TotalPosition?: Decimal | undefined;
-        PartialPrice?: Decimal | undefined;
-        PartialQty?: Decimal | undefined;
+        TotalPosition?: ({
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & { [K_27 in Exclude<keyof I_1["TotalPosition"], keyof Decimal>]: never; }) | undefined;
+        PartialPrice?: ({
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & { [K_28 in Exclude<keyof I_1["PartialPrice"], keyof Decimal>]: never; }) | undefined;
+        PartialQty?: ({
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & { [K_29 in Exclude<keyof I_1["PartialQty"], keyof Decimal>]: never; }) | undefined;
         ProcessInfo?: ({
-            ProcessState?: import("./util").ProcessState | undefined;
+            ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
             ProcessedAt?: Date | undefined;
         } & {
-            ProcessState?: import("./util").ProcessState | undefined;
+            ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
             ProcessedAt?: Date | undefined;
-        } & { [K_4 in Exclude<keyof I_1["ProcessInfo"], keyof ProcessInfo>]: never; }) | undefined;
+        } & { [K_30 in Exclude<keyof I_1["ProcessInfo"], keyof ProcessInfo>]: never; }) | undefined;
         InstanceID?: string | undefined;
         ClearingBroker?: ClearingBroker | undefined;
-    } & { [K_5 in Exclude<keyof I_1, keyof BrokerOrderDetails>]: never; }>(object: I_1): BrokerOrderDetails;
+        EventID?: string | undefined;
+        EventTime?: Date | undefined;
+        CommissionSettings?: ({
+            Commission?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            CommissionType?: import("./sologenic/com-fs-utils-lib/models/commission/commission").CommissionType | undefined;
+        } & {
+            Commission?: ({
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & { [K_31 in Exclude<keyof I_1["CommissionSettings"]["Commission"], keyof Decimal>]: never; }) | undefined;
+            CommissionType?: import("./sologenic/com-fs-utils-lib/models/commission/commission").CommissionType | undefined;
+        } & { [K_32 in Exclude<keyof I_1["CommissionSettings"], keyof CommissionSettings>]: never; }) | undefined;
+    } & { [K_33 in Exclude<keyof I_1, keyof BrokerOrderDetails>]: never; }>(object: I_1): BrokerOrderDetails;
 };
 export declare const ClientOrderID: {
     encode(message: ClientOrderID, writer?: _m0.Writer): _m0.Writer;
@@ -393,28 +654,73 @@ export declare const BrokerOrderDetailsList: {
             Type?: TradeType | undefined;
             Side?: OrderType | undefined;
             TimeInForce?: TimeInForce | undefined;
-            Notional?: Decimal | undefined;
-            OrderQty?: Decimal | undefined;
-            FilledQty?: Decimal | undefined;
-            FilledAvgPrice?: Decimal | undefined;
-            LimitPrice?: Decimal | undefined;
-            StopPrice?: Decimal | undefined;
-            TrailPrice?: Decimal | undefined;
-            TrailPercent?: Decimal | undefined;
-            HWM?: Decimal | undefined;
+            Notional?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            OrderQty?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            FilledQty?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            FilledAvgPrice?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            LimitPrice?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            StopPrice?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            TrailPrice?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            TrailPercent?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            HWM?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
             ExtendedHours?: boolean | undefined;
             CreatedAt?: Date | undefined;
             UpdatedAt?: Date | undefined;
             Status?: BrokerOrderStatus | undefined;
-            TotalPosition?: Decimal | undefined;
-            PartialPrice?: Decimal | undefined;
-            PartialQty?: Decimal | undefined;
+            TotalPosition?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            PartialPrice?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            PartialQty?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
             ProcessInfo?: {
-                ProcessState?: import("./util").ProcessState | undefined;
+                ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
             ClearingBroker?: ClearingBroker | undefined;
+            EventID?: string | undefined;
+            EventTime?: Date | undefined;
+            CommissionSettings?: {
+                Commission?: {
+                    Value?: number | undefined;
+                    Exp?: number | undefined;
+                } | undefined;
+                CommissionType?: import("./sologenic/com-fs-utils-lib/models/commission/commission").CommissionType | undefined;
+            } | undefined;
         }[] | undefined;
     } & {
         BrokerOrderDetailsList?: ({
@@ -436,28 +742,73 @@ export declare const BrokerOrderDetailsList: {
             Type?: TradeType | undefined;
             Side?: OrderType | undefined;
             TimeInForce?: TimeInForce | undefined;
-            Notional?: Decimal | undefined;
-            OrderQty?: Decimal | undefined;
-            FilledQty?: Decimal | undefined;
-            FilledAvgPrice?: Decimal | undefined;
-            LimitPrice?: Decimal | undefined;
-            StopPrice?: Decimal | undefined;
-            TrailPrice?: Decimal | undefined;
-            TrailPercent?: Decimal | undefined;
-            HWM?: Decimal | undefined;
+            Notional?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            OrderQty?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            FilledQty?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            FilledAvgPrice?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            LimitPrice?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            StopPrice?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            TrailPrice?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            TrailPercent?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            HWM?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
             ExtendedHours?: boolean | undefined;
             CreatedAt?: Date | undefined;
             UpdatedAt?: Date | undefined;
             Status?: BrokerOrderStatus | undefined;
-            TotalPosition?: Decimal | undefined;
-            PartialPrice?: Decimal | undefined;
-            PartialQty?: Decimal | undefined;
+            TotalPosition?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            PartialPrice?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            PartialQty?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
             ProcessInfo?: {
-                ProcessState?: import("./util").ProcessState | undefined;
+                ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
             ClearingBroker?: ClearingBroker | undefined;
+            EventID?: string | undefined;
+            EventTime?: Date | undefined;
+            CommissionSettings?: {
+                Commission?: {
+                    Value?: number | undefined;
+                    Exp?: number | undefined;
+                } | undefined;
+                CommissionType?: import("./sologenic/com-fs-utils-lib/models/commission/commission").CommissionType | undefined;
+            } | undefined;
         }[] & ({
             BrokerAssignedID?: string | undefined;
             ClientOrderID?: {
@@ -477,28 +828,73 @@ export declare const BrokerOrderDetailsList: {
             Type?: TradeType | undefined;
             Side?: OrderType | undefined;
             TimeInForce?: TimeInForce | undefined;
-            Notional?: Decimal | undefined;
-            OrderQty?: Decimal | undefined;
-            FilledQty?: Decimal | undefined;
-            FilledAvgPrice?: Decimal | undefined;
-            LimitPrice?: Decimal | undefined;
-            StopPrice?: Decimal | undefined;
-            TrailPrice?: Decimal | undefined;
-            TrailPercent?: Decimal | undefined;
-            HWM?: Decimal | undefined;
+            Notional?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            OrderQty?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            FilledQty?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            FilledAvgPrice?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            LimitPrice?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            StopPrice?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            TrailPrice?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            TrailPercent?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            HWM?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
             ExtendedHours?: boolean | undefined;
             CreatedAt?: Date | undefined;
             UpdatedAt?: Date | undefined;
             Status?: BrokerOrderStatus | undefined;
-            TotalPosition?: Decimal | undefined;
-            PartialPrice?: Decimal | undefined;
-            PartialQty?: Decimal | undefined;
+            TotalPosition?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            PartialPrice?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            PartialQty?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
             ProcessInfo?: {
-                ProcessState?: import("./util").ProcessState | undefined;
+                ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
             ClearingBroker?: ClearingBroker | undefined;
+            EventID?: string | undefined;
+            EventTime?: Date | undefined;
+            CommissionSettings?: {
+                Commission?: {
+                    Value?: number | undefined;
+                    Exp?: number | undefined;
+                } | undefined;
+                CommissionType?: import("./sologenic/com-fs-utils-lib/models/commission/commission").CommissionType | undefined;
+            } | undefined;
         } & {
             BrokerAssignedID?: string | undefined;
             ClientOrderID?: ({
@@ -522,32 +918,122 @@ export declare const BrokerOrderDetailsList: {
             Type?: TradeType | undefined;
             Side?: OrderType | undefined;
             TimeInForce?: TimeInForce | undefined;
-            Notional?: Decimal | undefined;
-            OrderQty?: Decimal | undefined;
-            FilledQty?: Decimal | undefined;
-            FilledAvgPrice?: Decimal | undefined;
-            LimitPrice?: Decimal | undefined;
-            StopPrice?: Decimal | undefined;
-            TrailPrice?: Decimal | undefined;
-            TrailPercent?: Decimal | undefined;
-            HWM?: Decimal | undefined;
+            Notional?: ({
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & { [K_1 in Exclude<keyof I["BrokerOrderDetailsList"][number]["Notional"], keyof Decimal>]: never; }) | undefined;
+            OrderQty?: ({
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & { [K_2 in Exclude<keyof I["BrokerOrderDetailsList"][number]["OrderQty"], keyof Decimal>]: never; }) | undefined;
+            FilledQty?: ({
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & { [K_3 in Exclude<keyof I["BrokerOrderDetailsList"][number]["FilledQty"], keyof Decimal>]: never; }) | undefined;
+            FilledAvgPrice?: ({
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & { [K_4 in Exclude<keyof I["BrokerOrderDetailsList"][number]["FilledAvgPrice"], keyof Decimal>]: never; }) | undefined;
+            LimitPrice?: ({
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & { [K_5 in Exclude<keyof I["BrokerOrderDetailsList"][number]["LimitPrice"], keyof Decimal>]: never; }) | undefined;
+            StopPrice?: ({
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & { [K_6 in Exclude<keyof I["BrokerOrderDetailsList"][number]["StopPrice"], keyof Decimal>]: never; }) | undefined;
+            TrailPrice?: ({
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & { [K_7 in Exclude<keyof I["BrokerOrderDetailsList"][number]["TrailPrice"], keyof Decimal>]: never; }) | undefined;
+            TrailPercent?: ({
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & { [K_8 in Exclude<keyof I["BrokerOrderDetailsList"][number]["TrailPercent"], keyof Decimal>]: never; }) | undefined;
+            HWM?: ({
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & { [K_9 in Exclude<keyof I["BrokerOrderDetailsList"][number]["HWM"], keyof Decimal>]: never; }) | undefined;
             ExtendedHours?: boolean | undefined;
             CreatedAt?: Date | undefined;
             UpdatedAt?: Date | undefined;
             Status?: BrokerOrderStatus | undefined;
-            TotalPosition?: Decimal | undefined;
-            PartialPrice?: Decimal | undefined;
-            PartialQty?: Decimal | undefined;
+            TotalPosition?: ({
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & { [K_10 in Exclude<keyof I["BrokerOrderDetailsList"][number]["TotalPosition"], keyof Decimal>]: never; }) | undefined;
+            PartialPrice?: ({
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & { [K_11 in Exclude<keyof I["BrokerOrderDetailsList"][number]["PartialPrice"], keyof Decimal>]: never; }) | undefined;
+            PartialQty?: ({
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & { [K_12 in Exclude<keyof I["BrokerOrderDetailsList"][number]["PartialQty"], keyof Decimal>]: never; }) | undefined;
             ProcessInfo?: ({
-                ProcessState?: import("./util").ProcessState | undefined;
+                ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
             } & {
-                ProcessState?: import("./util").ProcessState | undefined;
+                ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
-            } & { [K_1 in Exclude<keyof I["BrokerOrderDetailsList"][number]["ProcessInfo"], keyof ProcessInfo>]: never; }) | undefined;
+            } & { [K_13 in Exclude<keyof I["BrokerOrderDetailsList"][number]["ProcessInfo"], keyof ProcessInfo>]: never; }) | undefined;
             InstanceID?: string | undefined;
             ClearingBroker?: ClearingBroker | undefined;
-        } & { [K_2 in Exclude<keyof I["BrokerOrderDetailsList"][number], keyof BrokerOrderDetails>]: never; })[] & { [K_3 in Exclude<keyof I["BrokerOrderDetailsList"], keyof {
+            EventID?: string | undefined;
+            EventTime?: Date | undefined;
+            CommissionSettings?: ({
+                Commission?: {
+                    Value?: number | undefined;
+                    Exp?: number | undefined;
+                } | undefined;
+                CommissionType?: import("./sologenic/com-fs-utils-lib/models/commission/commission").CommissionType | undefined;
+            } & {
+                Commission?: ({
+                    Value?: number | undefined;
+                    Exp?: number | undefined;
+                } & {
+                    Value?: number | undefined;
+                    Exp?: number | undefined;
+                } & { [K_14 in Exclude<keyof I["BrokerOrderDetailsList"][number]["CommissionSettings"]["Commission"], keyof Decimal>]: never; }) | undefined;
+                CommissionType?: import("./sologenic/com-fs-utils-lib/models/commission/commission").CommissionType | undefined;
+            } & { [K_15 in Exclude<keyof I["BrokerOrderDetailsList"][number]["CommissionSettings"], keyof CommissionSettings>]: never; }) | undefined;
+        } & { [K_16 in Exclude<keyof I["BrokerOrderDetailsList"][number], keyof BrokerOrderDetails>]: never; })[] & { [K_17 in Exclude<keyof I["BrokerOrderDetailsList"], keyof {
             BrokerAssignedID?: string | undefined;
             ClientOrderID?: {
                 Network?: Network | undefined;
@@ -566,30 +1052,75 @@ export declare const BrokerOrderDetailsList: {
             Type?: TradeType | undefined;
             Side?: OrderType | undefined;
             TimeInForce?: TimeInForce | undefined;
-            Notional?: Decimal | undefined;
-            OrderQty?: Decimal | undefined;
-            FilledQty?: Decimal | undefined;
-            FilledAvgPrice?: Decimal | undefined;
-            LimitPrice?: Decimal | undefined;
-            StopPrice?: Decimal | undefined;
-            TrailPrice?: Decimal | undefined;
-            TrailPercent?: Decimal | undefined;
-            HWM?: Decimal | undefined;
+            Notional?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            OrderQty?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            FilledQty?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            FilledAvgPrice?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            LimitPrice?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            StopPrice?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            TrailPrice?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            TrailPercent?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            HWM?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
             ExtendedHours?: boolean | undefined;
             CreatedAt?: Date | undefined;
             UpdatedAt?: Date | undefined;
             Status?: BrokerOrderStatus | undefined;
-            TotalPosition?: Decimal | undefined;
-            PartialPrice?: Decimal | undefined;
-            PartialQty?: Decimal | undefined;
+            TotalPosition?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            PartialPrice?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            PartialQty?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
             ProcessInfo?: {
-                ProcessState?: import("./util").ProcessState | undefined;
+                ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
             ClearingBroker?: ClearingBroker | undefined;
+            EventID?: string | undefined;
+            EventTime?: Date | undefined;
+            CommissionSettings?: {
+                Commission?: {
+                    Value?: number | undefined;
+                    Exp?: number | undefined;
+                } | undefined;
+                CommissionType?: import("./sologenic/com-fs-utils-lib/models/commission/commission").CommissionType | undefined;
+            } | undefined;
         }[]>]: never; }) | undefined;
-    } & { [K_4 in Exclude<keyof I, "BrokerOrderDetailsList">]: never; }>(base?: I | undefined): BrokerOrderDetailsList;
+    } & { [K_18 in Exclude<keyof I, "BrokerOrderDetailsList">]: never; }>(base?: I | undefined): BrokerOrderDetailsList;
     fromPartial<I_1 extends {
         BrokerOrderDetailsList?: {
             BrokerAssignedID?: string | undefined;
@@ -610,28 +1141,73 @@ export declare const BrokerOrderDetailsList: {
             Type?: TradeType | undefined;
             Side?: OrderType | undefined;
             TimeInForce?: TimeInForce | undefined;
-            Notional?: Decimal | undefined;
-            OrderQty?: Decimal | undefined;
-            FilledQty?: Decimal | undefined;
-            FilledAvgPrice?: Decimal | undefined;
-            LimitPrice?: Decimal | undefined;
-            StopPrice?: Decimal | undefined;
-            TrailPrice?: Decimal | undefined;
-            TrailPercent?: Decimal | undefined;
-            HWM?: Decimal | undefined;
+            Notional?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            OrderQty?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            FilledQty?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            FilledAvgPrice?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            LimitPrice?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            StopPrice?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            TrailPrice?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            TrailPercent?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            HWM?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
             ExtendedHours?: boolean | undefined;
             CreatedAt?: Date | undefined;
             UpdatedAt?: Date | undefined;
             Status?: BrokerOrderStatus | undefined;
-            TotalPosition?: Decimal | undefined;
-            PartialPrice?: Decimal | undefined;
-            PartialQty?: Decimal | undefined;
+            TotalPosition?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            PartialPrice?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            PartialQty?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
             ProcessInfo?: {
-                ProcessState?: import("./util").ProcessState | undefined;
+                ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
             ClearingBroker?: ClearingBroker | undefined;
+            EventID?: string | undefined;
+            EventTime?: Date | undefined;
+            CommissionSettings?: {
+                Commission?: {
+                    Value?: number | undefined;
+                    Exp?: number | undefined;
+                } | undefined;
+                CommissionType?: import("./sologenic/com-fs-utils-lib/models/commission/commission").CommissionType | undefined;
+            } | undefined;
         }[] | undefined;
     } & {
         BrokerOrderDetailsList?: ({
@@ -653,28 +1229,73 @@ export declare const BrokerOrderDetailsList: {
             Type?: TradeType | undefined;
             Side?: OrderType | undefined;
             TimeInForce?: TimeInForce | undefined;
-            Notional?: Decimal | undefined;
-            OrderQty?: Decimal | undefined;
-            FilledQty?: Decimal | undefined;
-            FilledAvgPrice?: Decimal | undefined;
-            LimitPrice?: Decimal | undefined;
-            StopPrice?: Decimal | undefined;
-            TrailPrice?: Decimal | undefined;
-            TrailPercent?: Decimal | undefined;
-            HWM?: Decimal | undefined;
+            Notional?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            OrderQty?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            FilledQty?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            FilledAvgPrice?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            LimitPrice?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            StopPrice?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            TrailPrice?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            TrailPercent?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            HWM?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
             ExtendedHours?: boolean | undefined;
             CreatedAt?: Date | undefined;
             UpdatedAt?: Date | undefined;
             Status?: BrokerOrderStatus | undefined;
-            TotalPosition?: Decimal | undefined;
-            PartialPrice?: Decimal | undefined;
-            PartialQty?: Decimal | undefined;
+            TotalPosition?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            PartialPrice?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            PartialQty?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
             ProcessInfo?: {
-                ProcessState?: import("./util").ProcessState | undefined;
+                ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
             ClearingBroker?: ClearingBroker | undefined;
+            EventID?: string | undefined;
+            EventTime?: Date | undefined;
+            CommissionSettings?: {
+                Commission?: {
+                    Value?: number | undefined;
+                    Exp?: number | undefined;
+                } | undefined;
+                CommissionType?: import("./sologenic/com-fs-utils-lib/models/commission/commission").CommissionType | undefined;
+            } | undefined;
         }[] & ({
             BrokerAssignedID?: string | undefined;
             ClientOrderID?: {
@@ -694,28 +1315,73 @@ export declare const BrokerOrderDetailsList: {
             Type?: TradeType | undefined;
             Side?: OrderType | undefined;
             TimeInForce?: TimeInForce | undefined;
-            Notional?: Decimal | undefined;
-            OrderQty?: Decimal | undefined;
-            FilledQty?: Decimal | undefined;
-            FilledAvgPrice?: Decimal | undefined;
-            LimitPrice?: Decimal | undefined;
-            StopPrice?: Decimal | undefined;
-            TrailPrice?: Decimal | undefined;
-            TrailPercent?: Decimal | undefined;
-            HWM?: Decimal | undefined;
+            Notional?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            OrderQty?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            FilledQty?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            FilledAvgPrice?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            LimitPrice?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            StopPrice?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            TrailPrice?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            TrailPercent?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            HWM?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
             ExtendedHours?: boolean | undefined;
             CreatedAt?: Date | undefined;
             UpdatedAt?: Date | undefined;
             Status?: BrokerOrderStatus | undefined;
-            TotalPosition?: Decimal | undefined;
-            PartialPrice?: Decimal | undefined;
-            PartialQty?: Decimal | undefined;
+            TotalPosition?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            PartialPrice?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            PartialQty?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
             ProcessInfo?: {
-                ProcessState?: import("./util").ProcessState | undefined;
+                ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
             ClearingBroker?: ClearingBroker | undefined;
+            EventID?: string | undefined;
+            EventTime?: Date | undefined;
+            CommissionSettings?: {
+                Commission?: {
+                    Value?: number | undefined;
+                    Exp?: number | undefined;
+                } | undefined;
+                CommissionType?: import("./sologenic/com-fs-utils-lib/models/commission/commission").CommissionType | undefined;
+            } | undefined;
         } & {
             BrokerAssignedID?: string | undefined;
             ClientOrderID?: ({
@@ -726,7 +1392,7 @@ export declare const BrokerOrderDetailsList: {
                 Network?: Network | undefined;
                 SmartContractAddr?: string | undefined;
                 OrderID?: number | undefined;
-            } & { [K_5 in Exclude<keyof I_1["BrokerOrderDetailsList"][number]["ClientOrderID"], keyof ClientOrderID>]: never; }) | undefined;
+            } & { [K_19 in Exclude<keyof I_1["BrokerOrderDetailsList"][number]["ClientOrderID"], keyof ClientOrderID>]: never; }) | undefined;
             SubmittedAt?: Date | undefined;
             FilledAt?: Date | undefined;
             ExpiredAt?: Date | undefined;
@@ -739,32 +1405,122 @@ export declare const BrokerOrderDetailsList: {
             Type?: TradeType | undefined;
             Side?: OrderType | undefined;
             TimeInForce?: TimeInForce | undefined;
-            Notional?: Decimal | undefined;
-            OrderQty?: Decimal | undefined;
-            FilledQty?: Decimal | undefined;
-            FilledAvgPrice?: Decimal | undefined;
-            LimitPrice?: Decimal | undefined;
-            StopPrice?: Decimal | undefined;
-            TrailPrice?: Decimal | undefined;
-            TrailPercent?: Decimal | undefined;
-            HWM?: Decimal | undefined;
+            Notional?: ({
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & { [K_20 in Exclude<keyof I_1["BrokerOrderDetailsList"][number]["Notional"], keyof Decimal>]: never; }) | undefined;
+            OrderQty?: ({
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & { [K_21 in Exclude<keyof I_1["BrokerOrderDetailsList"][number]["OrderQty"], keyof Decimal>]: never; }) | undefined;
+            FilledQty?: ({
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & { [K_22 in Exclude<keyof I_1["BrokerOrderDetailsList"][number]["FilledQty"], keyof Decimal>]: never; }) | undefined;
+            FilledAvgPrice?: ({
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & { [K_23 in Exclude<keyof I_1["BrokerOrderDetailsList"][number]["FilledAvgPrice"], keyof Decimal>]: never; }) | undefined;
+            LimitPrice?: ({
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & { [K_24 in Exclude<keyof I_1["BrokerOrderDetailsList"][number]["LimitPrice"], keyof Decimal>]: never; }) | undefined;
+            StopPrice?: ({
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & { [K_25 in Exclude<keyof I_1["BrokerOrderDetailsList"][number]["StopPrice"], keyof Decimal>]: never; }) | undefined;
+            TrailPrice?: ({
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & { [K_26 in Exclude<keyof I_1["BrokerOrderDetailsList"][number]["TrailPrice"], keyof Decimal>]: never; }) | undefined;
+            TrailPercent?: ({
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & { [K_27 in Exclude<keyof I_1["BrokerOrderDetailsList"][number]["TrailPercent"], keyof Decimal>]: never; }) | undefined;
+            HWM?: ({
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & { [K_28 in Exclude<keyof I_1["BrokerOrderDetailsList"][number]["HWM"], keyof Decimal>]: never; }) | undefined;
             ExtendedHours?: boolean | undefined;
             CreatedAt?: Date | undefined;
             UpdatedAt?: Date | undefined;
             Status?: BrokerOrderStatus | undefined;
-            TotalPosition?: Decimal | undefined;
-            PartialPrice?: Decimal | undefined;
-            PartialQty?: Decimal | undefined;
+            TotalPosition?: ({
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & { [K_29 in Exclude<keyof I_1["BrokerOrderDetailsList"][number]["TotalPosition"], keyof Decimal>]: never; }) | undefined;
+            PartialPrice?: ({
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & { [K_30 in Exclude<keyof I_1["BrokerOrderDetailsList"][number]["PartialPrice"], keyof Decimal>]: never; }) | undefined;
+            PartialQty?: ({
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & { [K_31 in Exclude<keyof I_1["BrokerOrderDetailsList"][number]["PartialQty"], keyof Decimal>]: never; }) | undefined;
             ProcessInfo?: ({
-                ProcessState?: import("./util").ProcessState | undefined;
+                ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
             } & {
-                ProcessState?: import("./util").ProcessState | undefined;
+                ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
-            } & { [K_6 in Exclude<keyof I_1["BrokerOrderDetailsList"][number]["ProcessInfo"], keyof ProcessInfo>]: never; }) | undefined;
+            } & { [K_32 in Exclude<keyof I_1["BrokerOrderDetailsList"][number]["ProcessInfo"], keyof ProcessInfo>]: never; }) | undefined;
             InstanceID?: string | undefined;
             ClearingBroker?: ClearingBroker | undefined;
-        } & { [K_7 in Exclude<keyof I_1["BrokerOrderDetailsList"][number], keyof BrokerOrderDetails>]: never; })[] & { [K_8 in Exclude<keyof I_1["BrokerOrderDetailsList"], keyof {
+            EventID?: string | undefined;
+            EventTime?: Date | undefined;
+            CommissionSettings?: ({
+                Commission?: {
+                    Value?: number | undefined;
+                    Exp?: number | undefined;
+                } | undefined;
+                CommissionType?: import("./sologenic/com-fs-utils-lib/models/commission/commission").CommissionType | undefined;
+            } & {
+                Commission?: ({
+                    Value?: number | undefined;
+                    Exp?: number | undefined;
+                } & {
+                    Value?: number | undefined;
+                    Exp?: number | undefined;
+                } & { [K_33 in Exclude<keyof I_1["BrokerOrderDetailsList"][number]["CommissionSettings"]["Commission"], keyof Decimal>]: never; }) | undefined;
+                CommissionType?: import("./sologenic/com-fs-utils-lib/models/commission/commission").CommissionType | undefined;
+            } & { [K_34 in Exclude<keyof I_1["BrokerOrderDetailsList"][number]["CommissionSettings"], keyof CommissionSettings>]: never; }) | undefined;
+        } & { [K_35 in Exclude<keyof I_1["BrokerOrderDetailsList"][number], keyof BrokerOrderDetails>]: never; })[] & { [K_36 in Exclude<keyof I_1["BrokerOrderDetailsList"], keyof {
             BrokerAssignedID?: string | undefined;
             ClientOrderID?: {
                 Network?: Network | undefined;
@@ -783,30 +1539,75 @@ export declare const BrokerOrderDetailsList: {
             Type?: TradeType | undefined;
             Side?: OrderType | undefined;
             TimeInForce?: TimeInForce | undefined;
-            Notional?: Decimal | undefined;
-            OrderQty?: Decimal | undefined;
-            FilledQty?: Decimal | undefined;
-            FilledAvgPrice?: Decimal | undefined;
-            LimitPrice?: Decimal | undefined;
-            StopPrice?: Decimal | undefined;
-            TrailPrice?: Decimal | undefined;
-            TrailPercent?: Decimal | undefined;
-            HWM?: Decimal | undefined;
+            Notional?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            OrderQty?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            FilledQty?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            FilledAvgPrice?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            LimitPrice?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            StopPrice?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            TrailPrice?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            TrailPercent?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            HWM?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
             ExtendedHours?: boolean | undefined;
             CreatedAt?: Date | undefined;
             UpdatedAt?: Date | undefined;
             Status?: BrokerOrderStatus | undefined;
-            TotalPosition?: Decimal | undefined;
-            PartialPrice?: Decimal | undefined;
-            PartialQty?: Decimal | undefined;
+            TotalPosition?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            PartialPrice?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            PartialQty?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
             ProcessInfo?: {
-                ProcessState?: import("./util").ProcessState | undefined;
+                ProcessState?: import("./sologenic/com-fs-order-model/util").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
             ClearingBroker?: ClearingBroker | undefined;
+            EventID?: string | undefined;
+            EventTime?: Date | undefined;
+            CommissionSettings?: {
+                Commission?: {
+                    Value?: number | undefined;
+                    Exp?: number | undefined;
+                } | undefined;
+                CommissionType?: import("./sologenic/com-fs-utils-lib/models/commission/commission").CommissionType | undefined;
+            } | undefined;
         }[]>]: never; }) | undefined;
-    } & { [K_9 in Exclude<keyof I_1, "BrokerOrderDetailsList">]: never; }>(object: I_1): BrokerOrderDetailsList;
+    } & { [K_37 in Exclude<keyof I_1, "BrokerOrderDetailsList">]: never; }>(object: I_1): BrokerOrderDetailsList;
 };
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 export type DeepPartial<T> = T extends Builtin ? T : T extends globalThis.Array<infer U> ? globalThis.Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>> : T extends {} ? {
