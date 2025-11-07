@@ -14,7 +14,7 @@ export declare enum ClearingBroker {
 export declare function clearingBrokerFromJSON(object: any): ClearingBroker;
 export declare function clearingBrokerToJSON(object: ClearingBroker): string;
 export declare enum TradeType {
-    NOT_USED_TRADE_TYPE = 0,
+    NOT_APPLICABLE_TRADE_TYPE = 0,
     MARKET = 1,
     LIMIT = 2,
     STOP = 3,

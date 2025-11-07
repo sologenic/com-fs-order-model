@@ -13,7 +13,8 @@ service OrderService {
     rpc GetByID(OrderID) returns (Order) {}
     rpc GetByKey(Key) returns (Order) {}
     rpc GetAll(OrderQuery) returns (Orders) {}
-    // TODO: determine if we need this method: recovery uses unprocessed (open or locked) logs
+    // TODO: determine if we need this method: recovery uses unprocessed (open or locked) logs 
+    // GetAllUnfinished is at this moment (2025-11-07) for use by the broker oracle.
     rpc GetAllUnfinished(google.protobuf.Empty) returns (Orders) {}
 
     // Transactional operations
@@ -35,7 +36,7 @@ message OrderQuery {
     metadata.Network Network = 1;
     optional int32 Offset = 2;
     optional string SmartContractAddr = 3;
-    optional TransactionType TransactionType = 4;
+    optional TransactionType TransactionType = 4; //DEPRECATED
     optional string TXID = 5;
     optional int64 Height = 6;
     optional InternalOrderState InternalOrderState = 7;
@@ -47,6 +48,7 @@ message OrderQuery {
     optional OrderType OrderType = 12;
     optional OrderStateType OrderStateType = 13;
     optional PaymentState PaymentState = 14;
+    repeated TransactionType TransactionTypes = 15; //More flexible style query for transaction types.
 }
 
 message OrderStepInstruction {

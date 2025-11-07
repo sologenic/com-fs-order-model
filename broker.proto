@@ -89,7 +89,7 @@ message BrokerOrderDetailsList {
 }
 
 enum TradeType {
-    NOT_USED_TRADE_TYPE = 0;
+    NOT_APPLICABLE_TRADE_TYPE = 0;
     MARKET = 1;
     LIMIT = 2;
     STOP = 3;

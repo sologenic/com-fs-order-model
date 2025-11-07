@@ -26,7 +26,7 @@ message Order {
     int64 Height = 11;
 
     InternalOrderState InternalOrderState = 12;
-    BrokerOrderDetails BrokerOrderDetails = 13; // Matches data on SmartContractAddr, orderdetails.OrderID and network
+    optional BrokerOrderDetails BrokerOrderDetails = 13; // Matches data on SmartContractAddr, orderdetails.OrderID and network
 
     // Bookkeeping: did we process this event from broker smart contract order log?
     optional ProcessInfo ProcessInfo = 14;
@@ -48,12 +48,15 @@ enum TransactionType {
     EXECUTE_ORDER = 4;
     PAY_ORDER = 5;
     REQUEST_REATTESTATION = 6;
+    //Added for withdraw/deposit orders
+    DEPOSIT = 7;
+    WITHDRAWAL = 8; 
 }
 
 // Same structure as Order in the Smart Contract
 message OrderInstruction {
     int64 OrderID = 1; // Google datastore supports int64, not uint64, which is the used in the smart contract
-    string Creator = 2; // Sender in message from Coreum
+    string Creator = 2; // Sender in the message from Coreum
     string Denom = 3;
     int64 Amount = 4;
     int32 AmountExp = 5;
@@ -79,6 +82,7 @@ message OrderInstruction {
     optional TimeInForce TimeInForce = 22;
     
     optional double LimitPriceFloat = 23; // Direct float price from smart contract (e.g., 26.25)
+    optional Receiver Receiver = 24; // The address of the receiver, used for sending of funds. Receiver can also be an email address, tx address or blockchain addres from another blockchain.
 }
 
 message Orders {
@@ -105,6 +109,7 @@ enum OrderStateType {
     EXECUTED = 4;
     CANCELLATION_REQUESTED = 5;
     CANCELLED = 6;
+    FAILED = 7;
 }
 
 enum OrderCancelledBy {
@@ -126,7 +131,8 @@ enum PaymentState {
 }
 
 enum InternalOrderState {
-    NOT_USED_INTERNAL_ORDER_STATE = 0;
+    //Changed not used to NOT_APPLICABLE_INTERNAL_ORDER_STATE to accomodate for withdraw/deposit orders
+    NOT_APPLICABLE_INTERNAL_ORDER_STATE = 0;
     
     // Initial state: Order is just created in the smart contract
     SMART_CONTRACT_NEW_ORDER_CREATED = 1; // initial status when the order(BUY/SELL) is just created in the smart contract, OrderState in SC: `open``
@@ -164,8 +170,21 @@ enum InternalOrderState {
 }
 
 enum OrderDetailType {
-    NOT_USED_ORDER_DETAIL_TYPE = 0;
+    //Changed not used to NOT_APPLICABLE_ORDER_DETAIL_TYPE to accomodate for withdraw/deposit orders
+    NOT_APPLICABLE_ORDER_DETAIL_TYPE = 0;
     ORDER_DETAIL_LIMIT = 1;
     ORDER_DETAIL_MARKET = 2; // Ignores LimitPrice, executes at market price
     ORDER_DETAIL_STOP_LOSS = 3; // Uses LimitPrice as the stop loss threshold
+}
+
+message Receiver {
+    string Address = 1; // The address of the receiver, used for sending of funds.
+    ReceiverType Type = 2; // The type of the receiver, e.g. email, tx address, blockchain address from another blockchain.
+}
+
+enum ReceiverType {
+    EMAIL = 0;
+    TX = 1;
+    ETHEREUM = 2;
+    SOLANA = 3;
 }

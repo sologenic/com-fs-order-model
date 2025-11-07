@@ -1,7 +1,8 @@
 import _m0 from "protobufjs/minimal";
 export declare const protobufPackage = "order";
 export declare enum OrderType {
-    NOT_USED_ORDER_TYPE = 0,
+    /** NOT_APPLICABLE_ORDER_TYPE - Changed not used to NOT_APPLICABLE_ORDER_TYPE to avoid naming conflicts with PURCHASE in the action enum */
+    NOT_APPLICABLE_ORDER_TYPE = 0,
     /** ORDER_TYPE_PURCHASE - Avoid naming conflicts with PURCHASE in the action enum */
     ORDER_TYPE_PURCHASE = 1,
     ORDER_TYPE_SELL = 2,
