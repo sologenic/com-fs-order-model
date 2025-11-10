@@ -9,7 +9,7 @@ import _m0 from "protobufjs/minimal";
 import { BrokerOrderDetails } from "./broker";
 import { Timestamp } from "./google/protobuf/timestamp";
 import { networkFromJSON, networkToJSON } from "./sologenic/com-fs-utils-lib/models/metadata/metadata";
-import { orderTypeFromJSON, orderTypeToJSON, ProcessInfo, timeInForceFromJSON, timeInForceToJSON, } from "./util";
+import { orderTypeFromJSON, orderTypeToJSON, ProcessInfo, timeInForceFromJSON, timeInForceToJSON, } from "./sologenic/com-fs-utils-lib/models/order-properties/order-properties";
 export const protobufPackage = "order";
 /** Execution type(action) of the transaction against the smart contract */
 export var TransactionType;

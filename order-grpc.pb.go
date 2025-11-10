@@ -8,6 +8,7 @@ package order
 
 import (
 	metadata "github.com/sologenic/com-fs-utils-lib/models/metadata"
+	order_properties "github.com/sologenic/com-fs-utils-lib/models/order-properties"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	emptypb "google.golang.org/protobuf/types/known/emptypb"
@@ -128,23 +129,23 @@ func (x *OrderID) GetNetwork() metadata.Network {
 }
 
 type OrderQuery struct {
-	state              protoimpl.MessageState `protogen:"open.v1"`
-	Network            metadata.Network       `protobuf:"varint,1,opt,name=Network,proto3,enum=metadata.Network" json:"Network,omitempty"`
-	Offset             *int32                 `protobuf:"varint,2,opt,name=Offset,proto3,oneof" json:"Offset,omitempty"`
-	SmartContractAddr  *string                `protobuf:"bytes,3,opt,name=SmartContractAddr,proto3,oneof" json:"SmartContractAddr,omitempty"`
-	TransactionType    *TransactionType       `protobuf:"varint,4,opt,name=TransactionType,proto3,enum=order.TransactionType,oneof" json:"TransactionType,omitempty"` //DEPRECATED
-	TXID               *string                `protobuf:"bytes,5,opt,name=TXID,proto3,oneof" json:"TXID,omitempty"`
-	Height             *int64                 `protobuf:"varint,6,opt,name=Height,proto3,oneof" json:"Height,omitempty"`
-	InternalOrderState *InternalOrderState    `protobuf:"varint,7,opt,name=InternalOrderState,proto3,enum=order.InternalOrderState,oneof" json:"InternalOrderState,omitempty"`
-	ProcessInfo        *ProcessInfo           `protobuf:"bytes,8,opt,name=ProcessInfo,proto3,oneof" json:"ProcessInfo,omitempty"`
+	state              protoimpl.MessageState        `protogen:"open.v1"`
+	Network            metadata.Network              `protobuf:"varint,1,opt,name=Network,proto3,enum=metadata.Network" json:"Network,omitempty"`
+	Offset             *int32                        `protobuf:"varint,2,opt,name=Offset,proto3,oneof" json:"Offset,omitempty"`
+	SmartContractAddr  *string                       `protobuf:"bytes,3,opt,name=SmartContractAddr,proto3,oneof" json:"SmartContractAddr,omitempty"`
+	TransactionType    *TransactionType              `protobuf:"varint,4,opt,name=TransactionType,proto3,enum=order.TransactionType,oneof" json:"TransactionType,omitempty"` //DEPRECATED
+	TXID               *string                       `protobuf:"bytes,5,opt,name=TXID,proto3,oneof" json:"TXID,omitempty"`
+	Height             *int64                        `protobuf:"varint,6,opt,name=Height,proto3,oneof" json:"Height,omitempty"`
+	InternalOrderState *InternalOrderState           `protobuf:"varint,7,opt,name=InternalOrderState,proto3,enum=order.InternalOrderState,oneof" json:"InternalOrderState,omitempty"`
+	ProcessInfo        *order_properties.ProcessInfo `protobuf:"bytes,8,opt,name=ProcessInfo,proto3,oneof" json:"ProcessInfo,omitempty"`
 	// Fields in OrderInstruction
-	Creator          *string           `protobuf:"bytes,9,opt,name=Creator,proto3,oneof" json:"Creator,omitempty"`
-	OrderID          *int64            `protobuf:"varint,10,opt,name=OrderID,proto3,oneof" json:"OrderID,omitempty"`
-	Denom            *string           `protobuf:"bytes,11,opt,name=Denom,proto3,oneof" json:"Denom,omitempty"`
-	OrderType        *OrderType        `protobuf:"varint,12,opt,name=OrderType,proto3,enum=order.OrderType,oneof" json:"OrderType,omitempty"`
-	OrderStateType   *OrderStateType   `protobuf:"varint,13,opt,name=OrderStateType,proto3,enum=order.OrderStateType,oneof" json:"OrderStateType,omitempty"`
-	PaymentState     *PaymentState     `protobuf:"varint,14,opt,name=PaymentState,proto3,enum=order.PaymentState,oneof" json:"PaymentState,omitempty"`
-	TransactionTypes []TransactionType `protobuf:"varint,15,rep,packed,name=TransactionTypes,proto3,enum=order.TransactionType" json:"TransactionTypes,omitempty"` //More flexible style query for transaction types.
+	Creator          *string                     `protobuf:"bytes,9,opt,name=Creator,proto3,oneof" json:"Creator,omitempty"`
+	OrderID          *int64                      `protobuf:"varint,10,opt,name=OrderID,proto3,oneof" json:"OrderID,omitempty"`
+	Denom            *string                     `protobuf:"bytes,11,opt,name=Denom,proto3,oneof" json:"Denom,omitempty"`
+	OrderType        *order_properties.OrderType `protobuf:"varint,12,opt,name=OrderType,proto3,enum=orderproperties.OrderType,oneof" json:"OrderType,omitempty"`
+	OrderStateType   *OrderStateType             `protobuf:"varint,13,opt,name=OrderStateType,proto3,enum=order.OrderStateType,oneof" json:"OrderStateType,omitempty"`
+	PaymentState     *PaymentState               `protobuf:"varint,14,opt,name=PaymentState,proto3,enum=order.PaymentState,oneof" json:"PaymentState,omitempty"`
+	TransactionTypes []TransactionType           `protobuf:"varint,15,rep,packed,name=TransactionTypes,proto3,enum=order.TransactionType" json:"TransactionTypes,omitempty"` //More flexible style query for transaction types.
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
 }
@@ -228,7 +229,7 @@ func (x *OrderQuery) GetInternalOrderState() InternalOrderState {
 	return InternalOrderState_NOT_APPLICABLE_INTERNAL_ORDER_STATE
 }
 
-func (x *OrderQuery) GetProcessInfo() *ProcessInfo {
+func (x *OrderQuery) GetProcessInfo() *order_properties.ProcessInfo {
 	if x != nil {
 		return x.ProcessInfo
 	}
@@ -256,11 +257,11 @@ func (x *OrderQuery) GetDenom() string {
 	return ""
 }
 
-func (x *OrderQuery) GetOrderType() OrderType {
+func (x *OrderQuery) GetOrderType() order_properties.OrderType {
 	if x != nil && x.OrderType != nil {
 		return *x.OrderType
 	}
-	return OrderType_NOT_APPLICABLE_ORDER_TYPE
+	return order_properties.OrderType(0)
 }
 
 func (x *OrderQuery) GetOrderStateType() OrderStateType {
@@ -357,13 +358,13 @@ var File_order_grpc_proto protoreflect.FileDescriptor
 const file_order_grpc_proto_rawDesc = "" +
 	"\n" +
 	"\x10order-grpc.proto\x12\x05order\x1a\x1bgoogle/protobuf/empty.proto\x1a\vorder.proto\x1a\n" +
-	"util.proto\x1a9sologenic/com-fs-utils-lib/models/metadata/metadata.proto\"\x84\x01\n" +
+	"util.proto\x1aIsologenic/com-fs-utils-lib/models/order-properties/order-properties.proto\x1a9sologenic/com-fs-utils-lib/models/metadata/metadata.proto\"\x84\x01\n" +
 	"\rUpsertMessage\x12\"\n" +
 	"\x05Order\x18\x01 \x01(\v2\f.order.OrderR\x05Order\x12O\n" +
 	"\x14OrderStepInstruction\x18\x02 \x01(\v2\x1b.order.OrderStepInstructionR\x14OrderStepInstruction\"J\n" +
 	"\aOrderID\x12\x12\n" +
 	"\x04TXID\x18\x01 \x01(\tR\x04TXID\x12+\n" +
-	"\aNetwork\x18\x02 \x01(\x0e2\x11.metadata.NetworkR\aNetwork\"\xa9\a\n" +
+	"\aNetwork\x18\x02 \x01(\x0e2\x11.metadata.NetworkR\aNetwork\"\xbd\a\n" +
 	"\n" +
 	"OrderQuery\x12+\n" +
 	"\aNetwork\x18\x01 \x01(\x0e2\x11.metadata.NetworkR\aNetwork\x12\x1b\n" +
@@ -372,13 +373,13 @@ const file_order_grpc_proto_rawDesc = "" +
 	"\x0fTransactionType\x18\x04 \x01(\x0e2\x16.order.TransactionTypeH\x02R\x0fTransactionType\x88\x01\x01\x12\x17\n" +
 	"\x04TXID\x18\x05 \x01(\tH\x03R\x04TXID\x88\x01\x01\x12\x1b\n" +
 	"\x06Height\x18\x06 \x01(\x03H\x04R\x06Height\x88\x01\x01\x12N\n" +
-	"\x12InternalOrderState\x18\a \x01(\x0e2\x19.order.InternalOrderStateH\x05R\x12InternalOrderState\x88\x01\x01\x129\n" +
-	"\vProcessInfo\x18\b \x01(\v2\x12.order.ProcessInfoH\x06R\vProcessInfo\x88\x01\x01\x12\x1d\n" +
+	"\x12InternalOrderState\x18\a \x01(\x0e2\x19.order.InternalOrderStateH\x05R\x12InternalOrderState\x88\x01\x01\x12C\n" +
+	"\vProcessInfo\x18\b \x01(\v2\x1c.orderproperties.ProcessInfoH\x06R\vProcessInfo\x88\x01\x01\x12\x1d\n" +
 	"\aCreator\x18\t \x01(\tH\aR\aCreator\x88\x01\x01\x12\x1d\n" +
 	"\aOrderID\x18\n" +
 	" \x01(\x03H\bR\aOrderID\x88\x01\x01\x12\x19\n" +
-	"\x05Denom\x18\v \x01(\tH\tR\x05Denom\x88\x01\x01\x123\n" +
-	"\tOrderType\x18\f \x01(\x0e2\x10.order.OrderTypeH\n" +
+	"\x05Denom\x18\v \x01(\tH\tR\x05Denom\x88\x01\x01\x12=\n" +
+	"\tOrderType\x18\f \x01(\x0e2\x1a.orderproperties.OrderTypeH\n" +
 	"R\tOrderType\x88\x01\x01\x12B\n" +
 	"\x0eOrderStateType\x18\r \x01(\x0e2\x15.order.OrderStateTypeH\vR\x0eOrderStateType\x88\x01\x01\x12<\n" +
 	"\fPaymentState\x18\x0e \x01(\x0e2\x13.order.PaymentStateH\fR\fPaymentState\x88\x01\x01\x12B\n" +
@@ -430,21 +431,21 @@ func file_order_grpc_proto_rawDescGZIP() []byte {
 
 var file_order_grpc_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_order_grpc_proto_goTypes = []any{
-	(*UpsertMessage)(nil),        // 0: order.UpsertMessage
-	(*OrderID)(nil),              // 1: order.OrderID
-	(*OrderQuery)(nil),           // 2: order.OrderQuery
-	(*OrderStepInstruction)(nil), // 3: order.OrderStepInstruction
-	(*Order)(nil),                // 4: order.Order
-	(metadata.Network)(0),        // 5: metadata.Network
-	(TransactionType)(0),         // 6: order.TransactionType
-	(InternalOrderState)(0),      // 7: order.InternalOrderState
-	(*ProcessInfo)(nil),          // 8: order.ProcessInfo
-	(OrderType)(0),               // 9: order.OrderType
-	(OrderStateType)(0),          // 10: order.OrderStateType
-	(PaymentState)(0),            // 11: order.PaymentState
-	(*Key)(nil),                  // 12: order.Key
-	(*emptypb.Empty)(nil),        // 13: google.protobuf.Empty
-	(*Orders)(nil),               // 14: order.Orders
+	(*UpsertMessage)(nil),                // 0: order.UpsertMessage
+	(*OrderID)(nil),                      // 1: order.OrderID
+	(*OrderQuery)(nil),                   // 2: order.OrderQuery
+	(*OrderStepInstruction)(nil),         // 3: order.OrderStepInstruction
+	(*Order)(nil),                        // 4: order.Order
+	(metadata.Network)(0),                // 5: metadata.Network
+	(TransactionType)(0),                 // 6: order.TransactionType
+	(InternalOrderState)(0),              // 7: order.InternalOrderState
+	(*order_properties.ProcessInfo)(nil), // 8: orderproperties.ProcessInfo
+	(order_properties.OrderType)(0),      // 9: orderproperties.OrderType
+	(OrderStateType)(0),                  // 10: order.OrderStateType
+	(PaymentState)(0),                    // 11: order.PaymentState
+	(*Key)(nil),                          // 12: order.Key
+	(*emptypb.Empty)(nil),                // 13: google.protobuf.Empty
+	(*Orders)(nil),                       // 14: order.Orders
 }
 var file_order_grpc_proto_depIdxs = []int32{
 	4,  // 0: order.UpsertMessage.Order:type_name -> order.Order
@@ -453,8 +454,8 @@ var file_order_grpc_proto_depIdxs = []int32{
 	5,  // 3: order.OrderQuery.Network:type_name -> metadata.Network
 	6,  // 4: order.OrderQuery.TransactionType:type_name -> order.TransactionType
 	7,  // 5: order.OrderQuery.InternalOrderState:type_name -> order.InternalOrderState
-	8,  // 6: order.OrderQuery.ProcessInfo:type_name -> order.ProcessInfo
-	9,  // 7: order.OrderQuery.OrderType:type_name -> order.OrderType
+	8,  // 6: order.OrderQuery.ProcessInfo:type_name -> orderproperties.ProcessInfo
+	9,  // 7: order.OrderQuery.OrderType:type_name -> orderproperties.OrderType
 	10, // 8: order.OrderQuery.OrderStateType:type_name -> order.OrderStateType
 	11, // 9: order.OrderQuery.PaymentState:type_name -> order.PaymentState
 	6,  // 10: order.OrderQuery.TransactionTypes:type_name -> order.TransactionType

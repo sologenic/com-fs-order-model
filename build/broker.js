@@ -11,7 +11,7 @@ import { assetTypeFromJSON, assetTypeToJSON } from "./sologenic/com-fs-asset-mod
 import { Decimal } from "./sologenic/com-fs-utils-lib/go/decimal/decimal";
 import { CommissionSettings } from "./sologenic/com-fs-utils-lib/models/commission/commission";
 import { networkFromJSON, networkToJSON } from "./sologenic/com-fs-utils-lib/models/metadata/metadata";
-import { orderTypeFromJSON, orderTypeToJSON, ProcessInfo, timeInForceFromJSON, timeInForceToJSON, } from "./util";
+import { orderTypeFromJSON, orderTypeToJSON, ProcessInfo, timeInForceFromJSON, timeInForceToJSON, } from "./sologenic/com-fs-utils-lib/models/order-properties/order-properties";
 export const protobufPackage = "order";
 export var ClearingBroker;
 (function (ClearingBroker) {

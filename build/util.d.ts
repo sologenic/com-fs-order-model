@@ -1,48 +1,6 @@
 import _m0 from "protobufjs/minimal";
+import { ProcessState } from "./sologenic/com-fs-utils-lib/models/order-properties/order-properties";
 export declare const protobufPackage = "order";
-export declare enum OrderType {
-    /** NOT_APPLICABLE_ORDER_TYPE - Changed not used to NOT_APPLICABLE_ORDER_TYPE to avoid naming conflicts with PURCHASE in the action enum */
-    NOT_APPLICABLE_ORDER_TYPE = 0,
-    /** ORDER_TYPE_PURCHASE - Avoid naming conflicts with PURCHASE in the action enum */
-    ORDER_TYPE_PURCHASE = 1,
-    ORDER_TYPE_SELL = 2,
-    UNRECOGNIZED = -1
-}
-export declare function orderTypeFromJSON(object: any): OrderType;
-export declare function orderTypeToJSON(object: OrderType): string;
-export declare enum TimeInForce {
-    NOT_USED_TIME_IN_FORCE = 0,
-    DAY = 1,
-    /** GOOD_TIL_CANCELED - GTC */
-    GOOD_TIL_CANCELED = 2,
-    /** AT_THE_OPENING - OPG */
-    AT_THE_OPENING = 3,
-    /** AT_THE_CLOSE - CLS */
-    AT_THE_CLOSE = 4,
-    /** IMMEDIATE_OR_CANCEL - IOC */
-    IMMEDIATE_OR_CANCEL = 5,
-    /** FILL_OR_KILL - FOK */
-    FILL_OR_KILL = 6,
-    /** GOOD_TIL_TIME - GTT */
-    GOOD_TIL_TIME = 7,
-    UNRECOGNIZED = -1
-}
-export declare function timeInForceFromJSON(object: any): TimeInForce;
-export declare function timeInForceToJSON(object: TimeInForce): string;
-export declare enum ProcessState {
-    NOT_USED_PROCESS_STATE = 0,
-    PROCESS_STATE_OPEN = 1,
-    PROCESS_STATE_LOCKED = 2,
-    PROCESS_STATE_FAILED = 3,
-    PROCESS_STATE_PROCESSED = 4,
-    UNRECOGNIZED = -1
-}
-export declare function processStateFromJSON(object: any): ProcessState;
-export declare function processStateToJSON(object: ProcessState): string;
-export interface ProcessInfo {
-    ProcessState: ProcessState;
-    ProcessedAt: Date | undefined;
-}
 export interface LockLogRecord {
     Key: string;
     MustHaveState: ProcessState[];
@@ -63,26 +21,6 @@ export interface Key {
 export interface InstanceID {
     InstanceID: string;
 }
-export declare const ProcessInfo: {
-    encode(message: ProcessInfo, writer?: _m0.Writer): _m0.Writer;
-    decode(input: _m0.Reader | Uint8Array, length?: number): ProcessInfo;
-    fromJSON(object: any): ProcessInfo;
-    toJSON(message: ProcessInfo): unknown;
-    create<I extends {
-        ProcessState?: ProcessState | undefined;
-        ProcessedAt?: Date | undefined;
-    } & {
-        ProcessState?: ProcessState | undefined;
-        ProcessedAt?: Date | undefined;
-    } & { [K in Exclude<keyof I, keyof ProcessInfo>]: never; }>(base?: I | undefined): ProcessInfo;
-    fromPartial<I_1 extends {
-        ProcessState?: ProcessState | undefined;
-        ProcessedAt?: Date | undefined;
-    } & {
-        ProcessState?: ProcessState | undefined;
-        ProcessedAt?: Date | undefined;
-    } & { [K_1 in Exclude<keyof I_1, keyof ProcessInfo>]: never; }>(object: I_1): ProcessInfo;
-};
 export declare const LockLogRecord: {
     encode(message: LockLogRecord, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): LockLogRecord;

@@ -38,6 +38,7 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rs/zerolog v1.34.0 // indirect
+	github.com/sologenic/com-fs-utils-lib v0.0.0-20251110224218-167369bf7787 // indirect
 	github.com/sologenic/com-fs-utils-lib/models/audit v0.0.0-20250917193130-a63d775c7b6d // indirect
 	go.opentelemetry.io/auto/sdk v1.2.1 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.63.0 // indirect

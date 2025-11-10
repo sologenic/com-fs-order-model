@@ -63,6 +63,8 @@ github.com/sologenic/com-fs-asset-model v0.0.0-20250917201256-66e76daad82f h1:Cr
 github.com/sologenic/com-fs-asset-model v0.0.0-20250917201256-66e76daad82f/go.mod h1:0Rvi6PAt8ZKlnuts/l+/GSdQKLLRh5EgEjvZQ7lQGjs=
 github.com/sologenic/com-fs-asset-model v0.0.0-20250923172806-23e0eb1f12a8 h1:coyy7dqysSC7J2C9PAbuN4Ji+L3tyQVw+otzSDCZmMc=
 github.com/sologenic/com-fs-asset-model v0.0.0-20250923172806-23e0eb1f12a8/go.mod h1:0Rvi6PAt8ZKlnuts/l+/GSdQKLLRh5EgEjvZQ7lQGjs=
+github.com/sologenic/com-fs-utils-lib v0.0.0-20251110224218-167369bf7787 h1:99wuFQE3yJ6av+Gf4mbNEwK0TKnrIi/7VfV3D25m12A=
+github.com/sologenic/com-fs-utils-lib v0.0.0-20251110224218-167369bf7787/go.mod h1:uVRO4lfhPlyZzDSkMM7GY45TW9ZAalPlhqUFgymApFA=
 github.com/sologenic/com-fs-utils-lib/go/decimal v0.0.0-20250915133913-34ed554e333f h1:T9rRLrlSucuTXLwQ7ZLAomYvCweBK1rSIvhDZOk2Rpk=
 github.com/sologenic/com-fs-utils-lib/go/decimal v0.0.0-20250915133913-34ed554e333f/go.mod h1:gujN2PaQ7sbIrj8Jzq7Ub5uwoKgJlfiDDba/V/amnR0=
 github.com/sologenic/com-fs-utils-lib/go/grpc-client v0.0.0-20241030223317-5bff63a9ee29 h1:mLDAb6ZcDf8/kEzqDgBhP3jwiKzh+mQxftcwoNtt2fo=

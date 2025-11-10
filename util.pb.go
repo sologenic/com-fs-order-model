@@ -7,9 +7,9 @@
 package order
 
 import (
+	order_properties "github.com/sologenic/com-fs-utils-lib/models/order-properties"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -22,239 +22,18 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type OrderType int32
-
-const (
-	// Changed not used to NOT_APPLICABLE_ORDER_TYPE to avoid naming conflicts with PURCHASE in the action enum
-	OrderType_NOT_APPLICABLE_ORDER_TYPE OrderType = 0
-	OrderType_ORDER_TYPE_PURCHASE       OrderType = 1 // Avoid naming conflicts with PURCHASE in the action enum
-	OrderType_ORDER_TYPE_SELL           OrderType = 2
-)
-
-// Enum value maps for OrderType.
-var (
-	OrderType_name = map[int32]string{
-		0: "NOT_APPLICABLE_ORDER_TYPE",
-		1: "ORDER_TYPE_PURCHASE",
-		2: "ORDER_TYPE_SELL",
-	}
-	OrderType_value = map[string]int32{
-		"NOT_APPLICABLE_ORDER_TYPE": 0,
-		"ORDER_TYPE_PURCHASE":       1,
-		"ORDER_TYPE_SELL":           2,
-	}
-)
-
-func (x OrderType) Enum() *OrderType {
-	p := new(OrderType)
-	*p = x
-	return p
-}
-
-func (x OrderType) String() string {
-	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
-}
-
-func (OrderType) Descriptor() protoreflect.EnumDescriptor {
-	return file_util_proto_enumTypes[0].Descriptor()
-}
-
-func (OrderType) Type() protoreflect.EnumType {
-	return &file_util_proto_enumTypes[0]
-}
-
-func (x OrderType) Number() protoreflect.EnumNumber {
-	return protoreflect.EnumNumber(x)
-}
-
-// Deprecated: Use OrderType.Descriptor instead.
-func (OrderType) EnumDescriptor() ([]byte, []int) {
-	return file_util_proto_rawDescGZIP(), []int{0}
-}
-
-type TimeInForce int32
-
-const (
-	TimeInForce_NOT_USED_TIME_IN_FORCE TimeInForce = 0
-	TimeInForce_DAY                    TimeInForce = 1
-	TimeInForce_GOOD_TIL_CANCELED      TimeInForce = 2 // GTC
-	TimeInForce_AT_THE_OPENING         TimeInForce = 3 // OPG
-	TimeInForce_AT_THE_CLOSE           TimeInForce = 4 // CLS
-	TimeInForce_IMMEDIATE_OR_CANCEL    TimeInForce = 5 // IOC
-	TimeInForce_FILL_OR_KILL           TimeInForce = 6 // FOK
-	TimeInForce_GOOD_TIL_TIME          TimeInForce = 7 // GTT
-)
-
-// Enum value maps for TimeInForce.
-var (
-	TimeInForce_name = map[int32]string{
-		0: "NOT_USED_TIME_IN_FORCE",
-		1: "DAY",
-		2: "GOOD_TIL_CANCELED",
-		3: "AT_THE_OPENING",
-		4: "AT_THE_CLOSE",
-		5: "IMMEDIATE_OR_CANCEL",
-		6: "FILL_OR_KILL",
-		7: "GOOD_TIL_TIME",
-	}
-	TimeInForce_value = map[string]int32{
-		"NOT_USED_TIME_IN_FORCE": 0,
-		"DAY":                    1,
-		"GOOD_TIL_CANCELED":      2,
-		"AT_THE_OPENING":         3,
-		"AT_THE_CLOSE":           4,
-		"IMMEDIATE_OR_CANCEL":    5,
-		"FILL_OR_KILL":           6,
-		"GOOD_TIL_TIME":          7,
-	}
-)
-
-func (x TimeInForce) Enum() *TimeInForce {
-	p := new(TimeInForce)
-	*p = x
-	return p
-}
-
-func (x TimeInForce) String() string {
-	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
-}
-
-func (TimeInForce) Descriptor() protoreflect.EnumDescriptor {
-	return file_util_proto_enumTypes[1].Descriptor()
-}
-
-func (TimeInForce) Type() protoreflect.EnumType {
-	return &file_util_proto_enumTypes[1]
-}
-
-func (x TimeInForce) Number() protoreflect.EnumNumber {
-	return protoreflect.EnumNumber(x)
-}
-
-// Deprecated: Use TimeInForce.Descriptor instead.
-func (TimeInForce) EnumDescriptor() ([]byte, []int) {
-	return file_util_proto_rawDescGZIP(), []int{1}
-}
-
-type ProcessState int32
-
-const (
-	ProcessState_NOT_USED_PROCESS_STATE  ProcessState = 0
-	ProcessState_PROCESS_STATE_OPEN      ProcessState = 1
-	ProcessState_PROCESS_STATE_LOCKED    ProcessState = 2
-	ProcessState_PROCESS_STATE_FAILED    ProcessState = 3
-	ProcessState_PROCESS_STATE_PROCESSED ProcessState = 4
-)
-
-// Enum value maps for ProcessState.
-var (
-	ProcessState_name = map[int32]string{
-		0: "NOT_USED_PROCESS_STATE",
-		1: "PROCESS_STATE_OPEN",
-		2: "PROCESS_STATE_LOCKED",
-		3: "PROCESS_STATE_FAILED",
-		4: "PROCESS_STATE_PROCESSED",
-	}
-	ProcessState_value = map[string]int32{
-		"NOT_USED_PROCESS_STATE":  0,
-		"PROCESS_STATE_OPEN":      1,
-		"PROCESS_STATE_LOCKED":    2,
-		"PROCESS_STATE_FAILED":    3,
-		"PROCESS_STATE_PROCESSED": 4,
-	}
-)
-
-func (x ProcessState) Enum() *ProcessState {
-	p := new(ProcessState)
-	*p = x
-	return p
-}
-
-func (x ProcessState) String() string {
-	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
-}
-
-func (ProcessState) Descriptor() protoreflect.EnumDescriptor {
-	return file_util_proto_enumTypes[2].Descriptor()
-}
-
-func (ProcessState) Type() protoreflect.EnumType {
-	return &file_util_proto_enumTypes[2]
-}
-
-func (x ProcessState) Number() protoreflect.EnumNumber {
-	return protoreflect.EnumNumber(x)
-}
-
-// Deprecated: Use ProcessState.Descriptor instead.
-func (ProcessState) EnumDescriptor() ([]byte, []int) {
-	return file_util_proto_rawDescGZIP(), []int{2}
-}
-
-type ProcessInfo struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	ProcessState  ProcessState           `protobuf:"varint,1,opt,name=ProcessState,proto3,enum=order.ProcessState" json:"ProcessState,omitempty"`
-	ProcessedAt   *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=ProcessedAt,proto3" json:"ProcessedAt,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *ProcessInfo) Reset() {
-	*x = ProcessInfo{}
-	mi := &file_util_proto_msgTypes[0]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ProcessInfo) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ProcessInfo) ProtoMessage() {}
-
-func (x *ProcessInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_util_proto_msgTypes[0]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ProcessInfo.ProtoReflect.Descriptor instead.
-func (*ProcessInfo) Descriptor() ([]byte, []int) {
-	return file_util_proto_rawDescGZIP(), []int{0}
-}
-
-func (x *ProcessInfo) GetProcessState() ProcessState {
-	if x != nil {
-		return x.ProcessState
-	}
-	return ProcessState_NOT_USED_PROCESS_STATE
-}
-
-func (x *ProcessInfo) GetProcessedAt() *timestamppb.Timestamp {
-	if x != nil {
-		return x.ProcessedAt
-	}
-	return nil
-}
-
 type LockLogRecord struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Key           string                 `protobuf:"bytes,1,opt,name=Key,proto3" json:"Key,omitempty"`
-	MustHaveState []ProcessState         `protobuf:"varint,2,rep,packed,name=MustHaveState,proto3,enum=order.ProcessState" json:"MustHaveState,omitempty"`
-	TargetState   ProcessState           `protobuf:"varint,3,opt,name=TargetState,proto3,enum=order.ProcessState" json:"TargetState,omitempty"`
+	state         protoimpl.MessageState          `protogen:"open.v1"`
+	Key           string                          `protobuf:"bytes,1,opt,name=Key,proto3" json:"Key,omitempty"`
+	MustHaveState []order_properties.ProcessState `protobuf:"varint,2,rep,packed,name=MustHaveState,proto3,enum=orderproperties.ProcessState" json:"MustHaveState,omitempty"`
+	TargetState   order_properties.ProcessState   `protobuf:"varint,3,opt,name=TargetState,proto3,enum=orderproperties.ProcessState" json:"TargetState,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *LockLogRecord) Reset() {
 	*x = LockLogRecord{}
-	mi := &file_util_proto_msgTypes[1]
+	mi := &file_util_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -266,7 +45,7 @@ func (x *LockLogRecord) String() string {
 func (*LockLogRecord) ProtoMessage() {}
 
 func (x *LockLogRecord) ProtoReflect() protoreflect.Message {
-	mi := &file_util_proto_msgTypes[1]
+	mi := &file_util_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -279,7 +58,7 @@ func (x *LockLogRecord) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LockLogRecord.ProtoReflect.Descriptor instead.
 func (*LockLogRecord) Descriptor() ([]byte, []int) {
-	return file_util_proto_rawDescGZIP(), []int{1}
+	return file_util_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *LockLogRecord) GetKey() string {
@@ -289,18 +68,18 @@ func (x *LockLogRecord) GetKey() string {
 	return ""
 }
 
-func (x *LockLogRecord) GetMustHaveState() []ProcessState {
+func (x *LockLogRecord) GetMustHaveState() []order_properties.ProcessState {
 	if x != nil {
 		return x.MustHaveState
 	}
 	return nil
 }
 
-func (x *LockLogRecord) GetTargetState() ProcessState {
+func (x *LockLogRecord) GetTargetState() order_properties.ProcessState {
 	if x != nil {
 		return x.TargetState
 	}
-	return ProcessState_NOT_USED_PROCESS_STATE
+	return order_properties.ProcessState(0)
 }
 
 // The `Key` field represents the datastore key for the `Order` message.
@@ -319,7 +98,7 @@ type Key struct {
 
 func (x *Key) Reset() {
 	*x = Key{}
-	mi := &file_util_proto_msgTypes[2]
+	mi := &file_util_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -331,7 +110,7 @@ func (x *Key) String() string {
 func (*Key) ProtoMessage() {}
 
 func (x *Key) ProtoReflect() protoreflect.Message {
-	mi := &file_util_proto_msgTypes[2]
+	mi := &file_util_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -344,7 +123,7 @@ func (x *Key) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Key.ProtoReflect.Descriptor instead.
 func (*Key) Descriptor() ([]byte, []int) {
-	return file_util_proto_rawDescGZIP(), []int{2}
+	return file_util_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *Key) GetKey() string {
@@ -377,7 +156,7 @@ type InstanceID struct {
 
 func (x *InstanceID) Reset() {
 	*x = InstanceID{}
-	mi := &file_util_proto_msgTypes[3]
+	mi := &file_util_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -389,7 +168,7 @@ func (x *InstanceID) String() string {
 func (*InstanceID) ProtoMessage() {}
 
 func (x *InstanceID) ProtoReflect() protoreflect.Message {
-	mi := &file_util_proto_msgTypes[3]
+	mi := &file_util_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -402,7 +181,7 @@ func (x *InstanceID) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InstanceID.ProtoReflect.Descriptor instead.
 func (*InstanceID) Descriptor() ([]byte, []int) {
-	return file_util_proto_rawDescGZIP(), []int{3}
+	return file_util_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *InstanceID) GetInstanceID() string {
@@ -417,14 +196,11 @@ var File_util_proto protoreflect.FileDescriptor
 const file_util_proto_rawDesc = "" +
 	"\n" +
 	"\n" +
-	"util.proto\x12\x05order\x1a\x1fgoogle/protobuf/timestamp.proto\"\x84\x01\n" +
-	"\vProcessInfo\x127\n" +
-	"\fProcessState\x18\x01 \x01(\x0e2\x13.order.ProcessStateR\fProcessState\x12<\n" +
-	"\vProcessedAt\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\vProcessedAt\"\x93\x01\n" +
+	"util.proto\x12\x05order\x1aIsologenic/com-fs-utils-lib/models/order-properties/order-properties.proto\"\xa7\x01\n" +
 	"\rLockLogRecord\x12\x10\n" +
-	"\x03Key\x18\x01 \x01(\tR\x03Key\x129\n" +
-	"\rMustHaveState\x18\x02 \x03(\x0e2\x13.order.ProcessStateR\rMustHaveState\x125\n" +
-	"\vTargetState\x18\x03 \x01(\x0e2\x13.order.ProcessStateR\vTargetState\"m\n" +
+	"\x03Key\x18\x01 \x01(\tR\x03Key\x12C\n" +
+	"\rMustHaveState\x18\x02 \x03(\x0e2\x1d.orderproperties.ProcessStateR\rMustHaveState\x12?\n" +
+	"\vTargetState\x18\x03 \x01(\x0e2\x1d.orderproperties.ProcessStateR\vTargetState\"m\n" +
 	"\x03Key\x12\x10\n" +
 	"\x03Key\x18\x01 \x01(\tR\x03Key\x12!\n" +
 	"\tKeyPrefix\x18\x02 \x01(\tH\x00R\tKeyPrefix\x88\x01\x01\x12\x19\n" +
@@ -436,26 +212,7 @@ const file_util_proto_rawDesc = "" +
 	"InstanceID\x12\x1e\n" +
 	"\n" +
 	"InstanceID\x18\x01 \x01(\tR\n" +
-	"InstanceID*X\n" +
-	"\tOrderType\x12\x1d\n" +
-	"\x19NOT_APPLICABLE_ORDER_TYPE\x10\x00\x12\x17\n" +
-	"\x13ORDER_TYPE_PURCHASE\x10\x01\x12\x13\n" +
-	"\x0fORDER_TYPE_SELL\x10\x02*\xad\x01\n" +
-	"\vTimeInForce\x12\x1a\n" +
-	"\x16NOT_USED_TIME_IN_FORCE\x10\x00\x12\a\n" +
-	"\x03DAY\x10\x01\x12\x15\n" +
-	"\x11GOOD_TIL_CANCELED\x10\x02\x12\x12\n" +
-	"\x0eAT_THE_OPENING\x10\x03\x12\x10\n" +
-	"\fAT_THE_CLOSE\x10\x04\x12\x17\n" +
-	"\x13IMMEDIATE_OR_CANCEL\x10\x05\x12\x10\n" +
-	"\fFILL_OR_KILL\x10\x06\x12\x11\n" +
-	"\rGOOD_TIL_TIME\x10\a*\x93\x01\n" +
-	"\fProcessState\x12\x1a\n" +
-	"\x16NOT_USED_PROCESS_STATE\x10\x00\x12\x16\n" +
-	"\x12PROCESS_STATE_OPEN\x10\x01\x12\x18\n" +
-	"\x14PROCESS_STATE_LOCKED\x10\x02\x12\x18\n" +
-	"\x14PROCESS_STATE_FAILED\x10\x03\x12\x1b\n" +
-	"\x17PROCESS_STATE_PROCESSED\x10\x04B/Z-github.com/sologenic/com-fs-order-model;orderb\x06proto3"
+	"InstanceIDB/Z-github.com/sologenic/com-fs-order-model;orderb\x06proto3"
 
 var (
 	file_util_proto_rawDescOnce sync.Once
@@ -469,28 +226,21 @@ func file_util_proto_rawDescGZIP() []byte {
 	return file_util_proto_rawDescData
 }
 
-var file_util_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
-var file_util_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_util_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_util_proto_goTypes = []any{
-	(OrderType)(0),                // 0: order.OrderType
-	(TimeInForce)(0),              // 1: order.TimeInForce
-	(ProcessState)(0),             // 2: order.ProcessState
-	(*ProcessInfo)(nil),           // 3: order.ProcessInfo
-	(*LockLogRecord)(nil),         // 4: order.LockLogRecord
-	(*Key)(nil),                   // 5: order.Key
-	(*InstanceID)(nil),            // 6: order.InstanceID
-	(*timestamppb.Timestamp)(nil), // 7: google.protobuf.Timestamp
+	(*LockLogRecord)(nil),              // 0: order.LockLogRecord
+	(*Key)(nil),                        // 1: order.Key
+	(*InstanceID)(nil),                 // 2: order.InstanceID
+	(order_properties.ProcessState)(0), // 3: orderproperties.ProcessState
 }
 var file_util_proto_depIdxs = []int32{
-	2, // 0: order.ProcessInfo.ProcessState:type_name -> order.ProcessState
-	7, // 1: order.ProcessInfo.ProcessedAt:type_name -> google.protobuf.Timestamp
-	2, // 2: order.LockLogRecord.MustHaveState:type_name -> order.ProcessState
-	2, // 3: order.LockLogRecord.TargetState:type_name -> order.ProcessState
-	4, // [4:4] is the sub-list for method output_type
-	4, // [4:4] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	3, // 0: order.LockLogRecord.MustHaveState:type_name -> orderproperties.ProcessState
+	3, // 1: order.LockLogRecord.TargetState:type_name -> orderproperties.ProcessState
+	2, // [2:2] is the sub-list for method output_type
+	2, // [2:2] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_util_proto_init() }
@@ -498,20 +248,19 @@ func file_util_proto_init() {
 	if File_util_proto != nil {
 		return
 	}
-	file_util_proto_msgTypes[2].OneofWrappers = []any{}
+	file_util_proto_msgTypes[1].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_util_proto_rawDesc), len(file_util_proto_rawDesc)),
-			NumEnums:      3,
-			NumMessages:   4,
+			NumEnums:      0,
+			NumMessages:   3,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
 		GoTypes:           file_util_proto_goTypes,
 		DependencyIndexes: file_util_proto_depIdxs,
-		EnumInfos:         file_util_proto_enumTypes,
 		MessageInfos:      file_util_proto_msgTypes,
 	}.Build()
 	File_util_proto = out.File

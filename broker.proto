@@ -5,7 +5,7 @@ package order;
 option go_package = "github.com/sologenic/com-fs-order-model;order";
 
 import "google/protobuf/timestamp.proto";
-import "util.proto";
+import "sologenic/com-fs-utils-lib/models/order-properties/order-properties.proto";
 import "sologenic/com-fs-utils-lib/go/decimal/decimal.proto";
 import "sologenic/com-fs-utils-lib/models/metadata/metadata.proto";
 import "sologenic/com-fs-asset-model/asset.proto";
@@ -25,8 +25,8 @@ message BrokerOrderDetails {
     asset.AssetType AssetClass = 10; // Also called AssetType in the asset model
     OrderClass OrderClass = 11;
     TradeType Type = 12;
-    OrderType Side = 13;
-    TimeInForce TimeInForce = 14;
+    orderproperties.OrderType Side = 13;
+    orderproperties.TimeInForce TimeInForce = 14;
 
     // Notional and Qty are optional as one can be null if the other is present. However, both cannot be null or present at the same time.
     optional decimal.Decimal Notional = 15; 
@@ -56,7 +56,7 @@ message BrokerOrderDetails {
     optional decimal.Decimal PartialQty = 30;
 
     // Bookkeeping: did we process this event from the broker order log?
-    optional ProcessInfo ProcessInfo = 31;
+    optional orderproperties.ProcessInfo ProcessInfo = 31;
 
     optional string InstanceID = 32; // ID used by logs to identify the instance where the log was created/ processed
 

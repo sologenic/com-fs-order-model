@@ -11,6 +11,7 @@ import (
 	decimal "github.com/sologenic/com-fs-utils-lib/go/decimal"
 	commission "github.com/sologenic/com-fs-utils-lib/models/commission"
 	metadata "github.com/sologenic/com-fs-utils-lib/models/metadata"
+	order_properties "github.com/sologenic/com-fs-utils-lib/models/order-properties"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
@@ -302,8 +303,8 @@ type BrokerOrderDetails struct {
 	AssetClass       com_fs_asset_model.AssetType `protobuf:"varint,10,opt,name=AssetClass,proto3,enum=asset.AssetType" json:"AssetClass,omitempty"` // Also called AssetType in the asset model
 	OrderClass       OrderClass                   `protobuf:"varint,11,opt,name=OrderClass,proto3,enum=order.OrderClass" json:"OrderClass,omitempty"`
 	Type             TradeType                    `protobuf:"varint,12,opt,name=Type,proto3,enum=order.TradeType" json:"Type,omitempty"`
-	Side             OrderType                    `protobuf:"varint,13,opt,name=Side,proto3,enum=order.OrderType" json:"Side,omitempty"`
-	TimeInForce      TimeInForce                  `protobuf:"varint,14,opt,name=TimeInForce,proto3,enum=order.TimeInForce" json:"TimeInForce,omitempty"`
+	Side             order_properties.OrderType   `protobuf:"varint,13,opt,name=Side,proto3,enum=orderproperties.OrderType" json:"Side,omitempty"`
+	TimeInForce      order_properties.TimeInForce `protobuf:"varint,14,opt,name=TimeInForce,proto3,enum=orderproperties.TimeInForce" json:"TimeInForce,omitempty"`
 	// Notional and Qty are optional as one can be null if the other is present. However, both cannot be null or present at the same time.
 	Notional       *decimal.Decimal       `protobuf:"bytes,15,opt,name=Notional,proto3,oneof" json:"Notional,omitempty"`
 	OrderQty       *decimal.Decimal       `protobuf:"bytes,16,opt,name=OrderQty,proto3,oneof" json:"OrderQty,omitempty"`
@@ -327,9 +328,9 @@ type BrokerOrderDetails struct {
 	// For example, if a order for 10 shares is partially filled with 5, 3 and 2 shares, the `PartialQty` will be 5, 3 and 2 respectively.
 	PartialQty *decimal.Decimal `protobuf:"bytes,30,opt,name=PartialQty,proto3,oneof" json:"PartialQty,omitempty"`
 	// Bookkeeping: did we process this event from the broker order log?
-	ProcessInfo    *ProcessInfo   `protobuf:"bytes,31,opt,name=ProcessInfo,proto3,oneof" json:"ProcessInfo,omitempty"`
-	InstanceID     *string        `protobuf:"bytes,32,opt,name=InstanceID,proto3,oneof" json:"InstanceID,omitempty"`                              // ID used by logs to identify the instance where the log was created/ processed
-	ClearingBroker ClearingBroker `protobuf:"varint,33,opt,name=ClearingBroker,proto3,enum=order.ClearingBroker" json:"ClearingBroker,omitempty"` // Broker that cleared the order, e.g. Alpaca, RQD, etc.
+	ProcessInfo    *order_properties.ProcessInfo `protobuf:"bytes,31,opt,name=ProcessInfo,proto3,oneof" json:"ProcessInfo,omitempty"`
+	InstanceID     *string                       `protobuf:"bytes,32,opt,name=InstanceID,proto3,oneof" json:"InstanceID,omitempty"`                              // ID used by logs to identify the instance where the log was created/ processed
+	ClearingBroker ClearingBroker                `protobuf:"varint,33,opt,name=ClearingBroker,proto3,enum=order.ClearingBroker" json:"ClearingBroker,omitempty"` // Broker that cleared the order, e.g. Alpaca, RQD, etc.
 	// SSE Event tracking fields for precise event recovery using since_id parameter
 	// Enables seamless subscription from past point-in-time to real-time pushes
 	// EventID can be used with Alpaca SSE since_id parameter for reliable event replay
@@ -455,18 +456,18 @@ func (x *BrokerOrderDetails) GetType() TradeType {
 	return TradeType_NOT_APPLICABLE_TRADE_TYPE
 }
 
-func (x *BrokerOrderDetails) GetSide() OrderType {
+func (x *BrokerOrderDetails) GetSide() order_properties.OrderType {
 	if x != nil {
 		return x.Side
 	}
-	return OrderType_NOT_APPLICABLE_ORDER_TYPE
+	return order_properties.OrderType(0)
 }
 
-func (x *BrokerOrderDetails) GetTimeInForce() TimeInForce {
+func (x *BrokerOrderDetails) GetTimeInForce() order_properties.TimeInForce {
 	if x != nil {
 		return x.TimeInForce
 	}
-	return TimeInForce_NOT_USED_TIME_IN_FORCE
+	return order_properties.TimeInForce(0)
 }
 
 func (x *BrokerOrderDetails) GetNotional() *decimal.Decimal {
@@ -581,7 +582,7 @@ func (x *BrokerOrderDetails) GetPartialQty() *decimal.Decimal {
 	return nil
 }
 
-func (x *BrokerOrderDetails) GetProcessInfo() *ProcessInfo {
+func (x *BrokerOrderDetails) GetProcessInfo() *order_properties.ProcessInfo {
 	if x != nil {
 		return x.ProcessInfo
 	}
@@ -731,8 +732,7 @@ var File_broker_proto protoreflect.FileDescriptor
 
 const file_broker_proto_rawDesc = "" +
 	"\n" +
-	"\fbroker.proto\x12\x05order\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\n" +
-	"util.proto\x1a3sologenic/com-fs-utils-lib/go/decimal/decimal.proto\x1a9sologenic/com-fs-utils-lib/models/metadata/metadata.proto\x1a(sologenic/com-fs-asset-model/asset.proto\x1a=sologenic/com-fs-utils-lib/models/commission/commission.proto\"\xb7\x11\n" +
+	"\fbroker.proto\x12\x05order\x1a\x1fgoogle/protobuf/timestamp.proto\x1aIsologenic/com-fs-utils-lib/models/order-properties/order-properties.proto\x1a3sologenic/com-fs-utils-lib/go/decimal/decimal.proto\x1a9sologenic/com-fs-utils-lib/models/metadata/metadata.proto\x1a(sologenic/com-fs-asset-model/asset.proto\x1a=sologenic/com-fs-utils-lib/models/commission/commission.proto\"\xd5\x11\n" +
 	"\x12BrokerOrderDetails\x12*\n" +
 	"\x10BrokerAssignedID\x18\x01 \x01(\tR\x10BrokerAssignedID\x12:\n" +
 	"\rClientOrderID\x18\x02 \x01(\v2\x14.order.ClientOrderIDR\rClientOrderID\x12<\n" +
@@ -750,9 +750,9 @@ const file_broker_proto_rawDesc = "" +
 	"\n" +
 	"OrderClass\x18\v \x01(\x0e2\x11.order.OrderClassR\n" +
 	"OrderClass\x12$\n" +
-	"\x04Type\x18\f \x01(\x0e2\x10.order.TradeTypeR\x04Type\x12$\n" +
-	"\x04Side\x18\r \x01(\x0e2\x10.order.OrderTypeR\x04Side\x124\n" +
-	"\vTimeInForce\x18\x0e \x01(\x0e2\x12.order.TimeInForceR\vTimeInForce\x121\n" +
+	"\x04Type\x18\f \x01(\x0e2\x10.order.TradeTypeR\x04Type\x12.\n" +
+	"\x04Side\x18\r \x01(\x0e2\x1a.orderproperties.OrderTypeR\x04Side\x12>\n" +
+	"\vTimeInForce\x18\x0e \x01(\x0e2\x1c.orderproperties.TimeInForceR\vTimeInForce\x121\n" +
 	"\bNotional\x18\x0f \x01(\v2\x10.decimal.DecimalH\x04R\bNotional\x88\x01\x01\x121\n" +
 	"\bOrderQty\x18\x10 \x01(\v2\x10.decimal.DecimalH\x05R\bOrderQty\x88\x01\x01\x12.\n" +
 	"\tFilledQty\x18\x11 \x01(\v2\x10.decimal.DecimalR\tFilledQty\x12=\n" +
@@ -775,8 +775,8 @@ const file_broker_proto_rawDesc = "" +
 	"\fPartialPrice\x18\x1d \x01(\v2\x10.decimal.DecimalH\x0eR\fPartialPrice\x88\x01\x01\x125\n" +
 	"\n" +
 	"PartialQty\x18\x1e \x01(\v2\x10.decimal.DecimalH\x0fR\n" +
-	"PartialQty\x88\x01\x01\x129\n" +
-	"\vProcessInfo\x18\x1f \x01(\v2\x12.order.ProcessInfoH\x10R\vProcessInfo\x88\x01\x01\x12#\n" +
+	"PartialQty\x88\x01\x01\x12C\n" +
+	"\vProcessInfo\x18\x1f \x01(\v2\x1c.orderproperties.ProcessInfoH\x10R\vProcessInfo\x88\x01\x01\x12#\n" +
 	"\n" +
 	"InstanceID\x18  \x01(\tH\x11R\n" +
 	"InstanceID\x88\x01\x01\x12=\n" +
@@ -885,10 +885,10 @@ var file_broker_proto_goTypes = []any{
 	(*BrokerOrderDetailsList)(nil),        // 6: order.BrokerOrderDetailsList
 	(*timestamppb.Timestamp)(nil),         // 7: google.protobuf.Timestamp
 	(com_fs_asset_model.AssetType)(0),     // 8: asset.AssetType
-	(OrderType)(0),                        // 9: order.OrderType
-	(TimeInForce)(0),                      // 10: order.TimeInForce
+	(order_properties.OrderType)(0),       // 9: orderproperties.OrderType
+	(order_properties.TimeInForce)(0),     // 10: orderproperties.TimeInForce
 	(*decimal.Decimal)(nil),               // 11: decimal.Decimal
-	(*ProcessInfo)(nil),                   // 12: order.ProcessInfo
+	(*order_properties.ProcessInfo)(nil),  // 12: orderproperties.ProcessInfo
 	(*commission.CommissionSettings)(nil), // 13: commission.CommissionSettings
 	(metadata.Network)(0),                 // 14: metadata.Network
 }
@@ -902,8 +902,8 @@ var file_broker_proto_depIdxs = []int32{
 	8,  // 6: order.BrokerOrderDetails.AssetClass:type_name -> asset.AssetType
 	2,  // 7: order.BrokerOrderDetails.OrderClass:type_name -> order.OrderClass
 	1,  // 8: order.BrokerOrderDetails.Type:type_name -> order.TradeType
-	9,  // 9: order.BrokerOrderDetails.Side:type_name -> order.OrderType
-	10, // 10: order.BrokerOrderDetails.TimeInForce:type_name -> order.TimeInForce
+	9,  // 9: order.BrokerOrderDetails.Side:type_name -> orderproperties.OrderType
+	10, // 10: order.BrokerOrderDetails.TimeInForce:type_name -> orderproperties.TimeInForce
 	11, // 11: order.BrokerOrderDetails.Notional:type_name -> decimal.Decimal
 	11, // 12: order.BrokerOrderDetails.OrderQty:type_name -> decimal.Decimal
 	11, // 13: order.BrokerOrderDetails.FilledQty:type_name -> decimal.Decimal
@@ -919,7 +919,7 @@ var file_broker_proto_depIdxs = []int32{
 	11, // 23: order.BrokerOrderDetails.TotalPosition:type_name -> decimal.Decimal
 	11, // 24: order.BrokerOrderDetails.PartialPrice:type_name -> decimal.Decimal
 	11, // 25: order.BrokerOrderDetails.PartialQty:type_name -> decimal.Decimal
-	12, // 26: order.BrokerOrderDetails.ProcessInfo:type_name -> order.ProcessInfo
+	12, // 26: order.BrokerOrderDetails.ProcessInfo:type_name -> orderproperties.ProcessInfo
 	0,  // 27: order.BrokerOrderDetails.ClearingBroker:type_name -> order.ClearingBroker
 	7,  // 28: order.BrokerOrderDetails.EventTime:type_name -> google.protobuf.Timestamp
 	13, // 29: order.BrokerOrderDetails.CommissionSettings:type_name -> commission.CommissionSettings
@@ -937,7 +937,6 @@ func file_broker_proto_init() {
 	if File_broker_proto != nil {
 		return
 	}
-	file_util_proto_init()
 	file_broker_proto_msgTypes[0].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{

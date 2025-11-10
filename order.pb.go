@@ -8,6 +8,7 @@ package order
 
 import (
 	metadata "github.com/sologenic/com-fs-utils-lib/models/metadata"
+	order_properties "github.com/sologenic/com-fs-utils-lib/models/order-properties"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
@@ -490,12 +491,12 @@ type Order struct {
 	InternalOrderState InternalOrderState     `protobuf:"varint,12,opt,name=InternalOrderState,proto3,enum=order.InternalOrderState" json:"InternalOrderState,omitempty"`
 	BrokerOrderDetails *BrokerOrderDetails    `protobuf:"bytes,13,opt,name=BrokerOrderDetails,proto3,oneof" json:"BrokerOrderDetails,omitempty"` // Matches data on SmartContractAddr, orderdetails.OrderID and network
 	// Bookkeeping: did we process this event from broker smart contract order log?
-	ProcessInfo    *ProcessInfo           `protobuf:"bytes,14,opt,name=ProcessInfo,proto3,oneof" json:"ProcessInfo,omitempty"`
-	InstanceID     *string                `protobuf:"bytes,15,opt,name=InstanceID,proto3,oneof" json:"InstanceID,omitempty"` // ID used by logs to identify the instance where the log was created/ processed
-	BlockTime      *timestamppb.Timestamp `protobuf:"bytes,16,opt,name=BlockTime,proto3" json:"BlockTime,omitempty"`
-	Sequence       int64                  `protobuf:"varint,17,opt,name=Sequence,proto3" json:"Sequence,omitempty"` // Sequence
-	OrganizationID string                 `protobuf:"bytes,18,opt,name=OrganizationID,proto3" json:"OrganizationID,omitempty"`
-	UserID         string                 `protobuf:"bytes,19,opt,name=UserID,proto3" json:"UserID,omitempty"`
+	ProcessInfo    *order_properties.ProcessInfo `protobuf:"bytes,14,opt,name=ProcessInfo,proto3,oneof" json:"ProcessInfo,omitempty"`
+	InstanceID     *string                       `protobuf:"bytes,15,opt,name=InstanceID,proto3,oneof" json:"InstanceID,omitempty"` // ID used by logs to identify the instance where the log was created/ processed
+	BlockTime      *timestamppb.Timestamp        `protobuf:"bytes,16,opt,name=BlockTime,proto3" json:"BlockTime,omitempty"`
+	Sequence       int64                         `protobuf:"varint,17,opt,name=Sequence,proto3" json:"Sequence,omitempty"` // Sequence
+	OrganizationID string                        `protobuf:"bytes,18,opt,name=OrganizationID,proto3" json:"OrganizationID,omitempty"`
+	UserID         string                        `protobuf:"bytes,19,opt,name=UserID,proto3" json:"UserID,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -621,7 +622,7 @@ func (x *Order) GetBrokerOrderDetails() *BrokerOrderDetails {
 	return nil
 }
 
-func (x *Order) GetProcessInfo() *ProcessInfo {
+func (x *Order) GetProcessInfo() *order_properties.ProcessInfo {
 	if x != nil {
 		return x.ProcessInfo
 	}
@@ -665,31 +666,31 @@ func (x *Order) GetUserID() string {
 
 // Same structure as Order in the Smart Contract
 type OrderInstruction struct {
-	state              protoimpl.MessageState `protogen:"open.v1"`
-	OrderID            int64                  `protobuf:"varint,1,opt,name=OrderID,proto3" json:"OrderID,omitempty"` // Google datastore supports int64, not uint64, which is the used in the smart contract
-	Creator            string                 `protobuf:"bytes,2,opt,name=Creator,proto3" json:"Creator,omitempty"`  // Sender in the message from Coreum
-	Denom              string                 `protobuf:"bytes,3,opt,name=Denom,proto3" json:"Denom,omitempty"`
-	Amount             int64                  `protobuf:"varint,4,opt,name=Amount,proto3" json:"Amount,omitempty"`
-	AmountExp          int32                  `protobuf:"varint,5,opt,name=AmountExp,proto3" json:"AmountExp,omitempty"`
-	LimitPrice         int64                  `protobuf:"varint,6,opt,name=LimitPrice,proto3" json:"LimitPrice,omitempty"`       // DEPRECATED: Use LimitPriceFloat instead for new smart contract format
-	LimitPriceExp      int32                  `protobuf:"varint,7,opt,name=LimitPriceExp,proto3" json:"LimitPriceExp,omitempty"` // DEPRECATED: Use LimitPriceFloat instead for new smart contract format
-	FillOrKill         bool                   `protobuf:"varint,8,opt,name=FillOrKill,proto3" json:"FillOrKill,omitempty"`       // DEPRECATED: Use TimeInForce instead as it's more flexible and RQD does not support it (2025-08-18)
-	ExpiresAt          *string                `protobuf:"bytes,9,opt,name=ExpiresAt,proto3,oneof" json:"ExpiresAt,omitempty"`    // In ISO-8601 Zulu format (e.g., "2024-02-29T23:59:59Z")
-	OrderDetailType    OrderDetailType        `protobuf:"varint,10,opt,name=OrderDetailType,proto3,enum=order.OrderDetailType" json:"OrderDetailType,omitempty"`
-	Hold               *Hold                  `protobuf:"bytes,11,opt,name=Hold,proto3,oneof" json:"Hold,omitempty"`
-	FundsSent          *Coin                  `protobuf:"bytes,12,opt,name=FundsSent,proto3" json:"FundsSent,omitempty"`
-	OrderType          OrderType              `protobuf:"varint,13,opt,name=OrderType,proto3,enum=order.OrderType" json:"OrderType,omitempty"`
-	OrderState         *OrderState            `protobuf:"bytes,14,opt,name=OrderState,proto3" json:"OrderState,omitempty"`
-	PaymentState       *PaymentState          `protobuf:"varint,15,opt,name=PaymentState,proto3,enum=order.PaymentState,oneof" json:"PaymentState,omitempty"`
-	AmountExecuted     *int64                 `protobuf:"varint,16,opt,name=AmountExecuted,proto3,oneof" json:"AmountExecuted,omitempty"`
-	AmountExecutedExp  *int32                 `protobuf:"varint,17,opt,name=AmountExecutedExp,proto3,oneof" json:"AmountExecutedExp,omitempty"`
-	UsedFundsAmount    *int64                 `protobuf:"varint,18,opt,name=UsedFundsAmount,proto3,oneof" json:"UsedFundsAmount,omitempty"`
-	UsedFundsAmountExp *int32                 `protobuf:"varint,19,opt,name=UsedFundsAmountExp,proto3,oneof" json:"UsedFundsAmountExp,omitempty"`
-	Costs              *int64                 `protobuf:"varint,20,opt,name=Costs,proto3,oneof" json:"Costs,omitempty"`
-	CostsExp           *int32                 `protobuf:"varint,21,opt,name=CostsExp,proto3,oneof" json:"CostsExp,omitempty"`
-	TimeInForce        *TimeInForce           `protobuf:"varint,22,opt,name=TimeInForce,proto3,enum=order.TimeInForce,oneof" json:"TimeInForce,omitempty"`
-	LimitPriceFloat    *float64               `protobuf:"fixed64,23,opt,name=LimitPriceFloat,proto3,oneof" json:"LimitPriceFloat,omitempty"` // Direct float price from smart contract (e.g., 26.25)
-	Receiver           *Receiver              `protobuf:"bytes,24,opt,name=Receiver,proto3,oneof" json:"Receiver,omitempty"`                 // The address of the receiver, used for sending of funds. Receiver can also be an email address, tx address or blockchain addres from another blockchain.
+	state              protoimpl.MessageState        `protogen:"open.v1"`
+	OrderID            int64                         `protobuf:"varint,1,opt,name=OrderID,proto3" json:"OrderID,omitempty"` // Google datastore supports int64, not uint64, which is the used in the smart contract
+	Creator            string                        `protobuf:"bytes,2,opt,name=Creator,proto3" json:"Creator,omitempty"`  // Sender in the message from Coreum
+	Denom              string                        `protobuf:"bytes,3,opt,name=Denom,proto3" json:"Denom,omitempty"`
+	Amount             int64                         `protobuf:"varint,4,opt,name=Amount,proto3" json:"Amount,omitempty"`
+	AmountExp          int32                         `protobuf:"varint,5,opt,name=AmountExp,proto3" json:"AmountExp,omitempty"`
+	LimitPrice         int64                         `protobuf:"varint,6,opt,name=LimitPrice,proto3" json:"LimitPrice,omitempty"`       // DEPRECATED: Use LimitPriceFloat instead for new smart contract format
+	LimitPriceExp      int32                         `protobuf:"varint,7,opt,name=LimitPriceExp,proto3" json:"LimitPriceExp,omitempty"` // DEPRECATED: Use LimitPriceFloat instead for new smart contract format
+	FillOrKill         bool                          `protobuf:"varint,8,opt,name=FillOrKill,proto3" json:"FillOrKill,omitempty"`       // DEPRECATED: Use TimeInForce instead as it's more flexible and RQD does not support it (2025-08-18)
+	ExpiresAt          *string                       `protobuf:"bytes,9,opt,name=ExpiresAt,proto3,oneof" json:"ExpiresAt,omitempty"`    // In ISO-8601 Zulu format (e.g., "2024-02-29T23:59:59Z")
+	OrderDetailType    OrderDetailType               `protobuf:"varint,10,opt,name=OrderDetailType,proto3,enum=order.OrderDetailType" json:"OrderDetailType,omitempty"`
+	Hold               *Hold                         `protobuf:"bytes,11,opt,name=Hold,proto3,oneof" json:"Hold,omitempty"`
+	FundsSent          *Coin                         `protobuf:"bytes,12,opt,name=FundsSent,proto3" json:"FundsSent,omitempty"`
+	OrderType          order_properties.OrderType    `protobuf:"varint,13,opt,name=OrderType,proto3,enum=orderproperties.OrderType" json:"OrderType,omitempty"`
+	OrderState         *OrderState                   `protobuf:"bytes,14,opt,name=OrderState,proto3" json:"OrderState,omitempty"`
+	PaymentState       *PaymentState                 `protobuf:"varint,15,opt,name=PaymentState,proto3,enum=order.PaymentState,oneof" json:"PaymentState,omitempty"`
+	AmountExecuted     *int64                        `protobuf:"varint,16,opt,name=AmountExecuted,proto3,oneof" json:"AmountExecuted,omitempty"`
+	AmountExecutedExp  *int32                        `protobuf:"varint,17,opt,name=AmountExecutedExp,proto3,oneof" json:"AmountExecutedExp,omitempty"`
+	UsedFundsAmount    *int64                        `protobuf:"varint,18,opt,name=UsedFundsAmount,proto3,oneof" json:"UsedFundsAmount,omitempty"`
+	UsedFundsAmountExp *int32                        `protobuf:"varint,19,opt,name=UsedFundsAmountExp,proto3,oneof" json:"UsedFundsAmountExp,omitempty"`
+	Costs              *int64                        `protobuf:"varint,20,opt,name=Costs,proto3,oneof" json:"Costs,omitempty"`
+	CostsExp           *int32                        `protobuf:"varint,21,opt,name=CostsExp,proto3,oneof" json:"CostsExp,omitempty"`
+	TimeInForce        *order_properties.TimeInForce `protobuf:"varint,22,opt,name=TimeInForce,proto3,enum=orderproperties.TimeInForce,oneof" json:"TimeInForce,omitempty"`
+	LimitPriceFloat    *float64                      `protobuf:"fixed64,23,opt,name=LimitPriceFloat,proto3,oneof" json:"LimitPriceFloat,omitempty"` // Direct float price from smart contract (e.g., 26.25)
+	Receiver           *Receiver                     `protobuf:"bytes,24,opt,name=Receiver,proto3,oneof" json:"Receiver,omitempty"`                 // The address of the receiver, used for sending of funds. Receiver can also be an email address, tx address or blockchain addres from another blockchain.
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -808,11 +809,11 @@ func (x *OrderInstruction) GetFundsSent() *Coin {
 	return nil
 }
 
-func (x *OrderInstruction) GetOrderType() OrderType {
+func (x *OrderInstruction) GetOrderType() order_properties.OrderType {
 	if x != nil {
 		return x.OrderType
 	}
-	return OrderType_NOT_APPLICABLE_ORDER_TYPE
+	return order_properties.OrderType(0)
 }
 
 func (x *OrderInstruction) GetOrderState() *OrderState {
@@ -871,11 +872,11 @@ func (x *OrderInstruction) GetCostsExp() int32 {
 	return 0
 }
 
-func (x *OrderInstruction) GetTimeInForce() TimeInForce {
+func (x *OrderInstruction) GetTimeInForce() order_properties.TimeInForce {
 	if x != nil && x.TimeInForce != nil {
 		return *x.TimeInForce
 	}
-	return TimeInForce_NOT_USED_TIME_IN_FORCE
+	return order_properties.TimeInForce(0)
 }
 
 func (x *OrderInstruction) GetLimitPriceFloat() float64 {
@@ -1164,8 +1165,7 @@ var File_order_proto protoreflect.FileDescriptor
 
 const file_order_proto_rawDesc = "" +
 	"\n" +
-	"\vorder.proto\x12\x05order\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\n" +
-	"util.proto\x1a\fbroker.proto\x1a9sologenic/com-fs-utils-lib/models/metadata/metadata.proto\"\xcb\a\n" +
+	"\vorder.proto\x12\x05order\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\fbroker.proto\x1a9sologenic/com-fs-utils-lib/models/metadata/metadata.proto\x1aIsologenic/com-fs-utils-lib/models/order-properties/order-properties.proto\"\xd5\a\n" +
 	"\x05Order\x12+\n" +
 	"\aNetwork\x18\x01 \x01(\x0e2\x11.metadata.NetworkR\aNetwork\x12,\n" +
 	"\x11SmartContractAddr\x18\x02 \x01(\tR\x11SmartContractAddr\x129\n" +
@@ -1182,8 +1182,8 @@ const file_order_proto_rawDesc = "" +
 	"DetectedAt\x12\x16\n" +
 	"\x06Height\x18\v \x01(\x03R\x06Height\x12I\n" +
 	"\x12InternalOrderState\x18\f \x01(\x0e2\x19.order.InternalOrderStateR\x12InternalOrderState\x12N\n" +
-	"\x12BrokerOrderDetails\x18\r \x01(\v2\x19.order.BrokerOrderDetailsH\x01R\x12BrokerOrderDetails\x88\x01\x01\x129\n" +
-	"\vProcessInfo\x18\x0e \x01(\v2\x12.order.ProcessInfoH\x02R\vProcessInfo\x88\x01\x01\x12#\n" +
+	"\x12BrokerOrderDetails\x18\r \x01(\v2\x19.order.BrokerOrderDetailsH\x01R\x12BrokerOrderDetails\x88\x01\x01\x12C\n" +
+	"\vProcessInfo\x18\x0e \x01(\v2\x1c.orderproperties.ProcessInfoH\x02R\vProcessInfo\x88\x01\x01\x12#\n" +
 	"\n" +
 	"InstanceID\x18\x0f \x01(\tH\x03R\n" +
 	"InstanceID\x88\x01\x01\x128\n" +
@@ -1195,7 +1195,7 @@ const file_order_proto_rawDesc = "" +
 	"_GasFeeUSDB\x15\n" +
 	"\x13_BrokerOrderDetailsB\x0e\n" +
 	"\f_ProcessInfoB\r\n" +
-	"\v_InstanceID\"\xaf\t\n" +
+	"\v_InstanceID\"\xc3\t\n" +
 	"\x10OrderInstruction\x12\x18\n" +
 	"\aOrderID\x18\x01 \x01(\x03R\aOrderID\x12\x18\n" +
 	"\aCreator\x18\x02 \x01(\tR\aCreator\x12\x14\n" +
@@ -1213,8 +1213,8 @@ const file_order_proto_rawDesc = "" +
 	"\x0fOrderDetailType\x18\n" +
 	" \x01(\x0e2\x16.order.OrderDetailTypeR\x0fOrderDetailType\x12$\n" +
 	"\x04Hold\x18\v \x01(\v2\v.order.HoldH\x01R\x04Hold\x88\x01\x01\x12)\n" +
-	"\tFundsSent\x18\f \x01(\v2\v.order.CoinR\tFundsSent\x12.\n" +
-	"\tOrderType\x18\r \x01(\x0e2\x10.order.OrderTypeR\tOrderType\x121\n" +
+	"\tFundsSent\x18\f \x01(\v2\v.order.CoinR\tFundsSent\x128\n" +
+	"\tOrderType\x18\r \x01(\x0e2\x1a.orderproperties.OrderTypeR\tOrderType\x121\n" +
 	"\n" +
 	"OrderState\x18\x0e \x01(\v2\x11.order.OrderStateR\n" +
 	"OrderState\x12<\n" +
@@ -1224,8 +1224,8 @@ const file_order_proto_rawDesc = "" +
 	"\x0fUsedFundsAmount\x18\x12 \x01(\x03H\x05R\x0fUsedFundsAmount\x88\x01\x01\x123\n" +
 	"\x12UsedFundsAmountExp\x18\x13 \x01(\x05H\x06R\x12UsedFundsAmountExp\x88\x01\x01\x12\x19\n" +
 	"\x05Costs\x18\x14 \x01(\x03H\aR\x05Costs\x88\x01\x01\x12\x1f\n" +
-	"\bCostsExp\x18\x15 \x01(\x05H\bR\bCostsExp\x88\x01\x01\x129\n" +
-	"\vTimeInForce\x18\x16 \x01(\x0e2\x12.order.TimeInForceH\tR\vTimeInForce\x88\x01\x01\x12-\n" +
+	"\bCostsExp\x18\x15 \x01(\x05H\bR\bCostsExp\x88\x01\x01\x12C\n" +
+	"\vTimeInForce\x18\x16 \x01(\x0e2\x1c.orderproperties.TimeInForceH\tR\vTimeInForce\x88\x01\x01\x12-\n" +
 	"\x0fLimitPriceFloat\x18\x17 \x01(\x01H\n" +
 	"R\x0fLimitPriceFloat\x88\x01\x01\x120\n" +
 	"\bReceiver\x18\x18 \x01(\v2\x0f.order.ReceiverH\vR\bReceiver\x88\x01\x01B\f\n" +
@@ -1343,26 +1343,26 @@ func file_order_proto_rawDescGZIP() []byte {
 var file_order_proto_enumTypes = make([]protoimpl.EnumInfo, 7)
 var file_order_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_order_proto_goTypes = []any{
-	(TransactionType)(0),          // 0: order.TransactionType
-	(OrderStateType)(0),           // 1: order.OrderStateType
-	(OrderCancelledBy)(0),         // 2: order.OrderCancelledBy
-	(PaymentState)(0),             // 3: order.PaymentState
-	(InternalOrderState)(0),       // 4: order.InternalOrderState
-	(OrderDetailType)(0),          // 5: order.OrderDetailType
-	(ReceiverType)(0),             // 6: order.ReceiverType
-	(*Order)(nil),                 // 7: order.Order
-	(*OrderInstruction)(nil),      // 8: order.OrderInstruction
-	(*Orders)(nil),                // 9: order.Orders
-	(*Hold)(nil),                  // 10: order.Hold
-	(*Coin)(nil),                  // 11: order.Coin
-	(*OrderState)(nil),            // 12: order.OrderState
-	(*Receiver)(nil),              // 13: order.Receiver
-	(metadata.Network)(0),         // 14: metadata.Network
-	(*timestamppb.Timestamp)(nil), // 15: google.protobuf.Timestamp
-	(*BrokerOrderDetails)(nil),    // 16: order.BrokerOrderDetails
-	(*ProcessInfo)(nil),           // 17: order.ProcessInfo
-	(OrderType)(0),                // 18: order.OrderType
-	(TimeInForce)(0),              // 19: order.TimeInForce
+	(TransactionType)(0),                 // 0: order.TransactionType
+	(OrderStateType)(0),                  // 1: order.OrderStateType
+	(OrderCancelledBy)(0),                // 2: order.OrderCancelledBy
+	(PaymentState)(0),                    // 3: order.PaymentState
+	(InternalOrderState)(0),              // 4: order.InternalOrderState
+	(OrderDetailType)(0),                 // 5: order.OrderDetailType
+	(ReceiverType)(0),                    // 6: order.ReceiverType
+	(*Order)(nil),                        // 7: order.Order
+	(*OrderInstruction)(nil),             // 8: order.OrderInstruction
+	(*Orders)(nil),                       // 9: order.Orders
+	(*Hold)(nil),                         // 10: order.Hold
+	(*Coin)(nil),                         // 11: order.Coin
+	(*OrderState)(nil),                   // 12: order.OrderState
+	(*Receiver)(nil),                     // 13: order.Receiver
+	(metadata.Network)(0),                // 14: metadata.Network
+	(*timestamppb.Timestamp)(nil),        // 15: google.protobuf.Timestamp
+	(*BrokerOrderDetails)(nil),           // 16: order.BrokerOrderDetails
+	(*order_properties.ProcessInfo)(nil), // 17: orderproperties.ProcessInfo
+	(order_properties.OrderType)(0),      // 18: orderproperties.OrderType
+	(order_properties.TimeInForce)(0),    // 19: orderproperties.TimeInForce
 }
 var file_order_proto_depIdxs = []int32{
 	14, // 0: order.Order.Network:type_name -> metadata.Network
@@ -1373,15 +1373,15 @@ var file_order_proto_depIdxs = []int32{
 	15, // 5: order.Order.DetectedAt:type_name -> google.protobuf.Timestamp
 	4,  // 6: order.Order.InternalOrderState:type_name -> order.InternalOrderState
 	16, // 7: order.Order.BrokerOrderDetails:type_name -> order.BrokerOrderDetails
-	17, // 8: order.Order.ProcessInfo:type_name -> order.ProcessInfo
+	17, // 8: order.Order.ProcessInfo:type_name -> orderproperties.ProcessInfo
 	15, // 9: order.Order.BlockTime:type_name -> google.protobuf.Timestamp
 	5,  // 10: order.OrderInstruction.OrderDetailType:type_name -> order.OrderDetailType
 	10, // 11: order.OrderInstruction.Hold:type_name -> order.Hold
 	11, // 12: order.OrderInstruction.FundsSent:type_name -> order.Coin
-	18, // 13: order.OrderInstruction.OrderType:type_name -> order.OrderType
+	18, // 13: order.OrderInstruction.OrderType:type_name -> orderproperties.OrderType
 	12, // 14: order.OrderInstruction.OrderState:type_name -> order.OrderState
 	3,  // 15: order.OrderInstruction.PaymentState:type_name -> order.PaymentState
-	19, // 16: order.OrderInstruction.TimeInForce:type_name -> order.TimeInForce
+	19, // 16: order.OrderInstruction.TimeInForce:type_name -> orderproperties.TimeInForce
 	13, // 17: order.OrderInstruction.Receiver:type_name -> order.Receiver
 	7,  // 18: order.Orders.Orders:type_name -> order.Order
 	1,  // 19: order.OrderState.OrderStateType:type_name -> order.OrderStateType
@@ -1399,7 +1399,6 @@ func file_order_proto_init() {
 	if File_order_proto != nil {
 		return
 	}
-	file_util_proto_init()
 	file_broker_proto_init()
 	file_order_proto_msgTypes[0].OneofWrappers = []any{}
 	file_order_proto_msgTypes[1].OneofWrappers = []any{}

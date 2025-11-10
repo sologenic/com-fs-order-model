@@ -5,9 +5,10 @@ package order;
 option go_package = "github.com/sologenic/com-fs-order-model;order";
 
 import "google/protobuf/timestamp.proto";
-import "util.proto";
 import "broker.proto";
 import "sologenic/com-fs-utils-lib/models/metadata/metadata.proto";
+import "sologenic/com-fs-utils-lib/models/order-properties/order-properties.proto";
+
 
 
 // Order key: OrderID-SmartContractAddr-Network (1 entry per order)
@@ -29,7 +30,7 @@ message Order {
     optional BrokerOrderDetails BrokerOrderDetails = 13; // Matches data on SmartContractAddr, orderdetails.OrderID and network
 
     // Bookkeeping: did we process this event from broker smart contract order log?
-    optional ProcessInfo ProcessInfo = 14;
+    optional orderproperties.ProcessInfo ProcessInfo = 14;
 
     optional string InstanceID = 15; // ID used by logs to identify the instance where the log was created/ processed
 
@@ -70,7 +71,7 @@ message OrderInstruction {
 
     optional Hold Hold = 11;
     Coin FundsSent = 12;
-    OrderType OrderType = 13;
+    orderproperties.OrderType OrderType = 13;
     OrderState OrderState = 14;
     optional PaymentState PaymentState = 15;
     optional int64 AmountExecuted = 16;
@@ -80,7 +81,7 @@ message OrderInstruction {
     optional int64 Costs = 20;
     optional int32 CostsExp = 21;
 
-    optional TimeInForce TimeInForce = 22;
+    optional orderproperties.TimeInForce TimeInForce = 22;
     
     optional double LimitPriceFloat = 23; // Direct float price from smart contract (e.g., 26.25)
     optional Receiver Receiver = 24; // The address of the receiver, used for sending of funds. Receiver can also be an email address, tx address or blockchain addres from another blockchain.
