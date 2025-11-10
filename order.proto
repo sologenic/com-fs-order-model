@@ -44,13 +44,14 @@ enum TransactionType {
     NOT_USED_TRANSACTION_TYPE = 0;
     PURCHASE = 1;
     SELL = 2;
-    REQUEST_ORDER_CANCEL = 3;
+    REQUEST_ORDER_CANCEL = 3;   
     EXECUTE_ORDER = 4;
     PAY_ORDER = 5;
     REQUEST_REATTESTATION = 6;
     //Added for withdraw/deposit orders
     DEPOSIT = 7;
     WITHDRAWAL = 8; 
+    USDC_USD_CONVERSION = 9; // Conversion of USDC to USD for deposit/withdrawal orders
 }
 
 // Same structure as Order in the Smart Contract

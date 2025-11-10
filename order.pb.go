@@ -35,8 +35,9 @@ const (
 	TransactionType_PAY_ORDER                 TransactionType = 5
 	TransactionType_REQUEST_REATTESTATION     TransactionType = 6
 	// Added for withdraw/deposit orders
-	TransactionType_DEPOSIT    TransactionType = 7
-	TransactionType_WITHDRAWAL TransactionType = 8
+	TransactionType_DEPOSIT             TransactionType = 7
+	TransactionType_WITHDRAWAL          TransactionType = 8
+	TransactionType_USDC_USD_CONVERSION TransactionType = 9 // Conversion of USDC to USD for deposit/withdrawal orders
 )
 
 // Enum value maps for TransactionType.
@@ -51,6 +52,7 @@ var (
 		6: "REQUEST_REATTESTATION",
 		7: "DEPOSIT",
 		8: "WITHDRAWAL",
+		9: "USDC_USD_CONVERSION",
 	}
 	TransactionType_value = map[string]int32{
 		"NOT_USED_TRANSACTION_TYPE": 0,
@@ -62,6 +64,7 @@ var (
 		"REQUEST_REATTESTATION":     6,
 		"DEPOSIT":                   7,
 		"WITHDRAWAL":                8,
+		"USDC_USD_CONVERSION":       9,
 	}
 )
 
@@ -1257,7 +1260,7 @@ const file_order_proto_rawDesc = "" +
 	"\x11_OrderCancelledBy\"M\n" +
 	"\bReceiver\x12\x18\n" +
 	"\aAddress\x18\x01 \x01(\tR\aAddress\x12'\n" +
-	"\x04Type\x18\x02 \x01(\x0e2\x13.order.ReceiverTypeR\x04Type*\xbc\x01\n" +
+	"\x04Type\x18\x02 \x01(\x0e2\x13.order.ReceiverTypeR\x04Type*\xd5\x01\n" +
 	"\x0fTransactionType\x12\x1d\n" +
 	"\x19NOT_USED_TRANSACTION_TYPE\x10\x00\x12\f\n" +
 	"\bPURCHASE\x10\x01\x12\b\n" +
@@ -1268,7 +1271,8 @@ const file_order_proto_rawDesc = "" +
 	"\x15REQUEST_REATTESTATION\x10\x06\x12\v\n" +
 	"\aDEPOSIT\x10\a\x12\x0e\n" +
 	"\n" +
-	"WITHDRAWAL\x10\b*\xa2\x01\n" +
+	"WITHDRAWAL\x10\b\x12\x17\n" +
+	"\x13USDC_USD_CONVERSION\x10\t*\xa2\x01\n" +
 	"\x0eOrderStateType\x12\x1d\n" +
 	"\x19NOT_USED_ORDER_STATE_TYPE\x10\x00\x12\b\n" +
 	"\x04OPEN\x10\x01\x12\n" +

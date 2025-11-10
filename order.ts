@@ -34,6 +34,8 @@ export enum TransactionType {
   /** DEPOSIT - Added for withdraw/deposit orders */
   DEPOSIT = 7,
   WITHDRAWAL = 8,
+  /** USDC_USD_CONVERSION - Conversion of USDC to USD for deposit/withdrawal orders */
+  USDC_USD_CONVERSION = 9,
   UNRECOGNIZED = -1,
 }
 
@@ -66,6 +68,9 @@ export function transactionTypeFromJSON(object: any): TransactionType {
     case 8:
     case "WITHDRAWAL":
       return TransactionType.WITHDRAWAL;
+    case 9:
+    case "USDC_USD_CONVERSION":
+      return TransactionType.USDC_USD_CONVERSION;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -93,6 +98,8 @@ export function transactionTypeToJSON(object: TransactionType): string {
       return "DEPOSIT";
     case TransactionType.WITHDRAWAL:
       return "WITHDRAWAL";
+    case TransactionType.USDC_USD_CONVERSION:
+      return "USDC_USD_CONVERSION";
     case TransactionType.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
