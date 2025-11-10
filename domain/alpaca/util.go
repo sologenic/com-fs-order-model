@@ -146,7 +146,7 @@ func mapTradeType(orderType alpaca.OrderType) ordergrpc.TradeType {
 	case alpaca.TrailingStop:
 		return ordergrpc.TradeType_TRAILING_STOP
 	default:
-		return ordergrpc.TradeType_NOT_USED_TRADE_TYPE
+		return ordergrpc.TradeType_NOT_APPLICABLE_TRADE_TYPE
 	}
 }
 
@@ -158,7 +158,7 @@ func mapSide(side alpaca.Side) ordergrpc.OrderType {
 	case alpaca.Sell:
 		return ordergrpc.OrderType_ORDER_TYPE_SELL
 	default:
-		return ordergrpc.OrderType_NOT_USED_ORDER_TYPE
+		return ordergrpc.OrderType_NOT_APPLICABLE_ORDER_TYPE
 	}
 }
 

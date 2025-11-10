@@ -112,7 +112,7 @@ func mapSide(side string) ordergrpc.OrderType {
 	case "S":
 		return ordergrpc.OrderType_ORDER_TYPE_SELL
 	default:
-		return ordergrpc.OrderType_NOT_USED_ORDER_TYPE
+		return ordergrpc.OrderType_NOT_APPLICABLE_ORDER_TYPE
 	}
 }
 
