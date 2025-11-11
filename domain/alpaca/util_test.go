@@ -18,6 +18,7 @@ import (
 	"github.com/sologenic/com-fs-utils-lib/go/unittest"
 	"github.com/sologenic/com-fs-utils-lib/models/commission"
 	metadatagrpc "github.com/sologenic/com-fs-utils-lib/models/metadata"
+	orderproperties "github.com/sologenic/com-fs-utils-lib/models/order-properties"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
@@ -123,8 +124,8 @@ func TestMapBrokerOrderToInternal(t *testing.T) {
 					AssetClass:     assetgrpc.AssetType_EQUITY,
 					OrderClass:     ordergrpc.OrderClass_NOT_USED_ORDER_CLASS,
 					Type:           ordergrpc.TradeType_MARKET,
-					Side:           ordergrpc.OrderType_ORDER_TYPE_PURCHASE,
-					TimeInForce:    ordergrpc.TimeInForce_DAY,
+					Side:           orderproperties.OrderType_ORDER_TYPE_PURCHASE,
+					TimeInForce:    orderproperties.TimeInForce_DAY,
 					Status:         ordergrpc.BrokerOrderStatus_PENDING_NEW,
 					Notional:       nil,
 					OrderQty:       &utildecimal.Decimal{Value: 15, Exp: 0},
@@ -136,7 +137,7 @@ func TestMapBrokerOrderToInternal(t *testing.T) {
 					TrailPercent:   nil,
 					HWM:            nil,
 					ExtendedHours:  false,
-					ClearingBroker: ordergrpc.ClearingBroker_ALPACA,
+					ClearingBroker: orderproperties.ClearingBroker_ALPACA,
 					CommissionSettings: &commission.CommissionSettings{
 						Commission:     &utildecimal.Decimal{Value: 0, Exp: 0},
 						CommissionType: nil,
@@ -180,8 +181,8 @@ func TestMapBrokerOrderToInternal(t *testing.T) {
 					AssetClass:     assetgrpc.AssetType_EQUITY,
 					OrderClass:     ordergrpc.OrderClass_NOT_USED_ORDER_CLASS,
 					Type:           ordergrpc.TradeType_MARKET,
-					Side:           ordergrpc.OrderType_ORDER_TYPE_SELL,
-					TimeInForce:    ordergrpc.TimeInForce_DAY,
+					Side:           orderproperties.OrderType_ORDER_TYPE_SELL,
+					TimeInForce:    orderproperties.TimeInForce_DAY,
 					Status:         ordergrpc.BrokerOrderStatus_PENDING_NEW,
 					Notional:       nil,
 					OrderQty:       &utildecimal.Decimal{Value: 1, Exp: 0},
@@ -193,7 +194,7 @@ func TestMapBrokerOrderToInternal(t *testing.T) {
 					TrailPercent:   nil,
 					HWM:            nil,
 					ExtendedHours:  false,
-					ClearingBroker: ordergrpc.ClearingBroker_ALPACA,
+					ClearingBroker: orderproperties.ClearingBroker_ALPACA,
 					CommissionSettings: &commission.CommissionSettings{
 						Commission:     &utildecimal.Decimal{Value: 0, Exp: 0},
 						CommissionType: nil,
@@ -237,8 +238,8 @@ func TestMapBrokerOrderToInternal(t *testing.T) {
 					AssetClass:     assetgrpc.AssetType_EQUITY,
 					OrderClass:     ordergrpc.OrderClass_NOT_USED_ORDER_CLASS,
 					Type:           ordergrpc.TradeType_MARKET,
-					Side:           ordergrpc.OrderType_ORDER_TYPE_SELL,
-					TimeInForce:    ordergrpc.TimeInForce_DAY,
+					Side:           orderproperties.OrderType_ORDER_TYPE_SELL,
+					TimeInForce:    orderproperties.TimeInForce_DAY,
 					Status:         ordergrpc.BrokerOrderStatus_NEW,
 					Notional:       nil,
 					OrderQty:       &utildecimal.Decimal{Value: 1, Exp: 0},
@@ -250,7 +251,7 @@ func TestMapBrokerOrderToInternal(t *testing.T) {
 					TrailPercent:   nil,
 					HWM:            nil,
 					ExtendedHours:  false,
-					ClearingBroker: ordergrpc.ClearingBroker_ALPACA,
+					ClearingBroker: orderproperties.ClearingBroker_ALPACA,
 					CommissionSettings: &commission.CommissionSettings{
 						Commission:     &utildecimal.Decimal{Value: 0, Exp: 0},
 						CommissionType: nil,
@@ -294,8 +295,8 @@ func TestMapBrokerOrderToInternal(t *testing.T) {
 					AssetClass:     assetgrpc.AssetType_EQUITY,
 					OrderClass:     ordergrpc.OrderClass_NOT_USED_ORDER_CLASS,
 					Type:           ordergrpc.TradeType_MARKET,
-					Side:           ordergrpc.OrderType_ORDER_TYPE_PURCHASE,
-					TimeInForce:    ordergrpc.TimeInForce_DAY,
+					Side:           orderproperties.OrderType_ORDER_TYPE_PURCHASE,
+					TimeInForce:    orderproperties.TimeInForce_DAY,
 					Status:         ordergrpc.BrokerOrderStatus_FILLED,
 					Notional:       nil,
 					OrderQty:       &utildecimal.Decimal{Value: 1, Exp: 0},
@@ -307,7 +308,7 @@ func TestMapBrokerOrderToInternal(t *testing.T) {
 					TrailPercent:   nil,
 					HWM:            nil,
 					ExtendedHours:  false,
-					ClearingBroker: ordergrpc.ClearingBroker_ALPACA,
+					ClearingBroker: orderproperties.ClearingBroker_ALPACA,
 					CommissionSettings: &commission.CommissionSettings{
 						Commission:     &utildecimal.Decimal{Value: 0, Exp: 0},
 						CommissionType: nil,
@@ -351,8 +352,8 @@ func TestMapBrokerOrderToInternal(t *testing.T) {
 					AssetClass:     assetgrpc.AssetType_EQUITY,
 					OrderClass:     ordergrpc.OrderClass_NOT_USED_ORDER_CLASS,
 					Type:           ordergrpc.TradeType_MARKET,
-					Side:           ordergrpc.OrderType_ORDER_TYPE_PURCHASE,
-					TimeInForce:    ordergrpc.TimeInForce_DAY,
+					Side:           orderproperties.OrderType_ORDER_TYPE_PURCHASE,
+					TimeInForce:    orderproperties.TimeInForce_DAY,
 					Status:         ordergrpc.BrokerOrderStatus_FILLED,
 					Notional:       nil,
 					OrderQty:       &utildecimal.Decimal{Value: 1, Exp: 0},
@@ -364,7 +365,7 @@ func TestMapBrokerOrderToInternal(t *testing.T) {
 					TrailPercent:   nil,
 					HWM:            nil,
 					ExtendedHours:  false,
-					ClearingBroker: ordergrpc.ClearingBroker_ALPACA,
+					ClearingBroker: orderproperties.ClearingBroker_ALPACA,
 					CommissionSettings: &commission.CommissionSettings{
 						Commission:     &utildecimal.Decimal{Value: 0, Exp: 0},
 						CommissionType: nil,
@@ -408,8 +409,8 @@ func TestMapBrokerOrderToInternal(t *testing.T) {
 					AssetClass:     assetgrpc.AssetType_EQUITY,
 					OrderClass:     ordergrpc.OrderClass_NOT_USED_ORDER_CLASS,
 					Type:           ordergrpc.TradeType_MARKET,
-					Side:           ordergrpc.OrderType_ORDER_TYPE_PURCHASE,
-					TimeInForce:    ordergrpc.TimeInForce_DAY,
+					Side:           orderproperties.OrderType_ORDER_TYPE_PURCHASE,
+					TimeInForce:    orderproperties.TimeInForce_DAY,
 					Status:         ordergrpc.BrokerOrderStatus_PARTIALLY_FILLED,
 					Notional:       nil,
 					OrderQty:       &utildecimal.Decimal{Value: 15, Exp: 0},
@@ -421,7 +422,7 @@ func TestMapBrokerOrderToInternal(t *testing.T) {
 					TrailPercent:   nil,
 					HWM:            nil,
 					ExtendedHours:  false,
-					ClearingBroker: ordergrpc.ClearingBroker_ALPACA,
+					ClearingBroker: orderproperties.ClearingBroker_ALPACA,
 					CommissionSettings: &commission.CommissionSettings{
 						Commission:     &utildecimal.Decimal{Value: 0, Exp: 0},
 						CommissionType: nil,

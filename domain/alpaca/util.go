@@ -13,6 +13,7 @@ import (
 	dutils "github.com/sologenic/com-fs-utils-lib/go/decimal"
 	"github.com/sologenic/com-fs-utils-lib/models/commission"
 	metadatagrpc "github.com/sologenic/com-fs-utils-lib/models/metadata"
+	orderproperties "github.com/sologenic/com-fs-utils-lib/models/order-properties"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -71,7 +72,7 @@ func MapBrokerOrderToInternal(br *BrokerResponse) (*ordergrpc.BrokerOrderDetails
 		CreatedAt:        convertTimeToTimestamp(&bo.CreatedAt),
 		UpdatedAt:        convertTimeToTimestamp(&bo.UpdatedAt),
 		Status:           mapStatus(bo.Status),
-		ClearingBroker:   ordergrpc.ClearingBroker_ALPACA,
+		ClearingBroker:   orderproperties.ClearingBroker_ALPACA,
 		CommissionSettings: &commission.CommissionSettings{
 			Commission:     dutils.DecimalToInternalDecimal(bo.Commission),
 			CommissionType: mapCommissionType(bo.CommissionType),
@@ -151,34 +152,34 @@ func mapTradeType(orderType alpaca.OrderType) ordergrpc.TradeType {
 }
 
 // Maps the Alpaca OrderType string enum to the internal OrderType int enum
-func mapSide(side alpaca.Side) ordergrpc.OrderType {
+func mapSide(side alpaca.Side) orderproperties.OrderType {
 	switch side {
 	case alpaca.Buy:
-		return ordergrpc.OrderType_ORDER_TYPE_PURCHASE
+		return orderproperties.OrderType_ORDER_TYPE_PURCHASE
 	case alpaca.Sell:
-		return ordergrpc.OrderType_ORDER_TYPE_SELL
+		return orderproperties.OrderType_ORDER_TYPE_SELL
 	default:
-		return ordergrpc.OrderType_NOT_APPLICABLE_ORDER_TYPE
+		return orderproperties.OrderType_NOT_APPLICABLE_ORDER_TYPE
 	}
 }
 
 // Maps the Alpaca TimeInForce string enum to the internal TimeInForce int enum
-func mapTimeInForce(timeInForce alpaca.TimeInForce) ordergrpc.TimeInForce {
+func mapTimeInForce(timeInForce alpaca.TimeInForce) orderproperties.TimeInForce {
 	switch timeInForce {
 	case alpaca.Day:
-		return ordergrpc.TimeInForce_DAY
+		return orderproperties.TimeInForce_DAY
 	case alpaca.GTC:
-		return ordergrpc.TimeInForce_GOOD_TIL_CANCELED
+		return orderproperties.TimeInForce_GOOD_TIL_CANCELED
 	case alpaca.OPG:
-		return ordergrpc.TimeInForce_AT_THE_OPENING
+		return orderproperties.TimeInForce_AT_THE_OPENING
 	case alpaca.IOC:
-		return ordergrpc.TimeInForce_IMMEDIATE_OR_CANCEL
+		return orderproperties.TimeInForce_IMMEDIATE_OR_CANCEL
 	case alpaca.FOK:
-		return ordergrpc.TimeInForce_FILL_OR_KILL
+		return orderproperties.TimeInForce_FILL_OR_KILL
 	case alpaca.CLS:
-		return ordergrpc.TimeInForce_AT_THE_CLOSE
+		return orderproperties.TimeInForce_AT_THE_CLOSE
 	default:
-		return ordergrpc.TimeInForce_NOT_USED_TIME_IN_FORCE
+		return orderproperties.TimeInForce_NOT_USED_TIME_IN_FORCE
 	}
 }
 

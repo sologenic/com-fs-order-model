@@ -9,6 +9,7 @@ import (
 	ordergrpcdmn "github.com/sologenic/com-fs-order-model/domain"
 	utilsdecimal "github.com/sologenic/com-fs-utils-lib/go/decimal"
 	"github.com/sologenic/com-fs-utils-lib/models/metadata"
+	orderproperties "github.com/sologenic/com-fs-utils-lib/models/order-properties"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -76,7 +77,7 @@ func RQDOrderToInternalBrokerOrderDetails(o GetOrderResponse, t GetTransactionsR
 		CreatedAt:        strTimeToTimestamppb(o.OrderCreationTime),
 		UpdatedAt:        timestamppb.Now(),
 		Status:           mapOrderStatus(o.Status),
-		ClearingBroker:   ordergrpc.ClearingBroker_RQD,
+		ClearingBroker:   orderproperties.ClearingBroker_RQD,
 	}
 
 	if o.IsNotional {
@@ -105,25 +106,25 @@ func strTimeToTimestamppb(t string) *timestamppb.Timestamp {
 	return timestamppb.New(ts)
 }
 
-func mapSide(side string) ordergrpc.OrderType {
+func mapSide(side string) orderproperties.OrderType {
 	switch side {
 	case "B":
-		return ordergrpc.OrderType_ORDER_TYPE_PURCHASE
+		return orderproperties.OrderType_ORDER_TYPE_PURCHASE
 	case "S":
-		return ordergrpc.OrderType_ORDER_TYPE_SELL
+		return orderproperties.OrderType_ORDER_TYPE_SELL
 	default:
-		return ordergrpc.OrderType_NOT_APPLICABLE_ORDER_TYPE
+		return orderproperties.OrderType_NOT_APPLICABLE_ORDER_TYPE
 	}
 }
 
-func mapTIF(tif string) ordergrpc.TimeInForce {
+func mapTIF(tif string) orderproperties.TimeInForce {
 	switch tif {
 	case "DAY":
-		return ordergrpc.TimeInForce_DAY
+		return orderproperties.TimeInForce_DAY
 	case "GTC":
-		return ordergrpc.TimeInForce_GOOD_TIL_CANCELED
+		return orderproperties.TimeInForce_GOOD_TIL_CANCELED
 	default:
-		return ordergrpc.TimeInForce_NOT_USED_TIME_IN_FORCE
+		return orderproperties.TimeInForce_NOT_USED_TIME_IN_FORCE
 	}
 }
 

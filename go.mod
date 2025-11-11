@@ -14,6 +14,7 @@ require (
 	github.com/sologenic/com-fs-utils-lib/go/unittest v0.0.0-20250131210530-7306ae3e5762
 	github.com/sologenic/com-fs-utils-lib/models/commission v0.0.0-20250917193130-a63d775c7b6d
 	github.com/sologenic/com-fs-utils-lib/models/metadata v0.0.0-20250917193130-a63d775c7b6d
+	github.com/sologenic/com-fs-utils-lib/models/order-properties v0.0.0-20251111001333-8b6aaa65fd84
 	github.com/stretchr/testify v1.11.1
 	google.golang.org/grpc v1.75.1
 	google.golang.org/protobuf v1.36.9
@@ -38,7 +39,6 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rs/zerolog v1.34.0 // indirect
-	github.com/sologenic/com-fs-utils-lib v0.0.0-20251110224218-167369bf7787 // indirect
 	github.com/sologenic/com-fs-utils-lib/models/audit v0.0.0-20250917193130-a63d775c7b6d // indirect
 	go.opentelemetry.io/auto/sdk v1.2.1 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.63.0 // indirect
