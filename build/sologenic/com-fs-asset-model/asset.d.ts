@@ -3,14 +3,6 @@ import { Audit } from "../com-fs-utils-lib/models/audit/audit";
 import { MetaData, Network } from "../com-fs-utils-lib/models/metadata/metadata";
 import { Denom } from "./domain/denom/denom";
 export declare const protobufPackage = "asset";
-export declare enum DistributionType {
-    DISTRIBUTION_TYPE_DO_NOT_USE = 0,
-    DISTRIBUTION_TYPE_CROWDFUND = 1,
-    DISTRIBUTION_TYPE_PRICESUPPLY = 2,
-    UNRECOGNIZED = -1
-}
-export declare function distributionTypeFromJSON(object: any): DistributionType;
-export declare function distributionTypeToJSON(object: DistributionType): string;
 export declare enum LinkType {
     LINK_TYPE_DO_NOT_USE = 0,
     WEBSITE = 1,
@@ -71,9 +63,9 @@ export declare function assetTypeFromJSON(object: any): AssetType;
 export declare function assetTypeToJSON(object: AssetType): string;
 export declare enum UserAssetStatus {
     USER_ASSET_STATUS_DO_NOT_USE = 0,
-    WHITELISTED = 1,
-    BLACKLISTED = 2,
-    SELL_ONLY = 3,
+    NOT_WHITELISTED = 1,
+    WHITELISTING_REQUESTED = 2,
+    WHITELISTED = 3,
     OUTDATED_VERSION = 4,
     UNRECOGNIZED = -1
 }
@@ -103,7 +95,6 @@ export interface AssetDetails {
     Description?: Description | undefined;
     /** External links and resources */
     ExternalResources?: ExternalResources | undefined;
-    DistributionDetails?: Distribution | undefined;
 }
 export interface Asset {
     AssetDetails: AssetDetails | undefined;
@@ -123,7 +114,6 @@ export interface UserAssetList {
     Status: UserAssetStatus;
     MetaData: MetaData | undefined;
     Visible: boolean;
-    OrganizationID: string;
 }
 export interface UserAssetLists {
     UserAssetLists: UserAssetList[];
@@ -141,21 +131,6 @@ export interface RealEstate {
     TenancyStatus?: string | undefined;
     YearBuilt?: number | undefined;
     YieldPercent: number[];
-    Floors?: number | undefined;
-    HeightMeters?: number | undefined;
-    Units?: number | undefined;
-    AvailableUnits?: number | undefined;
-    ParkingSpaces?: number | undefined;
-    Elevators?: number | undefined;
-    Classification?: string | undefined;
-    YearRenovated?: number | undefined;
-    LotSize?: number | undefined;
-    ZoningType?: string | undefined;
-    CapRate?: number | undefined;
-    NetOperatingIncome?: number | undefined;
-    KeyHighlights: string[];
-    Amenities: string[];
-    PropertyDescription: string;
 }
 export interface StableCoin {
     Version?: string | undefined;
@@ -204,34 +179,6 @@ export interface Vehicle {
     Condition: string;
     CurrentOwner: string;
     Location?: string | undefined;
-}
-export interface DecCoin {
-    Denom: string;
-    Amount: string;
-}
-export interface Distribution {
-    Type: DistributionType;
-    CrowdfundDetails?: Crowdfund | undefined;
-    PriceSupplyDetails?: PriceSupply | undefined;
-}
-export interface PriceSupply {
-}
-export interface Crowdfund {
-    QuantityStep: string;
-    PricesPerSubunit: DecCoin[];
-    SellDenom: string;
-    MinAmount: string;
-    StartDate: number;
-    EndDate: number;
-    MinThreshold: string;
-    MaxThreshold: string;
-    AllowOrderCancellation: boolean;
-    ComplianceManagerContractAddr: string;
-    OrderHubContractAddr: string;
-    CrowdfundContractAddr?: string | undefined;
-    AssetRegistryContractAddr: string;
-    AssetExtensionCode: string;
-    AssetExtensionContractAddr?: string | undefined;
 }
 export interface IntellectualProperty {
     Category: string;
@@ -381,21 +328,6 @@ export declare const AssetDetails: {
             TenancyStatus?: string | undefined;
             YearBuilt?: number | undefined;
             YieldPercent?: number[] | undefined;
-            Floors?: number | undefined;
-            HeightMeters?: number | undefined;
-            Units?: number | undefined;
-            AvailableUnits?: number | undefined;
-            ParkingSpaces?: number | undefined;
-            Elevators?: number | undefined;
-            Classification?: string | undefined;
-            YearRenovated?: number | undefined;
-            LotSize?: number | undefined;
-            ZoningType?: string | undefined;
-            CapRate?: number | undefined;
-            NetOperatingIncome?: number | undefined;
-            KeyHighlights?: string[] | undefined;
-            Amenities?: string[] | undefined;
-            PropertyDescription?: string | undefined;
         } | undefined;
         StableCoinDetails?: {
             Version?: string | undefined;
@@ -524,30 +456,6 @@ export declare const AssetDetails: {
                 Type?: SocialMediaType | undefined;
                 URL?: string | undefined;
             }[] | undefined;
-        } | undefined;
-        DistributionDetails?: {
-            Type?: DistributionType | undefined;
-            CrowdfundDetails?: {
-                QuantityStep?: string | undefined;
-                PricesPerSubunit?: {
-                    Denom?: string | undefined;
-                    Amount?: string | undefined;
-                }[] | undefined;
-                SellDenom?: string | undefined;
-                MinAmount?: string | undefined;
-                StartDate?: number | undefined;
-                EndDate?: number | undefined;
-                MinThreshold?: string | undefined;
-                MaxThreshold?: string | undefined;
-                AllowOrderCancellation?: boolean | undefined;
-                ComplianceManagerContractAddr?: string | undefined;
-                OrderHubContractAddr?: string | undefined;
-                CrowdfundContractAddr?: string | undefined;
-                AssetRegistryContractAddr?: string | undefined;
-                AssetExtensionCode?: string | undefined;
-                AssetExtensionContractAddr?: string | undefined;
-            } | undefined;
-            PriceSupplyDetails?: {} | undefined;
         } | undefined;
     } & {
         ID?: string | undefined;
@@ -592,21 +500,6 @@ export declare const AssetDetails: {
             TenancyStatus?: string | undefined;
             YearBuilt?: number | undefined;
             YieldPercent?: number[] | undefined;
-            Floors?: number | undefined;
-            HeightMeters?: number | undefined;
-            Units?: number | undefined;
-            AvailableUnits?: number | undefined;
-            ParkingSpaces?: number | undefined;
-            Elevators?: number | undefined;
-            Classification?: string | undefined;
-            YearRenovated?: number | undefined;
-            LotSize?: number | undefined;
-            ZoningType?: string | undefined;
-            CapRate?: number | undefined;
-            NetOperatingIncome?: number | undefined;
-            KeyHighlights?: string[] | undefined;
-            Amenities?: string[] | undefined;
-            PropertyDescription?: string | undefined;
         } & {
             Address?: string | undefined;
             Bathrooms?: number | undefined;
@@ -620,22 +513,7 @@ export declare const AssetDetails: {
             TenancyStatus?: string | undefined;
             YearBuilt?: number | undefined;
             YieldPercent?: (number[] & number[] & { [K_2 in Exclude<keyof I["RealEstateDetails"]["YieldPercent"], keyof number[]>]: never; }) | undefined;
-            Floors?: number | undefined;
-            HeightMeters?: number | undefined;
-            Units?: number | undefined;
-            AvailableUnits?: number | undefined;
-            ParkingSpaces?: number | undefined;
-            Elevators?: number | undefined;
-            Classification?: string | undefined;
-            YearRenovated?: number | undefined;
-            LotSize?: number | undefined;
-            ZoningType?: string | undefined;
-            CapRate?: number | undefined;
-            NetOperatingIncome?: number | undefined;
-            KeyHighlights?: (string[] & string[] & { [K_3 in Exclude<keyof I["RealEstateDetails"]["KeyHighlights"], keyof string[]>]: never; }) | undefined;
-            Amenities?: (string[] & string[] & { [K_4 in Exclude<keyof I["RealEstateDetails"]["Amenities"], keyof string[]>]: never; }) | undefined;
-            PropertyDescription?: string | undefined;
-        } & { [K_5 in Exclude<keyof I["RealEstateDetails"], keyof RealEstate>]: never; }) | undefined;
+        } & { [K_3 in Exclude<keyof I["RealEstateDetails"], keyof RealEstate>]: never; }) | undefined;
         StableCoinDetails?: ({
             Version?: string | undefined;
             PegType?: string | undefined;
@@ -656,7 +534,7 @@ export declare const AssetDetails: {
             MinTransactionAmount?: number | undefined;
             TradingMarginPercentage?: number | undefined;
             AssetMarginPercentage?: number | undefined;
-        } & { [K_6 in Exclude<keyof I["StableCoinDetails"], keyof StableCoin>]: never; }) | undefined;
+        } & { [K_4 in Exclude<keyof I["StableCoinDetails"], keyof StableCoin>]: never; }) | undefined;
         CommodityDetails?: ({
             Category?: string | undefined;
             Quality?: string | undefined;
@@ -681,7 +559,7 @@ export declare const AssetDetails: {
             StorageLocation?: string | undefined;
             ContractType?: string | undefined;
             DeliveryDate?: string | undefined;
-        } & { [K_7 in Exclude<keyof I["CommodityDetails"], keyof Commodity>]: never; }) | undefined;
+        } & { [K_5 in Exclude<keyof I["CommodityDetails"], keyof Commodity>]: never; }) | undefined;
         CollectibleDetails?: ({
             Category?: string | undefined;
             CollectionName?: string | undefined;
@@ -698,9 +576,9 @@ export declare const AssetDetails: {
             TokenID?: string | undefined;
             MetadataURI?: string | undefined;
             Creator?: string | undefined;
-            OwnershipHistory?: (string[] & string[] & { [K_8 in Exclude<keyof I["CollectibleDetails"]["OwnershipHistory"], keyof string[]>]: never; }) | undefined;
+            OwnershipHistory?: (string[] & string[] & { [K_6 in Exclude<keyof I["CollectibleDetails"]["OwnershipHistory"], keyof string[]>]: never; }) | undefined;
             CurrentOwner?: string | undefined;
-        } & { [K_9 in Exclude<keyof I["CollectibleDetails"], keyof Collectible>]: never; }) | undefined;
+        } & { [K_7 in Exclude<keyof I["CollectibleDetails"], keyof Collectible>]: never; }) | undefined;
         VehicleDetails?: ({
             Category?: string | undefined;
             Manufacturer?: string | undefined;
@@ -727,7 +605,7 @@ export declare const AssetDetails: {
             Condition?: string | undefined;
             CurrentOwner?: string | undefined;
             Location?: string | undefined;
-        } & { [K_10 in Exclude<keyof I["VehicleDetails"], keyof Vehicle>]: never; }) | undefined;
+        } & { [K_8 in Exclude<keyof I["VehicleDetails"], keyof Vehicle>]: never; }) | undefined;
         IntellectualPropertyDetails?: ({
             Category?: string | undefined;
             Owner?: string | undefined;
@@ -744,11 +622,11 @@ export declare const AssetDetails: {
             RegistrationNumber?: string | undefined;
             FilingDate?: string | undefined;
             ExpirationDate?: string | undefined;
-            IPJurisdictionIDs?: (string[] & string[] & { [K_11 in Exclude<keyof I["IntellectualPropertyDetails"]["IPJurisdictionIDs"], keyof string[]>]: never; }) | undefined;
+            IPJurisdictionIDs?: (string[] & string[] & { [K_9 in Exclude<keyof I["IntellectualPropertyDetails"]["IPJurisdictionIDs"], keyof string[]>]: never; }) | undefined;
             LicenseType?: string | undefined;
             LicenseTerms?: string | undefined;
             Value?: number | undefined;
-        } & { [K_12 in Exclude<keyof I["IntellectualPropertyDetails"], keyof IntellectualProperty>]: never; }) | undefined;
+        } & { [K_10 in Exclude<keyof I["IntellectualPropertyDetails"], keyof IntellectualProperty>]: never; }) | undefined;
         InvestmentFundDetails?: ({
             FundType?: string | undefined;
             Exchange?: string | undefined;
@@ -766,8 +644,8 @@ export declare const AssetDetails: {
             InceptionDate?: string | undefined;
             Manager?: string | undefined;
             ExpenseRatio?: number | undefined;
-            Holdings?: (string[] & string[] & { [K_13 in Exclude<keyof I["InvestmentFundDetails"]["Holdings"], keyof string[]>]: never; }) | undefined;
-        } & { [K_14 in Exclude<keyof I["InvestmentFundDetails"], keyof InvestmentFund>]: never; }) | undefined;
+            Holdings?: (string[] & string[] & { [K_11 in Exclude<keyof I["InvestmentFundDetails"]["Holdings"], keyof string[]>]: never; }) | undefined;
+        } & { [K_12 in Exclude<keyof I["InvestmentFundDetails"], keyof InvestmentFund>]: never; }) | undefined;
         EquityDetails?: ({
             ExchangeTickerSymbol?: string | undefined;
             Exchange?: string | undefined;
@@ -780,7 +658,7 @@ export declare const AssetDetails: {
             MinTransactionAmount?: number | undefined;
             TradingMarginPercentage?: number | undefined;
             AssetMarginPercentage?: number | undefined;
-        } & { [K_15 in Exclude<keyof I["EquityDetails"], keyof Equity>]: never; }) | undefined;
+        } & { [K_13 in Exclude<keyof I["EquityDetails"], keyof Equity>]: never; }) | undefined;
         FinancialProperties?: ({
             Symbol?: string | undefined;
             Issuer?: string | undefined;
@@ -808,12 +686,12 @@ export declare const AssetDetails: {
         } & {
             Symbol?: string | undefined;
             Issuer?: string | undefined;
-            JurisdictionIDs?: (string[] & string[] & { [K_16 in Exclude<keyof I["FinancialProperties"]["JurisdictionIDs"], keyof string[]>]: never; }) | undefined;
+            JurisdictionIDs?: (string[] & string[] & { [K_14 in Exclude<keyof I["FinancialProperties"]["JurisdictionIDs"], keyof string[]>]: never; }) | undefined;
             JurisdictionRestrictions?: string | undefined;
             RedemptionTerms?: string | undefined;
             ComplianceRequired?: boolean | undefined;
             Type?: string | undefined;
-            TradeAllowances?: (string[] & string[] & { [K_17 in Exclude<keyof I["FinancialProperties"]["TradeAllowances"], keyof string[]>]: never; }) | undefined;
+            TradeAllowances?: (string[] & string[] & { [K_15 in Exclude<keyof I["FinancialProperties"]["TradeAllowances"], keyof string[]>]: never; }) | undefined;
             Transferable?: boolean | undefined;
             Platform?: string | undefined;
             PlatformType?: string | undefined;
@@ -829,7 +707,7 @@ export declare const AssetDetails: {
             ValuationDate?: string | undefined;
             Network?: Network | undefined;
             Status?: string | undefined;
-        } & { [K_18 in Exclude<keyof I["FinancialProperties"], keyof FinancialProperties>]: never; }) | undefined;
+        } & { [K_16 in Exclude<keyof I["FinancialProperties"], keyof FinancialProperties>]: never; }) | undefined;
         Description?: ({
             Name?: string | undefined;
             Description?: string | undefined;
@@ -857,16 +735,16 @@ export declare const AssetDetails: {
                 Reference?: string | undefined;
                 Extension?: string | undefined;
                 Name?: string | undefined;
-            } & { [K_19 in Exclude<keyof I["Description"]["Logo"], keyof LogoFile>]: never; }) | undefined;
+            } & { [K_17 in Exclude<keyof I["Description"]["Logo"], keyof LogoFile>]: never; }) | undefined;
             AssetID?: string | undefined;
             URL?: string | undefined;
-            Country?: (string[] & string[] & { [K_20 in Exclude<keyof I["Description"]["Country"], keyof string[]>]: never; }) | undefined;
-            Documents?: (string[] & string[] & { [K_21 in Exclude<keyof I["Description"]["Documents"], keyof string[]>]: never; }) | undefined;
-            Images?: (string[] & string[] & { [K_22 in Exclude<keyof I["Description"]["Images"], keyof string[]>]: never; }) | undefined;
+            Country?: (string[] & string[] & { [K_18 in Exclude<keyof I["Description"]["Country"], keyof string[]>]: never; }) | undefined;
+            Documents?: (string[] & string[] & { [K_19 in Exclude<keyof I["Description"]["Documents"], keyof string[]>]: never; }) | undefined;
+            Images?: (string[] & string[] & { [K_20 in Exclude<keyof I["Description"]["Images"], keyof string[]>]: never; }) | undefined;
             Vertical?: string | undefined;
             CreatedAt?: string | undefined;
             UpdatedAt?: string | undefined;
-        } & { [K_23 in Exclude<keyof I["Description"], keyof Description>]: never; }) | undefined;
+        } & { [K_21 in Exclude<keyof I["Description"], keyof Description>]: never; }) | undefined;
         ExternalResources?: ({
             Links?: {
                 Type?: LinkType | undefined;
@@ -886,7 +764,7 @@ export declare const AssetDetails: {
             } & {
                 Type?: LinkType | undefined;
                 URL?: string | undefined;
-            } & { [K_24 in Exclude<keyof I["ExternalResources"]["Links"][number], keyof Link>]: never; })[] & { [K_25 in Exclude<keyof I["ExternalResources"]["Links"], keyof {
+            } & { [K_22 in Exclude<keyof I["ExternalResources"]["Links"][number], keyof Link>]: never; })[] & { [K_23 in Exclude<keyof I["ExternalResources"]["Links"], keyof {
                 Type?: LinkType | undefined;
                 URL?: string | undefined;
             }[]>]: never; }) | undefined;
@@ -899,87 +777,12 @@ export declare const AssetDetails: {
             } & {
                 Type?: SocialMediaType | undefined;
                 URL?: string | undefined;
-            } & { [K_26 in Exclude<keyof I["ExternalResources"]["Socials"][number], keyof SocialMedia>]: never; })[] & { [K_27 in Exclude<keyof I["ExternalResources"]["Socials"], keyof {
+            } & { [K_24 in Exclude<keyof I["ExternalResources"]["Socials"][number], keyof SocialMedia>]: never; })[] & { [K_25 in Exclude<keyof I["ExternalResources"]["Socials"], keyof {
                 Type?: SocialMediaType | undefined;
                 URL?: string | undefined;
             }[]>]: never; }) | undefined;
-        } & { [K_28 in Exclude<keyof I["ExternalResources"], keyof ExternalResources>]: never; }) | undefined;
-        DistributionDetails?: ({
-            Type?: DistributionType | undefined;
-            CrowdfundDetails?: {
-                QuantityStep?: string | undefined;
-                PricesPerSubunit?: {
-                    Denom?: string | undefined;
-                    Amount?: string | undefined;
-                }[] | undefined;
-                SellDenom?: string | undefined;
-                MinAmount?: string | undefined;
-                StartDate?: number | undefined;
-                EndDate?: number | undefined;
-                MinThreshold?: string | undefined;
-                MaxThreshold?: string | undefined;
-                AllowOrderCancellation?: boolean | undefined;
-                ComplianceManagerContractAddr?: string | undefined;
-                OrderHubContractAddr?: string | undefined;
-                CrowdfundContractAddr?: string | undefined;
-                AssetRegistryContractAddr?: string | undefined;
-                AssetExtensionCode?: string | undefined;
-                AssetExtensionContractAddr?: string | undefined;
-            } | undefined;
-            PriceSupplyDetails?: {} | undefined;
-        } & {
-            Type?: DistributionType | undefined;
-            CrowdfundDetails?: ({
-                QuantityStep?: string | undefined;
-                PricesPerSubunit?: {
-                    Denom?: string | undefined;
-                    Amount?: string | undefined;
-                }[] | undefined;
-                SellDenom?: string | undefined;
-                MinAmount?: string | undefined;
-                StartDate?: number | undefined;
-                EndDate?: number | undefined;
-                MinThreshold?: string | undefined;
-                MaxThreshold?: string | undefined;
-                AllowOrderCancellation?: boolean | undefined;
-                ComplianceManagerContractAddr?: string | undefined;
-                OrderHubContractAddr?: string | undefined;
-                CrowdfundContractAddr?: string | undefined;
-                AssetRegistryContractAddr?: string | undefined;
-                AssetExtensionCode?: string | undefined;
-                AssetExtensionContractAddr?: string | undefined;
-            } & {
-                QuantityStep?: string | undefined;
-                PricesPerSubunit?: ({
-                    Denom?: string | undefined;
-                    Amount?: string | undefined;
-                }[] & ({
-                    Denom?: string | undefined;
-                    Amount?: string | undefined;
-                } & {
-                    Denom?: string | undefined;
-                    Amount?: string | undefined;
-                } & { [K_29 in Exclude<keyof I["DistributionDetails"]["CrowdfundDetails"]["PricesPerSubunit"][number], keyof DecCoin>]: never; })[] & { [K_30 in Exclude<keyof I["DistributionDetails"]["CrowdfundDetails"]["PricesPerSubunit"], keyof {
-                    Denom?: string | undefined;
-                    Amount?: string | undefined;
-                }[]>]: never; }) | undefined;
-                SellDenom?: string | undefined;
-                MinAmount?: string | undefined;
-                StartDate?: number | undefined;
-                EndDate?: number | undefined;
-                MinThreshold?: string | undefined;
-                MaxThreshold?: string | undefined;
-                AllowOrderCancellation?: boolean | undefined;
-                ComplianceManagerContractAddr?: string | undefined;
-                OrderHubContractAddr?: string | undefined;
-                CrowdfundContractAddr?: string | undefined;
-                AssetRegistryContractAddr?: string | undefined;
-                AssetExtensionCode?: string | undefined;
-                AssetExtensionContractAddr?: string | undefined;
-            } & { [K_31 in Exclude<keyof I["DistributionDetails"]["CrowdfundDetails"], keyof Crowdfund>]: never; }) | undefined;
-            PriceSupplyDetails?: ({} & {} & { [K_32 in Exclude<keyof I["DistributionDetails"]["PriceSupplyDetails"], never>]: never; }) | undefined;
-        } & { [K_33 in Exclude<keyof I["DistributionDetails"], keyof Distribution>]: never; }) | undefined;
-    } & { [K_34 in Exclude<keyof I, keyof AssetDetails>]: never; }>(base?: I | undefined): AssetDetails;
+        } & { [K_26 in Exclude<keyof I["ExternalResources"], keyof ExternalResources>]: never; }) | undefined;
+    } & { [K_27 in Exclude<keyof I, keyof AssetDetails>]: never; }>(base?: I | undefined): AssetDetails;
     fromPartial<I_1 extends {
         ID?: string | undefined;
         OrganizationID?: string | undefined;
@@ -1011,21 +814,6 @@ export declare const AssetDetails: {
             TenancyStatus?: string | undefined;
             YearBuilt?: number | undefined;
             YieldPercent?: number[] | undefined;
-            Floors?: number | undefined;
-            HeightMeters?: number | undefined;
-            Units?: number | undefined;
-            AvailableUnits?: number | undefined;
-            ParkingSpaces?: number | undefined;
-            Elevators?: number | undefined;
-            Classification?: string | undefined;
-            YearRenovated?: number | undefined;
-            LotSize?: number | undefined;
-            ZoningType?: string | undefined;
-            CapRate?: number | undefined;
-            NetOperatingIncome?: number | undefined;
-            KeyHighlights?: string[] | undefined;
-            Amenities?: string[] | undefined;
-            PropertyDescription?: string | undefined;
         } | undefined;
         StableCoinDetails?: {
             Version?: string | undefined;
@@ -1155,30 +943,6 @@ export declare const AssetDetails: {
                 URL?: string | undefined;
             }[] | undefined;
         } | undefined;
-        DistributionDetails?: {
-            Type?: DistributionType | undefined;
-            CrowdfundDetails?: {
-                QuantityStep?: string | undefined;
-                PricesPerSubunit?: {
-                    Denom?: string | undefined;
-                    Amount?: string | undefined;
-                }[] | undefined;
-                SellDenom?: string | undefined;
-                MinAmount?: string | undefined;
-                StartDate?: number | undefined;
-                EndDate?: number | undefined;
-                MinThreshold?: string | undefined;
-                MaxThreshold?: string | undefined;
-                AllowOrderCancellation?: boolean | undefined;
-                ComplianceManagerContractAddr?: string | undefined;
-                OrderHubContractAddr?: string | undefined;
-                CrowdfundContractAddr?: string | undefined;
-                AssetRegistryContractAddr?: string | undefined;
-                AssetExtensionCode?: string | undefined;
-                AssetExtensionContractAddr?: string | undefined;
-            } | undefined;
-            PriceSupplyDetails?: {} | undefined;
-        } | undefined;
     } & {
         ID?: string | undefined;
         OrganizationID?: string | undefined;
@@ -1201,12 +965,12 @@ export declare const AssetDetails: {
             } & {
                 Symbol?: string | undefined;
                 Version?: string | undefined;
-            } & { [K_35 in Exclude<keyof I_1["Denom"]["Currency"], keyof import("./domain/currency/currency").Currency>]: never; }) | undefined;
+            } & { [K_28 in Exclude<keyof I_1["Denom"]["Currency"], keyof import("./domain/currency/currency").Currency>]: never; }) | undefined;
             Subunit?: string | undefined;
             Issuer?: string | undefined;
             Precision?: number | undefined;
             Description?: string | undefined;
-        } & { [K_36 in Exclude<keyof I_1["Denom"], keyof Denom>]: never; }) | undefined;
+        } & { [K_29 in Exclude<keyof I_1["Denom"], keyof Denom>]: never; }) | undefined;
         IsIssuedInSmartContract?: boolean | undefined;
         SmartContractIssuerAddr?: string | undefined;
         RealEstateDetails?: ({
@@ -1222,21 +986,6 @@ export declare const AssetDetails: {
             TenancyStatus?: string | undefined;
             YearBuilt?: number | undefined;
             YieldPercent?: number[] | undefined;
-            Floors?: number | undefined;
-            HeightMeters?: number | undefined;
-            Units?: number | undefined;
-            AvailableUnits?: number | undefined;
-            ParkingSpaces?: number | undefined;
-            Elevators?: number | undefined;
-            Classification?: string | undefined;
-            YearRenovated?: number | undefined;
-            LotSize?: number | undefined;
-            ZoningType?: string | undefined;
-            CapRate?: number | undefined;
-            NetOperatingIncome?: number | undefined;
-            KeyHighlights?: string[] | undefined;
-            Amenities?: string[] | undefined;
-            PropertyDescription?: string | undefined;
         } & {
             Address?: string | undefined;
             Bathrooms?: number | undefined;
@@ -1249,23 +998,8 @@ export declare const AssetDetails: {
             SquareFootage?: number | undefined;
             TenancyStatus?: string | undefined;
             YearBuilt?: number | undefined;
-            YieldPercent?: (number[] & number[] & { [K_37 in Exclude<keyof I_1["RealEstateDetails"]["YieldPercent"], keyof number[]>]: never; }) | undefined;
-            Floors?: number | undefined;
-            HeightMeters?: number | undefined;
-            Units?: number | undefined;
-            AvailableUnits?: number | undefined;
-            ParkingSpaces?: number | undefined;
-            Elevators?: number | undefined;
-            Classification?: string | undefined;
-            YearRenovated?: number | undefined;
-            LotSize?: number | undefined;
-            ZoningType?: string | undefined;
-            CapRate?: number | undefined;
-            NetOperatingIncome?: number | undefined;
-            KeyHighlights?: (string[] & string[] & { [K_38 in Exclude<keyof I_1["RealEstateDetails"]["KeyHighlights"], keyof string[]>]: never; }) | undefined;
-            Amenities?: (string[] & string[] & { [K_39 in Exclude<keyof I_1["RealEstateDetails"]["Amenities"], keyof string[]>]: never; }) | undefined;
-            PropertyDescription?: string | undefined;
-        } & { [K_40 in Exclude<keyof I_1["RealEstateDetails"], keyof RealEstate>]: never; }) | undefined;
+            YieldPercent?: (number[] & number[] & { [K_30 in Exclude<keyof I_1["RealEstateDetails"]["YieldPercent"], keyof number[]>]: never; }) | undefined;
+        } & { [K_31 in Exclude<keyof I_1["RealEstateDetails"], keyof RealEstate>]: never; }) | undefined;
         StableCoinDetails?: ({
             Version?: string | undefined;
             PegType?: string | undefined;
@@ -1286,7 +1020,7 @@ export declare const AssetDetails: {
             MinTransactionAmount?: number | undefined;
             TradingMarginPercentage?: number | undefined;
             AssetMarginPercentage?: number | undefined;
-        } & { [K_41 in Exclude<keyof I_1["StableCoinDetails"], keyof StableCoin>]: never; }) | undefined;
+        } & { [K_32 in Exclude<keyof I_1["StableCoinDetails"], keyof StableCoin>]: never; }) | undefined;
         CommodityDetails?: ({
             Category?: string | undefined;
             Quality?: string | undefined;
@@ -1311,7 +1045,7 @@ export declare const AssetDetails: {
             StorageLocation?: string | undefined;
             ContractType?: string | undefined;
             DeliveryDate?: string | undefined;
-        } & { [K_42 in Exclude<keyof I_1["CommodityDetails"], keyof Commodity>]: never; }) | undefined;
+        } & { [K_33 in Exclude<keyof I_1["CommodityDetails"], keyof Commodity>]: never; }) | undefined;
         CollectibleDetails?: ({
             Category?: string | undefined;
             CollectionName?: string | undefined;
@@ -1328,9 +1062,9 @@ export declare const AssetDetails: {
             TokenID?: string | undefined;
             MetadataURI?: string | undefined;
             Creator?: string | undefined;
-            OwnershipHistory?: (string[] & string[] & { [K_43 in Exclude<keyof I_1["CollectibleDetails"]["OwnershipHistory"], keyof string[]>]: never; }) | undefined;
+            OwnershipHistory?: (string[] & string[] & { [K_34 in Exclude<keyof I_1["CollectibleDetails"]["OwnershipHistory"], keyof string[]>]: never; }) | undefined;
             CurrentOwner?: string | undefined;
-        } & { [K_44 in Exclude<keyof I_1["CollectibleDetails"], keyof Collectible>]: never; }) | undefined;
+        } & { [K_35 in Exclude<keyof I_1["CollectibleDetails"], keyof Collectible>]: never; }) | undefined;
         VehicleDetails?: ({
             Category?: string | undefined;
             Manufacturer?: string | undefined;
@@ -1357,7 +1091,7 @@ export declare const AssetDetails: {
             Condition?: string | undefined;
             CurrentOwner?: string | undefined;
             Location?: string | undefined;
-        } & { [K_45 in Exclude<keyof I_1["VehicleDetails"], keyof Vehicle>]: never; }) | undefined;
+        } & { [K_36 in Exclude<keyof I_1["VehicleDetails"], keyof Vehicle>]: never; }) | undefined;
         IntellectualPropertyDetails?: ({
             Category?: string | undefined;
             Owner?: string | undefined;
@@ -1374,11 +1108,11 @@ export declare const AssetDetails: {
             RegistrationNumber?: string | undefined;
             FilingDate?: string | undefined;
             ExpirationDate?: string | undefined;
-            IPJurisdictionIDs?: (string[] & string[] & { [K_46 in Exclude<keyof I_1["IntellectualPropertyDetails"]["IPJurisdictionIDs"], keyof string[]>]: never; }) | undefined;
+            IPJurisdictionIDs?: (string[] & string[] & { [K_37 in Exclude<keyof I_1["IntellectualPropertyDetails"]["IPJurisdictionIDs"], keyof string[]>]: never; }) | undefined;
             LicenseType?: string | undefined;
             LicenseTerms?: string | undefined;
             Value?: number | undefined;
-        } & { [K_47 in Exclude<keyof I_1["IntellectualPropertyDetails"], keyof IntellectualProperty>]: never; }) | undefined;
+        } & { [K_38 in Exclude<keyof I_1["IntellectualPropertyDetails"], keyof IntellectualProperty>]: never; }) | undefined;
         InvestmentFundDetails?: ({
             FundType?: string | undefined;
             Exchange?: string | undefined;
@@ -1396,8 +1130,8 @@ export declare const AssetDetails: {
             InceptionDate?: string | undefined;
             Manager?: string | undefined;
             ExpenseRatio?: number | undefined;
-            Holdings?: (string[] & string[] & { [K_48 in Exclude<keyof I_1["InvestmentFundDetails"]["Holdings"], keyof string[]>]: never; }) | undefined;
-        } & { [K_49 in Exclude<keyof I_1["InvestmentFundDetails"], keyof InvestmentFund>]: never; }) | undefined;
+            Holdings?: (string[] & string[] & { [K_39 in Exclude<keyof I_1["InvestmentFundDetails"]["Holdings"], keyof string[]>]: never; }) | undefined;
+        } & { [K_40 in Exclude<keyof I_1["InvestmentFundDetails"], keyof InvestmentFund>]: never; }) | undefined;
         EquityDetails?: ({
             ExchangeTickerSymbol?: string | undefined;
             Exchange?: string | undefined;
@@ -1410,7 +1144,7 @@ export declare const AssetDetails: {
             MinTransactionAmount?: number | undefined;
             TradingMarginPercentage?: number | undefined;
             AssetMarginPercentage?: number | undefined;
-        } & { [K_50 in Exclude<keyof I_1["EquityDetails"], keyof Equity>]: never; }) | undefined;
+        } & { [K_41 in Exclude<keyof I_1["EquityDetails"], keyof Equity>]: never; }) | undefined;
         FinancialProperties?: ({
             Symbol?: string | undefined;
             Issuer?: string | undefined;
@@ -1438,12 +1172,12 @@ export declare const AssetDetails: {
         } & {
             Symbol?: string | undefined;
             Issuer?: string | undefined;
-            JurisdictionIDs?: (string[] & string[] & { [K_51 in Exclude<keyof I_1["FinancialProperties"]["JurisdictionIDs"], keyof string[]>]: never; }) | undefined;
+            JurisdictionIDs?: (string[] & string[] & { [K_42 in Exclude<keyof I_1["FinancialProperties"]["JurisdictionIDs"], keyof string[]>]: never; }) | undefined;
             JurisdictionRestrictions?: string | undefined;
             RedemptionTerms?: string | undefined;
             ComplianceRequired?: boolean | undefined;
             Type?: string | undefined;
-            TradeAllowances?: (string[] & string[] & { [K_52 in Exclude<keyof I_1["FinancialProperties"]["TradeAllowances"], keyof string[]>]: never; }) | undefined;
+            TradeAllowances?: (string[] & string[] & { [K_43 in Exclude<keyof I_1["FinancialProperties"]["TradeAllowances"], keyof string[]>]: never; }) | undefined;
             Transferable?: boolean | undefined;
             Platform?: string | undefined;
             PlatformType?: string | undefined;
@@ -1459,7 +1193,7 @@ export declare const AssetDetails: {
             ValuationDate?: string | undefined;
             Network?: Network | undefined;
             Status?: string | undefined;
-        } & { [K_53 in Exclude<keyof I_1["FinancialProperties"], keyof FinancialProperties>]: never; }) | undefined;
+        } & { [K_44 in Exclude<keyof I_1["FinancialProperties"], keyof FinancialProperties>]: never; }) | undefined;
         Description?: ({
             Name?: string | undefined;
             Description?: string | undefined;
@@ -1487,16 +1221,16 @@ export declare const AssetDetails: {
                 Reference?: string | undefined;
                 Extension?: string | undefined;
                 Name?: string | undefined;
-            } & { [K_54 in Exclude<keyof I_1["Description"]["Logo"], keyof LogoFile>]: never; }) | undefined;
+            } & { [K_45 in Exclude<keyof I_1["Description"]["Logo"], keyof LogoFile>]: never; }) | undefined;
             AssetID?: string | undefined;
             URL?: string | undefined;
-            Country?: (string[] & string[] & { [K_55 in Exclude<keyof I_1["Description"]["Country"], keyof string[]>]: never; }) | undefined;
-            Documents?: (string[] & string[] & { [K_56 in Exclude<keyof I_1["Description"]["Documents"], keyof string[]>]: never; }) | undefined;
-            Images?: (string[] & string[] & { [K_57 in Exclude<keyof I_1["Description"]["Images"], keyof string[]>]: never; }) | undefined;
+            Country?: (string[] & string[] & { [K_46 in Exclude<keyof I_1["Description"]["Country"], keyof string[]>]: never; }) | undefined;
+            Documents?: (string[] & string[] & { [K_47 in Exclude<keyof I_1["Description"]["Documents"], keyof string[]>]: never; }) | undefined;
+            Images?: (string[] & string[] & { [K_48 in Exclude<keyof I_1["Description"]["Images"], keyof string[]>]: never; }) | undefined;
             Vertical?: string | undefined;
             CreatedAt?: string | undefined;
             UpdatedAt?: string | undefined;
-        } & { [K_58 in Exclude<keyof I_1["Description"], keyof Description>]: never; }) | undefined;
+        } & { [K_49 in Exclude<keyof I_1["Description"], keyof Description>]: never; }) | undefined;
         ExternalResources?: ({
             Links?: {
                 Type?: LinkType | undefined;
@@ -1516,7 +1250,7 @@ export declare const AssetDetails: {
             } & {
                 Type?: LinkType | undefined;
                 URL?: string | undefined;
-            } & { [K_59 in Exclude<keyof I_1["ExternalResources"]["Links"][number], keyof Link>]: never; })[] & { [K_60 in Exclude<keyof I_1["ExternalResources"]["Links"], keyof {
+            } & { [K_50 in Exclude<keyof I_1["ExternalResources"]["Links"][number], keyof Link>]: never; })[] & { [K_51 in Exclude<keyof I_1["ExternalResources"]["Links"], keyof {
                 Type?: LinkType | undefined;
                 URL?: string | undefined;
             }[]>]: never; }) | undefined;
@@ -1529,87 +1263,12 @@ export declare const AssetDetails: {
             } & {
                 Type?: SocialMediaType | undefined;
                 URL?: string | undefined;
-            } & { [K_61 in Exclude<keyof I_1["ExternalResources"]["Socials"][number], keyof SocialMedia>]: never; })[] & { [K_62 in Exclude<keyof I_1["ExternalResources"]["Socials"], keyof {
+            } & { [K_52 in Exclude<keyof I_1["ExternalResources"]["Socials"][number], keyof SocialMedia>]: never; })[] & { [K_53 in Exclude<keyof I_1["ExternalResources"]["Socials"], keyof {
                 Type?: SocialMediaType | undefined;
                 URL?: string | undefined;
             }[]>]: never; }) | undefined;
-        } & { [K_63 in Exclude<keyof I_1["ExternalResources"], keyof ExternalResources>]: never; }) | undefined;
-        DistributionDetails?: ({
-            Type?: DistributionType | undefined;
-            CrowdfundDetails?: {
-                QuantityStep?: string | undefined;
-                PricesPerSubunit?: {
-                    Denom?: string | undefined;
-                    Amount?: string | undefined;
-                }[] | undefined;
-                SellDenom?: string | undefined;
-                MinAmount?: string | undefined;
-                StartDate?: number | undefined;
-                EndDate?: number | undefined;
-                MinThreshold?: string | undefined;
-                MaxThreshold?: string | undefined;
-                AllowOrderCancellation?: boolean | undefined;
-                ComplianceManagerContractAddr?: string | undefined;
-                OrderHubContractAddr?: string | undefined;
-                CrowdfundContractAddr?: string | undefined;
-                AssetRegistryContractAddr?: string | undefined;
-                AssetExtensionCode?: string | undefined;
-                AssetExtensionContractAddr?: string | undefined;
-            } | undefined;
-            PriceSupplyDetails?: {} | undefined;
-        } & {
-            Type?: DistributionType | undefined;
-            CrowdfundDetails?: ({
-                QuantityStep?: string | undefined;
-                PricesPerSubunit?: {
-                    Denom?: string | undefined;
-                    Amount?: string | undefined;
-                }[] | undefined;
-                SellDenom?: string | undefined;
-                MinAmount?: string | undefined;
-                StartDate?: number | undefined;
-                EndDate?: number | undefined;
-                MinThreshold?: string | undefined;
-                MaxThreshold?: string | undefined;
-                AllowOrderCancellation?: boolean | undefined;
-                ComplianceManagerContractAddr?: string | undefined;
-                OrderHubContractAddr?: string | undefined;
-                CrowdfundContractAddr?: string | undefined;
-                AssetRegistryContractAddr?: string | undefined;
-                AssetExtensionCode?: string | undefined;
-                AssetExtensionContractAddr?: string | undefined;
-            } & {
-                QuantityStep?: string | undefined;
-                PricesPerSubunit?: ({
-                    Denom?: string | undefined;
-                    Amount?: string | undefined;
-                }[] & ({
-                    Denom?: string | undefined;
-                    Amount?: string | undefined;
-                } & {
-                    Denom?: string | undefined;
-                    Amount?: string | undefined;
-                } & { [K_64 in Exclude<keyof I_1["DistributionDetails"]["CrowdfundDetails"]["PricesPerSubunit"][number], keyof DecCoin>]: never; })[] & { [K_65 in Exclude<keyof I_1["DistributionDetails"]["CrowdfundDetails"]["PricesPerSubunit"], keyof {
-                    Denom?: string | undefined;
-                    Amount?: string | undefined;
-                }[]>]: never; }) | undefined;
-                SellDenom?: string | undefined;
-                MinAmount?: string | undefined;
-                StartDate?: number | undefined;
-                EndDate?: number | undefined;
-                MinThreshold?: string | undefined;
-                MaxThreshold?: string | undefined;
-                AllowOrderCancellation?: boolean | undefined;
-                ComplianceManagerContractAddr?: string | undefined;
-                OrderHubContractAddr?: string | undefined;
-                CrowdfundContractAddr?: string | undefined;
-                AssetRegistryContractAddr?: string | undefined;
-                AssetExtensionCode?: string | undefined;
-                AssetExtensionContractAddr?: string | undefined;
-            } & { [K_66 in Exclude<keyof I_1["DistributionDetails"]["CrowdfundDetails"], keyof Crowdfund>]: never; }) | undefined;
-            PriceSupplyDetails?: ({} & {} & { [K_67 in Exclude<keyof I_1["DistributionDetails"]["PriceSupplyDetails"], never>]: never; }) | undefined;
-        } & { [K_68 in Exclude<keyof I_1["DistributionDetails"], keyof Distribution>]: never; }) | undefined;
-    } & { [K_69 in Exclude<keyof I_1, keyof AssetDetails>]: never; }>(object: I_1): AssetDetails;
+        } & { [K_54 in Exclude<keyof I_1["ExternalResources"], keyof ExternalResources>]: never; }) | undefined;
+    } & { [K_55 in Exclude<keyof I_1, keyof AssetDetails>]: never; }>(object: I_1): AssetDetails;
 };
 export declare const Asset: {
     encode(message: Asset, writer?: _m0.Writer): _m0.Writer;
@@ -1648,21 +1307,6 @@ export declare const Asset: {
                 TenancyStatus?: string | undefined;
                 YearBuilt?: number | undefined;
                 YieldPercent?: number[] | undefined;
-                Floors?: number | undefined;
-                HeightMeters?: number | undefined;
-                Units?: number | undefined;
-                AvailableUnits?: number | undefined;
-                ParkingSpaces?: number | undefined;
-                Elevators?: number | undefined;
-                Classification?: string | undefined;
-                YearRenovated?: number | undefined;
-                LotSize?: number | undefined;
-                ZoningType?: string | undefined;
-                CapRate?: number | undefined;
-                NetOperatingIncome?: number | undefined;
-                KeyHighlights?: string[] | undefined;
-                Amenities?: string[] | undefined;
-                PropertyDescription?: string | undefined;
             } | undefined;
             StableCoinDetails?: {
                 Version?: string | undefined;
@@ -1791,30 +1435,6 @@ export declare const Asset: {
                     Type?: SocialMediaType | undefined;
                     URL?: string | undefined;
                 }[] | undefined;
-            } | undefined;
-            DistributionDetails?: {
-                Type?: DistributionType | undefined;
-                CrowdfundDetails?: {
-                    QuantityStep?: string | undefined;
-                    PricesPerSubunit?: {
-                        Denom?: string | undefined;
-                        Amount?: string | undefined;
-                    }[] | undefined;
-                    SellDenom?: string | undefined;
-                    MinAmount?: string | undefined;
-                    StartDate?: number | undefined;
-                    EndDate?: number | undefined;
-                    MinThreshold?: string | undefined;
-                    MaxThreshold?: string | undefined;
-                    AllowOrderCancellation?: boolean | undefined;
-                    ComplianceManagerContractAddr?: string | undefined;
-                    OrderHubContractAddr?: string | undefined;
-                    CrowdfundContractAddr?: string | undefined;
-                    AssetRegistryContractAddr?: string | undefined;
-                    AssetExtensionCode?: string | undefined;
-                    AssetExtensionContractAddr?: string | undefined;
-                } | undefined;
-                PriceSupplyDetails?: {} | undefined;
             } | undefined;
         } | undefined;
         MetaData?: {
@@ -1881,21 +1501,6 @@ export declare const Asset: {
                 TenancyStatus?: string | undefined;
                 YearBuilt?: number | undefined;
                 YieldPercent?: number[] | undefined;
-                Floors?: number | undefined;
-                HeightMeters?: number | undefined;
-                Units?: number | undefined;
-                AvailableUnits?: number | undefined;
-                ParkingSpaces?: number | undefined;
-                Elevators?: number | undefined;
-                Classification?: string | undefined;
-                YearRenovated?: number | undefined;
-                LotSize?: number | undefined;
-                ZoningType?: string | undefined;
-                CapRate?: number | undefined;
-                NetOperatingIncome?: number | undefined;
-                KeyHighlights?: string[] | undefined;
-                Amenities?: string[] | undefined;
-                PropertyDescription?: string | undefined;
             } | undefined;
             StableCoinDetails?: {
                 Version?: string | undefined;
@@ -2024,30 +1629,6 @@ export declare const Asset: {
                     Type?: SocialMediaType | undefined;
                     URL?: string | undefined;
                 }[] | undefined;
-            } | undefined;
-            DistributionDetails?: {
-                Type?: DistributionType | undefined;
-                CrowdfundDetails?: {
-                    QuantityStep?: string | undefined;
-                    PricesPerSubunit?: {
-                        Denom?: string | undefined;
-                        Amount?: string | undefined;
-                    }[] | undefined;
-                    SellDenom?: string | undefined;
-                    MinAmount?: string | undefined;
-                    StartDate?: number | undefined;
-                    EndDate?: number | undefined;
-                    MinThreshold?: string | undefined;
-                    MaxThreshold?: string | undefined;
-                    AllowOrderCancellation?: boolean | undefined;
-                    ComplianceManagerContractAddr?: string | undefined;
-                    OrderHubContractAddr?: string | undefined;
-                    CrowdfundContractAddr?: string | undefined;
-                    AssetRegistryContractAddr?: string | undefined;
-                    AssetExtensionCode?: string | undefined;
-                    AssetExtensionContractAddr?: string | undefined;
-                } | undefined;
-                PriceSupplyDetails?: {} | undefined;
             } | undefined;
         } & {
             ID?: string | undefined;
@@ -2092,21 +1673,6 @@ export declare const Asset: {
                 TenancyStatus?: string | undefined;
                 YearBuilt?: number | undefined;
                 YieldPercent?: number[] | undefined;
-                Floors?: number | undefined;
-                HeightMeters?: number | undefined;
-                Units?: number | undefined;
-                AvailableUnits?: number | undefined;
-                ParkingSpaces?: number | undefined;
-                Elevators?: number | undefined;
-                Classification?: string | undefined;
-                YearRenovated?: number | undefined;
-                LotSize?: number | undefined;
-                ZoningType?: string | undefined;
-                CapRate?: number | undefined;
-                NetOperatingIncome?: number | undefined;
-                KeyHighlights?: string[] | undefined;
-                Amenities?: string[] | undefined;
-                PropertyDescription?: string | undefined;
             } & {
                 Address?: string | undefined;
                 Bathrooms?: number | undefined;
@@ -2120,22 +1686,7 @@ export declare const Asset: {
                 TenancyStatus?: string | undefined;
                 YearBuilt?: number | undefined;
                 YieldPercent?: (number[] & number[] & { [K_2 in Exclude<keyof I["AssetDetails"]["RealEstateDetails"]["YieldPercent"], keyof number[]>]: never; }) | undefined;
-                Floors?: number | undefined;
-                HeightMeters?: number | undefined;
-                Units?: number | undefined;
-                AvailableUnits?: number | undefined;
-                ParkingSpaces?: number | undefined;
-                Elevators?: number | undefined;
-                Classification?: string | undefined;
-                YearRenovated?: number | undefined;
-                LotSize?: number | undefined;
-                ZoningType?: string | undefined;
-                CapRate?: number | undefined;
-                NetOperatingIncome?: number | undefined;
-                KeyHighlights?: (string[] & string[] & { [K_3 in Exclude<keyof I["AssetDetails"]["RealEstateDetails"]["KeyHighlights"], keyof string[]>]: never; }) | undefined;
-                Amenities?: (string[] & string[] & { [K_4 in Exclude<keyof I["AssetDetails"]["RealEstateDetails"]["Amenities"], keyof string[]>]: never; }) | undefined;
-                PropertyDescription?: string | undefined;
-            } & { [K_5 in Exclude<keyof I["AssetDetails"]["RealEstateDetails"], keyof RealEstate>]: never; }) | undefined;
+            } & { [K_3 in Exclude<keyof I["AssetDetails"]["RealEstateDetails"], keyof RealEstate>]: never; }) | undefined;
             StableCoinDetails?: ({
                 Version?: string | undefined;
                 PegType?: string | undefined;
@@ -2156,7 +1707,7 @@ export declare const Asset: {
                 MinTransactionAmount?: number | undefined;
                 TradingMarginPercentage?: number | undefined;
                 AssetMarginPercentage?: number | undefined;
-            } & { [K_6 in Exclude<keyof I["AssetDetails"]["StableCoinDetails"], keyof StableCoin>]: never; }) | undefined;
+            } & { [K_4 in Exclude<keyof I["AssetDetails"]["StableCoinDetails"], keyof StableCoin>]: never; }) | undefined;
             CommodityDetails?: ({
                 Category?: string | undefined;
                 Quality?: string | undefined;
@@ -2181,7 +1732,7 @@ export declare const Asset: {
                 StorageLocation?: string | undefined;
                 ContractType?: string | undefined;
                 DeliveryDate?: string | undefined;
-            } & { [K_7 in Exclude<keyof I["AssetDetails"]["CommodityDetails"], keyof Commodity>]: never; }) | undefined;
+            } & { [K_5 in Exclude<keyof I["AssetDetails"]["CommodityDetails"], keyof Commodity>]: never; }) | undefined;
             CollectibleDetails?: ({
                 Category?: string | undefined;
                 CollectionName?: string | undefined;
@@ -2198,9 +1749,9 @@ export declare const Asset: {
                 TokenID?: string | undefined;
                 MetadataURI?: string | undefined;
                 Creator?: string | undefined;
-                OwnershipHistory?: (string[] & string[] & { [K_8 in Exclude<keyof I["AssetDetails"]["CollectibleDetails"]["OwnershipHistory"], keyof string[]>]: never; }) | undefined;
+                OwnershipHistory?: (string[] & string[] & { [K_6 in Exclude<keyof I["AssetDetails"]["CollectibleDetails"]["OwnershipHistory"], keyof string[]>]: never; }) | undefined;
                 CurrentOwner?: string | undefined;
-            } & { [K_9 in Exclude<keyof I["AssetDetails"]["CollectibleDetails"], keyof Collectible>]: never; }) | undefined;
+            } & { [K_7 in Exclude<keyof I["AssetDetails"]["CollectibleDetails"], keyof Collectible>]: never; }) | undefined;
             VehicleDetails?: ({
                 Category?: string | undefined;
                 Manufacturer?: string | undefined;
@@ -2227,7 +1778,7 @@ export declare const Asset: {
                 Condition?: string | undefined;
                 CurrentOwner?: string | undefined;
                 Location?: string | undefined;
-            } & { [K_10 in Exclude<keyof I["AssetDetails"]["VehicleDetails"], keyof Vehicle>]: never; }) | undefined;
+            } & { [K_8 in Exclude<keyof I["AssetDetails"]["VehicleDetails"], keyof Vehicle>]: never; }) | undefined;
             IntellectualPropertyDetails?: ({
                 Category?: string | undefined;
                 Owner?: string | undefined;
@@ -2244,11 +1795,11 @@ export declare const Asset: {
                 RegistrationNumber?: string | undefined;
                 FilingDate?: string | undefined;
                 ExpirationDate?: string | undefined;
-                IPJurisdictionIDs?: (string[] & string[] & { [K_11 in Exclude<keyof I["AssetDetails"]["IntellectualPropertyDetails"]["IPJurisdictionIDs"], keyof string[]>]: never; }) | undefined;
+                IPJurisdictionIDs?: (string[] & string[] & { [K_9 in Exclude<keyof I["AssetDetails"]["IntellectualPropertyDetails"]["IPJurisdictionIDs"], keyof string[]>]: never; }) | undefined;
                 LicenseType?: string | undefined;
                 LicenseTerms?: string | undefined;
                 Value?: number | undefined;
-            } & { [K_12 in Exclude<keyof I["AssetDetails"]["IntellectualPropertyDetails"], keyof IntellectualProperty>]: never; }) | undefined;
+            } & { [K_10 in Exclude<keyof I["AssetDetails"]["IntellectualPropertyDetails"], keyof IntellectualProperty>]: never; }) | undefined;
             InvestmentFundDetails?: ({
                 FundType?: string | undefined;
                 Exchange?: string | undefined;
@@ -2266,8 +1817,8 @@ export declare const Asset: {
                 InceptionDate?: string | undefined;
                 Manager?: string | undefined;
                 ExpenseRatio?: number | undefined;
-                Holdings?: (string[] & string[] & { [K_13 in Exclude<keyof I["AssetDetails"]["InvestmentFundDetails"]["Holdings"], keyof string[]>]: never; }) | undefined;
-            } & { [K_14 in Exclude<keyof I["AssetDetails"]["InvestmentFundDetails"], keyof InvestmentFund>]: never; }) | undefined;
+                Holdings?: (string[] & string[] & { [K_11 in Exclude<keyof I["AssetDetails"]["InvestmentFundDetails"]["Holdings"], keyof string[]>]: never; }) | undefined;
+            } & { [K_12 in Exclude<keyof I["AssetDetails"]["InvestmentFundDetails"], keyof InvestmentFund>]: never; }) | undefined;
             EquityDetails?: ({
                 ExchangeTickerSymbol?: string | undefined;
                 Exchange?: string | undefined;
@@ -2280,7 +1831,7 @@ export declare const Asset: {
                 MinTransactionAmount?: number | undefined;
                 TradingMarginPercentage?: number | undefined;
                 AssetMarginPercentage?: number | undefined;
-            } & { [K_15 in Exclude<keyof I["AssetDetails"]["EquityDetails"], keyof Equity>]: never; }) | undefined;
+            } & { [K_13 in Exclude<keyof I["AssetDetails"]["EquityDetails"], keyof Equity>]: never; }) | undefined;
             FinancialProperties?: ({
                 Symbol?: string | undefined;
                 Issuer?: string | undefined;
@@ -2308,12 +1859,12 @@ export declare const Asset: {
             } & {
                 Symbol?: string | undefined;
                 Issuer?: string | undefined;
-                JurisdictionIDs?: (string[] & string[] & { [K_16 in Exclude<keyof I["AssetDetails"]["FinancialProperties"]["JurisdictionIDs"], keyof string[]>]: never; }) | undefined;
+                JurisdictionIDs?: (string[] & string[] & { [K_14 in Exclude<keyof I["AssetDetails"]["FinancialProperties"]["JurisdictionIDs"], keyof string[]>]: never; }) | undefined;
                 JurisdictionRestrictions?: string | undefined;
                 RedemptionTerms?: string | undefined;
                 ComplianceRequired?: boolean | undefined;
                 Type?: string | undefined;
-                TradeAllowances?: (string[] & string[] & { [K_17 in Exclude<keyof I["AssetDetails"]["FinancialProperties"]["TradeAllowances"], keyof string[]>]: never; }) | undefined;
+                TradeAllowances?: (string[] & string[] & { [K_15 in Exclude<keyof I["AssetDetails"]["FinancialProperties"]["TradeAllowances"], keyof string[]>]: never; }) | undefined;
                 Transferable?: boolean | undefined;
                 Platform?: string | undefined;
                 PlatformType?: string | undefined;
@@ -2329,7 +1880,7 @@ export declare const Asset: {
                 ValuationDate?: string | undefined;
                 Network?: Network | undefined;
                 Status?: string | undefined;
-            } & { [K_18 in Exclude<keyof I["AssetDetails"]["FinancialProperties"], keyof FinancialProperties>]: never; }) | undefined;
+            } & { [K_16 in Exclude<keyof I["AssetDetails"]["FinancialProperties"], keyof FinancialProperties>]: never; }) | undefined;
             Description?: ({
                 Name?: string | undefined;
                 Description?: string | undefined;
@@ -2357,16 +1908,16 @@ export declare const Asset: {
                     Reference?: string | undefined;
                     Extension?: string | undefined;
                     Name?: string | undefined;
-                } & { [K_19 in Exclude<keyof I["AssetDetails"]["Description"]["Logo"], keyof LogoFile>]: never; }) | undefined;
+                } & { [K_17 in Exclude<keyof I["AssetDetails"]["Description"]["Logo"], keyof LogoFile>]: never; }) | undefined;
                 AssetID?: string | undefined;
                 URL?: string | undefined;
-                Country?: (string[] & string[] & { [K_20 in Exclude<keyof I["AssetDetails"]["Description"]["Country"], keyof string[]>]: never; }) | undefined;
-                Documents?: (string[] & string[] & { [K_21 in Exclude<keyof I["AssetDetails"]["Description"]["Documents"], keyof string[]>]: never; }) | undefined;
-                Images?: (string[] & string[] & { [K_22 in Exclude<keyof I["AssetDetails"]["Description"]["Images"], keyof string[]>]: never; }) | undefined;
+                Country?: (string[] & string[] & { [K_18 in Exclude<keyof I["AssetDetails"]["Description"]["Country"], keyof string[]>]: never; }) | undefined;
+                Documents?: (string[] & string[] & { [K_19 in Exclude<keyof I["AssetDetails"]["Description"]["Documents"], keyof string[]>]: never; }) | undefined;
+                Images?: (string[] & string[] & { [K_20 in Exclude<keyof I["AssetDetails"]["Description"]["Images"], keyof string[]>]: never; }) | undefined;
                 Vertical?: string | undefined;
                 CreatedAt?: string | undefined;
                 UpdatedAt?: string | undefined;
-            } & { [K_23 in Exclude<keyof I["AssetDetails"]["Description"], keyof Description>]: never; }) | undefined;
+            } & { [K_21 in Exclude<keyof I["AssetDetails"]["Description"], keyof Description>]: never; }) | undefined;
             ExternalResources?: ({
                 Links?: {
                     Type?: LinkType | undefined;
@@ -2386,7 +1937,7 @@ export declare const Asset: {
                 } & {
                     Type?: LinkType | undefined;
                     URL?: string | undefined;
-                } & { [K_24 in Exclude<keyof I["AssetDetails"]["ExternalResources"]["Links"][number], keyof Link>]: never; })[] & { [K_25 in Exclude<keyof I["AssetDetails"]["ExternalResources"]["Links"], keyof {
+                } & { [K_22 in Exclude<keyof I["AssetDetails"]["ExternalResources"]["Links"][number], keyof Link>]: never; })[] & { [K_23 in Exclude<keyof I["AssetDetails"]["ExternalResources"]["Links"], keyof {
                     Type?: LinkType | undefined;
                     URL?: string | undefined;
                 }[]>]: never; }) | undefined;
@@ -2399,87 +1950,12 @@ export declare const Asset: {
                 } & {
                     Type?: SocialMediaType | undefined;
                     URL?: string | undefined;
-                } & { [K_26 in Exclude<keyof I["AssetDetails"]["ExternalResources"]["Socials"][number], keyof SocialMedia>]: never; })[] & { [K_27 in Exclude<keyof I["AssetDetails"]["ExternalResources"]["Socials"], keyof {
+                } & { [K_24 in Exclude<keyof I["AssetDetails"]["ExternalResources"]["Socials"][number], keyof SocialMedia>]: never; })[] & { [K_25 in Exclude<keyof I["AssetDetails"]["ExternalResources"]["Socials"], keyof {
                     Type?: SocialMediaType | undefined;
                     URL?: string | undefined;
                 }[]>]: never; }) | undefined;
-            } & { [K_28 in Exclude<keyof I["AssetDetails"]["ExternalResources"], keyof ExternalResources>]: never; }) | undefined;
-            DistributionDetails?: ({
-                Type?: DistributionType | undefined;
-                CrowdfundDetails?: {
-                    QuantityStep?: string | undefined;
-                    PricesPerSubunit?: {
-                        Denom?: string | undefined;
-                        Amount?: string | undefined;
-                    }[] | undefined;
-                    SellDenom?: string | undefined;
-                    MinAmount?: string | undefined;
-                    StartDate?: number | undefined;
-                    EndDate?: number | undefined;
-                    MinThreshold?: string | undefined;
-                    MaxThreshold?: string | undefined;
-                    AllowOrderCancellation?: boolean | undefined;
-                    ComplianceManagerContractAddr?: string | undefined;
-                    OrderHubContractAddr?: string | undefined;
-                    CrowdfundContractAddr?: string | undefined;
-                    AssetRegistryContractAddr?: string | undefined;
-                    AssetExtensionCode?: string | undefined;
-                    AssetExtensionContractAddr?: string | undefined;
-                } | undefined;
-                PriceSupplyDetails?: {} | undefined;
-            } & {
-                Type?: DistributionType | undefined;
-                CrowdfundDetails?: ({
-                    QuantityStep?: string | undefined;
-                    PricesPerSubunit?: {
-                        Denom?: string | undefined;
-                        Amount?: string | undefined;
-                    }[] | undefined;
-                    SellDenom?: string | undefined;
-                    MinAmount?: string | undefined;
-                    StartDate?: number | undefined;
-                    EndDate?: number | undefined;
-                    MinThreshold?: string | undefined;
-                    MaxThreshold?: string | undefined;
-                    AllowOrderCancellation?: boolean | undefined;
-                    ComplianceManagerContractAddr?: string | undefined;
-                    OrderHubContractAddr?: string | undefined;
-                    CrowdfundContractAddr?: string | undefined;
-                    AssetRegistryContractAddr?: string | undefined;
-                    AssetExtensionCode?: string | undefined;
-                    AssetExtensionContractAddr?: string | undefined;
-                } & {
-                    QuantityStep?: string | undefined;
-                    PricesPerSubunit?: ({
-                        Denom?: string | undefined;
-                        Amount?: string | undefined;
-                    }[] & ({
-                        Denom?: string | undefined;
-                        Amount?: string | undefined;
-                    } & {
-                        Denom?: string | undefined;
-                        Amount?: string | undefined;
-                    } & { [K_29 in Exclude<keyof I["AssetDetails"]["DistributionDetails"]["CrowdfundDetails"]["PricesPerSubunit"][number], keyof DecCoin>]: never; })[] & { [K_30 in Exclude<keyof I["AssetDetails"]["DistributionDetails"]["CrowdfundDetails"]["PricesPerSubunit"], keyof {
-                        Denom?: string | undefined;
-                        Amount?: string | undefined;
-                    }[]>]: never; }) | undefined;
-                    SellDenom?: string | undefined;
-                    MinAmount?: string | undefined;
-                    StartDate?: number | undefined;
-                    EndDate?: number | undefined;
-                    MinThreshold?: string | undefined;
-                    MaxThreshold?: string | undefined;
-                    AllowOrderCancellation?: boolean | undefined;
-                    ComplianceManagerContractAddr?: string | undefined;
-                    OrderHubContractAddr?: string | undefined;
-                    CrowdfundContractAddr?: string | undefined;
-                    AssetRegistryContractAddr?: string | undefined;
-                    AssetExtensionCode?: string | undefined;
-                    AssetExtensionContractAddr?: string | undefined;
-                } & { [K_31 in Exclude<keyof I["AssetDetails"]["DistributionDetails"]["CrowdfundDetails"], keyof Crowdfund>]: never; }) | undefined;
-                PriceSupplyDetails?: ({} & {} & { [K_32 in Exclude<keyof I["AssetDetails"]["DistributionDetails"]["PriceSupplyDetails"], never>]: never; }) | undefined;
-            } & { [K_33 in Exclude<keyof I["AssetDetails"]["DistributionDetails"], keyof Distribution>]: never; }) | undefined;
-        } & { [K_34 in Exclude<keyof I["AssetDetails"], keyof AssetDetails>]: never; }) | undefined;
+            } & { [K_26 in Exclude<keyof I["AssetDetails"]["ExternalResources"], keyof ExternalResources>]: never; }) | undefined;
+        } & { [K_27 in Exclude<keyof I["AssetDetails"], keyof AssetDetails>]: never; }) | undefined;
         MetaData?: ({
             Network?: Network | undefined;
             UpdatedAt?: Date | undefined;
@@ -2490,7 +1966,7 @@ export declare const Asset: {
             UpdatedAt?: Date | undefined;
             CreatedAt?: Date | undefined;
             UpdatedByAccount?: string | undefined;
-        } & { [K_35 in Exclude<keyof I["MetaData"], keyof MetaData>]: never; }) | undefined;
+        } & { [K_28 in Exclude<keyof I["MetaData"], keyof MetaData>]: never; }) | undefined;
         Audit?: ({
             ChangedBy?: string | undefined;
             ChangedAt?: Date | undefined;
@@ -2499,7 +1975,7 @@ export declare const Asset: {
             ChangedBy?: string | undefined;
             ChangedAt?: Date | undefined;
             Reason?: string | undefined;
-        } & { [K_36 in Exclude<keyof I["Audit"], keyof Audit>]: never; }) | undefined;
+        } & { [K_29 in Exclude<keyof I["Audit"], keyof Audit>]: never; }) | undefined;
         IssuerDetails?: ({
             Name?: string | undefined;
             Description?: string | undefined;
@@ -2537,11 +2013,11 @@ export declare const Asset: {
             LicenseNumber?: string | undefined;
             Phone?: string | undefined;
             Email?: string | undefined;
-            SocialMediaLinks?: (string[] & string[] & { [K_37 in Exclude<keyof I["IssuerDetails"]["SocialMediaLinks"], keyof string[]>]: never; }) | undefined;
+            SocialMediaLinks?: (string[] & string[] & { [K_30 in Exclude<keyof I["IssuerDetails"]["SocialMediaLinks"], keyof string[]>]: never; }) | undefined;
             KeyClients?: string | undefined;
             Press?: string | undefined;
-        } & { [K_38 in Exclude<keyof I["IssuerDetails"], keyof IssuerDetails>]: never; }) | undefined;
-    } & { [K_39 in Exclude<keyof I, keyof Asset>]: never; }>(base?: I | undefined): Asset;
+        } & { [K_31 in Exclude<keyof I["IssuerDetails"], keyof IssuerDetails>]: never; }) | undefined;
+    } & { [K_32 in Exclude<keyof I, keyof Asset>]: never; }>(base?: I | undefined): Asset;
     fromPartial<I_1 extends {
         AssetDetails?: {
             ID?: string | undefined;
@@ -2574,21 +2050,6 @@ export declare const Asset: {
                 TenancyStatus?: string | undefined;
                 YearBuilt?: number | undefined;
                 YieldPercent?: number[] | undefined;
-                Floors?: number | undefined;
-                HeightMeters?: number | undefined;
-                Units?: number | undefined;
-                AvailableUnits?: number | undefined;
-                ParkingSpaces?: number | undefined;
-                Elevators?: number | undefined;
-                Classification?: string | undefined;
-                YearRenovated?: number | undefined;
-                LotSize?: number | undefined;
-                ZoningType?: string | undefined;
-                CapRate?: number | undefined;
-                NetOperatingIncome?: number | undefined;
-                KeyHighlights?: string[] | undefined;
-                Amenities?: string[] | undefined;
-                PropertyDescription?: string | undefined;
             } | undefined;
             StableCoinDetails?: {
                 Version?: string | undefined;
@@ -2717,30 +2178,6 @@ export declare const Asset: {
                     Type?: SocialMediaType | undefined;
                     URL?: string | undefined;
                 }[] | undefined;
-            } | undefined;
-            DistributionDetails?: {
-                Type?: DistributionType | undefined;
-                CrowdfundDetails?: {
-                    QuantityStep?: string | undefined;
-                    PricesPerSubunit?: {
-                        Denom?: string | undefined;
-                        Amount?: string | undefined;
-                    }[] | undefined;
-                    SellDenom?: string | undefined;
-                    MinAmount?: string | undefined;
-                    StartDate?: number | undefined;
-                    EndDate?: number | undefined;
-                    MinThreshold?: string | undefined;
-                    MaxThreshold?: string | undefined;
-                    AllowOrderCancellation?: boolean | undefined;
-                    ComplianceManagerContractAddr?: string | undefined;
-                    OrderHubContractAddr?: string | undefined;
-                    CrowdfundContractAddr?: string | undefined;
-                    AssetRegistryContractAddr?: string | undefined;
-                    AssetExtensionCode?: string | undefined;
-                    AssetExtensionContractAddr?: string | undefined;
-                } | undefined;
-                PriceSupplyDetails?: {} | undefined;
             } | undefined;
         } | undefined;
         MetaData?: {
@@ -2807,21 +2244,6 @@ export declare const Asset: {
                 TenancyStatus?: string | undefined;
                 YearBuilt?: number | undefined;
                 YieldPercent?: number[] | undefined;
-                Floors?: number | undefined;
-                HeightMeters?: number | undefined;
-                Units?: number | undefined;
-                AvailableUnits?: number | undefined;
-                ParkingSpaces?: number | undefined;
-                Elevators?: number | undefined;
-                Classification?: string | undefined;
-                YearRenovated?: number | undefined;
-                LotSize?: number | undefined;
-                ZoningType?: string | undefined;
-                CapRate?: number | undefined;
-                NetOperatingIncome?: number | undefined;
-                KeyHighlights?: string[] | undefined;
-                Amenities?: string[] | undefined;
-                PropertyDescription?: string | undefined;
             } | undefined;
             StableCoinDetails?: {
                 Version?: string | undefined;
@@ -2951,30 +2373,6 @@ export declare const Asset: {
                     URL?: string | undefined;
                 }[] | undefined;
             } | undefined;
-            DistributionDetails?: {
-                Type?: DistributionType | undefined;
-                CrowdfundDetails?: {
-                    QuantityStep?: string | undefined;
-                    PricesPerSubunit?: {
-                        Denom?: string | undefined;
-                        Amount?: string | undefined;
-                    }[] | undefined;
-                    SellDenom?: string | undefined;
-                    MinAmount?: string | undefined;
-                    StartDate?: number | undefined;
-                    EndDate?: number | undefined;
-                    MinThreshold?: string | undefined;
-                    MaxThreshold?: string | undefined;
-                    AllowOrderCancellation?: boolean | undefined;
-                    ComplianceManagerContractAddr?: string | undefined;
-                    OrderHubContractAddr?: string | undefined;
-                    CrowdfundContractAddr?: string | undefined;
-                    AssetRegistryContractAddr?: string | undefined;
-                    AssetExtensionCode?: string | undefined;
-                    AssetExtensionContractAddr?: string | undefined;
-                } | undefined;
-                PriceSupplyDetails?: {} | undefined;
-            } | undefined;
         } & {
             ID?: string | undefined;
             OrganizationID?: string | undefined;
@@ -2997,12 +2395,12 @@ export declare const Asset: {
                 } & {
                     Symbol?: string | undefined;
                     Version?: string | undefined;
-                } & { [K_40 in Exclude<keyof I_1["AssetDetails"]["Denom"]["Currency"], keyof import("./domain/currency/currency").Currency>]: never; }) | undefined;
+                } & { [K_33 in Exclude<keyof I_1["AssetDetails"]["Denom"]["Currency"], keyof import("./domain/currency/currency").Currency>]: never; }) | undefined;
                 Subunit?: string | undefined;
                 Issuer?: string | undefined;
                 Precision?: number | undefined;
                 Description?: string | undefined;
-            } & { [K_41 in Exclude<keyof I_1["AssetDetails"]["Denom"], keyof Denom>]: never; }) | undefined;
+            } & { [K_34 in Exclude<keyof I_1["AssetDetails"]["Denom"], keyof Denom>]: never; }) | undefined;
             IsIssuedInSmartContract?: boolean | undefined;
             SmartContractIssuerAddr?: string | undefined;
             RealEstateDetails?: ({
@@ -3018,21 +2416,6 @@ export declare const Asset: {
                 TenancyStatus?: string | undefined;
                 YearBuilt?: number | undefined;
                 YieldPercent?: number[] | undefined;
-                Floors?: number | undefined;
-                HeightMeters?: number | undefined;
-                Units?: number | undefined;
-                AvailableUnits?: number | undefined;
-                ParkingSpaces?: number | undefined;
-                Elevators?: number | undefined;
-                Classification?: string | undefined;
-                YearRenovated?: number | undefined;
-                LotSize?: number | undefined;
-                ZoningType?: string | undefined;
-                CapRate?: number | undefined;
-                NetOperatingIncome?: number | undefined;
-                KeyHighlights?: string[] | undefined;
-                Amenities?: string[] | undefined;
-                PropertyDescription?: string | undefined;
             } & {
                 Address?: string | undefined;
                 Bathrooms?: number | undefined;
@@ -3045,23 +2428,8 @@ export declare const Asset: {
                 SquareFootage?: number | undefined;
                 TenancyStatus?: string | undefined;
                 YearBuilt?: number | undefined;
-                YieldPercent?: (number[] & number[] & { [K_42 in Exclude<keyof I_1["AssetDetails"]["RealEstateDetails"]["YieldPercent"], keyof number[]>]: never; }) | undefined;
-                Floors?: number | undefined;
-                HeightMeters?: number | undefined;
-                Units?: number | undefined;
-                AvailableUnits?: number | undefined;
-                ParkingSpaces?: number | undefined;
-                Elevators?: number | undefined;
-                Classification?: string | undefined;
-                YearRenovated?: number | undefined;
-                LotSize?: number | undefined;
-                ZoningType?: string | undefined;
-                CapRate?: number | undefined;
-                NetOperatingIncome?: number | undefined;
-                KeyHighlights?: (string[] & string[] & { [K_43 in Exclude<keyof I_1["AssetDetails"]["RealEstateDetails"]["KeyHighlights"], keyof string[]>]: never; }) | undefined;
-                Amenities?: (string[] & string[] & { [K_44 in Exclude<keyof I_1["AssetDetails"]["RealEstateDetails"]["Amenities"], keyof string[]>]: never; }) | undefined;
-                PropertyDescription?: string | undefined;
-            } & { [K_45 in Exclude<keyof I_1["AssetDetails"]["RealEstateDetails"], keyof RealEstate>]: never; }) | undefined;
+                YieldPercent?: (number[] & number[] & { [K_35 in Exclude<keyof I_1["AssetDetails"]["RealEstateDetails"]["YieldPercent"], keyof number[]>]: never; }) | undefined;
+            } & { [K_36 in Exclude<keyof I_1["AssetDetails"]["RealEstateDetails"], keyof RealEstate>]: never; }) | undefined;
             StableCoinDetails?: ({
                 Version?: string | undefined;
                 PegType?: string | undefined;
@@ -3082,7 +2450,7 @@ export declare const Asset: {
                 MinTransactionAmount?: number | undefined;
                 TradingMarginPercentage?: number | undefined;
                 AssetMarginPercentage?: number | undefined;
-            } & { [K_46 in Exclude<keyof I_1["AssetDetails"]["StableCoinDetails"], keyof StableCoin>]: never; }) | undefined;
+            } & { [K_37 in Exclude<keyof I_1["AssetDetails"]["StableCoinDetails"], keyof StableCoin>]: never; }) | undefined;
             CommodityDetails?: ({
                 Category?: string | undefined;
                 Quality?: string | undefined;
@@ -3107,7 +2475,7 @@ export declare const Asset: {
                 StorageLocation?: string | undefined;
                 ContractType?: string | undefined;
                 DeliveryDate?: string | undefined;
-            } & { [K_47 in Exclude<keyof I_1["AssetDetails"]["CommodityDetails"], keyof Commodity>]: never; }) | undefined;
+            } & { [K_38 in Exclude<keyof I_1["AssetDetails"]["CommodityDetails"], keyof Commodity>]: never; }) | undefined;
             CollectibleDetails?: ({
                 Category?: string | undefined;
                 CollectionName?: string | undefined;
@@ -3124,9 +2492,9 @@ export declare const Asset: {
                 TokenID?: string | undefined;
                 MetadataURI?: string | undefined;
                 Creator?: string | undefined;
-                OwnershipHistory?: (string[] & string[] & { [K_48 in Exclude<keyof I_1["AssetDetails"]["CollectibleDetails"]["OwnershipHistory"], keyof string[]>]: never; }) | undefined;
+                OwnershipHistory?: (string[] & string[] & { [K_39 in Exclude<keyof I_1["AssetDetails"]["CollectibleDetails"]["OwnershipHistory"], keyof string[]>]: never; }) | undefined;
                 CurrentOwner?: string | undefined;
-            } & { [K_49 in Exclude<keyof I_1["AssetDetails"]["CollectibleDetails"], keyof Collectible>]: never; }) | undefined;
+            } & { [K_40 in Exclude<keyof I_1["AssetDetails"]["CollectibleDetails"], keyof Collectible>]: never; }) | undefined;
             VehicleDetails?: ({
                 Category?: string | undefined;
                 Manufacturer?: string | undefined;
@@ -3153,7 +2521,7 @@ export declare const Asset: {
                 Condition?: string | undefined;
                 CurrentOwner?: string | undefined;
                 Location?: string | undefined;
-            } & { [K_50 in Exclude<keyof I_1["AssetDetails"]["VehicleDetails"], keyof Vehicle>]: never; }) | undefined;
+            } & { [K_41 in Exclude<keyof I_1["AssetDetails"]["VehicleDetails"], keyof Vehicle>]: never; }) | undefined;
             IntellectualPropertyDetails?: ({
                 Category?: string | undefined;
                 Owner?: string | undefined;
@@ -3170,11 +2538,11 @@ export declare const Asset: {
                 RegistrationNumber?: string | undefined;
                 FilingDate?: string | undefined;
                 ExpirationDate?: string | undefined;
-                IPJurisdictionIDs?: (string[] & string[] & { [K_51 in Exclude<keyof I_1["AssetDetails"]["IntellectualPropertyDetails"]["IPJurisdictionIDs"], keyof string[]>]: never; }) | undefined;
+                IPJurisdictionIDs?: (string[] & string[] & { [K_42 in Exclude<keyof I_1["AssetDetails"]["IntellectualPropertyDetails"]["IPJurisdictionIDs"], keyof string[]>]: never; }) | undefined;
                 LicenseType?: string | undefined;
                 LicenseTerms?: string | undefined;
                 Value?: number | undefined;
-            } & { [K_52 in Exclude<keyof I_1["AssetDetails"]["IntellectualPropertyDetails"], keyof IntellectualProperty>]: never; }) | undefined;
+            } & { [K_43 in Exclude<keyof I_1["AssetDetails"]["IntellectualPropertyDetails"], keyof IntellectualProperty>]: never; }) | undefined;
             InvestmentFundDetails?: ({
                 FundType?: string | undefined;
                 Exchange?: string | undefined;
@@ -3192,8 +2560,8 @@ export declare const Asset: {
                 InceptionDate?: string | undefined;
                 Manager?: string | undefined;
                 ExpenseRatio?: number | undefined;
-                Holdings?: (string[] & string[] & { [K_53 in Exclude<keyof I_1["AssetDetails"]["InvestmentFundDetails"]["Holdings"], keyof string[]>]: never; }) | undefined;
-            } & { [K_54 in Exclude<keyof I_1["AssetDetails"]["InvestmentFundDetails"], keyof InvestmentFund>]: never; }) | undefined;
+                Holdings?: (string[] & string[] & { [K_44 in Exclude<keyof I_1["AssetDetails"]["InvestmentFundDetails"]["Holdings"], keyof string[]>]: never; }) | undefined;
+            } & { [K_45 in Exclude<keyof I_1["AssetDetails"]["InvestmentFundDetails"], keyof InvestmentFund>]: never; }) | undefined;
             EquityDetails?: ({
                 ExchangeTickerSymbol?: string | undefined;
                 Exchange?: string | undefined;
@@ -3206,7 +2574,7 @@ export declare const Asset: {
                 MinTransactionAmount?: number | undefined;
                 TradingMarginPercentage?: number | undefined;
                 AssetMarginPercentage?: number | undefined;
-            } & { [K_55 in Exclude<keyof I_1["AssetDetails"]["EquityDetails"], keyof Equity>]: never; }) | undefined;
+            } & { [K_46 in Exclude<keyof I_1["AssetDetails"]["EquityDetails"], keyof Equity>]: never; }) | undefined;
             FinancialProperties?: ({
                 Symbol?: string | undefined;
                 Issuer?: string | undefined;
@@ -3234,12 +2602,12 @@ export declare const Asset: {
             } & {
                 Symbol?: string | undefined;
                 Issuer?: string | undefined;
-                JurisdictionIDs?: (string[] & string[] & { [K_56 in Exclude<keyof I_1["AssetDetails"]["FinancialProperties"]["JurisdictionIDs"], keyof string[]>]: never; }) | undefined;
+                JurisdictionIDs?: (string[] & string[] & { [K_47 in Exclude<keyof I_1["AssetDetails"]["FinancialProperties"]["JurisdictionIDs"], keyof string[]>]: never; }) | undefined;
                 JurisdictionRestrictions?: string | undefined;
                 RedemptionTerms?: string | undefined;
                 ComplianceRequired?: boolean | undefined;
                 Type?: string | undefined;
-                TradeAllowances?: (string[] & string[] & { [K_57 in Exclude<keyof I_1["AssetDetails"]["FinancialProperties"]["TradeAllowances"], keyof string[]>]: never; }) | undefined;
+                TradeAllowances?: (string[] & string[] & { [K_48 in Exclude<keyof I_1["AssetDetails"]["FinancialProperties"]["TradeAllowances"], keyof string[]>]: never; }) | undefined;
                 Transferable?: boolean | undefined;
                 Platform?: string | undefined;
                 PlatformType?: string | undefined;
@@ -3255,7 +2623,7 @@ export declare const Asset: {
                 ValuationDate?: string | undefined;
                 Network?: Network | undefined;
                 Status?: string | undefined;
-            } & { [K_58 in Exclude<keyof I_1["AssetDetails"]["FinancialProperties"], keyof FinancialProperties>]: never; }) | undefined;
+            } & { [K_49 in Exclude<keyof I_1["AssetDetails"]["FinancialProperties"], keyof FinancialProperties>]: never; }) | undefined;
             Description?: ({
                 Name?: string | undefined;
                 Description?: string | undefined;
@@ -3283,16 +2651,16 @@ export declare const Asset: {
                     Reference?: string | undefined;
                     Extension?: string | undefined;
                     Name?: string | undefined;
-                } & { [K_59 in Exclude<keyof I_1["AssetDetails"]["Description"]["Logo"], keyof LogoFile>]: never; }) | undefined;
+                } & { [K_50 in Exclude<keyof I_1["AssetDetails"]["Description"]["Logo"], keyof LogoFile>]: never; }) | undefined;
                 AssetID?: string | undefined;
                 URL?: string | undefined;
-                Country?: (string[] & string[] & { [K_60 in Exclude<keyof I_1["AssetDetails"]["Description"]["Country"], keyof string[]>]: never; }) | undefined;
-                Documents?: (string[] & string[] & { [K_61 in Exclude<keyof I_1["AssetDetails"]["Description"]["Documents"], keyof string[]>]: never; }) | undefined;
-                Images?: (string[] & string[] & { [K_62 in Exclude<keyof I_1["AssetDetails"]["Description"]["Images"], keyof string[]>]: never; }) | undefined;
+                Country?: (string[] & string[] & { [K_51 in Exclude<keyof I_1["AssetDetails"]["Description"]["Country"], keyof string[]>]: never; }) | undefined;
+                Documents?: (string[] & string[] & { [K_52 in Exclude<keyof I_1["AssetDetails"]["Description"]["Documents"], keyof string[]>]: never; }) | undefined;
+                Images?: (string[] & string[] & { [K_53 in Exclude<keyof I_1["AssetDetails"]["Description"]["Images"], keyof string[]>]: never; }) | undefined;
                 Vertical?: string | undefined;
                 CreatedAt?: string | undefined;
                 UpdatedAt?: string | undefined;
-            } & { [K_63 in Exclude<keyof I_1["AssetDetails"]["Description"], keyof Description>]: never; }) | undefined;
+            } & { [K_54 in Exclude<keyof I_1["AssetDetails"]["Description"], keyof Description>]: never; }) | undefined;
             ExternalResources?: ({
                 Links?: {
                     Type?: LinkType | undefined;
@@ -3312,7 +2680,7 @@ export declare const Asset: {
                 } & {
                     Type?: LinkType | undefined;
                     URL?: string | undefined;
-                } & { [K_64 in Exclude<keyof I_1["AssetDetails"]["ExternalResources"]["Links"][number], keyof Link>]: never; })[] & { [K_65 in Exclude<keyof I_1["AssetDetails"]["ExternalResources"]["Links"], keyof {
+                } & { [K_55 in Exclude<keyof I_1["AssetDetails"]["ExternalResources"]["Links"][number], keyof Link>]: never; })[] & { [K_56 in Exclude<keyof I_1["AssetDetails"]["ExternalResources"]["Links"], keyof {
                     Type?: LinkType | undefined;
                     URL?: string | undefined;
                 }[]>]: never; }) | undefined;
@@ -3325,87 +2693,12 @@ export declare const Asset: {
                 } & {
                     Type?: SocialMediaType | undefined;
                     URL?: string | undefined;
-                } & { [K_66 in Exclude<keyof I_1["AssetDetails"]["ExternalResources"]["Socials"][number], keyof SocialMedia>]: never; })[] & { [K_67 in Exclude<keyof I_1["AssetDetails"]["ExternalResources"]["Socials"], keyof {
+                } & { [K_57 in Exclude<keyof I_1["AssetDetails"]["ExternalResources"]["Socials"][number], keyof SocialMedia>]: never; })[] & { [K_58 in Exclude<keyof I_1["AssetDetails"]["ExternalResources"]["Socials"], keyof {
                     Type?: SocialMediaType | undefined;
                     URL?: string | undefined;
                 }[]>]: never; }) | undefined;
-            } & { [K_68 in Exclude<keyof I_1["AssetDetails"]["ExternalResources"], keyof ExternalResources>]: never; }) | undefined;
-            DistributionDetails?: ({
-                Type?: DistributionType | undefined;
-                CrowdfundDetails?: {
-                    QuantityStep?: string | undefined;
-                    PricesPerSubunit?: {
-                        Denom?: string | undefined;
-                        Amount?: string | undefined;
-                    }[] | undefined;
-                    SellDenom?: string | undefined;
-                    MinAmount?: string | undefined;
-                    StartDate?: number | undefined;
-                    EndDate?: number | undefined;
-                    MinThreshold?: string | undefined;
-                    MaxThreshold?: string | undefined;
-                    AllowOrderCancellation?: boolean | undefined;
-                    ComplianceManagerContractAddr?: string | undefined;
-                    OrderHubContractAddr?: string | undefined;
-                    CrowdfundContractAddr?: string | undefined;
-                    AssetRegistryContractAddr?: string | undefined;
-                    AssetExtensionCode?: string | undefined;
-                    AssetExtensionContractAddr?: string | undefined;
-                } | undefined;
-                PriceSupplyDetails?: {} | undefined;
-            } & {
-                Type?: DistributionType | undefined;
-                CrowdfundDetails?: ({
-                    QuantityStep?: string | undefined;
-                    PricesPerSubunit?: {
-                        Denom?: string | undefined;
-                        Amount?: string | undefined;
-                    }[] | undefined;
-                    SellDenom?: string | undefined;
-                    MinAmount?: string | undefined;
-                    StartDate?: number | undefined;
-                    EndDate?: number | undefined;
-                    MinThreshold?: string | undefined;
-                    MaxThreshold?: string | undefined;
-                    AllowOrderCancellation?: boolean | undefined;
-                    ComplianceManagerContractAddr?: string | undefined;
-                    OrderHubContractAddr?: string | undefined;
-                    CrowdfundContractAddr?: string | undefined;
-                    AssetRegistryContractAddr?: string | undefined;
-                    AssetExtensionCode?: string | undefined;
-                    AssetExtensionContractAddr?: string | undefined;
-                } & {
-                    QuantityStep?: string | undefined;
-                    PricesPerSubunit?: ({
-                        Denom?: string | undefined;
-                        Amount?: string | undefined;
-                    }[] & ({
-                        Denom?: string | undefined;
-                        Amount?: string | undefined;
-                    } & {
-                        Denom?: string | undefined;
-                        Amount?: string | undefined;
-                    } & { [K_69 in Exclude<keyof I_1["AssetDetails"]["DistributionDetails"]["CrowdfundDetails"]["PricesPerSubunit"][number], keyof DecCoin>]: never; })[] & { [K_70 in Exclude<keyof I_1["AssetDetails"]["DistributionDetails"]["CrowdfundDetails"]["PricesPerSubunit"], keyof {
-                        Denom?: string | undefined;
-                        Amount?: string | undefined;
-                    }[]>]: never; }) | undefined;
-                    SellDenom?: string | undefined;
-                    MinAmount?: string | undefined;
-                    StartDate?: number | undefined;
-                    EndDate?: number | undefined;
-                    MinThreshold?: string | undefined;
-                    MaxThreshold?: string | undefined;
-                    AllowOrderCancellation?: boolean | undefined;
-                    ComplianceManagerContractAddr?: string | undefined;
-                    OrderHubContractAddr?: string | undefined;
-                    CrowdfundContractAddr?: string | undefined;
-                    AssetRegistryContractAddr?: string | undefined;
-                    AssetExtensionCode?: string | undefined;
-                    AssetExtensionContractAddr?: string | undefined;
-                } & { [K_71 in Exclude<keyof I_1["AssetDetails"]["DistributionDetails"]["CrowdfundDetails"], keyof Crowdfund>]: never; }) | undefined;
-                PriceSupplyDetails?: ({} & {} & { [K_72 in Exclude<keyof I_1["AssetDetails"]["DistributionDetails"]["PriceSupplyDetails"], never>]: never; }) | undefined;
-            } & { [K_73 in Exclude<keyof I_1["AssetDetails"]["DistributionDetails"], keyof Distribution>]: never; }) | undefined;
-        } & { [K_74 in Exclude<keyof I_1["AssetDetails"], keyof AssetDetails>]: never; }) | undefined;
+            } & { [K_59 in Exclude<keyof I_1["AssetDetails"]["ExternalResources"], keyof ExternalResources>]: never; }) | undefined;
+        } & { [K_60 in Exclude<keyof I_1["AssetDetails"], keyof AssetDetails>]: never; }) | undefined;
         MetaData?: ({
             Network?: Network | undefined;
             UpdatedAt?: Date | undefined;
@@ -3416,7 +2709,7 @@ export declare const Asset: {
             UpdatedAt?: Date | undefined;
             CreatedAt?: Date | undefined;
             UpdatedByAccount?: string | undefined;
-        } & { [K_75 in Exclude<keyof I_1["MetaData"], keyof MetaData>]: never; }) | undefined;
+        } & { [K_61 in Exclude<keyof I_1["MetaData"], keyof MetaData>]: never; }) | undefined;
         Audit?: ({
             ChangedBy?: string | undefined;
             ChangedAt?: Date | undefined;
@@ -3425,7 +2718,7 @@ export declare const Asset: {
             ChangedBy?: string | undefined;
             ChangedAt?: Date | undefined;
             Reason?: string | undefined;
-        } & { [K_76 in Exclude<keyof I_1["Audit"], keyof Audit>]: never; }) | undefined;
+        } & { [K_62 in Exclude<keyof I_1["Audit"], keyof Audit>]: never; }) | undefined;
         IssuerDetails?: ({
             Name?: string | undefined;
             Description?: string | undefined;
@@ -3463,11 +2756,11 @@ export declare const Asset: {
             LicenseNumber?: string | undefined;
             Phone?: string | undefined;
             Email?: string | undefined;
-            SocialMediaLinks?: (string[] & string[] & { [K_77 in Exclude<keyof I_1["IssuerDetails"]["SocialMediaLinks"], keyof string[]>]: never; }) | undefined;
+            SocialMediaLinks?: (string[] & string[] & { [K_63 in Exclude<keyof I_1["IssuerDetails"]["SocialMediaLinks"], keyof string[]>]: never; }) | undefined;
             KeyClients?: string | undefined;
             Press?: string | undefined;
-        } & { [K_78 in Exclude<keyof I_1["IssuerDetails"], keyof IssuerDetails>]: never; }) | undefined;
-    } & { [K_79 in Exclude<keyof I_1, keyof Asset>]: never; }>(object: I_1): Asset;
+        } & { [K_64 in Exclude<keyof I_1["IssuerDetails"], keyof IssuerDetails>]: never; }) | undefined;
+    } & { [K_65 in Exclude<keyof I_1, keyof Asset>]: never; }>(object: I_1): Asset;
 };
 export declare const Assets: {
     encode(message: Assets, writer?: _m0.Writer): _m0.Writer;
@@ -3507,21 +2800,6 @@ export declare const Assets: {
                     TenancyStatus?: string | undefined;
                     YearBuilt?: number | undefined;
                     YieldPercent?: number[] | undefined;
-                    Floors?: number | undefined;
-                    HeightMeters?: number | undefined;
-                    Units?: number | undefined;
-                    AvailableUnits?: number | undefined;
-                    ParkingSpaces?: number | undefined;
-                    Elevators?: number | undefined;
-                    Classification?: string | undefined;
-                    YearRenovated?: number | undefined;
-                    LotSize?: number | undefined;
-                    ZoningType?: string | undefined;
-                    CapRate?: number | undefined;
-                    NetOperatingIncome?: number | undefined;
-                    KeyHighlights?: string[] | undefined;
-                    Amenities?: string[] | undefined;
-                    PropertyDescription?: string | undefined;
                 } | undefined;
                 StableCoinDetails?: {
                     Version?: string | undefined;
@@ -3650,30 +2928,6 @@ export declare const Assets: {
                         Type?: SocialMediaType | undefined;
                         URL?: string | undefined;
                     }[] | undefined;
-                } | undefined;
-                DistributionDetails?: {
-                    Type?: DistributionType | undefined;
-                    CrowdfundDetails?: {
-                        QuantityStep?: string | undefined;
-                        PricesPerSubunit?: {
-                            Denom?: string | undefined;
-                            Amount?: string | undefined;
-                        }[] | undefined;
-                        SellDenom?: string | undefined;
-                        MinAmount?: string | undefined;
-                        StartDate?: number | undefined;
-                        EndDate?: number | undefined;
-                        MinThreshold?: string | undefined;
-                        MaxThreshold?: string | undefined;
-                        AllowOrderCancellation?: boolean | undefined;
-                        ComplianceManagerContractAddr?: string | undefined;
-                        OrderHubContractAddr?: string | undefined;
-                        CrowdfundContractAddr?: string | undefined;
-                        AssetRegistryContractAddr?: string | undefined;
-                        AssetExtensionCode?: string | undefined;
-                        AssetExtensionContractAddr?: string | undefined;
-                    } | undefined;
-                    PriceSupplyDetails?: {} | undefined;
                 } | undefined;
             } | undefined;
             MetaData?: {
@@ -3743,21 +2997,6 @@ export declare const Assets: {
                     TenancyStatus?: string | undefined;
                     YearBuilt?: number | undefined;
                     YieldPercent?: number[] | undefined;
-                    Floors?: number | undefined;
-                    HeightMeters?: number | undefined;
-                    Units?: number | undefined;
-                    AvailableUnits?: number | undefined;
-                    ParkingSpaces?: number | undefined;
-                    Elevators?: number | undefined;
-                    Classification?: string | undefined;
-                    YearRenovated?: number | undefined;
-                    LotSize?: number | undefined;
-                    ZoningType?: string | undefined;
-                    CapRate?: number | undefined;
-                    NetOperatingIncome?: number | undefined;
-                    KeyHighlights?: string[] | undefined;
-                    Amenities?: string[] | undefined;
-                    PropertyDescription?: string | undefined;
                 } | undefined;
                 StableCoinDetails?: {
                     Version?: string | undefined;
@@ -3886,30 +3125,6 @@ export declare const Assets: {
                         Type?: SocialMediaType | undefined;
                         URL?: string | undefined;
                     }[] | undefined;
-                } | undefined;
-                DistributionDetails?: {
-                    Type?: DistributionType | undefined;
-                    CrowdfundDetails?: {
-                        QuantityStep?: string | undefined;
-                        PricesPerSubunit?: {
-                            Denom?: string | undefined;
-                            Amount?: string | undefined;
-                        }[] | undefined;
-                        SellDenom?: string | undefined;
-                        MinAmount?: string | undefined;
-                        StartDate?: number | undefined;
-                        EndDate?: number | undefined;
-                        MinThreshold?: string | undefined;
-                        MaxThreshold?: string | undefined;
-                        AllowOrderCancellation?: boolean | undefined;
-                        ComplianceManagerContractAddr?: string | undefined;
-                        OrderHubContractAddr?: string | undefined;
-                        CrowdfundContractAddr?: string | undefined;
-                        AssetRegistryContractAddr?: string | undefined;
-                        AssetExtensionCode?: string | undefined;
-                        AssetExtensionContractAddr?: string | undefined;
-                    } | undefined;
-                    PriceSupplyDetails?: {} | undefined;
                 } | undefined;
             } | undefined;
             MetaData?: {
@@ -3976,21 +3191,6 @@ export declare const Assets: {
                     TenancyStatus?: string | undefined;
                     YearBuilt?: number | undefined;
                     YieldPercent?: number[] | undefined;
-                    Floors?: number | undefined;
-                    HeightMeters?: number | undefined;
-                    Units?: number | undefined;
-                    AvailableUnits?: number | undefined;
-                    ParkingSpaces?: number | undefined;
-                    Elevators?: number | undefined;
-                    Classification?: string | undefined;
-                    YearRenovated?: number | undefined;
-                    LotSize?: number | undefined;
-                    ZoningType?: string | undefined;
-                    CapRate?: number | undefined;
-                    NetOperatingIncome?: number | undefined;
-                    KeyHighlights?: string[] | undefined;
-                    Amenities?: string[] | undefined;
-                    PropertyDescription?: string | undefined;
                 } | undefined;
                 StableCoinDetails?: {
                     Version?: string | undefined;
@@ -4119,30 +3319,6 @@ export declare const Assets: {
                         Type?: SocialMediaType | undefined;
                         URL?: string | undefined;
                     }[] | undefined;
-                } | undefined;
-                DistributionDetails?: {
-                    Type?: DistributionType | undefined;
-                    CrowdfundDetails?: {
-                        QuantityStep?: string | undefined;
-                        PricesPerSubunit?: {
-                            Denom?: string | undefined;
-                            Amount?: string | undefined;
-                        }[] | undefined;
-                        SellDenom?: string | undefined;
-                        MinAmount?: string | undefined;
-                        StartDate?: number | undefined;
-                        EndDate?: number | undefined;
-                        MinThreshold?: string | undefined;
-                        MaxThreshold?: string | undefined;
-                        AllowOrderCancellation?: boolean | undefined;
-                        ComplianceManagerContractAddr?: string | undefined;
-                        OrderHubContractAddr?: string | undefined;
-                        CrowdfundContractAddr?: string | undefined;
-                        AssetRegistryContractAddr?: string | undefined;
-                        AssetExtensionCode?: string | undefined;
-                        AssetExtensionContractAddr?: string | undefined;
-                    } | undefined;
-                    PriceSupplyDetails?: {} | undefined;
                 } | undefined;
             } | undefined;
             MetaData?: {
@@ -4209,21 +3385,6 @@ export declare const Assets: {
                     TenancyStatus?: string | undefined;
                     YearBuilt?: number | undefined;
                     YieldPercent?: number[] | undefined;
-                    Floors?: number | undefined;
-                    HeightMeters?: number | undefined;
-                    Units?: number | undefined;
-                    AvailableUnits?: number | undefined;
-                    ParkingSpaces?: number | undefined;
-                    Elevators?: number | undefined;
-                    Classification?: string | undefined;
-                    YearRenovated?: number | undefined;
-                    LotSize?: number | undefined;
-                    ZoningType?: string | undefined;
-                    CapRate?: number | undefined;
-                    NetOperatingIncome?: number | undefined;
-                    KeyHighlights?: string[] | undefined;
-                    Amenities?: string[] | undefined;
-                    PropertyDescription?: string | undefined;
                 } | undefined;
                 StableCoinDetails?: {
                     Version?: string | undefined;
@@ -4352,30 +3513,6 @@ export declare const Assets: {
                         Type?: SocialMediaType | undefined;
                         URL?: string | undefined;
                     }[] | undefined;
-                } | undefined;
-                DistributionDetails?: {
-                    Type?: DistributionType | undefined;
-                    CrowdfundDetails?: {
-                        QuantityStep?: string | undefined;
-                        PricesPerSubunit?: {
-                            Denom?: string | undefined;
-                            Amount?: string | undefined;
-                        }[] | undefined;
-                        SellDenom?: string | undefined;
-                        MinAmount?: string | undefined;
-                        StartDate?: number | undefined;
-                        EndDate?: number | undefined;
-                        MinThreshold?: string | undefined;
-                        MaxThreshold?: string | undefined;
-                        AllowOrderCancellation?: boolean | undefined;
-                        ComplianceManagerContractAddr?: string | undefined;
-                        OrderHubContractAddr?: string | undefined;
-                        CrowdfundContractAddr?: string | undefined;
-                        AssetRegistryContractAddr?: string | undefined;
-                        AssetExtensionCode?: string | undefined;
-                        AssetExtensionContractAddr?: string | undefined;
-                    } | undefined;
-                    PriceSupplyDetails?: {} | undefined;
                 } | undefined;
             } & {
                 ID?: string | undefined;
@@ -4420,21 +3557,6 @@ export declare const Assets: {
                     TenancyStatus?: string | undefined;
                     YearBuilt?: number | undefined;
                     YieldPercent?: number[] | undefined;
-                    Floors?: number | undefined;
-                    HeightMeters?: number | undefined;
-                    Units?: number | undefined;
-                    AvailableUnits?: number | undefined;
-                    ParkingSpaces?: number | undefined;
-                    Elevators?: number | undefined;
-                    Classification?: string | undefined;
-                    YearRenovated?: number | undefined;
-                    LotSize?: number | undefined;
-                    ZoningType?: string | undefined;
-                    CapRate?: number | undefined;
-                    NetOperatingIncome?: number | undefined;
-                    KeyHighlights?: string[] | undefined;
-                    Amenities?: string[] | undefined;
-                    PropertyDescription?: string | undefined;
                 } & {
                     Address?: string | undefined;
                     Bathrooms?: number | undefined;
@@ -4448,22 +3570,7 @@ export declare const Assets: {
                     TenancyStatus?: string | undefined;
                     YearBuilt?: number | undefined;
                     YieldPercent?: (number[] & number[] & { [K_2 in Exclude<keyof I["Assets"][number]["AssetDetails"]["RealEstateDetails"]["YieldPercent"], keyof number[]>]: never; }) | undefined;
-                    Floors?: number | undefined;
-                    HeightMeters?: number | undefined;
-                    Units?: number | undefined;
-                    AvailableUnits?: number | undefined;
-                    ParkingSpaces?: number | undefined;
-                    Elevators?: number | undefined;
-                    Classification?: string | undefined;
-                    YearRenovated?: number | undefined;
-                    LotSize?: number | undefined;
-                    ZoningType?: string | undefined;
-                    CapRate?: number | undefined;
-                    NetOperatingIncome?: number | undefined;
-                    KeyHighlights?: (string[] & string[] & { [K_3 in Exclude<keyof I["Assets"][number]["AssetDetails"]["RealEstateDetails"]["KeyHighlights"], keyof string[]>]: never; }) | undefined;
-                    Amenities?: (string[] & string[] & { [K_4 in Exclude<keyof I["Assets"][number]["AssetDetails"]["RealEstateDetails"]["Amenities"], keyof string[]>]: never; }) | undefined;
-                    PropertyDescription?: string | undefined;
-                } & { [K_5 in Exclude<keyof I["Assets"][number]["AssetDetails"]["RealEstateDetails"], keyof RealEstate>]: never; }) | undefined;
+                } & { [K_3 in Exclude<keyof I["Assets"][number]["AssetDetails"]["RealEstateDetails"], keyof RealEstate>]: never; }) | undefined;
                 StableCoinDetails?: ({
                     Version?: string | undefined;
                     PegType?: string | undefined;
@@ -4484,7 +3591,7 @@ export declare const Assets: {
                     MinTransactionAmount?: number | undefined;
                     TradingMarginPercentage?: number | undefined;
                     AssetMarginPercentage?: number | undefined;
-                } & { [K_6 in Exclude<keyof I["Assets"][number]["AssetDetails"]["StableCoinDetails"], keyof StableCoin>]: never; }) | undefined;
+                } & { [K_4 in Exclude<keyof I["Assets"][number]["AssetDetails"]["StableCoinDetails"], keyof StableCoin>]: never; }) | undefined;
                 CommodityDetails?: ({
                     Category?: string | undefined;
                     Quality?: string | undefined;
@@ -4509,7 +3616,7 @@ export declare const Assets: {
                     StorageLocation?: string | undefined;
                     ContractType?: string | undefined;
                     DeliveryDate?: string | undefined;
-                } & { [K_7 in Exclude<keyof I["Assets"][number]["AssetDetails"]["CommodityDetails"], keyof Commodity>]: never; }) | undefined;
+                } & { [K_5 in Exclude<keyof I["Assets"][number]["AssetDetails"]["CommodityDetails"], keyof Commodity>]: never; }) | undefined;
                 CollectibleDetails?: ({
                     Category?: string | undefined;
                     CollectionName?: string | undefined;
@@ -4526,9 +3633,9 @@ export declare const Assets: {
                     TokenID?: string | undefined;
                     MetadataURI?: string | undefined;
                     Creator?: string | undefined;
-                    OwnershipHistory?: (string[] & string[] & { [K_8 in Exclude<keyof I["Assets"][number]["AssetDetails"]["CollectibleDetails"]["OwnershipHistory"], keyof string[]>]: never; }) | undefined;
+                    OwnershipHistory?: (string[] & string[] & { [K_6 in Exclude<keyof I["Assets"][number]["AssetDetails"]["CollectibleDetails"]["OwnershipHistory"], keyof string[]>]: never; }) | undefined;
                     CurrentOwner?: string | undefined;
-                } & { [K_9 in Exclude<keyof I["Assets"][number]["AssetDetails"]["CollectibleDetails"], keyof Collectible>]: never; }) | undefined;
+                } & { [K_7 in Exclude<keyof I["Assets"][number]["AssetDetails"]["CollectibleDetails"], keyof Collectible>]: never; }) | undefined;
                 VehicleDetails?: ({
                     Category?: string | undefined;
                     Manufacturer?: string | undefined;
@@ -4555,7 +3662,7 @@ export declare const Assets: {
                     Condition?: string | undefined;
                     CurrentOwner?: string | undefined;
                     Location?: string | undefined;
-                } & { [K_10 in Exclude<keyof I["Assets"][number]["AssetDetails"]["VehicleDetails"], keyof Vehicle>]: never; }) | undefined;
+                } & { [K_8 in Exclude<keyof I["Assets"][number]["AssetDetails"]["VehicleDetails"], keyof Vehicle>]: never; }) | undefined;
                 IntellectualPropertyDetails?: ({
                     Category?: string | undefined;
                     Owner?: string | undefined;
@@ -4572,11 +3679,11 @@ export declare const Assets: {
                     RegistrationNumber?: string | undefined;
                     FilingDate?: string | undefined;
                     ExpirationDate?: string | undefined;
-                    IPJurisdictionIDs?: (string[] & string[] & { [K_11 in Exclude<keyof I["Assets"][number]["AssetDetails"]["IntellectualPropertyDetails"]["IPJurisdictionIDs"], keyof string[]>]: never; }) | undefined;
+                    IPJurisdictionIDs?: (string[] & string[] & { [K_9 in Exclude<keyof I["Assets"][number]["AssetDetails"]["IntellectualPropertyDetails"]["IPJurisdictionIDs"], keyof string[]>]: never; }) | undefined;
                     LicenseType?: string | undefined;
                     LicenseTerms?: string | undefined;
                     Value?: number | undefined;
-                } & { [K_12 in Exclude<keyof I["Assets"][number]["AssetDetails"]["IntellectualPropertyDetails"], keyof IntellectualProperty>]: never; }) | undefined;
+                } & { [K_10 in Exclude<keyof I["Assets"][number]["AssetDetails"]["IntellectualPropertyDetails"], keyof IntellectualProperty>]: never; }) | undefined;
                 InvestmentFundDetails?: ({
                     FundType?: string | undefined;
                     Exchange?: string | undefined;
@@ -4594,8 +3701,8 @@ export declare const Assets: {
                     InceptionDate?: string | undefined;
                     Manager?: string | undefined;
                     ExpenseRatio?: number | undefined;
-                    Holdings?: (string[] & string[] & { [K_13 in Exclude<keyof I["Assets"][number]["AssetDetails"]["InvestmentFundDetails"]["Holdings"], keyof string[]>]: never; }) | undefined;
-                } & { [K_14 in Exclude<keyof I["Assets"][number]["AssetDetails"]["InvestmentFundDetails"], keyof InvestmentFund>]: never; }) | undefined;
+                    Holdings?: (string[] & string[] & { [K_11 in Exclude<keyof I["Assets"][number]["AssetDetails"]["InvestmentFundDetails"]["Holdings"], keyof string[]>]: never; }) | undefined;
+                } & { [K_12 in Exclude<keyof I["Assets"][number]["AssetDetails"]["InvestmentFundDetails"], keyof InvestmentFund>]: never; }) | undefined;
                 EquityDetails?: ({
                     ExchangeTickerSymbol?: string | undefined;
                     Exchange?: string | undefined;
@@ -4608,7 +3715,7 @@ export declare const Assets: {
                     MinTransactionAmount?: number | undefined;
                     TradingMarginPercentage?: number | undefined;
                     AssetMarginPercentage?: number | undefined;
-                } & { [K_15 in Exclude<keyof I["Assets"][number]["AssetDetails"]["EquityDetails"], keyof Equity>]: never; }) | undefined;
+                } & { [K_13 in Exclude<keyof I["Assets"][number]["AssetDetails"]["EquityDetails"], keyof Equity>]: never; }) | undefined;
                 FinancialProperties?: ({
                     Symbol?: string | undefined;
                     Issuer?: string | undefined;
@@ -4636,12 +3743,12 @@ export declare const Assets: {
                 } & {
                     Symbol?: string | undefined;
                     Issuer?: string | undefined;
-                    JurisdictionIDs?: (string[] & string[] & { [K_16 in Exclude<keyof I["Assets"][number]["AssetDetails"]["FinancialProperties"]["JurisdictionIDs"], keyof string[]>]: never; }) | undefined;
+                    JurisdictionIDs?: (string[] & string[] & { [K_14 in Exclude<keyof I["Assets"][number]["AssetDetails"]["FinancialProperties"]["JurisdictionIDs"], keyof string[]>]: never; }) | undefined;
                     JurisdictionRestrictions?: string | undefined;
                     RedemptionTerms?: string | undefined;
                     ComplianceRequired?: boolean | undefined;
                     Type?: string | undefined;
-                    TradeAllowances?: (string[] & string[] & { [K_17 in Exclude<keyof I["Assets"][number]["AssetDetails"]["FinancialProperties"]["TradeAllowances"], keyof string[]>]: never; }) | undefined;
+                    TradeAllowances?: (string[] & string[] & { [K_15 in Exclude<keyof I["Assets"][number]["AssetDetails"]["FinancialProperties"]["TradeAllowances"], keyof string[]>]: never; }) | undefined;
                     Transferable?: boolean | undefined;
                     Platform?: string | undefined;
                     PlatformType?: string | undefined;
@@ -4657,7 +3764,7 @@ export declare const Assets: {
                     ValuationDate?: string | undefined;
                     Network?: Network | undefined;
                     Status?: string | undefined;
-                } & { [K_18 in Exclude<keyof I["Assets"][number]["AssetDetails"]["FinancialProperties"], keyof FinancialProperties>]: never; }) | undefined;
+                } & { [K_16 in Exclude<keyof I["Assets"][number]["AssetDetails"]["FinancialProperties"], keyof FinancialProperties>]: never; }) | undefined;
                 Description?: ({
                     Name?: string | undefined;
                     Description?: string | undefined;
@@ -4685,16 +3792,16 @@ export declare const Assets: {
                         Reference?: string | undefined;
                         Extension?: string | undefined;
                         Name?: string | undefined;
-                    } & { [K_19 in Exclude<keyof I["Assets"][number]["AssetDetails"]["Description"]["Logo"], keyof LogoFile>]: never; }) | undefined;
+                    } & { [K_17 in Exclude<keyof I["Assets"][number]["AssetDetails"]["Description"]["Logo"], keyof LogoFile>]: never; }) | undefined;
                     AssetID?: string | undefined;
                     URL?: string | undefined;
-                    Country?: (string[] & string[] & { [K_20 in Exclude<keyof I["Assets"][number]["AssetDetails"]["Description"]["Country"], keyof string[]>]: never; }) | undefined;
-                    Documents?: (string[] & string[] & { [K_21 in Exclude<keyof I["Assets"][number]["AssetDetails"]["Description"]["Documents"], keyof string[]>]: never; }) | undefined;
-                    Images?: (string[] & string[] & { [K_22 in Exclude<keyof I["Assets"][number]["AssetDetails"]["Description"]["Images"], keyof string[]>]: never; }) | undefined;
+                    Country?: (string[] & string[] & { [K_18 in Exclude<keyof I["Assets"][number]["AssetDetails"]["Description"]["Country"], keyof string[]>]: never; }) | undefined;
+                    Documents?: (string[] & string[] & { [K_19 in Exclude<keyof I["Assets"][number]["AssetDetails"]["Description"]["Documents"], keyof string[]>]: never; }) | undefined;
+                    Images?: (string[] & string[] & { [K_20 in Exclude<keyof I["Assets"][number]["AssetDetails"]["Description"]["Images"], keyof string[]>]: never; }) | undefined;
                     Vertical?: string | undefined;
                     CreatedAt?: string | undefined;
                     UpdatedAt?: string | undefined;
-                } & { [K_23 in Exclude<keyof I["Assets"][number]["AssetDetails"]["Description"], keyof Description>]: never; }) | undefined;
+                } & { [K_21 in Exclude<keyof I["Assets"][number]["AssetDetails"]["Description"], keyof Description>]: never; }) | undefined;
                 ExternalResources?: ({
                     Links?: {
                         Type?: LinkType | undefined;
@@ -4714,7 +3821,7 @@ export declare const Assets: {
                     } & {
                         Type?: LinkType | undefined;
                         URL?: string | undefined;
-                    } & { [K_24 in Exclude<keyof I["Assets"][number]["AssetDetails"]["ExternalResources"]["Links"][number], keyof Link>]: never; })[] & { [K_25 in Exclude<keyof I["Assets"][number]["AssetDetails"]["ExternalResources"]["Links"], keyof {
+                    } & { [K_22 in Exclude<keyof I["Assets"][number]["AssetDetails"]["ExternalResources"]["Links"][number], keyof Link>]: never; })[] & { [K_23 in Exclude<keyof I["Assets"][number]["AssetDetails"]["ExternalResources"]["Links"], keyof {
                         Type?: LinkType | undefined;
                         URL?: string | undefined;
                     }[]>]: never; }) | undefined;
@@ -4727,87 +3834,12 @@ export declare const Assets: {
                     } & {
                         Type?: SocialMediaType | undefined;
                         URL?: string | undefined;
-                    } & { [K_26 in Exclude<keyof I["Assets"][number]["AssetDetails"]["ExternalResources"]["Socials"][number], keyof SocialMedia>]: never; })[] & { [K_27 in Exclude<keyof I["Assets"][number]["AssetDetails"]["ExternalResources"]["Socials"], keyof {
+                    } & { [K_24 in Exclude<keyof I["Assets"][number]["AssetDetails"]["ExternalResources"]["Socials"][number], keyof SocialMedia>]: never; })[] & { [K_25 in Exclude<keyof I["Assets"][number]["AssetDetails"]["ExternalResources"]["Socials"], keyof {
                         Type?: SocialMediaType | undefined;
                         URL?: string | undefined;
                     }[]>]: never; }) | undefined;
-                } & { [K_28 in Exclude<keyof I["Assets"][number]["AssetDetails"]["ExternalResources"], keyof ExternalResources>]: never; }) | undefined;
-                DistributionDetails?: ({
-                    Type?: DistributionType | undefined;
-                    CrowdfundDetails?: {
-                        QuantityStep?: string | undefined;
-                        PricesPerSubunit?: {
-                            Denom?: string | undefined;
-                            Amount?: string | undefined;
-                        }[] | undefined;
-                        SellDenom?: string | undefined;
-                        MinAmount?: string | undefined;
-                        StartDate?: number | undefined;
-                        EndDate?: number | undefined;
-                        MinThreshold?: string | undefined;
-                        MaxThreshold?: string | undefined;
-                        AllowOrderCancellation?: boolean | undefined;
-                        ComplianceManagerContractAddr?: string | undefined;
-                        OrderHubContractAddr?: string | undefined;
-                        CrowdfundContractAddr?: string | undefined;
-                        AssetRegistryContractAddr?: string | undefined;
-                        AssetExtensionCode?: string | undefined;
-                        AssetExtensionContractAddr?: string | undefined;
-                    } | undefined;
-                    PriceSupplyDetails?: {} | undefined;
-                } & {
-                    Type?: DistributionType | undefined;
-                    CrowdfundDetails?: ({
-                        QuantityStep?: string | undefined;
-                        PricesPerSubunit?: {
-                            Denom?: string | undefined;
-                            Amount?: string | undefined;
-                        }[] | undefined;
-                        SellDenom?: string | undefined;
-                        MinAmount?: string | undefined;
-                        StartDate?: number | undefined;
-                        EndDate?: number | undefined;
-                        MinThreshold?: string | undefined;
-                        MaxThreshold?: string | undefined;
-                        AllowOrderCancellation?: boolean | undefined;
-                        ComplianceManagerContractAddr?: string | undefined;
-                        OrderHubContractAddr?: string | undefined;
-                        CrowdfundContractAddr?: string | undefined;
-                        AssetRegistryContractAddr?: string | undefined;
-                        AssetExtensionCode?: string | undefined;
-                        AssetExtensionContractAddr?: string | undefined;
-                    } & {
-                        QuantityStep?: string | undefined;
-                        PricesPerSubunit?: ({
-                            Denom?: string | undefined;
-                            Amount?: string | undefined;
-                        }[] & ({
-                            Denom?: string | undefined;
-                            Amount?: string | undefined;
-                        } & {
-                            Denom?: string | undefined;
-                            Amount?: string | undefined;
-                        } & { [K_29 in Exclude<keyof I["Assets"][number]["AssetDetails"]["DistributionDetails"]["CrowdfundDetails"]["PricesPerSubunit"][number], keyof DecCoin>]: never; })[] & { [K_30 in Exclude<keyof I["Assets"][number]["AssetDetails"]["DistributionDetails"]["CrowdfundDetails"]["PricesPerSubunit"], keyof {
-                            Denom?: string | undefined;
-                            Amount?: string | undefined;
-                        }[]>]: never; }) | undefined;
-                        SellDenom?: string | undefined;
-                        MinAmount?: string | undefined;
-                        StartDate?: number | undefined;
-                        EndDate?: number | undefined;
-                        MinThreshold?: string | undefined;
-                        MaxThreshold?: string | undefined;
-                        AllowOrderCancellation?: boolean | undefined;
-                        ComplianceManagerContractAddr?: string | undefined;
-                        OrderHubContractAddr?: string | undefined;
-                        CrowdfundContractAddr?: string | undefined;
-                        AssetRegistryContractAddr?: string | undefined;
-                        AssetExtensionCode?: string | undefined;
-                        AssetExtensionContractAddr?: string | undefined;
-                    } & { [K_31 in Exclude<keyof I["Assets"][number]["AssetDetails"]["DistributionDetails"]["CrowdfundDetails"], keyof Crowdfund>]: never; }) | undefined;
-                    PriceSupplyDetails?: ({} & {} & { [K_32 in Exclude<keyof I["Assets"][number]["AssetDetails"]["DistributionDetails"]["PriceSupplyDetails"], never>]: never; }) | undefined;
-                } & { [K_33 in Exclude<keyof I["Assets"][number]["AssetDetails"]["DistributionDetails"], keyof Distribution>]: never; }) | undefined;
-            } & { [K_34 in Exclude<keyof I["Assets"][number]["AssetDetails"], keyof AssetDetails>]: never; }) | undefined;
+                } & { [K_26 in Exclude<keyof I["Assets"][number]["AssetDetails"]["ExternalResources"], keyof ExternalResources>]: never; }) | undefined;
+            } & { [K_27 in Exclude<keyof I["Assets"][number]["AssetDetails"], keyof AssetDetails>]: never; }) | undefined;
             MetaData?: ({
                 Network?: Network | undefined;
                 UpdatedAt?: Date | undefined;
@@ -4818,7 +3850,7 @@ export declare const Assets: {
                 UpdatedAt?: Date | undefined;
                 CreatedAt?: Date | undefined;
                 UpdatedByAccount?: string | undefined;
-            } & { [K_35 in Exclude<keyof I["Assets"][number]["MetaData"], keyof MetaData>]: never; }) | undefined;
+            } & { [K_28 in Exclude<keyof I["Assets"][number]["MetaData"], keyof MetaData>]: never; }) | undefined;
             Audit?: ({
                 ChangedBy?: string | undefined;
                 ChangedAt?: Date | undefined;
@@ -4827,7 +3859,7 @@ export declare const Assets: {
                 ChangedBy?: string | undefined;
                 ChangedAt?: Date | undefined;
                 Reason?: string | undefined;
-            } & { [K_36 in Exclude<keyof I["Assets"][number]["Audit"], keyof Audit>]: never; }) | undefined;
+            } & { [K_29 in Exclude<keyof I["Assets"][number]["Audit"], keyof Audit>]: never; }) | undefined;
             IssuerDetails?: ({
                 Name?: string | undefined;
                 Description?: string | undefined;
@@ -4865,11 +3897,11 @@ export declare const Assets: {
                 LicenseNumber?: string | undefined;
                 Phone?: string | undefined;
                 Email?: string | undefined;
-                SocialMediaLinks?: (string[] & string[] & { [K_37 in Exclude<keyof I["Assets"][number]["IssuerDetails"]["SocialMediaLinks"], keyof string[]>]: never; }) | undefined;
+                SocialMediaLinks?: (string[] & string[] & { [K_30 in Exclude<keyof I["Assets"][number]["IssuerDetails"]["SocialMediaLinks"], keyof string[]>]: never; }) | undefined;
                 KeyClients?: string | undefined;
                 Press?: string | undefined;
-            } & { [K_38 in Exclude<keyof I["Assets"][number]["IssuerDetails"], keyof IssuerDetails>]: never; }) | undefined;
-        } & { [K_39 in Exclude<keyof I["Assets"][number], keyof Asset>]: never; })[] & { [K_40 in Exclude<keyof I["Assets"], keyof {
+            } & { [K_31 in Exclude<keyof I["Assets"][number]["IssuerDetails"], keyof IssuerDetails>]: never; }) | undefined;
+        } & { [K_32 in Exclude<keyof I["Assets"][number], keyof Asset>]: never; })[] & { [K_33 in Exclude<keyof I["Assets"], keyof {
             AssetDetails?: {
                 ID?: string | undefined;
                 OrganizationID?: string | undefined;
@@ -4901,21 +3933,6 @@ export declare const Assets: {
                     TenancyStatus?: string | undefined;
                     YearBuilt?: number | undefined;
                     YieldPercent?: number[] | undefined;
-                    Floors?: number | undefined;
-                    HeightMeters?: number | undefined;
-                    Units?: number | undefined;
-                    AvailableUnits?: number | undefined;
-                    ParkingSpaces?: number | undefined;
-                    Elevators?: number | undefined;
-                    Classification?: string | undefined;
-                    YearRenovated?: number | undefined;
-                    LotSize?: number | undefined;
-                    ZoningType?: string | undefined;
-                    CapRate?: number | undefined;
-                    NetOperatingIncome?: number | undefined;
-                    KeyHighlights?: string[] | undefined;
-                    Amenities?: string[] | undefined;
-                    PropertyDescription?: string | undefined;
                 } | undefined;
                 StableCoinDetails?: {
                     Version?: string | undefined;
@@ -5044,30 +4061,6 @@ export declare const Assets: {
                         Type?: SocialMediaType | undefined;
                         URL?: string | undefined;
                     }[] | undefined;
-                } | undefined;
-                DistributionDetails?: {
-                    Type?: DistributionType | undefined;
-                    CrowdfundDetails?: {
-                        QuantityStep?: string | undefined;
-                        PricesPerSubunit?: {
-                            Denom?: string | undefined;
-                            Amount?: string | undefined;
-                        }[] | undefined;
-                        SellDenom?: string | undefined;
-                        MinAmount?: string | undefined;
-                        StartDate?: number | undefined;
-                        EndDate?: number | undefined;
-                        MinThreshold?: string | undefined;
-                        MaxThreshold?: string | undefined;
-                        AllowOrderCancellation?: boolean | undefined;
-                        ComplianceManagerContractAddr?: string | undefined;
-                        OrderHubContractAddr?: string | undefined;
-                        CrowdfundContractAddr?: string | undefined;
-                        AssetRegistryContractAddr?: string | undefined;
-                        AssetExtensionCode?: string | undefined;
-                        AssetExtensionContractAddr?: string | undefined;
-                    } | undefined;
-                    PriceSupplyDetails?: {} | undefined;
                 } | undefined;
             } | undefined;
             MetaData?: {
@@ -5104,7 +4097,7 @@ export declare const Assets: {
             } | undefined;
         }[]>]: never; }) | undefined;
         Offset?: number | undefined;
-    } & { [K_41 in Exclude<keyof I, keyof Assets>]: never; }>(base?: I | undefined): Assets;
+    } & { [K_34 in Exclude<keyof I, keyof Assets>]: never; }>(base?: I | undefined): Assets;
     fromPartial<I_1 extends {
         Assets?: {
             AssetDetails?: {
@@ -5138,21 +4131,6 @@ export declare const Assets: {
                     TenancyStatus?: string | undefined;
                     YearBuilt?: number | undefined;
                     YieldPercent?: number[] | undefined;
-                    Floors?: number | undefined;
-                    HeightMeters?: number | undefined;
-                    Units?: number | undefined;
-                    AvailableUnits?: number | undefined;
-                    ParkingSpaces?: number | undefined;
-                    Elevators?: number | undefined;
-                    Classification?: string | undefined;
-                    YearRenovated?: number | undefined;
-                    LotSize?: number | undefined;
-                    ZoningType?: string | undefined;
-                    CapRate?: number | undefined;
-                    NetOperatingIncome?: number | undefined;
-                    KeyHighlights?: string[] | undefined;
-                    Amenities?: string[] | undefined;
-                    PropertyDescription?: string | undefined;
                 } | undefined;
                 StableCoinDetails?: {
                     Version?: string | undefined;
@@ -5281,30 +4259,6 @@ export declare const Assets: {
                         Type?: SocialMediaType | undefined;
                         URL?: string | undefined;
                     }[] | undefined;
-                } | undefined;
-                DistributionDetails?: {
-                    Type?: DistributionType | undefined;
-                    CrowdfundDetails?: {
-                        QuantityStep?: string | undefined;
-                        PricesPerSubunit?: {
-                            Denom?: string | undefined;
-                            Amount?: string | undefined;
-                        }[] | undefined;
-                        SellDenom?: string | undefined;
-                        MinAmount?: string | undefined;
-                        StartDate?: number | undefined;
-                        EndDate?: number | undefined;
-                        MinThreshold?: string | undefined;
-                        MaxThreshold?: string | undefined;
-                        AllowOrderCancellation?: boolean | undefined;
-                        ComplianceManagerContractAddr?: string | undefined;
-                        OrderHubContractAddr?: string | undefined;
-                        CrowdfundContractAddr?: string | undefined;
-                        AssetRegistryContractAddr?: string | undefined;
-                        AssetExtensionCode?: string | undefined;
-                        AssetExtensionContractAddr?: string | undefined;
-                    } | undefined;
-                    PriceSupplyDetails?: {} | undefined;
                 } | undefined;
             } | undefined;
             MetaData?: {
@@ -5374,21 +4328,6 @@ export declare const Assets: {
                     TenancyStatus?: string | undefined;
                     YearBuilt?: number | undefined;
                     YieldPercent?: number[] | undefined;
-                    Floors?: number | undefined;
-                    HeightMeters?: number | undefined;
-                    Units?: number | undefined;
-                    AvailableUnits?: number | undefined;
-                    ParkingSpaces?: number | undefined;
-                    Elevators?: number | undefined;
-                    Classification?: string | undefined;
-                    YearRenovated?: number | undefined;
-                    LotSize?: number | undefined;
-                    ZoningType?: string | undefined;
-                    CapRate?: number | undefined;
-                    NetOperatingIncome?: number | undefined;
-                    KeyHighlights?: string[] | undefined;
-                    Amenities?: string[] | undefined;
-                    PropertyDescription?: string | undefined;
                 } | undefined;
                 StableCoinDetails?: {
                     Version?: string | undefined;
@@ -5517,30 +4456,6 @@ export declare const Assets: {
                         Type?: SocialMediaType | undefined;
                         URL?: string | undefined;
                     }[] | undefined;
-                } | undefined;
-                DistributionDetails?: {
-                    Type?: DistributionType | undefined;
-                    CrowdfundDetails?: {
-                        QuantityStep?: string | undefined;
-                        PricesPerSubunit?: {
-                            Denom?: string | undefined;
-                            Amount?: string | undefined;
-                        }[] | undefined;
-                        SellDenom?: string | undefined;
-                        MinAmount?: string | undefined;
-                        StartDate?: number | undefined;
-                        EndDate?: number | undefined;
-                        MinThreshold?: string | undefined;
-                        MaxThreshold?: string | undefined;
-                        AllowOrderCancellation?: boolean | undefined;
-                        ComplianceManagerContractAddr?: string | undefined;
-                        OrderHubContractAddr?: string | undefined;
-                        CrowdfundContractAddr?: string | undefined;
-                        AssetRegistryContractAddr?: string | undefined;
-                        AssetExtensionCode?: string | undefined;
-                        AssetExtensionContractAddr?: string | undefined;
-                    } | undefined;
-                    PriceSupplyDetails?: {} | undefined;
                 } | undefined;
             } | undefined;
             MetaData?: {
@@ -5607,21 +4522,6 @@ export declare const Assets: {
                     TenancyStatus?: string | undefined;
                     YearBuilt?: number | undefined;
                     YieldPercent?: number[] | undefined;
-                    Floors?: number | undefined;
-                    HeightMeters?: number | undefined;
-                    Units?: number | undefined;
-                    AvailableUnits?: number | undefined;
-                    ParkingSpaces?: number | undefined;
-                    Elevators?: number | undefined;
-                    Classification?: string | undefined;
-                    YearRenovated?: number | undefined;
-                    LotSize?: number | undefined;
-                    ZoningType?: string | undefined;
-                    CapRate?: number | undefined;
-                    NetOperatingIncome?: number | undefined;
-                    KeyHighlights?: string[] | undefined;
-                    Amenities?: string[] | undefined;
-                    PropertyDescription?: string | undefined;
                 } | undefined;
                 StableCoinDetails?: {
                     Version?: string | undefined;
@@ -5750,30 +4650,6 @@ export declare const Assets: {
                         Type?: SocialMediaType | undefined;
                         URL?: string | undefined;
                     }[] | undefined;
-                } | undefined;
-                DistributionDetails?: {
-                    Type?: DistributionType | undefined;
-                    CrowdfundDetails?: {
-                        QuantityStep?: string | undefined;
-                        PricesPerSubunit?: {
-                            Denom?: string | undefined;
-                            Amount?: string | undefined;
-                        }[] | undefined;
-                        SellDenom?: string | undefined;
-                        MinAmount?: string | undefined;
-                        StartDate?: number | undefined;
-                        EndDate?: number | undefined;
-                        MinThreshold?: string | undefined;
-                        MaxThreshold?: string | undefined;
-                        AllowOrderCancellation?: boolean | undefined;
-                        ComplianceManagerContractAddr?: string | undefined;
-                        OrderHubContractAddr?: string | undefined;
-                        CrowdfundContractAddr?: string | undefined;
-                        AssetRegistryContractAddr?: string | undefined;
-                        AssetExtensionCode?: string | undefined;
-                        AssetExtensionContractAddr?: string | undefined;
-                    } | undefined;
-                    PriceSupplyDetails?: {} | undefined;
                 } | undefined;
             } | undefined;
             MetaData?: {
@@ -5840,21 +4716,6 @@ export declare const Assets: {
                     TenancyStatus?: string | undefined;
                     YearBuilt?: number | undefined;
                     YieldPercent?: number[] | undefined;
-                    Floors?: number | undefined;
-                    HeightMeters?: number | undefined;
-                    Units?: number | undefined;
-                    AvailableUnits?: number | undefined;
-                    ParkingSpaces?: number | undefined;
-                    Elevators?: number | undefined;
-                    Classification?: string | undefined;
-                    YearRenovated?: number | undefined;
-                    LotSize?: number | undefined;
-                    ZoningType?: string | undefined;
-                    CapRate?: number | undefined;
-                    NetOperatingIncome?: number | undefined;
-                    KeyHighlights?: string[] | undefined;
-                    Amenities?: string[] | undefined;
-                    PropertyDescription?: string | undefined;
                 } | undefined;
                 StableCoinDetails?: {
                     Version?: string | undefined;
@@ -5984,30 +4845,6 @@ export declare const Assets: {
                         URL?: string | undefined;
                     }[] | undefined;
                 } | undefined;
-                DistributionDetails?: {
-                    Type?: DistributionType | undefined;
-                    CrowdfundDetails?: {
-                        QuantityStep?: string | undefined;
-                        PricesPerSubunit?: {
-                            Denom?: string | undefined;
-                            Amount?: string | undefined;
-                        }[] | undefined;
-                        SellDenom?: string | undefined;
-                        MinAmount?: string | undefined;
-                        StartDate?: number | undefined;
-                        EndDate?: number | undefined;
-                        MinThreshold?: string | undefined;
-                        MaxThreshold?: string | undefined;
-                        AllowOrderCancellation?: boolean | undefined;
-                        ComplianceManagerContractAddr?: string | undefined;
-                        OrderHubContractAddr?: string | undefined;
-                        CrowdfundContractAddr?: string | undefined;
-                        AssetRegistryContractAddr?: string | undefined;
-                        AssetExtensionCode?: string | undefined;
-                        AssetExtensionContractAddr?: string | undefined;
-                    } | undefined;
-                    PriceSupplyDetails?: {} | undefined;
-                } | undefined;
             } & {
                 ID?: string | undefined;
                 OrganizationID?: string | undefined;
@@ -6030,12 +4867,12 @@ export declare const Assets: {
                     } & {
                         Symbol?: string | undefined;
                         Version?: string | undefined;
-                    } & { [K_42 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["Denom"]["Currency"], keyof import("./domain/currency/currency").Currency>]: never; }) | undefined;
+                    } & { [K_35 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["Denom"]["Currency"], keyof import("./domain/currency/currency").Currency>]: never; }) | undefined;
                     Subunit?: string | undefined;
                     Issuer?: string | undefined;
                     Precision?: number | undefined;
                     Description?: string | undefined;
-                } & { [K_43 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["Denom"], keyof Denom>]: never; }) | undefined;
+                } & { [K_36 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["Denom"], keyof Denom>]: never; }) | undefined;
                 IsIssuedInSmartContract?: boolean | undefined;
                 SmartContractIssuerAddr?: string | undefined;
                 RealEstateDetails?: ({
@@ -6051,21 +4888,6 @@ export declare const Assets: {
                     TenancyStatus?: string | undefined;
                     YearBuilt?: number | undefined;
                     YieldPercent?: number[] | undefined;
-                    Floors?: number | undefined;
-                    HeightMeters?: number | undefined;
-                    Units?: number | undefined;
-                    AvailableUnits?: number | undefined;
-                    ParkingSpaces?: number | undefined;
-                    Elevators?: number | undefined;
-                    Classification?: string | undefined;
-                    YearRenovated?: number | undefined;
-                    LotSize?: number | undefined;
-                    ZoningType?: string | undefined;
-                    CapRate?: number | undefined;
-                    NetOperatingIncome?: number | undefined;
-                    KeyHighlights?: string[] | undefined;
-                    Amenities?: string[] | undefined;
-                    PropertyDescription?: string | undefined;
                 } & {
                     Address?: string | undefined;
                     Bathrooms?: number | undefined;
@@ -6078,23 +4900,8 @@ export declare const Assets: {
                     SquareFootage?: number | undefined;
                     TenancyStatus?: string | undefined;
                     YearBuilt?: number | undefined;
-                    YieldPercent?: (number[] & number[] & { [K_44 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["RealEstateDetails"]["YieldPercent"], keyof number[]>]: never; }) | undefined;
-                    Floors?: number | undefined;
-                    HeightMeters?: number | undefined;
-                    Units?: number | undefined;
-                    AvailableUnits?: number | undefined;
-                    ParkingSpaces?: number | undefined;
-                    Elevators?: number | undefined;
-                    Classification?: string | undefined;
-                    YearRenovated?: number | undefined;
-                    LotSize?: number | undefined;
-                    ZoningType?: string | undefined;
-                    CapRate?: number | undefined;
-                    NetOperatingIncome?: number | undefined;
-                    KeyHighlights?: (string[] & string[] & { [K_45 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["RealEstateDetails"]["KeyHighlights"], keyof string[]>]: never; }) | undefined;
-                    Amenities?: (string[] & string[] & { [K_46 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["RealEstateDetails"]["Amenities"], keyof string[]>]: never; }) | undefined;
-                    PropertyDescription?: string | undefined;
-                } & { [K_47 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["RealEstateDetails"], keyof RealEstate>]: never; }) | undefined;
+                    YieldPercent?: (number[] & number[] & { [K_37 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["RealEstateDetails"]["YieldPercent"], keyof number[]>]: never; }) | undefined;
+                } & { [K_38 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["RealEstateDetails"], keyof RealEstate>]: never; }) | undefined;
                 StableCoinDetails?: ({
                     Version?: string | undefined;
                     PegType?: string | undefined;
@@ -6115,7 +4922,7 @@ export declare const Assets: {
                     MinTransactionAmount?: number | undefined;
                     TradingMarginPercentage?: number | undefined;
                     AssetMarginPercentage?: number | undefined;
-                } & { [K_48 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["StableCoinDetails"], keyof StableCoin>]: never; }) | undefined;
+                } & { [K_39 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["StableCoinDetails"], keyof StableCoin>]: never; }) | undefined;
                 CommodityDetails?: ({
                     Category?: string | undefined;
                     Quality?: string | undefined;
@@ -6140,7 +4947,7 @@ export declare const Assets: {
                     StorageLocation?: string | undefined;
                     ContractType?: string | undefined;
                     DeliveryDate?: string | undefined;
-                } & { [K_49 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["CommodityDetails"], keyof Commodity>]: never; }) | undefined;
+                } & { [K_40 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["CommodityDetails"], keyof Commodity>]: never; }) | undefined;
                 CollectibleDetails?: ({
                     Category?: string | undefined;
                     CollectionName?: string | undefined;
@@ -6157,9 +4964,9 @@ export declare const Assets: {
                     TokenID?: string | undefined;
                     MetadataURI?: string | undefined;
                     Creator?: string | undefined;
-                    OwnershipHistory?: (string[] & string[] & { [K_50 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["CollectibleDetails"]["OwnershipHistory"], keyof string[]>]: never; }) | undefined;
+                    OwnershipHistory?: (string[] & string[] & { [K_41 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["CollectibleDetails"]["OwnershipHistory"], keyof string[]>]: never; }) | undefined;
                     CurrentOwner?: string | undefined;
-                } & { [K_51 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["CollectibleDetails"], keyof Collectible>]: never; }) | undefined;
+                } & { [K_42 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["CollectibleDetails"], keyof Collectible>]: never; }) | undefined;
                 VehicleDetails?: ({
                     Category?: string | undefined;
                     Manufacturer?: string | undefined;
@@ -6186,7 +4993,7 @@ export declare const Assets: {
                     Condition?: string | undefined;
                     CurrentOwner?: string | undefined;
                     Location?: string | undefined;
-                } & { [K_52 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["VehicleDetails"], keyof Vehicle>]: never; }) | undefined;
+                } & { [K_43 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["VehicleDetails"], keyof Vehicle>]: never; }) | undefined;
                 IntellectualPropertyDetails?: ({
                     Category?: string | undefined;
                     Owner?: string | undefined;
@@ -6203,11 +5010,11 @@ export declare const Assets: {
                     RegistrationNumber?: string | undefined;
                     FilingDate?: string | undefined;
                     ExpirationDate?: string | undefined;
-                    IPJurisdictionIDs?: (string[] & string[] & { [K_53 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["IntellectualPropertyDetails"]["IPJurisdictionIDs"], keyof string[]>]: never; }) | undefined;
+                    IPJurisdictionIDs?: (string[] & string[] & { [K_44 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["IntellectualPropertyDetails"]["IPJurisdictionIDs"], keyof string[]>]: never; }) | undefined;
                     LicenseType?: string | undefined;
                     LicenseTerms?: string | undefined;
                     Value?: number | undefined;
-                } & { [K_54 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["IntellectualPropertyDetails"], keyof IntellectualProperty>]: never; }) | undefined;
+                } & { [K_45 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["IntellectualPropertyDetails"], keyof IntellectualProperty>]: never; }) | undefined;
                 InvestmentFundDetails?: ({
                     FundType?: string | undefined;
                     Exchange?: string | undefined;
@@ -6225,8 +5032,8 @@ export declare const Assets: {
                     InceptionDate?: string | undefined;
                     Manager?: string | undefined;
                     ExpenseRatio?: number | undefined;
-                    Holdings?: (string[] & string[] & { [K_55 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["InvestmentFundDetails"]["Holdings"], keyof string[]>]: never; }) | undefined;
-                } & { [K_56 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["InvestmentFundDetails"], keyof InvestmentFund>]: never; }) | undefined;
+                    Holdings?: (string[] & string[] & { [K_46 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["InvestmentFundDetails"]["Holdings"], keyof string[]>]: never; }) | undefined;
+                } & { [K_47 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["InvestmentFundDetails"], keyof InvestmentFund>]: never; }) | undefined;
                 EquityDetails?: ({
                     ExchangeTickerSymbol?: string | undefined;
                     Exchange?: string | undefined;
@@ -6239,7 +5046,7 @@ export declare const Assets: {
                     MinTransactionAmount?: number | undefined;
                     TradingMarginPercentage?: number | undefined;
                     AssetMarginPercentage?: number | undefined;
-                } & { [K_57 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["EquityDetails"], keyof Equity>]: never; }) | undefined;
+                } & { [K_48 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["EquityDetails"], keyof Equity>]: never; }) | undefined;
                 FinancialProperties?: ({
                     Symbol?: string | undefined;
                     Issuer?: string | undefined;
@@ -6267,12 +5074,12 @@ export declare const Assets: {
                 } & {
                     Symbol?: string | undefined;
                     Issuer?: string | undefined;
-                    JurisdictionIDs?: (string[] & string[] & { [K_58 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["FinancialProperties"]["JurisdictionIDs"], keyof string[]>]: never; }) | undefined;
+                    JurisdictionIDs?: (string[] & string[] & { [K_49 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["FinancialProperties"]["JurisdictionIDs"], keyof string[]>]: never; }) | undefined;
                     JurisdictionRestrictions?: string | undefined;
                     RedemptionTerms?: string | undefined;
                     ComplianceRequired?: boolean | undefined;
                     Type?: string | undefined;
-                    TradeAllowances?: (string[] & string[] & { [K_59 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["FinancialProperties"]["TradeAllowances"], keyof string[]>]: never; }) | undefined;
+                    TradeAllowances?: (string[] & string[] & { [K_50 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["FinancialProperties"]["TradeAllowances"], keyof string[]>]: never; }) | undefined;
                     Transferable?: boolean | undefined;
                     Platform?: string | undefined;
                     PlatformType?: string | undefined;
@@ -6288,7 +5095,7 @@ export declare const Assets: {
                     ValuationDate?: string | undefined;
                     Network?: Network | undefined;
                     Status?: string | undefined;
-                } & { [K_60 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["FinancialProperties"], keyof FinancialProperties>]: never; }) | undefined;
+                } & { [K_51 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["FinancialProperties"], keyof FinancialProperties>]: never; }) | undefined;
                 Description?: ({
                     Name?: string | undefined;
                     Description?: string | undefined;
@@ -6316,16 +5123,16 @@ export declare const Assets: {
                         Reference?: string | undefined;
                         Extension?: string | undefined;
                         Name?: string | undefined;
-                    } & { [K_61 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["Description"]["Logo"], keyof LogoFile>]: never; }) | undefined;
+                    } & { [K_52 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["Description"]["Logo"], keyof LogoFile>]: never; }) | undefined;
                     AssetID?: string | undefined;
                     URL?: string | undefined;
-                    Country?: (string[] & string[] & { [K_62 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["Description"]["Country"], keyof string[]>]: never; }) | undefined;
-                    Documents?: (string[] & string[] & { [K_63 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["Description"]["Documents"], keyof string[]>]: never; }) | undefined;
-                    Images?: (string[] & string[] & { [K_64 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["Description"]["Images"], keyof string[]>]: never; }) | undefined;
+                    Country?: (string[] & string[] & { [K_53 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["Description"]["Country"], keyof string[]>]: never; }) | undefined;
+                    Documents?: (string[] & string[] & { [K_54 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["Description"]["Documents"], keyof string[]>]: never; }) | undefined;
+                    Images?: (string[] & string[] & { [K_55 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["Description"]["Images"], keyof string[]>]: never; }) | undefined;
                     Vertical?: string | undefined;
                     CreatedAt?: string | undefined;
                     UpdatedAt?: string | undefined;
-                } & { [K_65 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["Description"], keyof Description>]: never; }) | undefined;
+                } & { [K_56 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["Description"], keyof Description>]: never; }) | undefined;
                 ExternalResources?: ({
                     Links?: {
                         Type?: LinkType | undefined;
@@ -6345,7 +5152,7 @@ export declare const Assets: {
                     } & {
                         Type?: LinkType | undefined;
                         URL?: string | undefined;
-                    } & { [K_66 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["ExternalResources"]["Links"][number], keyof Link>]: never; })[] & { [K_67 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["ExternalResources"]["Links"], keyof {
+                    } & { [K_57 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["ExternalResources"]["Links"][number], keyof Link>]: never; })[] & { [K_58 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["ExternalResources"]["Links"], keyof {
                         Type?: LinkType | undefined;
                         URL?: string | undefined;
                     }[]>]: never; }) | undefined;
@@ -6358,87 +5165,12 @@ export declare const Assets: {
                     } & {
                         Type?: SocialMediaType | undefined;
                         URL?: string | undefined;
-                    } & { [K_68 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["ExternalResources"]["Socials"][number], keyof SocialMedia>]: never; })[] & { [K_69 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["ExternalResources"]["Socials"], keyof {
+                    } & { [K_59 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["ExternalResources"]["Socials"][number], keyof SocialMedia>]: never; })[] & { [K_60 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["ExternalResources"]["Socials"], keyof {
                         Type?: SocialMediaType | undefined;
                         URL?: string | undefined;
                     }[]>]: never; }) | undefined;
-                } & { [K_70 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["ExternalResources"], keyof ExternalResources>]: never; }) | undefined;
-                DistributionDetails?: ({
-                    Type?: DistributionType | undefined;
-                    CrowdfundDetails?: {
-                        QuantityStep?: string | undefined;
-                        PricesPerSubunit?: {
-                            Denom?: string | undefined;
-                            Amount?: string | undefined;
-                        }[] | undefined;
-                        SellDenom?: string | undefined;
-                        MinAmount?: string | undefined;
-                        StartDate?: number | undefined;
-                        EndDate?: number | undefined;
-                        MinThreshold?: string | undefined;
-                        MaxThreshold?: string | undefined;
-                        AllowOrderCancellation?: boolean | undefined;
-                        ComplianceManagerContractAddr?: string | undefined;
-                        OrderHubContractAddr?: string | undefined;
-                        CrowdfundContractAddr?: string | undefined;
-                        AssetRegistryContractAddr?: string | undefined;
-                        AssetExtensionCode?: string | undefined;
-                        AssetExtensionContractAddr?: string | undefined;
-                    } | undefined;
-                    PriceSupplyDetails?: {} | undefined;
-                } & {
-                    Type?: DistributionType | undefined;
-                    CrowdfundDetails?: ({
-                        QuantityStep?: string | undefined;
-                        PricesPerSubunit?: {
-                            Denom?: string | undefined;
-                            Amount?: string | undefined;
-                        }[] | undefined;
-                        SellDenom?: string | undefined;
-                        MinAmount?: string | undefined;
-                        StartDate?: number | undefined;
-                        EndDate?: number | undefined;
-                        MinThreshold?: string | undefined;
-                        MaxThreshold?: string | undefined;
-                        AllowOrderCancellation?: boolean | undefined;
-                        ComplianceManagerContractAddr?: string | undefined;
-                        OrderHubContractAddr?: string | undefined;
-                        CrowdfundContractAddr?: string | undefined;
-                        AssetRegistryContractAddr?: string | undefined;
-                        AssetExtensionCode?: string | undefined;
-                        AssetExtensionContractAddr?: string | undefined;
-                    } & {
-                        QuantityStep?: string | undefined;
-                        PricesPerSubunit?: ({
-                            Denom?: string | undefined;
-                            Amount?: string | undefined;
-                        }[] & ({
-                            Denom?: string | undefined;
-                            Amount?: string | undefined;
-                        } & {
-                            Denom?: string | undefined;
-                            Amount?: string | undefined;
-                        } & { [K_71 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["DistributionDetails"]["CrowdfundDetails"]["PricesPerSubunit"][number], keyof DecCoin>]: never; })[] & { [K_72 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["DistributionDetails"]["CrowdfundDetails"]["PricesPerSubunit"], keyof {
-                            Denom?: string | undefined;
-                            Amount?: string | undefined;
-                        }[]>]: never; }) | undefined;
-                        SellDenom?: string | undefined;
-                        MinAmount?: string | undefined;
-                        StartDate?: number | undefined;
-                        EndDate?: number | undefined;
-                        MinThreshold?: string | undefined;
-                        MaxThreshold?: string | undefined;
-                        AllowOrderCancellation?: boolean | undefined;
-                        ComplianceManagerContractAddr?: string | undefined;
-                        OrderHubContractAddr?: string | undefined;
-                        CrowdfundContractAddr?: string | undefined;
-                        AssetRegistryContractAddr?: string | undefined;
-                        AssetExtensionCode?: string | undefined;
-                        AssetExtensionContractAddr?: string | undefined;
-                    } & { [K_73 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["DistributionDetails"]["CrowdfundDetails"], keyof Crowdfund>]: never; }) | undefined;
-                    PriceSupplyDetails?: ({} & {} & { [K_74 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["DistributionDetails"]["PriceSupplyDetails"], never>]: never; }) | undefined;
-                } & { [K_75 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["DistributionDetails"], keyof Distribution>]: never; }) | undefined;
-            } & { [K_76 in Exclude<keyof I_1["Assets"][number]["AssetDetails"], keyof AssetDetails>]: never; }) | undefined;
+                } & { [K_61 in Exclude<keyof I_1["Assets"][number]["AssetDetails"]["ExternalResources"], keyof ExternalResources>]: never; }) | undefined;
+            } & { [K_62 in Exclude<keyof I_1["Assets"][number]["AssetDetails"], keyof AssetDetails>]: never; }) | undefined;
             MetaData?: ({
                 Network?: Network | undefined;
                 UpdatedAt?: Date | undefined;
@@ -6449,7 +5181,7 @@ export declare const Assets: {
                 UpdatedAt?: Date | undefined;
                 CreatedAt?: Date | undefined;
                 UpdatedByAccount?: string | undefined;
-            } & { [K_77 in Exclude<keyof I_1["Assets"][number]["MetaData"], keyof MetaData>]: never; }) | undefined;
+            } & { [K_63 in Exclude<keyof I_1["Assets"][number]["MetaData"], keyof MetaData>]: never; }) | undefined;
             Audit?: ({
                 ChangedBy?: string | undefined;
                 ChangedAt?: Date | undefined;
@@ -6458,7 +5190,7 @@ export declare const Assets: {
                 ChangedBy?: string | undefined;
                 ChangedAt?: Date | undefined;
                 Reason?: string | undefined;
-            } & { [K_78 in Exclude<keyof I_1["Assets"][number]["Audit"], keyof Audit>]: never; }) | undefined;
+            } & { [K_64 in Exclude<keyof I_1["Assets"][number]["Audit"], keyof Audit>]: never; }) | undefined;
             IssuerDetails?: ({
                 Name?: string | undefined;
                 Description?: string | undefined;
@@ -6496,11 +5228,11 @@ export declare const Assets: {
                 LicenseNumber?: string | undefined;
                 Phone?: string | undefined;
                 Email?: string | undefined;
-                SocialMediaLinks?: (string[] & string[] & { [K_79 in Exclude<keyof I_1["Assets"][number]["IssuerDetails"]["SocialMediaLinks"], keyof string[]>]: never; }) | undefined;
+                SocialMediaLinks?: (string[] & string[] & { [K_65 in Exclude<keyof I_1["Assets"][number]["IssuerDetails"]["SocialMediaLinks"], keyof string[]>]: never; }) | undefined;
                 KeyClients?: string | undefined;
                 Press?: string | undefined;
-            } & { [K_80 in Exclude<keyof I_1["Assets"][number]["IssuerDetails"], keyof IssuerDetails>]: never; }) | undefined;
-        } & { [K_81 in Exclude<keyof I_1["Assets"][number], keyof Asset>]: never; })[] & { [K_82 in Exclude<keyof I_1["Assets"], keyof {
+            } & { [K_66 in Exclude<keyof I_1["Assets"][number]["IssuerDetails"], keyof IssuerDetails>]: never; }) | undefined;
+        } & { [K_67 in Exclude<keyof I_1["Assets"][number], keyof Asset>]: never; })[] & { [K_68 in Exclude<keyof I_1["Assets"], keyof {
             AssetDetails?: {
                 ID?: string | undefined;
                 OrganizationID?: string | undefined;
@@ -6532,21 +5264,6 @@ export declare const Assets: {
                     TenancyStatus?: string | undefined;
                     YearBuilt?: number | undefined;
                     YieldPercent?: number[] | undefined;
-                    Floors?: number | undefined;
-                    HeightMeters?: number | undefined;
-                    Units?: number | undefined;
-                    AvailableUnits?: number | undefined;
-                    ParkingSpaces?: number | undefined;
-                    Elevators?: number | undefined;
-                    Classification?: string | undefined;
-                    YearRenovated?: number | undefined;
-                    LotSize?: number | undefined;
-                    ZoningType?: string | undefined;
-                    CapRate?: number | undefined;
-                    NetOperatingIncome?: number | undefined;
-                    KeyHighlights?: string[] | undefined;
-                    Amenities?: string[] | undefined;
-                    PropertyDescription?: string | undefined;
                 } | undefined;
                 StableCoinDetails?: {
                     Version?: string | undefined;
@@ -6676,30 +5393,6 @@ export declare const Assets: {
                         URL?: string | undefined;
                     }[] | undefined;
                 } | undefined;
-                DistributionDetails?: {
-                    Type?: DistributionType | undefined;
-                    CrowdfundDetails?: {
-                        QuantityStep?: string | undefined;
-                        PricesPerSubunit?: {
-                            Denom?: string | undefined;
-                            Amount?: string | undefined;
-                        }[] | undefined;
-                        SellDenom?: string | undefined;
-                        MinAmount?: string | undefined;
-                        StartDate?: number | undefined;
-                        EndDate?: number | undefined;
-                        MinThreshold?: string | undefined;
-                        MaxThreshold?: string | undefined;
-                        AllowOrderCancellation?: boolean | undefined;
-                        ComplianceManagerContractAddr?: string | undefined;
-                        OrderHubContractAddr?: string | undefined;
-                        CrowdfundContractAddr?: string | undefined;
-                        AssetRegistryContractAddr?: string | undefined;
-                        AssetExtensionCode?: string | undefined;
-                        AssetExtensionContractAddr?: string | undefined;
-                    } | undefined;
-                    PriceSupplyDetails?: {} | undefined;
-                } | undefined;
             } | undefined;
             MetaData?: {
                 Network?: Network | undefined;
@@ -6735,7 +5428,7 @@ export declare const Assets: {
             } | undefined;
         }[]>]: never; }) | undefined;
         Offset?: number | undefined;
-    } & { [K_83 in Exclude<keyof I_1, keyof Assets>]: never; }>(object: I_1): Assets;
+    } & { [K_69 in Exclude<keyof I_1, keyof Assets>]: never; }>(object: I_1): Assets;
 };
 export declare const UserAssetList: {
     encode(message: UserAssetList, writer?: _m0.Writer): _m0.Writer;
@@ -6754,7 +5447,6 @@ export declare const UserAssetList: {
             UpdatedByAccount?: string | undefined;
         } | undefined;
         Visible?: boolean | undefined;
-        OrganizationID?: string | undefined;
     } & {
         AccountID?: string | undefined;
         Wallet?: string | undefined;
@@ -6772,7 +5464,6 @@ export declare const UserAssetList: {
             UpdatedByAccount?: string | undefined;
         } & { [K in Exclude<keyof I["MetaData"], keyof MetaData>]: never; }) | undefined;
         Visible?: boolean | undefined;
-        OrganizationID?: string | undefined;
     } & { [K_1 in Exclude<keyof I, keyof UserAssetList>]: never; }>(base?: I | undefined): UserAssetList;
     fromPartial<I_1 extends {
         AccountID?: string | undefined;
@@ -6786,7 +5477,6 @@ export declare const UserAssetList: {
             UpdatedByAccount?: string | undefined;
         } | undefined;
         Visible?: boolean | undefined;
-        OrganizationID?: string | undefined;
     } & {
         AccountID?: string | undefined;
         Wallet?: string | undefined;
@@ -6804,7 +5494,6 @@ export declare const UserAssetList: {
             UpdatedByAccount?: string | undefined;
         } & { [K_2 in Exclude<keyof I_1["MetaData"], keyof MetaData>]: never; }) | undefined;
         Visible?: boolean | undefined;
-        OrganizationID?: string | undefined;
     } & { [K_3 in Exclude<keyof I_1, keyof UserAssetList>]: never; }>(object: I_1): UserAssetList;
 };
 export declare const UserAssetLists: {
@@ -6825,7 +5514,6 @@ export declare const UserAssetLists: {
                 UpdatedByAccount?: string | undefined;
             } | undefined;
             Visible?: boolean | undefined;
-            OrganizationID?: string | undefined;
         }[] | undefined;
     } & {
         UserAssetLists?: ({
@@ -6840,7 +5528,6 @@ export declare const UserAssetLists: {
                 UpdatedByAccount?: string | undefined;
             } | undefined;
             Visible?: boolean | undefined;
-            OrganizationID?: string | undefined;
         }[] & ({
             AccountID?: string | undefined;
             Wallet?: string | undefined;
@@ -6853,7 +5540,6 @@ export declare const UserAssetLists: {
                 UpdatedByAccount?: string | undefined;
             } | undefined;
             Visible?: boolean | undefined;
-            OrganizationID?: string | undefined;
         } & {
             AccountID?: string | undefined;
             Wallet?: string | undefined;
@@ -6871,7 +5557,6 @@ export declare const UserAssetLists: {
                 UpdatedByAccount?: string | undefined;
             } & { [K in Exclude<keyof I["UserAssetLists"][number]["MetaData"], keyof MetaData>]: never; }) | undefined;
             Visible?: boolean | undefined;
-            OrganizationID?: string | undefined;
         } & { [K_1 in Exclude<keyof I["UserAssetLists"][number], keyof UserAssetList>]: never; })[] & { [K_2 in Exclude<keyof I["UserAssetLists"], keyof {
             AccountID?: string | undefined;
             Wallet?: string | undefined;
@@ -6884,7 +5569,6 @@ export declare const UserAssetLists: {
                 UpdatedByAccount?: string | undefined;
             } | undefined;
             Visible?: boolean | undefined;
-            OrganizationID?: string | undefined;
         }[]>]: never; }) | undefined;
     } & { [K_3 in Exclude<keyof I, "UserAssetLists">]: never; }>(base?: I | undefined): UserAssetLists;
     fromPartial<I_1 extends {
@@ -6900,7 +5584,6 @@ export declare const UserAssetLists: {
                 UpdatedByAccount?: string | undefined;
             } | undefined;
             Visible?: boolean | undefined;
-            OrganizationID?: string | undefined;
         }[] | undefined;
     } & {
         UserAssetLists?: ({
@@ -6915,7 +5598,6 @@ export declare const UserAssetLists: {
                 UpdatedByAccount?: string | undefined;
             } | undefined;
             Visible?: boolean | undefined;
-            OrganizationID?: string | undefined;
         }[] & ({
             AccountID?: string | undefined;
             Wallet?: string | undefined;
@@ -6928,7 +5610,6 @@ export declare const UserAssetLists: {
                 UpdatedByAccount?: string | undefined;
             } | undefined;
             Visible?: boolean | undefined;
-            OrganizationID?: string | undefined;
         } & {
             AccountID?: string | undefined;
             Wallet?: string | undefined;
@@ -6946,7 +5627,6 @@ export declare const UserAssetLists: {
                 UpdatedByAccount?: string | undefined;
             } & { [K_4 in Exclude<keyof I_1["UserAssetLists"][number]["MetaData"], keyof MetaData>]: never; }) | undefined;
             Visible?: boolean | undefined;
-            OrganizationID?: string | undefined;
         } & { [K_5 in Exclude<keyof I_1["UserAssetLists"][number], keyof UserAssetList>]: never; })[] & { [K_6 in Exclude<keyof I_1["UserAssetLists"], keyof {
             AccountID?: string | undefined;
             Wallet?: string | undefined;
@@ -6959,7 +5639,6 @@ export declare const UserAssetLists: {
                 UpdatedByAccount?: string | undefined;
             } | undefined;
             Visible?: boolean | undefined;
-            OrganizationID?: string | undefined;
         }[]>]: never; }) | undefined;
     } & { [K_7 in Exclude<keyof I_1, "UserAssetLists">]: never; }>(object: I_1): UserAssetLists;
 };
@@ -6981,21 +5660,6 @@ export declare const RealEstate: {
         TenancyStatus?: string | undefined;
         YearBuilt?: number | undefined;
         YieldPercent?: number[] | undefined;
-        Floors?: number | undefined;
-        HeightMeters?: number | undefined;
-        Units?: number | undefined;
-        AvailableUnits?: number | undefined;
-        ParkingSpaces?: number | undefined;
-        Elevators?: number | undefined;
-        Classification?: string | undefined;
-        YearRenovated?: number | undefined;
-        LotSize?: number | undefined;
-        ZoningType?: string | undefined;
-        CapRate?: number | undefined;
-        NetOperatingIncome?: number | undefined;
-        KeyHighlights?: string[] | undefined;
-        Amenities?: string[] | undefined;
-        PropertyDescription?: string | undefined;
     } & {
         Address?: string | undefined;
         Bathrooms?: number | undefined;
@@ -7009,22 +5673,7 @@ export declare const RealEstate: {
         TenancyStatus?: string | undefined;
         YearBuilt?: number | undefined;
         YieldPercent?: (number[] & number[] & { [K in Exclude<keyof I["YieldPercent"], keyof number[]>]: never; }) | undefined;
-        Floors?: number | undefined;
-        HeightMeters?: number | undefined;
-        Units?: number | undefined;
-        AvailableUnits?: number | undefined;
-        ParkingSpaces?: number | undefined;
-        Elevators?: number | undefined;
-        Classification?: string | undefined;
-        YearRenovated?: number | undefined;
-        LotSize?: number | undefined;
-        ZoningType?: string | undefined;
-        CapRate?: number | undefined;
-        NetOperatingIncome?: number | undefined;
-        KeyHighlights?: (string[] & string[] & { [K_1 in Exclude<keyof I["KeyHighlights"], keyof string[]>]: never; }) | undefined;
-        Amenities?: (string[] & string[] & { [K_2 in Exclude<keyof I["Amenities"], keyof string[]>]: never; }) | undefined;
-        PropertyDescription?: string | undefined;
-    } & { [K_3 in Exclude<keyof I, keyof RealEstate>]: never; }>(base?: I | undefined): RealEstate;
+    } & { [K_1 in Exclude<keyof I, keyof RealEstate>]: never; }>(base?: I | undefined): RealEstate;
     fromPartial<I_1 extends {
         Address?: string | undefined;
         Bathrooms?: number | undefined;
@@ -7038,21 +5687,6 @@ export declare const RealEstate: {
         TenancyStatus?: string | undefined;
         YearBuilt?: number | undefined;
         YieldPercent?: number[] | undefined;
-        Floors?: number | undefined;
-        HeightMeters?: number | undefined;
-        Units?: number | undefined;
-        AvailableUnits?: number | undefined;
-        ParkingSpaces?: number | undefined;
-        Elevators?: number | undefined;
-        Classification?: string | undefined;
-        YearRenovated?: number | undefined;
-        LotSize?: number | undefined;
-        ZoningType?: string | undefined;
-        CapRate?: number | undefined;
-        NetOperatingIncome?: number | undefined;
-        KeyHighlights?: string[] | undefined;
-        Amenities?: string[] | undefined;
-        PropertyDescription?: string | undefined;
     } & {
         Address?: string | undefined;
         Bathrooms?: number | undefined;
@@ -7065,23 +5699,8 @@ export declare const RealEstate: {
         SquareFootage?: number | undefined;
         TenancyStatus?: string | undefined;
         YearBuilt?: number | undefined;
-        YieldPercent?: (number[] & number[] & { [K_4 in Exclude<keyof I_1["YieldPercent"], keyof number[]>]: never; }) | undefined;
-        Floors?: number | undefined;
-        HeightMeters?: number | undefined;
-        Units?: number | undefined;
-        AvailableUnits?: number | undefined;
-        ParkingSpaces?: number | undefined;
-        Elevators?: number | undefined;
-        Classification?: string | undefined;
-        YearRenovated?: number | undefined;
-        LotSize?: number | undefined;
-        ZoningType?: string | undefined;
-        CapRate?: number | undefined;
-        NetOperatingIncome?: number | undefined;
-        KeyHighlights?: (string[] & string[] & { [K_5 in Exclude<keyof I_1["KeyHighlights"], keyof string[]>]: never; }) | undefined;
-        Amenities?: (string[] & string[] & { [K_6 in Exclude<keyof I_1["Amenities"], keyof string[]>]: never; }) | undefined;
-        PropertyDescription?: string | undefined;
-    } & { [K_7 in Exclude<keyof I_1, keyof RealEstate>]: never; }>(object: I_1): RealEstate;
+        YieldPercent?: (number[] & number[] & { [K_2 in Exclude<keyof I_1["YieldPercent"], keyof number[]>]: never; }) | undefined;
+    } & { [K_3 in Exclude<keyof I_1, keyof RealEstate>]: never; }>(object: I_1): RealEstate;
 };
 export declare const StableCoin: {
     encode(message: StableCoin, writer?: _m0.Writer): _m0.Writer;
@@ -7290,292 +5909,6 @@ export declare const Vehicle: {
         CurrentOwner?: string | undefined;
         Location?: string | undefined;
     } & { [K_1 in Exclude<keyof I_1, keyof Vehicle>]: never; }>(object: I_1): Vehicle;
-};
-export declare const DecCoin: {
-    encode(message: DecCoin, writer?: _m0.Writer): _m0.Writer;
-    decode(input: _m0.Reader | Uint8Array, length?: number): DecCoin;
-    fromJSON(object: any): DecCoin;
-    toJSON(message: DecCoin): unknown;
-    create<I extends {
-        Denom?: string | undefined;
-        Amount?: string | undefined;
-    } & {
-        Denom?: string | undefined;
-        Amount?: string | undefined;
-    } & { [K in Exclude<keyof I, keyof DecCoin>]: never; }>(base?: I | undefined): DecCoin;
-    fromPartial<I_1 extends {
-        Denom?: string | undefined;
-        Amount?: string | undefined;
-    } & {
-        Denom?: string | undefined;
-        Amount?: string | undefined;
-    } & { [K_1 in Exclude<keyof I_1, keyof DecCoin>]: never; }>(object: I_1): DecCoin;
-};
-export declare const Distribution: {
-    encode(message: Distribution, writer?: _m0.Writer): _m0.Writer;
-    decode(input: _m0.Reader | Uint8Array, length?: number): Distribution;
-    fromJSON(object: any): Distribution;
-    toJSON(message: Distribution): unknown;
-    create<I extends {
-        Type?: DistributionType | undefined;
-        CrowdfundDetails?: {
-            QuantityStep?: string | undefined;
-            PricesPerSubunit?: {
-                Denom?: string | undefined;
-                Amount?: string | undefined;
-            }[] | undefined;
-            SellDenom?: string | undefined;
-            MinAmount?: string | undefined;
-            StartDate?: number | undefined;
-            EndDate?: number | undefined;
-            MinThreshold?: string | undefined;
-            MaxThreshold?: string | undefined;
-            AllowOrderCancellation?: boolean | undefined;
-            ComplianceManagerContractAddr?: string | undefined;
-            OrderHubContractAddr?: string | undefined;
-            CrowdfundContractAddr?: string | undefined;
-            AssetRegistryContractAddr?: string | undefined;
-            AssetExtensionCode?: string | undefined;
-            AssetExtensionContractAddr?: string | undefined;
-        } | undefined;
-        PriceSupplyDetails?: {} | undefined;
-    } & {
-        Type?: DistributionType | undefined;
-        CrowdfundDetails?: ({
-            QuantityStep?: string | undefined;
-            PricesPerSubunit?: {
-                Denom?: string | undefined;
-                Amount?: string | undefined;
-            }[] | undefined;
-            SellDenom?: string | undefined;
-            MinAmount?: string | undefined;
-            StartDate?: number | undefined;
-            EndDate?: number | undefined;
-            MinThreshold?: string | undefined;
-            MaxThreshold?: string | undefined;
-            AllowOrderCancellation?: boolean | undefined;
-            ComplianceManagerContractAddr?: string | undefined;
-            OrderHubContractAddr?: string | undefined;
-            CrowdfundContractAddr?: string | undefined;
-            AssetRegistryContractAddr?: string | undefined;
-            AssetExtensionCode?: string | undefined;
-            AssetExtensionContractAddr?: string | undefined;
-        } & {
-            QuantityStep?: string | undefined;
-            PricesPerSubunit?: ({
-                Denom?: string | undefined;
-                Amount?: string | undefined;
-            }[] & ({
-                Denom?: string | undefined;
-                Amount?: string | undefined;
-            } & {
-                Denom?: string | undefined;
-                Amount?: string | undefined;
-            } & { [K in Exclude<keyof I["CrowdfundDetails"]["PricesPerSubunit"][number], keyof DecCoin>]: never; })[] & { [K_1 in Exclude<keyof I["CrowdfundDetails"]["PricesPerSubunit"], keyof {
-                Denom?: string | undefined;
-                Amount?: string | undefined;
-            }[]>]: never; }) | undefined;
-            SellDenom?: string | undefined;
-            MinAmount?: string | undefined;
-            StartDate?: number | undefined;
-            EndDate?: number | undefined;
-            MinThreshold?: string | undefined;
-            MaxThreshold?: string | undefined;
-            AllowOrderCancellation?: boolean | undefined;
-            ComplianceManagerContractAddr?: string | undefined;
-            OrderHubContractAddr?: string | undefined;
-            CrowdfundContractAddr?: string | undefined;
-            AssetRegistryContractAddr?: string | undefined;
-            AssetExtensionCode?: string | undefined;
-            AssetExtensionContractAddr?: string | undefined;
-        } & { [K_2 in Exclude<keyof I["CrowdfundDetails"], keyof Crowdfund>]: never; }) | undefined;
-        PriceSupplyDetails?: ({} & {} & { [K_3 in Exclude<keyof I["PriceSupplyDetails"], never>]: never; }) | undefined;
-    } & { [K_4 in Exclude<keyof I, keyof Distribution>]: never; }>(base?: I | undefined): Distribution;
-    fromPartial<I_1 extends {
-        Type?: DistributionType | undefined;
-        CrowdfundDetails?: {
-            QuantityStep?: string | undefined;
-            PricesPerSubunit?: {
-                Denom?: string | undefined;
-                Amount?: string | undefined;
-            }[] | undefined;
-            SellDenom?: string | undefined;
-            MinAmount?: string | undefined;
-            StartDate?: number | undefined;
-            EndDate?: number | undefined;
-            MinThreshold?: string | undefined;
-            MaxThreshold?: string | undefined;
-            AllowOrderCancellation?: boolean | undefined;
-            ComplianceManagerContractAddr?: string | undefined;
-            OrderHubContractAddr?: string | undefined;
-            CrowdfundContractAddr?: string | undefined;
-            AssetRegistryContractAddr?: string | undefined;
-            AssetExtensionCode?: string | undefined;
-            AssetExtensionContractAddr?: string | undefined;
-        } | undefined;
-        PriceSupplyDetails?: {} | undefined;
-    } & {
-        Type?: DistributionType | undefined;
-        CrowdfundDetails?: ({
-            QuantityStep?: string | undefined;
-            PricesPerSubunit?: {
-                Denom?: string | undefined;
-                Amount?: string | undefined;
-            }[] | undefined;
-            SellDenom?: string | undefined;
-            MinAmount?: string | undefined;
-            StartDate?: number | undefined;
-            EndDate?: number | undefined;
-            MinThreshold?: string | undefined;
-            MaxThreshold?: string | undefined;
-            AllowOrderCancellation?: boolean | undefined;
-            ComplianceManagerContractAddr?: string | undefined;
-            OrderHubContractAddr?: string | undefined;
-            CrowdfundContractAddr?: string | undefined;
-            AssetRegistryContractAddr?: string | undefined;
-            AssetExtensionCode?: string | undefined;
-            AssetExtensionContractAddr?: string | undefined;
-        } & {
-            QuantityStep?: string | undefined;
-            PricesPerSubunit?: ({
-                Denom?: string | undefined;
-                Amount?: string | undefined;
-            }[] & ({
-                Denom?: string | undefined;
-                Amount?: string | undefined;
-            } & {
-                Denom?: string | undefined;
-                Amount?: string | undefined;
-            } & { [K_5 in Exclude<keyof I_1["CrowdfundDetails"]["PricesPerSubunit"][number], keyof DecCoin>]: never; })[] & { [K_6 in Exclude<keyof I_1["CrowdfundDetails"]["PricesPerSubunit"], keyof {
-                Denom?: string | undefined;
-                Amount?: string | undefined;
-            }[]>]: never; }) | undefined;
-            SellDenom?: string | undefined;
-            MinAmount?: string | undefined;
-            StartDate?: number | undefined;
-            EndDate?: number | undefined;
-            MinThreshold?: string | undefined;
-            MaxThreshold?: string | undefined;
-            AllowOrderCancellation?: boolean | undefined;
-            ComplianceManagerContractAddr?: string | undefined;
-            OrderHubContractAddr?: string | undefined;
-            CrowdfundContractAddr?: string | undefined;
-            AssetRegistryContractAddr?: string | undefined;
-            AssetExtensionCode?: string | undefined;
-            AssetExtensionContractAddr?: string | undefined;
-        } & { [K_7 in Exclude<keyof I_1["CrowdfundDetails"], keyof Crowdfund>]: never; }) | undefined;
-        PriceSupplyDetails?: ({} & {} & { [K_8 in Exclude<keyof I_1["PriceSupplyDetails"], never>]: never; }) | undefined;
-    } & { [K_9 in Exclude<keyof I_1, keyof Distribution>]: never; }>(object: I_1): Distribution;
-};
-export declare const PriceSupply: {
-    encode(_: PriceSupply, writer?: _m0.Writer): _m0.Writer;
-    decode(input: _m0.Reader | Uint8Array, length?: number): PriceSupply;
-    fromJSON(_: any): PriceSupply;
-    toJSON(_: PriceSupply): unknown;
-    create<I extends {} & {} & { [K in Exclude<keyof I, never>]: never; }>(base?: I | undefined): PriceSupply;
-    fromPartial<I_1 extends {} & {} & { [K_1 in Exclude<keyof I_1, never>]: never; }>(_: I_1): PriceSupply;
-};
-export declare const Crowdfund: {
-    encode(message: Crowdfund, writer?: _m0.Writer): _m0.Writer;
-    decode(input: _m0.Reader | Uint8Array, length?: number): Crowdfund;
-    fromJSON(object: any): Crowdfund;
-    toJSON(message: Crowdfund): unknown;
-    create<I extends {
-        QuantityStep?: string | undefined;
-        PricesPerSubunit?: {
-            Denom?: string | undefined;
-            Amount?: string | undefined;
-        }[] | undefined;
-        SellDenom?: string | undefined;
-        MinAmount?: string | undefined;
-        StartDate?: number | undefined;
-        EndDate?: number | undefined;
-        MinThreshold?: string | undefined;
-        MaxThreshold?: string | undefined;
-        AllowOrderCancellation?: boolean | undefined;
-        ComplianceManagerContractAddr?: string | undefined;
-        OrderHubContractAddr?: string | undefined;
-        CrowdfundContractAddr?: string | undefined;
-        AssetRegistryContractAddr?: string | undefined;
-        AssetExtensionCode?: string | undefined;
-        AssetExtensionContractAddr?: string | undefined;
-    } & {
-        QuantityStep?: string | undefined;
-        PricesPerSubunit?: ({
-            Denom?: string | undefined;
-            Amount?: string | undefined;
-        }[] & ({
-            Denom?: string | undefined;
-            Amount?: string | undefined;
-        } & {
-            Denom?: string | undefined;
-            Amount?: string | undefined;
-        } & { [K in Exclude<keyof I["PricesPerSubunit"][number], keyof DecCoin>]: never; })[] & { [K_1 in Exclude<keyof I["PricesPerSubunit"], keyof {
-            Denom?: string | undefined;
-            Amount?: string | undefined;
-        }[]>]: never; }) | undefined;
-        SellDenom?: string | undefined;
-        MinAmount?: string | undefined;
-        StartDate?: number | undefined;
-        EndDate?: number | undefined;
-        MinThreshold?: string | undefined;
-        MaxThreshold?: string | undefined;
-        AllowOrderCancellation?: boolean | undefined;
-        ComplianceManagerContractAddr?: string | undefined;
-        OrderHubContractAddr?: string | undefined;
-        CrowdfundContractAddr?: string | undefined;
-        AssetRegistryContractAddr?: string | undefined;
-        AssetExtensionCode?: string | undefined;
-        AssetExtensionContractAddr?: string | undefined;
-    } & { [K_2 in Exclude<keyof I, keyof Crowdfund>]: never; }>(base?: I | undefined): Crowdfund;
-    fromPartial<I_1 extends {
-        QuantityStep?: string | undefined;
-        PricesPerSubunit?: {
-            Denom?: string | undefined;
-            Amount?: string | undefined;
-        }[] | undefined;
-        SellDenom?: string | undefined;
-        MinAmount?: string | undefined;
-        StartDate?: number | undefined;
-        EndDate?: number | undefined;
-        MinThreshold?: string | undefined;
-        MaxThreshold?: string | undefined;
-        AllowOrderCancellation?: boolean | undefined;
-        ComplianceManagerContractAddr?: string | undefined;
-        OrderHubContractAddr?: string | undefined;
-        CrowdfundContractAddr?: string | undefined;
-        AssetRegistryContractAddr?: string | undefined;
-        AssetExtensionCode?: string | undefined;
-        AssetExtensionContractAddr?: string | undefined;
-    } & {
-        QuantityStep?: string | undefined;
-        PricesPerSubunit?: ({
-            Denom?: string | undefined;
-            Amount?: string | undefined;
-        }[] & ({
-            Denom?: string | undefined;
-            Amount?: string | undefined;
-        } & {
-            Denom?: string | undefined;
-            Amount?: string | undefined;
-        } & { [K_3 in Exclude<keyof I_1["PricesPerSubunit"][number], keyof DecCoin>]: never; })[] & { [K_4 in Exclude<keyof I_1["PricesPerSubunit"], keyof {
-            Denom?: string | undefined;
-            Amount?: string | undefined;
-        }[]>]: never; }) | undefined;
-        SellDenom?: string | undefined;
-        MinAmount?: string | undefined;
-        StartDate?: number | undefined;
-        EndDate?: number | undefined;
-        MinThreshold?: string | undefined;
-        MaxThreshold?: string | undefined;
-        AllowOrderCancellation?: boolean | undefined;
-        ComplianceManagerContractAddr?: string | undefined;
-        OrderHubContractAddr?: string | undefined;
-        CrowdfundContractAddr?: string | undefined;
-        AssetRegistryContractAddr?: string | undefined;
-        AssetExtensionCode?: string | undefined;
-        AssetExtensionContractAddr?: string | undefined;
-    } & { [K_5 in Exclude<keyof I_1, keyof Crowdfund>]: never; }>(object: I_1): Crowdfund;
 };
 export declare const IntellectualProperty: {
     encode(message: IntellectualProperty, writer?: _m0.Writer): _m0.Writer;

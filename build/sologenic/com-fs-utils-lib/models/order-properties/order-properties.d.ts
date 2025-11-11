@@ -51,6 +51,14 @@ export declare enum ProcessState {
 }
 export declare function processStateFromJSON(object: any): ProcessState;
 export declare function processStateToJSON(object: ProcessState): string;
+export declare enum ClearingBroker {
+    NOT_USED_CLEARING_BROKER = 0,
+    ALPACA = 1,
+    RQD = 2,
+    UNRECOGNIZED = -1
+}
+export declare function clearingBrokerFromJSON(object: any): ClearingBroker;
+export declare function clearingBrokerToJSON(object: ClearingBroker): string;
 export interface ProcessInfo {
     ProcessState: ProcessState;
     ProcessedAt: Date | undefined;

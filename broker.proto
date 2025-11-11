@@ -60,7 +60,7 @@ message BrokerOrderDetails {
 
     optional string InstanceID = 32; // ID used by logs to identify the instance where the log was created/ processed
 
-    ClearingBroker ClearingBroker = 33; // Broker that cleared the order, e.g. Alpaca, RQD, etc.
+    orderproperties.ClearingBroker ClearingBroker = 33; // Broker that cleared the order, e.g. Alpaca, RQD, etc.
     
     // SSE Event tracking fields for precise event recovery using since_id parameter
     // Enables seamless subscription from past point-in-time to real-time pushes
@@ -70,12 +70,6 @@ message BrokerOrderDetails {
     
     // Broker API specific commission
     optional commission.CommissionSettings CommissionSettings = 38;
-}
-
-enum ClearingBroker {
-    NOT_USED_CLEARING_BROKER = 0;
-    ALPACA = 1;
-    RQD = 2;
 }
 
 message ClientOrderID {

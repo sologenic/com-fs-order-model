@@ -338,7 +338,7 @@ export declare const Order: {
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
-            ClearingBroker?: import("./broker").ClearingBroker | undefined;
+            ClearingBroker?: import("./sologenic/com-fs-utils-lib/models/order-properties/order-properties").ClearingBroker | undefined;
             EventID?: string | undefined;
             EventTime?: Date | undefined;
             CommissionSettings?: {
@@ -536,7 +536,7 @@ export declare const Order: {
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
-            ClearingBroker?: import("./broker").ClearingBroker | undefined;
+            ClearingBroker?: import("./sologenic/com-fs-utils-lib/models/order-properties/order-properties").ClearingBroker | undefined;
             EventID?: string | undefined;
             EventTime?: Date | undefined;
             CommissionSettings?: {
@@ -665,7 +665,7 @@ export declare const Order: {
                 ProcessedAt?: Date | undefined;
             } & { [K_18 in Exclude<keyof I["BrokerOrderDetails"]["ProcessInfo"], keyof ProcessInfo>]: never; }) | undefined;
             InstanceID?: string | undefined;
-            ClearingBroker?: import("./broker").ClearingBroker | undefined;
+            ClearingBroker?: import("./sologenic/com-fs-utils-lib/models/order-properties/order-properties").ClearingBroker | undefined;
             EventID?: string | undefined;
             EventTime?: Date | undefined;
             CommissionSettings?: ({
@@ -825,7 +825,7 @@ export declare const Order: {
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
-            ClearingBroker?: import("./broker").ClearingBroker | undefined;
+            ClearingBroker?: import("./sologenic/com-fs-utils-lib/models/order-properties/order-properties").ClearingBroker | undefined;
             EventID?: string | undefined;
             EventTime?: Date | undefined;
             CommissionSettings?: {
@@ -1023,7 +1023,7 @@ export declare const Order: {
                 ProcessedAt?: Date | undefined;
             } | undefined;
             InstanceID?: string | undefined;
-            ClearingBroker?: import("./broker").ClearingBroker | undefined;
+            ClearingBroker?: import("./sologenic/com-fs-utils-lib/models/order-properties/order-properties").ClearingBroker | undefined;
             EventID?: string | undefined;
             EventTime?: Date | undefined;
             CommissionSettings?: {
@@ -1152,7 +1152,7 @@ export declare const Order: {
                 ProcessedAt?: Date | undefined;
             } & { [K_42 in Exclude<keyof I_1["BrokerOrderDetails"]["ProcessInfo"], keyof ProcessInfo>]: never; }) | undefined;
             InstanceID?: string | undefined;
-            ClearingBroker?: import("./broker").ClearingBroker | undefined;
+            ClearingBroker?: import("./sologenic/com-fs-utils-lib/models/order-properties/order-properties").ClearingBroker | undefined;
             EventID?: string | undefined;
             EventTime?: Date | undefined;
             CommissionSettings?: ({
@@ -1505,7 +1505,7 @@ export declare const Orders: {
                     ProcessedAt?: Date | undefined;
                 } | undefined;
                 InstanceID?: string | undefined;
-                ClearingBroker?: import("./broker").ClearingBroker | undefined;
+                ClearingBroker?: import("./sologenic/com-fs-utils-lib/models/order-properties/order-properties").ClearingBroker | undefined;
                 EventID?: string | undefined;
                 EventTime?: Date | undefined;
                 CommissionSettings?: {
@@ -1655,7 +1655,7 @@ export declare const Orders: {
                     ProcessedAt?: Date | undefined;
                 } | undefined;
                 InstanceID?: string | undefined;
-                ClearingBroker?: import("./broker").ClearingBroker | undefined;
+                ClearingBroker?: import("./sologenic/com-fs-utils-lib/models/order-properties/order-properties").ClearingBroker | undefined;
                 EventID?: string | undefined;
                 EventTime?: Date | undefined;
                 CommissionSettings?: {
@@ -1802,7 +1802,7 @@ export declare const Orders: {
                     ProcessedAt?: Date | undefined;
                 } | undefined;
                 InstanceID?: string | undefined;
-                ClearingBroker?: import("./broker").ClearingBroker | undefined;
+                ClearingBroker?: import("./sologenic/com-fs-utils-lib/models/order-properties/order-properties").ClearingBroker | undefined;
                 EventID?: string | undefined;
                 EventTime?: Date | undefined;
                 CommissionSettings?: {
@@ -2000,7 +2000,7 @@ export declare const Orders: {
                     ProcessedAt?: Date | undefined;
                 } | undefined;
                 InstanceID?: string | undefined;
-                ClearingBroker?: import("./broker").ClearingBroker | undefined;
+                ClearingBroker?: import("./sologenic/com-fs-utils-lib/models/order-properties/order-properties").ClearingBroker | undefined;
                 EventID?: string | undefined;
                 EventTime?: Date | undefined;
                 CommissionSettings?: {
@@ -2129,7 +2129,7 @@ export declare const Orders: {
                     ProcessedAt?: Date | undefined;
                 } & { [K_18 in Exclude<keyof I["Orders"][number]["BrokerOrderDetails"]["ProcessInfo"], keyof ProcessInfo>]: never; }) | undefined;
                 InstanceID?: string | undefined;
-                ClearingBroker?: import("./broker").ClearingBroker | undefined;
+                ClearingBroker?: import("./sologenic/com-fs-utils-lib/models/order-properties/order-properties").ClearingBroker | undefined;
                 EventID?: string | undefined;
                 EventTime?: Date | undefined;
                 CommissionSettings?: ({
@@ -2288,7 +2288,7 @@ export declare const Orders: {
                     ProcessedAt?: Date | undefined;
                 } | undefined;
                 InstanceID?: string | undefined;
-                ClearingBroker?: import("./broker").ClearingBroker | undefined;
+                ClearingBroker?: import("./sologenic/com-fs-utils-lib/models/order-properties/order-properties").ClearingBroker | undefined;
                 EventID?: string | undefined;
                 EventTime?: Date | undefined;
                 CommissionSettings?: {
@@ -2439,7 +2439,7 @@ export declare const Orders: {
                     ProcessedAt?: Date | undefined;
                 } | undefined;
                 InstanceID?: string | undefined;
-                ClearingBroker?: import("./broker").ClearingBroker | undefined;
+                ClearingBroker?: import("./sologenic/com-fs-utils-lib/models/order-properties/order-properties").ClearingBroker | undefined;
                 EventID?: string | undefined;
                 EventTime?: Date | undefined;
                 CommissionSettings?: {
@@ -2589,7 +2589,7 @@ export declare const Orders: {
                     ProcessedAt?: Date | undefined;
                 } | undefined;
                 InstanceID?: string | undefined;
-                ClearingBroker?: import("./broker").ClearingBroker | undefined;
+                ClearingBroker?: import("./sologenic/com-fs-utils-lib/models/order-properties/order-properties").ClearingBroker | undefined;
                 EventID?: string | undefined;
                 EventTime?: Date | undefined;
                 CommissionSettings?: {
@@ -2736,7 +2736,7 @@ export declare const Orders: {
                     ProcessedAt?: Date | undefined;
                 } | undefined;
                 InstanceID?: string | undefined;
-                ClearingBroker?: import("./broker").ClearingBroker | undefined;
+                ClearingBroker?: import("./sologenic/com-fs-utils-lib/models/order-properties/order-properties").ClearingBroker | undefined;
                 EventID?: string | undefined;
                 EventTime?: Date | undefined;
                 CommissionSettings?: {
@@ -2934,7 +2934,7 @@ export declare const Orders: {
                     ProcessedAt?: Date | undefined;
                 } | undefined;
                 InstanceID?: string | undefined;
-                ClearingBroker?: import("./broker").ClearingBroker | undefined;
+                ClearingBroker?: import("./sologenic/com-fs-utils-lib/models/order-properties/order-properties").ClearingBroker | undefined;
                 EventID?: string | undefined;
                 EventTime?: Date | undefined;
                 CommissionSettings?: {
@@ -3063,7 +3063,7 @@ export declare const Orders: {
                     ProcessedAt?: Date | undefined;
                 } & { [K_44 in Exclude<keyof I_1["Orders"][number]["BrokerOrderDetails"]["ProcessInfo"], keyof ProcessInfo>]: never; }) | undefined;
                 InstanceID?: string | undefined;
-                ClearingBroker?: import("./broker").ClearingBroker | undefined;
+                ClearingBroker?: import("./sologenic/com-fs-utils-lib/models/order-properties/order-properties").ClearingBroker | undefined;
                 EventID?: string | undefined;
                 EventTime?: Date | undefined;
                 CommissionSettings?: ({
@@ -3222,7 +3222,7 @@ export declare const Orders: {
                     ProcessedAt?: Date | undefined;
                 } | undefined;
                 InstanceID?: string | undefined;
-                ClearingBroker?: import("./broker").ClearingBroker | undefined;
+                ClearingBroker?: import("./sologenic/com-fs-utils-lib/models/order-properties/order-properties").ClearingBroker | undefined;
                 EventID?: string | undefined;
                 EventTime?: Date | undefined;
                 CommissionSettings?: {
