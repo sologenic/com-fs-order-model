@@ -165,6 +165,9 @@ enum InternalOrderState {
     SMART_CONTRACT_PRE_ORDER_CANCELLED = 17;
     SMART_CONTRACT_ORDER_CANCELLED = 18; // order has been cancelled in the smart contract, OrderState in SC: `cancelled`
 
+    SMART_CONTRACT_PRE_ORDER_EXPIRED = 21;
+    SMART_CONTRACT_ORDER_EXPIRED = 22; // order has expired in the smart contract, OrderState in SC: `expired`
+
     PROCESS_FINISHED = 19; // order has been processed and finished
     
     // Alternative scenarios

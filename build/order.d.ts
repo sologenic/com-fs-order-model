@@ -88,6 +88,9 @@ export declare enum InternalOrderState {
     SMART_CONTRACT_PRE_ORDER_CANCELLED = 17,
     /** SMART_CONTRACT_ORDER_CANCELLED - order has been cancelled in the smart contract, OrderState in SC: `cancelled` */
     SMART_CONTRACT_ORDER_CANCELLED = 18,
+    SMART_CONTRACT_PRE_ORDER_EXPIRED = 21,
+    /** SMART_CONTRACT_ORDER_EXPIRED - order has expired in the smart contract, OrderState in SC: `expired` */
+    SMART_CONTRACT_ORDER_EXPIRED = 22,
     /** PROCESS_FINISHED - order has been processed and finished */
     PROCESS_FINISHED = 19,
     /** SMART_CONTRACT_CANCEL_ORDER_REQUESTED - Alternative scenarios */
