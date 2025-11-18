@@ -7,13 +7,13 @@ require (
 	github.com/google/go-cmp v0.7.0
 	github.com/samber/lo v1.51.0
 	github.com/shopspring/decimal v1.4.0
-	github.com/sologenic/com-fs-asset-model v0.0.0-20250923172806-23e0eb1f12a8
-	github.com/sologenic/com-fs-utils-lib/go/decimal v0.0.0-20250915133913-34ed554e333f
-	github.com/sologenic/com-fs-utils-lib/go/grpc-client v0.0.0-20241030223317-5bff63a9ee29
-	github.com/sologenic/com-fs-utils-lib/go/logger v0.0.0-20240906214824-8118c42c5b35
-	github.com/sologenic/com-fs-utils-lib/go/unittest v0.0.0-20250131210530-7306ae3e5762
-	github.com/sologenic/com-fs-utils-lib/models/commission v0.0.0-20250917193130-a63d775c7b6d
-	github.com/sologenic/com-fs-utils-lib/models/metadata v0.0.0-20250917193130-a63d775c7b6d
+	github.com/sologenic/com-fs-asset-model v0.0.0-20251021201834-36ccc38df721
+	github.com/sologenic/com-fs-utils-lib/go/decimal v0.0.0-20251111001333-8b6aaa65fd84
+	github.com/sologenic/com-fs-utils-lib/go/grpc-client v0.0.0-20251111001333-8b6aaa65fd84
+	github.com/sologenic/com-fs-utils-lib/go/logger v0.0.0-20251111001333-8b6aaa65fd84
+	github.com/sologenic/com-fs-utils-lib/go/unittest v0.0.0-20251111001333-8b6aaa65fd84
+	github.com/sologenic/com-fs-utils-lib/models/commission v0.0.0-20251111001333-8b6aaa65fd84
+	github.com/sologenic/com-fs-utils-lib/models/metadata v0.0.0-20251111001333-8b6aaa65fd84
 	github.com/sologenic/com-fs-utils-lib/models/order-properties v0.0.0-20251111001333-8b6aaa65fd84
 	github.com/stretchr/testify v1.11.1
 	google.golang.org/grpc v1.75.1

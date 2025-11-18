@@ -3,20 +3,38 @@ import { BrokerOrderDetails } from "./broker";
 import { Network } from "./sologenic/com-fs-utils-lib/models/metadata/metadata";
 import { OrderType, ProcessInfo, TimeInForce } from "./sologenic/com-fs-utils-lib/models/order-properties/order-properties";
 export declare const protobufPackage = "order";
-/** Execution type(action) of the transaction against the smart contract */
+/** Execution type(action) of the transactions */
 export declare enum TransactionType {
     NOT_USED_TRANSACTION_TYPE = 0,
+    /** PURCHASE - Specific type used for marking generic purchase orders, and for stock tokenization smart contract orders */
     PURCHASE = 1,
+    /** SELL - Specific type used for marking generic sell orders, and for stock tokenization smart contract orders */
     SELL = 2,
+    /** REQUEST_ORDER_CANCEL - Specific type used for marking generic request order cancel orders, and for stock tokenization smart contract orders */
     REQUEST_ORDER_CANCEL = 3,
+    /** EXECUTE_ORDER - DEPRECATED */
     EXECUTE_ORDER = 4,
+    /** PAY_ORDER - DEPRECATED */
     PAY_ORDER = 5,
+    /** REQUEST_REATTESTATION - DEPRECATED */
     REQUEST_REATTESTATION = 6,
     /** DEPOSIT - Added for withdraw/deposit orders */
     DEPOSIT = 7,
     WITHDRAWAL = 8,
-    /** USDC_USD_CONVERSION - Conversion of USDC to USD for deposit/withdrawal orders */
+    /** USDC_USD_CONVERSION - Conversion of USDC to USD for deposit/withdrawal orders (by Alpaca) */
     USDC_USD_CONVERSION = 9,
+    /** CROWDFUND_PURCHASE - Crowdfund transactions */
+    CROWDFUND_PURCHASE = 20,
+    /** CROWDFUND_BUYBACK - Buyback of a crowdfund */
+    CROWDFUND_BUYBACK = 21,
+    /** CROWDFUND_CANCEL - Cancel of a crowdfund */
+    CROWDFUND_CANCEL = 22,
+    /** CROWDFUND_DISTRIBUTION - Distribution of a crowdfund */
+    CROWDFUND_DISTRIBUTION = 23,
+    /** TOKEN_SALE_PURCHASE - Token-sale (e.g. price-supply) smart contract */
+    TOKEN_SALE_PURCHASE = 30,
+    /** TOKEN_SALE_BUYBACK - Buyback of a token-sale */
+    TOKEN_SALE_BUYBACK = 31,
     UNRECOGNIZED = -1
 }
 export declare function transactionTypeFromJSON(object: any): TransactionType;

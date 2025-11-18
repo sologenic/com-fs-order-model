@@ -40,19 +40,31 @@ message Order {
     string UserID = 19;
 }
 
-// Execution type(action) of the transaction against the smart contract
+// Execution type(action) of the transactions
 enum TransactionType {
     NOT_USED_TRANSACTION_TYPE = 0;
-    PURCHASE = 1;
-    SELL = 2;
-    REQUEST_ORDER_CANCEL = 3;   
-    EXECUTE_ORDER = 4;
-    PAY_ORDER = 5;
-    REQUEST_REATTESTATION = 6;
-    //Added for withdraw/deposit orders
+    PURCHASE = 1; // Specific type used for marking generic purchase orders, and for stock tokenization smart contract orders
+    SELL = 2; // Specific type used for marking generic sell orders, and for stock tokenization smart contract orders
+    REQUEST_ORDER_CANCEL = 3; // Specific type used for marking generic request order cancel orders, and for stock tokenization smart contract orders
+    EXECUTE_ORDER = 4; // DEPRECATED
+    PAY_ORDER = 5; // DEPRECATED
+    REQUEST_REATTESTATION = 6; // DEPRECATED
+    // Added for withdraw/deposit orders
     DEPOSIT = 7;
-    WITHDRAWAL = 8; 
-    USDC_USD_CONVERSION = 9; // Conversion of USDC to USD for deposit/withdrawal orders
+    WITHDRAWAL = 8;
+    USDC_USD_CONVERSION = 9; // Conversion of USDC to USD for deposit/withdrawal orders (by Alpaca)
+
+    // Crowdfund transactions
+    CROWDFUND_PURCHASE = 20; // Purchase of a crowdfund tokens
+    CROWDFUND_BUYBACK = 21; // Buyback of a crowdfund
+    CROWDFUND_CANCEL = 22; // Cancel of a crowdfund
+    CROWDFUND_DISTRIBUTION = 23; // Distribution of a crowdfund
+
+    // Token-sale (e.g. price-supply) smart contract
+    TOKEN_SALE_PURCHASE = 30; // Purchase of a token-sale tokens
+    TOKEN_SALE_BUYBACK = 31; // Buyback of a token-sale
+
+    // Admin style transaction for Crowdfund and token-sale (TODO)
 }
 
 // Same structure as Order in the Smart Contract
@@ -193,3 +205,4 @@ enum ReceiverType {
     ETHEREUM = 2;
     SOLANA = 3;
 }
+
