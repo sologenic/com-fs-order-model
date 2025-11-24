@@ -14,7 +14,7 @@ export var DistributionType;
 (function (DistributionType) {
     DistributionType[DistributionType["DISTRIBUTION_TYPE_DO_NOT_USE"] = 0] = "DISTRIBUTION_TYPE_DO_NOT_USE";
     DistributionType[DistributionType["DISTRIBUTION_TYPE_CROWDFUND"] = 1] = "DISTRIBUTION_TYPE_CROWDFUND";
-    DistributionType[DistributionType["DISTRIBUTION_TYPE_PRICESUPPLY"] = 2] = "DISTRIBUTION_TYPE_PRICESUPPLY";
+    DistributionType[DistributionType["DISTRIBUTION_TYPE_TOKENSALE"] = 2] = "DISTRIBUTION_TYPE_TOKENSALE";
     DistributionType[DistributionType["UNRECOGNIZED"] = -1] = "UNRECOGNIZED";
 })(DistributionType || (DistributionType = {}));
 export function distributionTypeFromJSON(object) {
@@ -26,8 +26,8 @@ export function distributionTypeFromJSON(object) {
         case "DISTRIBUTION_TYPE_CROWDFUND":
             return DistributionType.DISTRIBUTION_TYPE_CROWDFUND;
         case 2:
-        case "DISTRIBUTION_TYPE_PRICESUPPLY":
-            return DistributionType.DISTRIBUTION_TYPE_PRICESUPPLY;
+        case "DISTRIBUTION_TYPE_TOKENSALE":
+            return DistributionType.DISTRIBUTION_TYPE_TOKENSALE;
         case -1:
         case "UNRECOGNIZED":
         default:
@@ -40,8 +40,8 @@ export function distributionTypeToJSON(object) {
             return "DISTRIBUTION_TYPE_DO_NOT_USE";
         case DistributionType.DISTRIBUTION_TYPE_CROWDFUND:
             return "DISTRIBUTION_TYPE_CROWDFUND";
-        case DistributionType.DISTRIBUTION_TYPE_PRICESUPPLY:
-            return "DISTRIBUTION_TYPE_PRICESUPPLY";
+        case DistributionType.DISTRIBUTION_TYPE_TOKENSALE:
+            return "DISTRIBUTION_TYPE_TOKENSALE";
         case DistributionType.UNRECOGNIZED:
         default:
             return "UNRECOGNIZED";
@@ -2446,7 +2446,7 @@ export const DecCoin = {
     },
 };
 function createBaseDistribution() {
-    return { Type: 0, CrowdfundDetails: undefined, PriceSupplyDetails: undefined };
+    return { Type: 0, CrowdfundDetails: undefined, TokenSaleDetails: undefined };
 }
 export const Distribution = {
     encode(message, writer = _m0.Writer.create()) {
@@ -2456,8 +2456,8 @@ export const Distribution = {
         if (message.CrowdfundDetails !== undefined) {
             Crowdfund.encode(message.CrowdfundDetails, writer.uint32(18).fork()).ldelim();
         }
-        if (message.PriceSupplyDetails !== undefined) {
-            PriceSupply.encode(message.PriceSupplyDetails, writer.uint32(26).fork()).ldelim();
+        if (message.TokenSaleDetails !== undefined) {
+            TokenSale.encode(message.TokenSaleDetails, writer.uint32(26).fork()).ldelim();
         }
         return writer;
     },
@@ -2484,7 +2484,7 @@ export const Distribution = {
                     if (tag !== 26) {
                         break;
                     }
-                    message.PriceSupplyDetails = PriceSupply.decode(reader, reader.uint32());
+                    message.TokenSaleDetails = TokenSale.decode(reader, reader.uint32());
                     continue;
             }
             if ((tag & 7) === 4 || tag === 0) {
@@ -2498,9 +2498,7 @@ export const Distribution = {
         return {
             Type: isSet(object.Type) ? distributionTypeFromJSON(object.Type) : 0,
             CrowdfundDetails: isSet(object.CrowdfundDetails) ? Crowdfund.fromJSON(object.CrowdfundDetails) : undefined,
-            PriceSupplyDetails: isSet(object.PriceSupplyDetails)
-                ? PriceSupply.fromJSON(object.PriceSupplyDetails)
-                : undefined,
+            TokenSaleDetails: isSet(object.TokenSaleDetails) ? TokenSale.fromJSON(object.TokenSaleDetails) : undefined,
         };
     },
     toJSON(message) {
@@ -2511,8 +2509,8 @@ export const Distribution = {
         if (message.CrowdfundDetails !== undefined) {
             obj.CrowdfundDetails = Crowdfund.toJSON(message.CrowdfundDetails);
         }
-        if (message.PriceSupplyDetails !== undefined) {
-            obj.PriceSupplyDetails = PriceSupply.toJSON(message.PriceSupplyDetails);
+        if (message.TokenSaleDetails !== undefined) {
+            obj.TokenSaleDetails = TokenSale.toJSON(message.TokenSaleDetails);
         }
         return obj;
     },
@@ -2526,26 +2524,157 @@ export const Distribution = {
         message.CrowdfundDetails = (object.CrowdfundDetails !== undefined && object.CrowdfundDetails !== null)
             ? Crowdfund.fromPartial(object.CrowdfundDetails)
             : undefined;
-        message.PriceSupplyDetails = (object.PriceSupplyDetails !== undefined && object.PriceSupplyDetails !== null)
-            ? PriceSupply.fromPartial(object.PriceSupplyDetails)
+        message.TokenSaleDetails = (object.TokenSaleDetails !== undefined && object.TokenSaleDetails !== null)
+            ? TokenSale.fromPartial(object.TokenSaleDetails)
             : undefined;
         return message;
     },
 };
-function createBasePriceSupply() {
-    return {};
+function createBaseTokenSale() {
+    return {
+        QuantityStep: "",
+        SellPricesPerSubunit: [],
+        BaseDenom: "",
+        MinAmount: "",
+        StartDate: 0,
+        EndDate: 0,
+        ComplianceManagerContractAddr: "",
+        BuyPricesPerSubunit: [],
+        AssetRegistryContractAddr: "",
+        AssetExtensionCode: "",
+        AssetExtensionContractAddr: undefined,
+        OrderHubContractAddr: "",
+        TokenSaleContractAddr: undefined,
+    };
 }
-export const PriceSupply = {
-    encode(_, writer = _m0.Writer.create()) {
+export const TokenSale = {
+    encode(message, writer = _m0.Writer.create()) {
+        if (message.QuantityStep !== "") {
+            writer.uint32(10).string(message.QuantityStep);
+        }
+        for (const v of message.SellPricesPerSubunit) {
+            DecCoin.encode(v, writer.uint32(18).fork()).ldelim();
+        }
+        if (message.BaseDenom !== "") {
+            writer.uint32(26).string(message.BaseDenom);
+        }
+        if (message.MinAmount !== "") {
+            writer.uint32(34).string(message.MinAmount);
+        }
+        if (message.StartDate !== 0) {
+            writer.uint32(40).int64(message.StartDate);
+        }
+        if (message.EndDate !== 0) {
+            writer.uint32(48).int64(message.EndDate);
+        }
+        if (message.ComplianceManagerContractAddr !== "") {
+            writer.uint32(58).string(message.ComplianceManagerContractAddr);
+        }
+        for (const v of message.BuyPricesPerSubunit) {
+            DecCoin.encode(v, writer.uint32(66).fork()).ldelim();
+        }
+        if (message.AssetRegistryContractAddr !== "") {
+            writer.uint32(74).string(message.AssetRegistryContractAddr);
+        }
+        if (message.AssetExtensionCode !== "") {
+            writer.uint32(82).string(message.AssetExtensionCode);
+        }
+        if (message.AssetExtensionContractAddr !== undefined) {
+            writer.uint32(90).string(message.AssetExtensionContractAddr);
+        }
+        if (message.OrderHubContractAddr !== "") {
+            writer.uint32(98).string(message.OrderHubContractAddr);
+        }
+        if (message.TokenSaleContractAddr !== undefined) {
+            writer.uint32(106).string(message.TokenSaleContractAddr);
+        }
         return writer;
     },
     decode(input, length) {
         const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
         let end = length === undefined ? reader.len : reader.pos + length;
-        const message = createBasePriceSupply();
+        const message = createBaseTokenSale();
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
+                case 1:
+                    if (tag !== 10) {
+                        break;
+                    }
+                    message.QuantityStep = reader.string();
+                    continue;
+                case 2:
+                    if (tag !== 18) {
+                        break;
+                    }
+                    message.SellPricesPerSubunit.push(DecCoin.decode(reader, reader.uint32()));
+                    continue;
+                case 3:
+                    if (tag !== 26) {
+                        break;
+                    }
+                    message.BaseDenom = reader.string();
+                    continue;
+                case 4:
+                    if (tag !== 34) {
+                        break;
+                    }
+                    message.MinAmount = reader.string();
+                    continue;
+                case 5:
+                    if (tag !== 40) {
+                        break;
+                    }
+                    message.StartDate = longToNumber(reader.int64());
+                    continue;
+                case 6:
+                    if (tag !== 48) {
+                        break;
+                    }
+                    message.EndDate = longToNumber(reader.int64());
+                    continue;
+                case 7:
+                    if (tag !== 58) {
+                        break;
+                    }
+                    message.ComplianceManagerContractAddr = reader.string();
+                    continue;
+                case 8:
+                    if (tag !== 66) {
+                        break;
+                    }
+                    message.BuyPricesPerSubunit.push(DecCoin.decode(reader, reader.uint32()));
+                    continue;
+                case 9:
+                    if (tag !== 74) {
+                        break;
+                    }
+                    message.AssetRegistryContractAddr = reader.string();
+                    continue;
+                case 10:
+                    if (tag !== 82) {
+                        break;
+                    }
+                    message.AssetExtensionCode = reader.string();
+                    continue;
+                case 11:
+                    if (tag !== 90) {
+                        break;
+                    }
+                    message.AssetExtensionContractAddr = reader.string();
+                    continue;
+                case 12:
+                    if (tag !== 98) {
+                        break;
+                    }
+                    message.OrderHubContractAddr = reader.string();
+                    continue;
+                case 13:
+                    if (tag !== 106) {
+                        break;
+                    }
+                    message.TokenSaleContractAddr = reader.string();
+                    continue;
             }
             if ((tag & 7) === 4 || tag === 0) {
                 break;
@@ -2554,18 +2683,98 @@ export const PriceSupply = {
         }
         return message;
     },
-    fromJSON(_) {
-        return {};
+    fromJSON(object) {
+        return {
+            QuantityStep: isSet(object.QuantityStep) ? globalThis.String(object.QuantityStep) : "",
+            SellPricesPerSubunit: globalThis.Array.isArray(object === null || object === void 0 ? void 0 : object.SellPricesPerSubunit)
+                ? object.SellPricesPerSubunit.map((e) => DecCoin.fromJSON(e))
+                : [],
+            BaseDenom: isSet(object.BaseDenom) ? globalThis.String(object.BaseDenom) : "",
+            MinAmount: isSet(object.MinAmount) ? globalThis.String(object.MinAmount) : "",
+            StartDate: isSet(object.StartDate) ? globalThis.Number(object.StartDate) : 0,
+            EndDate: isSet(object.EndDate) ? globalThis.Number(object.EndDate) : 0,
+            ComplianceManagerContractAddr: isSet(object.ComplianceManagerContractAddr)
+                ? globalThis.String(object.ComplianceManagerContractAddr)
+                : "",
+            BuyPricesPerSubunit: globalThis.Array.isArray(object === null || object === void 0 ? void 0 : object.BuyPricesPerSubunit)
+                ? object.BuyPricesPerSubunit.map((e) => DecCoin.fromJSON(e))
+                : [],
+            AssetRegistryContractAddr: isSet(object.AssetRegistryContractAddr)
+                ? globalThis.String(object.AssetRegistryContractAddr)
+                : "",
+            AssetExtensionCode: isSet(object.AssetExtensionCode) ? globalThis.String(object.AssetExtensionCode) : "",
+            AssetExtensionContractAddr: isSet(object.AssetExtensionContractAddr)
+                ? globalThis.String(object.AssetExtensionContractAddr)
+                : undefined,
+            OrderHubContractAddr: isSet(object.OrderHubContractAddr) ? globalThis.String(object.OrderHubContractAddr) : "",
+            TokenSaleContractAddr: isSet(object.TokenSaleContractAddr)
+                ? globalThis.String(object.TokenSaleContractAddr)
+                : undefined,
+        };
     },
-    toJSON(_) {
+    toJSON(message) {
+        var _a, _b;
         const obj = {};
+        if (message.QuantityStep !== "") {
+            obj.QuantityStep = message.QuantityStep;
+        }
+        if ((_a = message.SellPricesPerSubunit) === null || _a === void 0 ? void 0 : _a.length) {
+            obj.SellPricesPerSubunit = message.SellPricesPerSubunit.map((e) => DecCoin.toJSON(e));
+        }
+        if (message.BaseDenom !== "") {
+            obj.BaseDenom = message.BaseDenom;
+        }
+        if (message.MinAmount !== "") {
+            obj.MinAmount = message.MinAmount;
+        }
+        if (message.StartDate !== 0) {
+            obj.StartDate = Math.round(message.StartDate);
+        }
+        if (message.EndDate !== 0) {
+            obj.EndDate = Math.round(message.EndDate);
+        }
+        if (message.ComplianceManagerContractAddr !== "") {
+            obj.ComplianceManagerContractAddr = message.ComplianceManagerContractAddr;
+        }
+        if ((_b = message.BuyPricesPerSubunit) === null || _b === void 0 ? void 0 : _b.length) {
+            obj.BuyPricesPerSubunit = message.BuyPricesPerSubunit.map((e) => DecCoin.toJSON(e));
+        }
+        if (message.AssetRegistryContractAddr !== "") {
+            obj.AssetRegistryContractAddr = message.AssetRegistryContractAddr;
+        }
+        if (message.AssetExtensionCode !== "") {
+            obj.AssetExtensionCode = message.AssetExtensionCode;
+        }
+        if (message.AssetExtensionContractAddr !== undefined) {
+            obj.AssetExtensionContractAddr = message.AssetExtensionContractAddr;
+        }
+        if (message.OrderHubContractAddr !== "") {
+            obj.OrderHubContractAddr = message.OrderHubContractAddr;
+        }
+        if (message.TokenSaleContractAddr !== undefined) {
+            obj.TokenSaleContractAddr = message.TokenSaleContractAddr;
+        }
         return obj;
     },
     create(base) {
-        return PriceSupply.fromPartial(base !== null && base !== void 0 ? base : {});
+        return TokenSale.fromPartial(base !== null && base !== void 0 ? base : {});
     },
-    fromPartial(_) {
-        const message = createBasePriceSupply();
+    fromPartial(object) {
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
+        const message = createBaseTokenSale();
+        message.QuantityStep = (_a = object.QuantityStep) !== null && _a !== void 0 ? _a : "";
+        message.SellPricesPerSubunit = ((_b = object.SellPricesPerSubunit) === null || _b === void 0 ? void 0 : _b.map((e) => DecCoin.fromPartial(e))) || [];
+        message.BaseDenom = (_c = object.BaseDenom) !== null && _c !== void 0 ? _c : "";
+        message.MinAmount = (_d = object.MinAmount) !== null && _d !== void 0 ? _d : "";
+        message.StartDate = (_e = object.StartDate) !== null && _e !== void 0 ? _e : 0;
+        message.EndDate = (_f = object.EndDate) !== null && _f !== void 0 ? _f : 0;
+        message.ComplianceManagerContractAddr = (_g = object.ComplianceManagerContractAddr) !== null && _g !== void 0 ? _g : "";
+        message.BuyPricesPerSubunit = ((_h = object.BuyPricesPerSubunit) === null || _h === void 0 ? void 0 : _h.map((e) => DecCoin.fromPartial(e))) || [];
+        message.AssetRegistryContractAddr = (_j = object.AssetRegistryContractAddr) !== null && _j !== void 0 ? _j : "";
+        message.AssetExtensionCode = (_k = object.AssetExtensionCode) !== null && _k !== void 0 ? _k : "";
+        message.AssetExtensionContractAddr = (_l = object.AssetExtensionContractAddr) !== null && _l !== void 0 ? _l : undefined;
+        message.OrderHubContractAddr = (_m = object.OrderHubContractAddr) !== null && _m !== void 0 ? _m : "";
+        message.TokenSaleContractAddr = (_o = object.TokenSaleContractAddr) !== null && _o !== void 0 ? _o : undefined;
         return message;
     },
 };
@@ -2573,7 +2782,7 @@ function createBaseCrowdfund() {
     return {
         QuantityStep: "",
         PricesPerSubunit: [],
-        SellDenom: "",
+        BaseDenom: "",
         MinAmount: "",
         StartDate: 0,
         EndDate: 0,
@@ -2596,8 +2805,8 @@ export const Crowdfund = {
         for (const v of message.PricesPerSubunit) {
             DecCoin.encode(v, writer.uint32(18).fork()).ldelim();
         }
-        if (message.SellDenom !== "") {
-            writer.uint32(26).string(message.SellDenom);
+        if (message.BaseDenom !== "") {
+            writer.uint32(26).string(message.BaseDenom);
         }
         if (message.MinAmount !== "") {
             writer.uint32(34).string(message.MinAmount);
@@ -2660,7 +2869,7 @@ export const Crowdfund = {
                     if (tag !== 26) {
                         break;
                     }
-                    message.SellDenom = reader.string();
+                    message.BaseDenom = reader.string();
                     continue;
                 case 4:
                     if (tag !== 34) {
@@ -2748,7 +2957,7 @@ export const Crowdfund = {
             PricesPerSubunit: globalThis.Array.isArray(object === null || object === void 0 ? void 0 : object.PricesPerSubunit)
                 ? object.PricesPerSubunit.map((e) => DecCoin.fromJSON(e))
                 : [],
-            SellDenom: isSet(object.SellDenom) ? globalThis.String(object.SellDenom) : "",
+            BaseDenom: isSet(object.BaseDenom) ? globalThis.String(object.BaseDenom) : "",
             MinAmount: isSet(object.MinAmount) ? globalThis.String(object.MinAmount) : "",
             StartDate: isSet(object.StartDate) ? globalThis.Number(object.StartDate) : 0,
             EndDate: isSet(object.EndDate) ? globalThis.Number(object.EndDate) : 0,
@@ -2782,8 +2991,8 @@ export const Crowdfund = {
         if ((_a = message.PricesPerSubunit) === null || _a === void 0 ? void 0 : _a.length) {
             obj.PricesPerSubunit = message.PricesPerSubunit.map((e) => DecCoin.toJSON(e));
         }
-        if (message.SellDenom !== "") {
-            obj.SellDenom = message.SellDenom;
+        if (message.BaseDenom !== "") {
+            obj.BaseDenom = message.BaseDenom;
         }
         if (message.MinAmount !== "") {
             obj.MinAmount = message.MinAmount;
@@ -2831,7 +3040,7 @@ export const Crowdfund = {
         const message = createBaseCrowdfund();
         message.QuantityStep = (_a = object.QuantityStep) !== null && _a !== void 0 ? _a : "";
         message.PricesPerSubunit = ((_b = object.PricesPerSubunit) === null || _b === void 0 ? void 0 : _b.map((e) => DecCoin.fromPartial(e))) || [];
-        message.SellDenom = (_c = object.SellDenom) !== null && _c !== void 0 ? _c : "";
+        message.BaseDenom = (_c = object.BaseDenom) !== null && _c !== void 0 ? _c : "";
         message.MinAmount = (_d = object.MinAmount) !== null && _d !== void 0 ? _d : "";
         message.StartDate = (_e = object.StartDate) !== null && _e !== void 0 ? _e : 0;
         message.EndDate = (_f = object.EndDate) !== null && _f !== void 0 ? _f : 0;

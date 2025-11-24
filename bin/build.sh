@@ -5,6 +5,32 @@ set -e
 rd=$(git rev-parse --show-toplevel)
 cd $rd
 
+# Refresh the current repository
+echo "Pulling latest changes for current repository..."
+git pull
+
+# Refresh related repositories referenced in proto files
+parent_dir=$(dirname $(dirname "$rd"))
+echo "Refreshing related repositories..."
+
+# Pull com-fs-utils-lib (referenced in proto imports)
+utils_lib_dir="$parent_dir/sologenic/com-fs-utils-lib"
+if [ -d "$utils_lib_dir" ] && [ -d "$utils_lib_dir/.git" ]; then
+    echo "Pulling com-fs-utils-lib..."
+    (cd "$utils_lib_dir" && git pull)
+else
+    echo "Warning: com-fs-utils-lib not found at $utils_lib_dir"
+fi
+
+# Pull com-fs-asset-model (referenced in proto imports)
+asset_model_dir="$parent_dir/sologenic/com-fs-asset-model"
+if [ -d "$asset_model_dir" ] && [ -d "$asset_model_dir/.git" ]; then
+    echo "Pulling com-fs-asset-model..."
+    (cd "$asset_model_dir" && git pull)
+else
+    echo "Warning: com-fs-asset-model not found at $asset_model_dir"
+fi
+
 rm -rf node_modules
 rm -rf sologenic
 rm -rf build
