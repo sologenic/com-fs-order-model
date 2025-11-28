@@ -12,6 +12,10 @@
     - [BrokerOrderDetails](#brokerorderdetails)
     - [ClientOrderID](#clientorderid)
     - [BrokerOrderDetailsList](#brokerorderdetailslist)
+  - [Enums](#enums)
+    - [TradeType](#tradetype)
+    - [OrderClass](#orderclass)
+    - [BrokerOrderStatus](#brokerorderstatus)
 - [order.proto](#order)
   - [Messages](#messages)
     - [Order](#order)
@@ -24,8 +28,11 @@
   - [Enums](#enums)
     - [TransactionType](#transactiontype)
     - [OrderStateType](#orderstatetype)
+    - [OrderCancelledBy](#ordercancelledby)
     - [PaymentState](#paymentstate)
+    - [InternalOrderState](#internalorderstate)
     - [OrderDetailType](#orderdetailtype)
+    - [ReceiverType](#receivertype)
 - [util.proto](#util)
   - [Messages](#messages)
     - [LockLogRecord](#locklogrecord)
@@ -212,6 +219,95 @@ The `BrokerOrderDetailsList` message contains all the core information about a b
 
 **Important Notes:**
 - This message provides the brokerorderdetailslist representation
+
+### Enums
+
+#### TradeType {#tradetype}
+
+The `TradeType` enum defines the possible states or types for order, allowing for classification and state management.
+
+**Value Table:**
+
+| Value Name | Number | Description |
+|------------|--------|-------------|
+| NOT_APPLICABLE_TRADE_TYPE | 0 | Default/unused value (protobuf convention) |
+| MARKET | 1 | Market state or type |
+| LIMIT | 2 | Limit state or type |
+| STOP | 3 | Stop state or type |
+| STOP_LIMIT | 4 | Stop Limit state or type |
+| OPEN_CLOSE_AUCTION | 5 | Open Close Auction state or type |
+| BRACKET | 6 | Bracket state or type |
+| ONE_CANCELS_OTHER | 7 | One Cancels Other state or type |
+| ONE_TRIGGERS_OTHER | 8 | One Triggers Other state or type |
+| TRAILING_STOP | 9 | Trailing Stop state or type |
+
+**Use Cases:**
+- Setting tradetype for items
+- Filtering items by tradetype in queries
+- Enforcing business logic based on tradetype
+
+**Important Notes:**
+- Values with `NOT_USED` prefix or number 0 follow protobuf conventions for default enum values and should not be actively used
+- Only valid tradetype values should be used in production code
+- TradeType changes should be tracked in audit trails for compliance purposes
+
+#### OrderClass {#orderclass}
+
+The `OrderClass` enum defines the possible states or types for order, allowing for classification and state management.
+
+**Value Table:**
+
+| Value Name | Number | Description |
+|------------|--------|-------------|
+| NOT_USED_ORDER_CLASS | 0 | Default/unused value (protobuf convention) |
+| ORDER_CLASS_SIMPLE | 1 | Order Class Simple state or type |
+| ORDER_CLASS_BRACKET | 2 | Order Class Bracket state or type |
+| ORDER_CLASS_ONE_CANCELS_OTHER | 3 | Order Class One Cancels Other state or type |
+| ORDER_CLASS_ONE_TRIGGERS_OTHER | 4 | Order Class One Triggers Other state or type |
+
+**Use Cases:**
+- Setting orderclass for items
+- Filtering items by orderclass in queries
+- Enforcing business logic based on orderclass
+
+**Important Notes:**
+- Values with `NOT_USED` prefix or number 0 follow protobuf conventions for default enum values and should not be actively used
+- Only valid orderclass values should be used in production code
+- OrderClass changes should be tracked in audit trails for compliance purposes
+
+#### BrokerOrderStatus {#brokerorderstatus}
+
+The `BrokerOrderStatus` enum defines the possible states or types for order, allowing for classification and state management.
+
+**Value Table:**
+
+| Value Name | Number | Description |
+|------------|--------|-------------|
+| NOT_USED_ORDER_STATUS | 0 | Default/unused value (protobuf convention) |
+| PENDING_NEW | 1 | Pending New state or type |
+| NEW | 2 | New state or type |
+| PARTIALLY_FILLED | 3 | Partially Filled state or type |
+| FILLED | 4 | Filled state or type |
+| DONE_FOR_DAY | 5 | Done For Day state or type |
+| CANCELED | 6 | Canceled state or type |
+| EXPIRED | 7 | Expired state or type |
+| PENDING_CANCEL | 8 | Pending Cancel state or type |
+| ACCEPTED | 9 | Accepted state or type |
+| ACCEPTED_FOR_BIDDING | 10 | Accepted For Bidding state or type |
+| STOPPED | 11 | Stopped state or type |
+| REJECTED | 12 | Rejected state or type |
+| SUSPENDED | 13 | Suspended state or type |
+| CALCULATED | 14 | Calculated state or type |
+
+**Use Cases:**
+- Setting brokerorderstatus for items
+- Filtering items by brokerorderstatus in queries
+- Enforcing business logic based on brokerorderstatus
+
+**Important Notes:**
+- Values with `NOT_USED` prefix or number 0 follow protobuf conventions for default enum values and should not be actively used
+- Only valid brokerorderstatus values should be used in production code
+- BrokerOrderStatus changes should be tracked in audit trails for compliance purposes
 
 ## order.proto
 
@@ -415,24 +511,22 @@ The `TransactionType` enum defines the possible states or types for order, allow
 
 | Value Name | Number | Description |
 |------------|--------|-------------|
-| LimitPriceExp | 7 | LimitPriceExp value |
-| FillOrKill | 8 | FillOrKill value |
-| ExpiresAt | 9 | ExpiresAt value |
-| OrderDetailType | 10 | OrderDetailType value |
-| Hold | 11 | Hold value |
-| FundsSent | 12 | FundsSent value |
-| OrderType | 13 | OrderType value |
-| OrderState | 14 | OrderState value |
-| PaymentState | 15 | PaymentState value |
-| AmountExecuted | 16 | AmountExecuted value |
-| AmountExecutedExp | 17 | AmountExecutedExp value |
-| UsedFundsAmount | 18 | UsedFundsAmount value |
-| UsedFundsAmountExp | 19 | UsedFundsAmountExp value |
-| Costs | 20 | Costs value |
-| CostsExp | 21 | CostsExp value |
-| TimeInForce | 22 | TimeInForce value |
-| LimitPriceFloat | 23 | LimitPriceFloat value |
-| Receiver | 24 | Receiver value |
+| NOT_USED_TRANSACTION_TYPE | 0 | Default/unused value (protobuf convention) |
+| PURCHASE | 1 | Purchase state or type |
+| SELL | 2 | Sell state or type |
+| REQUEST_ORDER_CANCEL | 3 | Request Order Cancel state or type |
+| EXECUTE_ORDER | 4 | Execute Order state or type |
+| PAY_ORDER | 5 | Pay Order state or type |
+| REQUEST_REATTESTATION | 6 | Request Reattestation state or type |
+| DEPOSIT | 7 | Deposit state or type |
+| WITHDRAWAL | 8 | Withdrawal state or type |
+| USDC_USD_CONVERSION | 9 | Usdc Usd Conversion state or type |
+| CROWDFUND_PURCHASE | 20 | Crowdfund Purchase state or type |
+| CROWDFUND_BUYBACK | 21 | Crowdfund Buyback state or type |
+| CROWDFUND_CANCEL | 22 | Crowdfund Cancel state or type |
+| CROWDFUND_DISTRIBUTION | 23 | Crowdfund Distribution state or type |
+| TOKEN_SALE_PURCHASE | 30 | Token Sale Purchase state or type |
+| TOKEN_SALE_BUYBACK | 31 | Token Sale Buyback state or type |
 
 **Use Cases:**
 - Setting transactiontype for items
@@ -440,6 +534,7 @@ The `TransactionType` enum defines the possible states or types for order, allow
 - Enforcing business logic based on transactiontype
 
 **Important Notes:**
+- Values with `NOT_USED` prefix or number 0 follow protobuf conventions for default enum values and should not be actively used
 - Only valid transactiontype values should be used in production code
 - TransactionType changes should be tracked in audit trails for compliance purposes
 
@@ -451,10 +546,14 @@ The `OrderStateType` enum defines the possible states or types for order, allowi
 
 | Value Name | Number | Description |
 |------------|--------|-------------|
-| Y | 0 | Default/unused value (protobuf convention) |
-| SMART_CONTRACT_OWNER | 1 | Smart Contract Owner state or type |
-| USER | 2 | User state or type |
-| BROKER_ORACLE | 3 | Broker Oracle state or type |
+| NOT_USED_ORDER_STATE_TYPE | 0 | Default/unused value (protobuf convention) |
+| OPEN | 1 | Open state or type |
+| PLACED | 2 | Placed state or type |
+| PARTIALLY_EXECUTED | 3 | Partially Executed state or type |
+| EXECUTED | 4 | Executed state or type |
+| CANCELLATION_REQUESTED | 5 | Cancellation Requested state or type |
+| CANCELLED | 6 | Cancelled state or type |
+| FAILED | 7 | Failed state or type |
 
 **Use Cases:**
 - Setting orderstatetype for items
@@ -466,9 +565,54 @@ The `OrderStateType` enum defines the possible states or types for order, allowi
 - Only valid orderstatetype values should be used in production code
 - OrderStateType changes should be tracked in audit trails for compliance purposes
 
+#### OrderCancelledBy {#ordercancelledby}
+
+The `OrderCancelledBy` enum defines the possible states or types for order, allowing for classification and state management.
+
+**Value Table:**
+
+| Value Name | Number | Description |
+|------------|--------|-------------|
+| NOT_USED_ORDER_CANCEL_BY | 0 | Default/unused value (protobuf convention) |
+| SMART_CONTRACT_OWNER | 1 | Smart Contract Owner state or type |
+| USER | 2 | User state or type |
+| BROKER_ORACLE | 3 | Broker Oracle state or type |
+
+**Use Cases:**
+- Setting ordercancelledby for items
+- Filtering items by ordercancelledby in queries
+- Enforcing business logic based on ordercancelledby
+
+**Important Notes:**
+- Values with `NOT_USED` prefix or number 0 follow protobuf conventions for default enum values and should not be actively used
+- Only valid ordercancelledby values should be used in production code
+- OrderCancelledBy changes should be tracked in audit trails for compliance purposes
+
 #### PaymentState {#paymentstate}
 
 The `PaymentState` enum defines the possible states or types for order, allowing for classification and state management.
+
+**Value Table:**
+
+| Value Name | Number | Description |
+|------------|--------|-------------|
+| NOT_USED_PAYMENT_STATE | 0 | Default/unused value (protobuf convention) |
+| NOT_PAID | 1 | Not Paid state or type |
+| PAID | 2 | Paid state or type |
+
+**Use Cases:**
+- Setting paymentstate for items
+- Filtering items by paymentstate in queries
+- Enforcing business logic based on paymentstate
+
+**Important Notes:**
+- Values with `NOT_USED` prefix or number 0 follow protobuf conventions for default enum values and should not be actively used
+- Only valid paymentstate values should be used in production code
+- PaymentState changes should be tracked in audit trails for compliance purposes
+
+#### InternalOrderState {#internalorderstate}
+
+The `InternalOrderState` enum defines the possible states or types for order, allowing for classification and state management.
 
 **Value Table:**
 
@@ -499,14 +643,14 @@ The `PaymentState` enum defines the possible states or types for order, allowing
 | SMART_CONTRACT_CANCEL_ORDER_REQUESTED | 20 | Smart Contract Cancel Order Requested state or type |
 
 **Use Cases:**
-- Setting paymentstate for items
-- Filtering items by paymentstate in queries
-- Enforcing business logic based on paymentstate
+- Setting internalorderstate for items
+- Filtering items by internalorderstate in queries
+- Enforcing business logic based on internalorderstate
 
 **Important Notes:**
 - Values with `NOT_USED` prefix or number 0 follow protobuf conventions for default enum values and should not be actively used
-- Only valid paymentstate values should be used in production code
-- PaymentState changes should be tracked in audit trails for compliance purposes
+- Only valid internalorderstate values should be used in production code
+- InternalOrderState changes should be tracked in audit trails for compliance purposes
 
 #### OrderDetailType {#orderdetailtype}
 
@@ -530,6 +674,29 @@ The `OrderDetailType` enum defines the possible states or types for order, allow
 - Values with `NOT_USED` prefix or number 0 follow protobuf conventions for default enum values and should not be actively used
 - Only valid orderdetailtype values should be used in production code
 - OrderDetailType changes should be tracked in audit trails for compliance purposes
+
+#### ReceiverType {#receivertype}
+
+The `ReceiverType` enum defines the possible states or types for order, allowing for classification and state management.
+
+**Value Table:**
+
+| Value Name | Number | Description |
+|------------|--------|-------------|
+| EMAIL | 0 | Default/unused value (protobuf convention) |
+| TX | 1 | Tx state or type |
+| ETHEREUM | 2 | Ethereum state or type |
+| SOLANA | 3 | Solana state or type |
+
+**Use Cases:**
+- Setting receivertype for items
+- Filtering items by receivertype in queries
+- Enforcing business logic based on receivertype
+
+**Important Notes:**
+- Values with `NOT_USED` prefix or number 0 follow protobuf conventions for default enum values and should not be actively used
+- Only valid receivertype values should be used in production code
+- ReceiverType changes should be tracked in audit trails for compliance purposes
 
 ## util.proto
 
