@@ -6,6 +6,7 @@
 - [attestation.proto](#attestation)
   - [Messages](#messages)
     - [Attestation](#attestation)
+    - [Attestations](#attestations)
 - [broker.proto](#broker)
   - [Messages](#messages)
     - [BrokerOrderDetails](#brokerorderdetails)
@@ -19,24 +20,29 @@
     - [Hold](#hold)
     - [Coin](#coin)
     - [OrderState](#orderstate)
+    - [Receiver](#receiver)
   - [Enums](#enums)
     - [TransactionType](#transactiontype)
     - [OrderStateType](#orderstatetype)
     - [PaymentState](#paymentstate)
     - [OrderDetailType](#orderdetailtype)
 - [util.proto](#util)
+  - [Messages](#messages)
+    - [LockLogRecord](#locklogrecord)
+    - [Key](#key)
+    - [InstanceID](#instanceid)
 - [Version Information](#version-information)
 - [Support](#support)
 
 ## Overview
 
-The Order provides a comprehensive data structure for managing order within the system. This model supports pagination support: provides offset-based pagination for collections, identification: provides unique identifiers for order, status management: tracks status for administrative control, and more. 
+The Order provides a comprehensive data structure for managing order within the system. This model supports metadata and audit: includes metadata and audit trails for tracking changes, pagination support: provides offset-based pagination for collections, identification: provides unique identifiers for order, and more. 
 
 Key features of the {model_name.lower()} model include:
+- **Metadata and Audit**: Includes metadata and audit trails for tracking changes
 - **Pagination Support**: Provides offset-based pagination for collections
 - **Identification**: Provides unique identifiers for order
 - **Status Management**: Tracks status for administrative control
-- **Metadata and Audit**: Includes metadata and audit trails for tracking changes
 - **Organizational Context**: Links items to organizations via OrganizationID
 
 ## attestation.proto
@@ -60,13 +66,38 @@ The `Attestation` message provides attestation data and operations.
 
 | Field Name | Type | Required/Optional | Description |
 |------------|------|-------------------|-------------|
-| Attestations | `Attestation` | Optional | Attestations field |
-| Offset | `int32` | Optional | Offset field |
+| Network | `metadata.Network` | Required | Metadata information including network and version details |
+| SmartContractAddr | `string` | Required | SmartContractAddr value |
+| Denom | `string` | Required | Denom value |
+| BrokerQuantity | `decimal.Decimal` | Optional | BrokerQuantity field |
+| ChainQuantity | `decimal.Decimal` | Required | ChainQuantity field |
+| BlockHeight | `int64` | Required | BlockHeight field |
+| Timestamp | `google.protobuf.Timestamp` | Required | Timestamp field |
+| ReattestationBlockHeight | `int64` | Optional | ReattestationBlockHeight field |
 
 **Use Cases:**
 - Creating new attestation records
 - Retrieving attestation information
 - Updating attestation data
+
+**Important Notes:**
+- This message provides the attestation representation
+
+#### Attestations {#attestations}
+
+The `Attestations` message represents a collection of attestation with pagination support for handling large result sets.
+
+**Field Table:**
+
+| Field Name | Type | Required/Optional | Description |
+|------------|------|-------------------|-------------|
+| Attestations | `Attestation` | Optional | Attestations field |
+| Offset | `int32` | Optional | Offset field |
+
+**Use Cases:**
+- Returning paginated lists of attestation from queries or searches
+- Implementing pagination in attestation listing APIs
+- Handling large attestations efficiently
 - Providing continuation tokens for subsequent page requests
 
 **Important Notes:**
@@ -94,6 +125,16 @@ The `BrokerOrderDetails` message contains all the core information about a broke
 
 | Field Name | Type | Required/Optional | Description |
 |------------|------|-------------------|-------------|
+| BrokerAssignedID | `string` | Required | auto generated ID from the broker |
+| ClientOrderID | `ClientOrderID` | Required | unique identifier for the order in message to the broker, value is from the key function |
+| SubmittedAt | `google.protobuf.Timestamp` | Required | SubmittedAt field |
+| FilledAt | `google.protobuf.Timestamp` | Optional | FilledAt field |
+| ExpiredAt | `google.protobuf.Timestamp` | Optional | ExpiredAt field |
+| CancelledAt | `google.protobuf.Timestamp` | Optional | CancelledAt field |
+| FailedAt | `google.protobuf.Timestamp` | Optional | FailedAt field |
+| AssetID | `string` | Required | Unique identifier for the asset |
+| Symbol | `string` | Required | Symbol value |
+| AssetClass | `asset.AssetType` | Required | Also called AssetType in the asset model |
 | OrderClass | `OrderClass` | Required | OrderClass field |
 | Type | `TradeType` | Required | Type classification for this item (see related enum) |
 | Side | `orderproperties.OrderType` | Required | Unique identifier for the side |
@@ -127,6 +168,9 @@ The `BrokerOrderDetails` message contains all the core information about a broke
 - Tracking status for administrative purposes
 
 **Important Notes:**
+- The `BrokerAssignedID` field must match a valid identifier format
+- The `ClientOrderID` field must match a valid identifier format
+- The `AssetID` field must match a valid identifier format
 - The `Side` field must match a valid identifier format
 - The `Status` field determines the current state of this item
 - The `InstanceID` field must match a valid identifier format
@@ -190,7 +234,18 @@ The `Order` message provides order data and operations.
 
 | Field Name | Type | Required/Optional | Description |
 |------------|------|-------------------|-------------|
-| InternalOrderState | `State` | Required | InternalOrderState field |
+| Network | `metadata.Network` | Required | Metadata information including network and version details |
+| SmartContractAddr | `string` | Required | SmartContractAddr value |
+| Instruction | `OrderInstruction` | Required | Snapshot of the order in the smart contract |
+| CreatedAt | `google.protobuf.Timestamp` | Required | CreatedAt field |
+| UpdatedAt | `google.protobuf.Timestamp` | Required | UpdatedAt field |
+| TransactionType | `TransactionType` | Required | Type classification for this item (see related enum) |
+| TXID | `string` | Required | Unique Key in the datastore |
+| GasFee | `int64` | Required | GasFee field |
+| GasFeeUSD | `double` | Optional | GasFeeUSD field |
+| DetectedAt | `google.protobuf.Timestamp` | Required | DetectedAt field |
+| Height | `int64` | Required | Height field |
+| InternalOrderState | `InternalOrderState` | Required | InternalOrderState field |
 | BrokerOrderDetails | `BrokerOrderDetails` | Optional | Matches data on SmartContractAddr, orderdetails.OrderID and network |
 | ProcessInfo | `orderproperties.ProcessInfo` | Optional | ProcessInfo field |
 | InstanceID | `string` | Optional | ID used by logs to identify the instance where the log was created/ processed |
@@ -206,6 +261,7 @@ The `Order` message provides order data and operations.
 - Associating items with specific organizations
 
 **Important Notes:**
+- The `TXID` field must match a valid identifier format
 - The `InstanceID` field must match a valid identifier format
 - The `OrganizationID` must be a valid UUID format
 - The `UserID` field must match a valid identifier format
@@ -213,6 +269,43 @@ The `Order` message provides order data and operations.
 #### OrderInstruction {#orderinstruction}
 
 The `OrderInstruction` message provides orderinstruction data and operations.
+
+**Field Table:**
+
+| Field Name | Type | Required/Optional | Description |
+|------------|------|-------------------|-------------|
+| OrderID | `int64` | Required | Google datastore supports int64, not uint64, which is the used in the smart contract |
+| Creator | `string` | Required | Sender in the message from Coreum |
+| Denom | `string` | Required | Denom value |
+| Amount | `int64` | Required | Amount field |
+| AmountExp | `int32` | Required | AmountExp field |
+| LimitPrice | `int64` | Required | DEPRECATED: Use LimitPriceFloat instead for new smart contract format |
+| LimitPriceExp | `int32` | Required | DEPRECATED: Use LimitPriceFloat instead for new smart contract format |
+| FillOrKill | `bool` | Required | DEPRECATED: Use TimeInForce instead as it's more flexible and RQD does not support it (2025-08-18) |
+| ExpiresAt | `string` | Optional | In ISO-8601 Zulu format (e.g., "2024-02-29T23:59:59Z") |
+| OrderDetailType | `OrderDetailType` | Required | Type classification for this item (see related enum) |
+| Hold | `Hold` | Optional | Hold field |
+| FundsSent | `Coin` | Required | FundsSent field |
+| OrderType | `orderproperties.OrderType` | Required | Type classification for this item (see related enum) |
+| OrderState | `OrderState` | Required | OrderState field |
+| PaymentState | `PaymentState` | Optional | PaymentState field |
+| AmountExecuted | `int64` | Optional | AmountExecuted field |
+| AmountExecutedExp | `int32` | Optional | AmountExecutedExp field |
+| UsedFundsAmount | `int64` | Optional | UsedFundsAmount field |
+| UsedFundsAmountExp | `int32` | Optional | UsedFundsAmountExp field |
+| Costs | `int64` | Optional | Costs field |
+| CostsExp | `int32` | Optional | CostsExp field |
+| TimeInForce | `orderproperties.TimeInForce` | Optional | TimeInForce field |
+| LimitPriceFloat | `double` | Optional | Direct float price from smart contract (e.g., 26.25) |
+| Receiver | `Receiver` | Optional | The address of the receiver, used for sending of funds. Receiver can also be an email address, tx address or blockchain addres from another blockchain. |
+
+**Use Cases:**
+- Creating new orderinstruction records
+- Retrieving orderinstruction information
+- Updating orderinstruction data
+
+**Important Notes:**
+- The `OrderID` field must match a valid identifier format
 
 #### Orders {#orders}
 
@@ -277,6 +370,40 @@ The `Coin` message provides coin data and operations.
 #### OrderState {#orderstate}
 
 The `OrderState` message provides orderstate data and operations.
+
+**Field Table:**
+
+| Field Name | Type | Required/Optional | Description |
+|------------|------|-------------------|-------------|
+| OrderStateType | `OrderStateType` | Required | Type classification for this item (see related enum) |
+| OrderCancelledBy | `OrderCancelledBy` | Optional | OrderCancelledBy field |
+
+**Use Cases:**
+- Creating new orderstate records
+- Retrieving orderstate information
+- Updating orderstate data
+
+**Important Notes:**
+- This message provides the orderstate representation
+
+#### Receiver {#receiver}
+
+The `Receiver` message provides receiver data and operations.
+
+**Field Table:**
+
+| Field Name | Type | Required/Optional | Description |
+|------------|------|-------------------|-------------|
+| Address | `string` | Required | The address of the receiver, used for sending of funds. |
+| Type | `ReceiverType` | Required | The type of the receiver, e.g. email, tx address, blockchain address from another blockchain. |
+
+**Use Cases:**
+- Creating new receiver records
+- Retrieving receiver information
+- Updating receiver data
+
+**Important Notes:**
+- This message provides the receiver representation
 
 ### Enums
 
@@ -414,6 +541,66 @@ The `OrderDetailType` enum defines the possible states or types for order, allow
 ### Overview
 
 The `util.proto` file defines the core util model for order management. It provides message types for representing util data and operations. The file integrates with external utility libraries: `order-properties.proto`.
+
+### Messages
+
+#### LockLogRecord {#locklogrecord}
+
+The `LockLogRecord` message provides locklogrecord data and operations.
+
+**Field Table:**
+
+| Field Name | Type | Required/Optional | Description |
+|------------|------|-------------------|-------------|
+| Key | `string` | Required | Key value |
+| MustHaveState | `orderproperties.ProcessState` | Optional | MustHaveState field |
+| TargetState | `orderproperties.ProcessState` | Required | TargetState field |
+
+**Use Cases:**
+- Creating new locklogrecord records
+- Retrieving locklogrecord information
+- Updating locklogrecord data
+
+**Important Notes:**
+- This message provides the locklogrecord representation
+
+#### Key {#key}
+
+The `Key` message provides key data and operations.
+
+**Field Table:**
+
+| Field Name | Type | Required/Optional | Description |
+|------------|------|-------------------|-------------|
+| Key | `string` | Required | Key value |
+| KeyPrefix | `string` | Optional | KeyPrefix value |
+| IsNew | `bool` | Optional | IsNew field |
+
+**Use Cases:**
+- Creating new key records
+- Retrieving key information
+- Updating key data
+
+**Important Notes:**
+- This message provides the key representation
+
+#### InstanceID {#instanceid}
+
+The `InstanceID` message provides instanceid data and operations.
+
+**Field Table:**
+
+| Field Name | Type | Required/Optional | Description |
+|------------|------|-------------------|-------------|
+| InstanceID | `string` | Required | Unique identifier for the instance |
+
+**Use Cases:**
+- Creating new instanceid records
+- Retrieving instanceid information
+- Updating instanceid data
+
+**Important Notes:**
+- The `InstanceID` field must match a valid identifier format
 
 ## Version Information
 
