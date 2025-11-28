@@ -2,38 +2,44 @@
 
 ## Table of Contents
 
+- [Overview](#overview)
 - [attestation.proto](#attestation)
+  - [Messages](#messages)
+    - [Attestation](#attestation)
 - [broker.proto](#broker)
+  - [Messages](#messages)
+    - [BrokerOrderDetails](#brokerorderdetails)
+    - [ClientOrderID](#clientorderid)
+    - [BrokerOrderDetailsList](#brokerorderdetailslist)
 - [order.proto](#order)
+  - [Messages](#messages)
+    - [Order](#order)
+    - [OrderInstruction](#orderinstruction)
+    - [Orders](#orders)
+    - [Hold](#hold)
+    - [Coin](#coin)
+    - [OrderState](#orderstate)
+  - [Enums](#enums)
+    - [TransactionType](#transactiontype)
+    - [OrderStateType](#orderstatetype)
+    - [PaymentState](#paymentstate)
+    - [OrderDetailType](#orderdetailtype)
 - [util.proto](#util)
+- [Version Information](#version-information)
+- [Support](#support)
 
 ## Overview
 
-The Order provides data structures and definitions for managing order within the system.
+The Order provides a comprehensive data structure for managing order within the system. This model supports pagination support: provides offset-based pagination for collections, identification: provides unique identifiers for order, status management: tracks status for administrative control, and more. 
 
-## attestation.proto {#attestation}
+Key features of the {model_name.lower()} model include:
+- **Pagination Support**: Provides offset-based pagination for collections
+- **Identification**: Provides unique identifiers for order
+- **Status Management**: Tracks status for administrative control
+- **Metadata and Audit**: Includes metadata and audit trails for tracking changes
+- **Organizational Context**: Links items to organizations via OrganizationID
 
-### Package Information
-
-- **Package Name**: `order`
-- **Go Package Path**: `github.com/sologenic/com-fs-order-model;order`
-
-### Overview
-
-The `attestation.proto` file defines the Attestation model.
-
-### Messages
-
-#### Attestation
-
-**Field Table:**
-
-| Field Name | Type | Number | Description |
-|------------|------|--------|-------------|
-| Attestations | `Attestation` | 1 |  |
-| Offset | `int32` | 2 |  |
-
-## broker.proto {#broker}
+## attestation.proto
 
 ### Package Information
 
@@ -42,62 +48,32 @@ The `attestation.proto` file defines the Attestation model.
 
 ### Overview
 
-The `broker.proto` file defines the Broker model.
+The `attestation.proto` file defines the core attestation model for order management. It provides message types for representing attestation data and operations. The file integrates with external utility libraries: `decimal.proto`, `metadata.proto`.
 
 ### Messages
 
-#### BrokerOrderDetails
+#### Attestation {#attestation}
+
+The `Attestation` message provides attestation data and operations.
 
 **Field Table:**
 
-| Field Name | Type | Number | Description |
-|------------|------|--------|-------------|
-| OrderClass | `OrderClass` | 11 |  |
-| Type | `TradeType` | 12 |  |
-| Side | `OrderType` | 13 |  |
-| TimeInForce | `TimeInForce` | 14 |  |
-| Notional | `Decimal` | 15 |  |
-| OrderQty | `Decimal` | 16 |  |
-| FilledQty | `Decimal` | 17 |  |
-| FilledAvgPrice | `Decimal` | 18 |  |
-| LimitPrice | `Decimal` | 19 |  |
-| StopPrice | `Decimal` | 20 |  |
-| TrailPrice | `Decimal` | 21 |  |
-| TrailPercent | `Decimal` | 22 |  |
-| HWM | `Decimal` | 23 |  |
-| ExtendedHours | `bool` | 24 |  |
-| CreatedAt | `Timestamp` | 25 |  |
-| UpdatedAt | `Timestamp` | 26 |  |
-| Status | `BrokerOrderStatus` | 27 |  |
-| TotalPosition | `Decimal` | 28 |  |
-| PartialPrice | `Decimal` | 29 |  |
-| PartialQty | `Decimal` | 30 |  |
-| ProcessInfo | `ProcessInfo` | 31 |  |
-| InstanceID | `string` | 32 |  |
-| ClearingBroker | `ClearingBroker` | 33 |  |
-| EventID | `string` | 36 |  |
-| EventTime | `Timestamp` | 37 |  |
-| CommissionSettings | `CommissionSettings` | 38 |  |
+| Field Name | Type | Required/Optional | Description |
+|------------|------|-------------------|-------------|
+| Attestations | `Attestation` | Optional | Attestations field |
+| Offset | `int32` | Optional | Offset field |
 
-#### ClientOrderID
+**Use Cases:**
+- Creating new attestation records
+- Retrieving attestation information
+- Updating attestation data
+- Providing continuation tokens for subsequent page requests
 
-**Field Table:**
+**Important Notes:**
+- If `Offset` is not set (or is 0), it indicates that all available items have been returned
+- Clients should use the `Offset` value in subsequent requests to retrieve the next page of results
 
-| Field Name | Type | Number | Description |
-|------------|------|--------|-------------|
-| Network | `Network` | 1 |  |
-| SmartContractAddr | `string` | 2 |  |
-| OrderID | `int64` | 3 |  |
-
-#### BrokerOrderDetailsList
-
-**Field Table:**
-
-| Field Name | Type | Number | Description |
-|------------|------|--------|-------------|
-| BrokerOrderDetailsList | `BrokerOrderDetails` | 1 |  |
-
-## order.proto {#order}
+## broker.proto
 
 ### Package Information
 
@@ -106,151 +82,349 @@ The `broker.proto` file defines the Broker model.
 
 ### Overview
 
-The `order.proto` file defines the Order model.
+The `broker.proto` file defines the core broker model for order management. It provides message types for representing broker data and operations. The file integrates with external utility libraries: `order-properties.proto`, `decimal.proto`, `metadata.proto`.
 
 ### Messages
 
-#### Order
+#### BrokerOrderDetails {#brokerorderdetails}
+
+The `BrokerOrderDetails` message contains all the core information about a brokerorder, including essential details and metadata.
 
 **Field Table:**
 
-| Field Name | Type | Number | Description |
-|------------|------|--------|-------------|
-| InternalOrderState | `State` | 12 |  |
-| BrokerOrderDetails | `BrokerOrderDetails` | 13 |  |
-| ProcessInfo | `ProcessInfo` | 14 |  |
-| InstanceID | `string` | 15 |  |
-| BlockTime | `Timestamp` | 16 |  |
-| Sequence | `int64` | 17 |  |
-| OrganizationID | `string` | 18 |  |
-| UserID | `string` | 19 |  |
+| Field Name | Type | Required/Optional | Description |
+|------------|------|-------------------|-------------|
+| OrderClass | `OrderClass` | Required | OrderClass field |
+| Type | `TradeType` | Required | Type classification for this item (see related enum) |
+| Side | `orderproperties.OrderType` | Required | Unique identifier for the side |
+| TimeInForce | `orderproperties.TimeInForce` | Required | TimeInForce field |
+| Notional | `decimal.Decimal` | Optional | Notional field |
+| OrderQty | `decimal.Decimal` | Optional | OrderQty field |
+| FilledQty | `decimal.Decimal` | Required | FilledQty field |
+| FilledAvgPrice | `decimal.Decimal` | Optional | FilledAvgPrice field |
+| LimitPrice | `decimal.Decimal` | Optional | LimitPrice field |
+| StopPrice | `decimal.Decimal` | Optional | StopPrice field |
+| TrailPrice | `decimal.Decimal` | Optional | TrailPrice field |
+| TrailPercent | `decimal.Decimal` | Optional | TrailPercent field |
+| HWM | `decimal.Decimal` | Optional | HWM field |
+| ExtendedHours | `bool` | Required | ExtendedHours field |
+| CreatedAt | `google.protobuf.Timestamp` | Required | CreatedAt field |
+| UpdatedAt | `google.protobuf.Timestamp` | Optional | UpdatedAt field |
+| Status | `BrokerOrderStatus` | Required | Current status of this item (see related enum) |
+| TotalPosition | `decimal.Decimal` | Optional | TotalPosition field |
+| PartialPrice | `decimal.Decimal` | Optional | PartialPrice field |
+| PartialQty | `decimal.Decimal` | Optional | PartialQty field |
+| ProcessInfo | `orderproperties.ProcessInfo` | Optional | ProcessInfo field |
+| InstanceID | `string` | Optional | Unique identifier for the instance |
+| ClearingBroker | `orderproperties.ClearingBroker` | Required | ClearingBroker field |
+| EventID | `string` | Optional | Unique identifier for the event |
+| EventTime | `google.protobuf.Timestamp` | Optional | EventTime field |
+| CommissionSettings | `commission.CommissionSettings` | Optional | CommissionSettings field |
 
-#### OrderInstruction
+**Use Cases:**
+- Creating new brokerorder records with complete information
+- Updating brokerorder information
+- Tracking status for administrative purposes
 
-No fields defined.
+**Important Notes:**
+- The `Side` field must match a valid identifier format
+- The `Status` field determines the current state of this item
+- The `InstanceID` field must match a valid identifier format
+- The `EventID` field must match a valid identifier format
 
-#### Orders
+#### ClientOrderID {#clientorderid}
+
+The `ClientOrderID` message provides clientorderid data and operations.
 
 **Field Table:**
 
-| Field Name | Type | Number | Description |
-|------------|------|--------|-------------|
-| Orders | `Order` | 1 |  |
-| Offset | `int32` | 2 |  |
+| Field Name | Type | Required/Optional | Description |
+|------------|------|-------------------|-------------|
+| Network | `metadata.Network` | Required | Metadata information including network and version details |
+| SmartContractAddr | `string` | Required | SmartContractAddr value |
+| OrderID | `int64` | Required | Unique identifier for the order |
 
-#### Hold
+**Use Cases:**
+- Creating new clientorderid records
+- Retrieving clientorderid information
+- Updating clientorderid data
 
-**Field Table:**
+**Important Notes:**
+- The `OrderID` field must match a valid identifier format
 
-| Field Name | Type | Number | Description |
-|------------|------|--------|-------------|
-| Denom | `string` | 1 |  |
-| Amount | `int64` | 2 |  |
-| AmountExp | `int32` | 3 |  |
+#### BrokerOrderDetailsList {#brokerorderdetailslist}
 
-#### Coin
-
-**Field Table:**
-
-| Field Name | Type | Number | Description |
-|------------|------|--------|-------------|
-| Denom | `string` | 1 |  |
-| Amount | `int64` | 2 |  |
-
-#### OrderState
+The `BrokerOrderDetailsList` message contains all the core information about a brokerorderlist, including essential details and metadata.
 
 **Field Table:**
 
-| Field Name | Type | Number | Description |
-|------------|------|--------|-------------|
-| SMART_CONTRACT_NEW_ORDER_CREATED | `contract` | 1 |  |
-| BROKER_ORDER_PRE_SUBMITTED | `states` | 2 |  |
-| BROKER_ORDER_SUBMITTED | `processing` | 3 |  |
-| BROKER_ORDER_ACCEPTED | `processing` | 4 |  |
-| BROKER_ORDER_CANCELED | `broker` | 14 |  |
-| BROKER_ORDER_EXPIRED | `it` | 16 |  |
-| SMART_CONTRACT_CANCEL_ORDER_REQUESTED | `scenarios` | 20 |  |
+| Field Name | Type | Required/Optional | Description |
+|------------|------|-------------------|-------------|
+| BrokerOrderDetailsList | `BrokerOrderDetails` | Optional | BrokerOrderDetailsList field |
+
+**Use Cases:**
+- Creating new brokerorderlist records with complete information
+- Updating brokerorderlist information
+
+**Important Notes:**
+- This message provides the brokerorderdetailslist representation
+
+## order.proto
+
+### Package Information
+
+- **Package Name**: `order`
+- **Go Package Path**: `github.com/sologenic/com-fs-order-model;order`
+
+### Overview
+
+The `order.proto` file defines the core order model for order management. It provides message types for representing order data and operations. The file integrates with external utility libraries: `metadata.proto`, `order-properties.proto`.
+
+### Messages
+
+#### Order {#order}
+
+The `Order` message provides order data and operations.
+
+**Field Table:**
+
+| Field Name | Type | Required/Optional | Description |
+|------------|------|-------------------|-------------|
+| InternalOrderState | `State` | Required | InternalOrderState field |
+| BrokerOrderDetails | `BrokerOrderDetails` | Optional | BrokerOrderDetails field |
+| ProcessInfo | `orderproperties.ProcessInfo` | Optional | ProcessInfo field |
+| InstanceID | `string` | Optional | Unique identifier for the instance |
+| BlockTime | `google.protobuf.Timestamp` | Required | BlockTime field |
+| Sequence | `int64` | Required | Sequence field |
+| OrganizationID | `string` | Required | UUID of the organization this item belongs to |
+| UserID | `string` | Required | Unique identifier for the user |
+
+**Use Cases:**
+- Creating new order records
+- Retrieving order information
+- Updating order data
+- Associating items with specific organizations
+
+**Important Notes:**
+- The `InstanceID` field must match a valid identifier format
+- The `OrganizationID` must be a valid UUID format
+- The `UserID` field must match a valid identifier format
+
+#### OrderInstruction {#orderinstruction}
+
+The `OrderInstruction` message provides orderinstruction data and operations.
+
+#### Orders {#orders}
+
+The `Orders` message represents a collection of order with pagination support for handling large result sets.
+
+**Field Table:**
+
+| Field Name | Type | Required/Optional | Description |
+|------------|------|-------------------|-------------|
+| Orders | `Order` | Optional | Orders field |
+| Offset | `int32` | Optional | Offset field |
+
+**Use Cases:**
+- Returning paginated lists of order from queries or searches
+- Implementing pagination in order listing APIs
+- Handling large orders efficiently
+- Providing continuation tokens for subsequent page requests
+
+**Important Notes:**
+- If `Offset` is not set (or is 0), it indicates that all available items have been returned
+- Clients should use the `Offset` value in subsequent requests to retrieve the next page of results
+
+#### Hold {#hold}
+
+The `Hold` message provides hold data and operations.
+
+**Field Table:**
+
+| Field Name | Type | Required/Optional | Description |
+|------------|------|-------------------|-------------|
+| Denom | `string` | Required | Denom value |
+| Amount | `int64` | Required | Amount field |
+| AmountExp | `int32` | Required | AmountExp field |
+
+**Use Cases:**
+- Creating new hold records
+- Retrieving hold information
+- Updating hold data
+
+**Important Notes:**
+- This message provides the hold representation
+
+#### Coin {#coin}
+
+The `Coin` message provides coin data and operations.
+
+**Field Table:**
+
+| Field Name | Type | Required/Optional | Description |
+|------------|------|-------------------|-------------|
+| Denom | `string` | Required | Denom value |
+| Amount | `int64` | Required | Amount field |
+
+**Use Cases:**
+- Creating new coin records
+- Retrieving coin information
+- Updating coin data
+
+**Important Notes:**
+- This message provides the coin representation
+
+#### OrderState {#orderstate}
+
+The `OrderState` message provides orderstate data and operations.
+
+**Field Table:**
+
+| Field Name | Type | Required/Optional | Description |
+|------------|------|-------------------|-------------|
+| SMART_CONTRACT_NEW_ORDER_CREATED | `contract` | Required | SMART_CONTRACT_NEW_ORDER_CREATED field |
+| BROKER_ORDER_PRE_SUBMITTED | `states` | Required | BROKER_ORDER_PRE_SUBMITTED field |
+| BROKER_ORDER_SUBMITTED | `processing` | Required | BROKER_ORDER_SUBMITTED field |
+| BROKER_ORDER_ACCEPTED | `processing` | Required | BROKER_ORDER_ACCEPTED field |
+| BROKER_ORDER_CANCELED | `broker` | Required | BROKER_ORDER_CANCELED field |
+| BROKER_ORDER_EXPIRED | `it` | Required | BROKER_ORDER_EXPIRED field |
+| SMART_CONTRACT_CANCEL_ORDER_REQUESTED | `scenarios` | Required | SMART_CONTRACT_CANCEL_ORDER_REQUESTED field |
+
+**Use Cases:**
+- Creating new orderstate records
+- Retrieving orderstate information
+- Updating orderstate data
+
+**Important Notes:**
+- This message provides the orderstate representation
 
 ### Enums
 
-#### TransactionType
+#### TransactionType {#transactiontype}
+
+The `TransactionType` enum defines the possible states or types for order, allowing for classification and state management.
 
 **Value Table:**
 
 | Value Name | Number | Description |
 |------------|--------|-------------|
-| LimitPriceExp | 7 |  |
-| FillOrKill | 8 |  |
-| ExpiresAt | 9 |  |
-| OrderDetailType | 10 |  |
-| Hold | 11 |  |
-| FundsSent | 12 |  |
-| OrderType | 13 |  |
-| OrderState | 14 |  |
-| PaymentState | 15 |  |
-| AmountExecuted | 16 |  |
-| AmountExecutedExp | 17 |  |
-| UsedFundsAmount | 18 |  |
-| UsedFundsAmountExp | 19 |  |
-| Costs | 20 |  |
-| CostsExp | 21 |  |
-| TimeInForce | 22 |  |
-| LimitPriceFloat | 23 |  |
-| Receiver | 24 |  |
+| LimitPriceExp | 7 | LimitPriceExp value |
+| FillOrKill | 8 | FillOrKill value |
+| ExpiresAt | 9 | ExpiresAt value |
+| OrderDetailType | 10 | OrderDetailType value |
+| Hold | 11 | Hold value |
+| FundsSent | 12 | FundsSent value |
+| OrderType | 13 | OrderType value |
+| OrderState | 14 | OrderState value |
+| PaymentState | 15 | PaymentState value |
+| AmountExecuted | 16 | AmountExecuted value |
+| AmountExecutedExp | 17 | AmountExecutedExp value |
+| UsedFundsAmount | 18 | UsedFundsAmount value |
+| UsedFundsAmountExp | 19 | UsedFundsAmountExp value |
+| Costs | 20 | Costs value |
+| CostsExp | 21 | CostsExp value |
+| TimeInForce | 22 | TimeInForce value |
+| LimitPriceFloat | 23 | LimitPriceFloat value |
+| Receiver | 24 | Receiver value |
 
-#### OrderStateType
+**Use Cases:**
+- Setting transactiontype for items
+- Filtering items by transactiontype in queries
+- Enforcing business logic based on transactiontype
 
-**Value Table:**
+**Important Notes:**
+- Only valid transactiontype values should be used in production code
+- TransactionType changes should be tracked in audit trails for compliance purposes
 
-| Value Name | Number | Description |
-|------------|--------|-------------|
-| Y | 0 |  |
-| SMART_CONTRACT_OWNER | 1 |  |
-| USER | 2 |  |
-| BROKER_ORACLE | 3 |  |
+#### OrderStateType {#orderstatetype}
 
-#### PaymentState
-
-**Value Table:**
-
-| Value Name | Number | Description |
-|------------|--------|-------------|
-| NOT_APPLICABLE_INTERNAL_ORDER_STATE | 0 |  |
-| SMART_CONTRACT_NEW_ORDER_CREATED | 1 |  |
-| BROKER_ORDER_PRE_SUBMITTED | 2 |  |
-| BROKER_ORDER_SUBMITTED | 3 |  |
-| BROKER_ORDER_ACCEPTED | 4 |  |
-| BROKER_ORDER_PENDING_NEW | 5 |  |
-| BROKER_ORDER_NEW | 6 |  |
-| SMART_CONTRACT_ORDER_PLACED | 7 |  |
-| BROKER_ORDER_PARTIALLY_FILLED | 8 |  |
-| SMART_CONTRACT_ORDER_PARTIALLY_FILLED_SUBMITTED | 9 |  |
-| BROKER_ORDER_FILLED | 10 |  |
-| SMART_CONTRACT_ORDER_EXECUTED | 11 |  |
-| BROKER_ORDER_PRE_CANCEL_REQUESTED | 12 |  |
-| BROKER_ORDER_CANCEL_REQUESTED | 13 |  |
-| BROKER_ORDER_CANCELED | 14 |  |
-| BROKER_ORDER_REFUSED | 15 |  |
-| BROKER_ORDER_EXPIRED | 16 |  |
-| SMART_CONTRACT_PRE_ORDER_CANCELLED | 17 |  |
-| SMART_CONTRACT_ORDER_CANCELLED | 18 |  |
-| SMART_CONTRACT_PRE_ORDER_EXPIRED | 21 |  |
-| SMART_CONTRACT_ORDER_EXPIRED | 22 |  |
-| PROCESS_FINISHED | 19 |  |
-| SMART_CONTRACT_CANCEL_ORDER_REQUESTED | 20 |  |
-
-#### OrderDetailType
+The `OrderStateType` enum defines the possible states or types for order, allowing for classification and state management.
 
 **Value Table:**
 
 | Value Name | Number | Description |
 |------------|--------|-------------|
-| NOT_APPLICABLE_ORDER_DETAIL_TYPE | 0 |  |
-| ORDER_DETAIL_LIMIT | 1 |  |
-| ORDER_DETAIL_MARKET | 2 |  |
-| ORDER_DETAIL_STOP_LOSS | 3 |  |
+| Y | 0 | Default/unused value (protobuf convention) |
+| SMART_CONTRACT_OWNER | 1 | Smart Contract Owner state or type |
+| USER | 2 | User state or type |
+| BROKER_ORACLE | 3 | Broker Oracle state or type |
 
-## util.proto {#util}
+**Use Cases:**
+- Setting orderstatetype for items
+- Filtering items by orderstatetype in queries
+- Enforcing business logic based on orderstatetype
+
+**Important Notes:**
+- Values with `NOT_USED` prefix or number 0 follow protobuf conventions for default enum values and should not be actively used
+- Only valid orderstatetype values should be used in production code
+- OrderStateType changes should be tracked in audit trails for compliance purposes
+
+#### PaymentState {#paymentstate}
+
+The `PaymentState` enum defines the possible states or types for order, allowing for classification and state management.
+
+**Value Table:**
+
+| Value Name | Number | Description |
+|------------|--------|-------------|
+| NOT_APPLICABLE_INTERNAL_ORDER_STATE | 0 | Default/unused value (protobuf convention) |
+| SMART_CONTRACT_NEW_ORDER_CREATED | 1 | Smart Contract New Order Created state or type |
+| BROKER_ORDER_PRE_SUBMITTED | 2 | Broker Order Pre Submitted state or type |
+| BROKER_ORDER_SUBMITTED | 3 | Broker Order Submitted state or type |
+| BROKER_ORDER_ACCEPTED | 4 | Broker Order Accepted state or type |
+| BROKER_ORDER_PENDING_NEW | 5 | Broker Order Pending New state or type |
+| BROKER_ORDER_NEW | 6 | Broker Order New state or type |
+| SMART_CONTRACT_ORDER_PLACED | 7 | Smart Contract Order Placed state or type |
+| BROKER_ORDER_PARTIALLY_FILLED | 8 | Broker Order Partially Filled state or type |
+| SMART_CONTRACT_ORDER_PARTIALLY_FILLED_SUBMITTED | 9 | Smart Contract Order Partially Filled Submitted state or type |
+| BROKER_ORDER_FILLED | 10 | Broker Order Filled state or type |
+| SMART_CONTRACT_ORDER_EXECUTED | 11 | Smart Contract Order Executed state or type |
+| BROKER_ORDER_PRE_CANCEL_REQUESTED | 12 | Broker Order Pre Cancel Requested state or type |
+| BROKER_ORDER_CANCEL_REQUESTED | 13 | Broker Order Cancel Requested state or type |
+| BROKER_ORDER_CANCELED | 14 | Broker Order Canceled state or type |
+| BROKER_ORDER_REFUSED | 15 | Broker Order Refused state or type |
+| BROKER_ORDER_EXPIRED | 16 | Broker Order Expired state or type |
+| SMART_CONTRACT_PRE_ORDER_CANCELLED | 17 | Smart Contract Pre Order Cancelled state or type |
+| SMART_CONTRACT_ORDER_CANCELLED | 18 | Smart Contract Order Cancelled state or type |
+| SMART_CONTRACT_PRE_ORDER_EXPIRED | 21 | Smart Contract Pre Order Expired state or type |
+| SMART_CONTRACT_ORDER_EXPIRED | 22 | Smart Contract Order Expired state or type |
+| PROCESS_FINISHED | 19 | Process Finished state or type |
+| SMART_CONTRACT_CANCEL_ORDER_REQUESTED | 20 | Smart Contract Cancel Order Requested state or type |
+
+**Use Cases:**
+- Setting paymentstate for items
+- Filtering items by paymentstate in queries
+- Enforcing business logic based on paymentstate
+
+**Important Notes:**
+- Values with `NOT_USED` prefix or number 0 follow protobuf conventions for default enum values and should not be actively used
+- Only valid paymentstate values should be used in production code
+- PaymentState changes should be tracked in audit trails for compliance purposes
+
+#### OrderDetailType {#orderdetailtype}
+
+The `OrderDetailType` enum defines the possible states or types for order, allowing for classification and state management.
+
+**Value Table:**
+
+| Value Name | Number | Description |
+|------------|--------|-------------|
+| NOT_APPLICABLE_ORDER_DETAIL_TYPE | 0 | Default/unused value (protobuf convention) |
+| ORDER_DETAIL_LIMIT | 1 | Order Detail Limit state or type |
+| ORDER_DETAIL_MARKET | 2 | Order Detail Market state or type |
+| ORDER_DETAIL_STOP_LOSS | 3 | Order Detail Stop Loss state or type |
+
+**Use Cases:**
+- Setting orderdetailtype for items
+- Filtering items by orderdetailtype in queries
+- Enforcing business logic based on orderdetailtype
+
+**Important Notes:**
+- Values with `NOT_USED` prefix or number 0 follow protobuf conventions for default enum values and should not be actively used
+- Only valid orderdetailtype values should be used in production code
+- OrderDetailType changes should be tracked in audit trails for compliance purposes
+
+## util.proto
 
 ### Package Information
 
@@ -259,14 +433,16 @@ No fields defined.
 
 ### Overview
 
-The `util.proto` file defines the Util model.
+The `util.proto` file defines the core util model for order management. It provides message types for representing util data and operations. The file integrates with external utility libraries: `order-properties.proto`.
 
 ## Version Information
 
-This documentation corresponds to the current version of the proto files in this repository.
+This documentation corresponds to the Protocol Buffer definitions in `attestation.proto`, `broker.proto`, `order.proto`, `util.proto`. The proto file(s) use `proto3` syntax. When referencing this documentation, ensure that the version of the proto files matches the version of the generated code and API implementations you are using.
 
 ## Support
 
-For more information, see:
-- README.md in this repository
-- Protocol Buffer documentation
+For additional information and support:
+- See `README.md` for project setup, installation, and usage instructions
+- Refer to the Protocol Buffer definitions in `attestation.proto`, `broker.proto`, `order.proto`, `util.proto` for the authoritative source of truth
+- Check the imported utility libraries for details on related types:
+  - `sologenic/com-fs-utils-lib/models/order-properties/order-properties.proto`
