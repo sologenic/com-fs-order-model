@@ -30,12 +30,11 @@
 
 ## Overview
 
-The Order provides a comprehensive data structure for managing order within the system. This model supports pagination support: provides offset-based pagination for collections, identification: provides unique identifiers for order, status management: tracks status for administrative control, and more. 
+The Order provides a comprehensive data structure for managing order within the system. This model supports pagination support: provides offset-based pagination for collections, identification: provides unique identifiers for order, metadata and audit: includes metadata and audit trails for tracking changes, and more. 
 
 Key features of the {model_name.lower()} model include:
 - **Pagination Support**: Provides offset-based pagination for collections
 - **Identification**: Provides unique identifiers for order
-- **Status Management**: Tracks status for administrative control
 - **Metadata and Audit**: Includes metadata and audit trails for tracking changes
 - **Organizational Context**: Links items to organizations via OrganizationID
 
@@ -100,37 +99,26 @@ The `BrokerOrderDetails` message contains all the core information about a broke
 | TimeInForce | `orderproperties.TimeInForce` | Required | TimeInForce field |
 | Notional | `decimal.Decimal` | Optional | Notional field |
 | OrderQty | `decimal.Decimal` | Optional | OrderQty field |
-| FilledQty | `decimal.Decimal` | Required | FilledQty field |
 | FilledAvgPrice | `decimal.Decimal` | Optional | FilledAvgPrice field |
 | LimitPrice | `decimal.Decimal` | Optional | LimitPrice field |
 | StopPrice | `decimal.Decimal` | Optional | StopPrice field |
 | TrailPrice | `decimal.Decimal` | Optional | TrailPrice field |
 | TrailPercent | `decimal.Decimal` | Optional | TrailPercent field |
-| HWM | `decimal.Decimal` | Optional | HWM field |
-| ExtendedHours | `bool` | Required | ExtendedHours field |
 | CreatedAt | `google.protobuf.Timestamp` | Required | CreatedAt field |
 | UpdatedAt | `google.protobuf.Timestamp` | Optional | UpdatedAt field |
-| Status | `BrokerOrderStatus` | Required | Current status of this item (see related enum) |
 | TotalPosition | `decimal.Decimal` | Optional | TotalPosition field |
 | PartialPrice | `decimal.Decimal` | Optional | PartialPrice field |
 | PartialQty | `decimal.Decimal` | Optional | PartialQty field |
 | ProcessInfo | `orderproperties.ProcessInfo` | Optional | ProcessInfo field |
-| InstanceID | `string` | Optional | Unique identifier for the instance |
-| ClearingBroker | `orderproperties.ClearingBroker` | Required | ClearingBroker field |
-| EventID | `string` | Optional | Unique identifier for the event |
 | EventTime | `google.protobuf.Timestamp` | Optional | EventTime field |
 | CommissionSettings | `commission.CommissionSettings` | Optional | CommissionSettings field |
 
 **Use Cases:**
 - Creating new brokerorder records with complete information
 - Updating brokerorder information
-- Tracking status for administrative purposes
 
 **Important Notes:**
 - The `Side` field must match a valid identifier format
-- The `Status` field determines the current state of this item
-- The `InstanceID` field must match a valid identifier format
-- The `EventID` field must match a valid identifier format
 
 #### ClientOrderID {#clientorderid}
 
@@ -191,11 +179,8 @@ The `Order` message provides order data and operations.
 | Field Name | Type | Required/Optional | Description |
 |------------|------|-------------------|-------------|
 | InternalOrderState | `State` | Required | InternalOrderState field |
-| BrokerOrderDetails | `BrokerOrderDetails` | Optional | BrokerOrderDetails field |
 | ProcessInfo | `orderproperties.ProcessInfo` | Optional | ProcessInfo field |
-| InstanceID | `string` | Optional | Unique identifier for the instance |
 | BlockTime | `google.protobuf.Timestamp` | Required | BlockTime field |
-| Sequence | `int64` | Required | Sequence field |
 | OrganizationID | `string` | Required | UUID of the organization this item belongs to |
 | UserID | `string` | Required | Unique identifier for the user |
 
@@ -206,7 +191,6 @@ The `Order` message provides order data and operations.
 - Associating items with specific organizations
 
 **Important Notes:**
-- The `InstanceID` field must match a valid identifier format
 - The `OrganizationID` must be a valid UUID format
 - The `UserID` field must match a valid identifier format
 
@@ -277,26 +261,6 @@ The `Coin` message provides coin data and operations.
 #### OrderState {#orderstate}
 
 The `OrderState` message provides orderstate data and operations.
-
-**Field Table:**
-
-| Field Name | Type | Required/Optional | Description |
-|------------|------|-------------------|-------------|
-| SMART_CONTRACT_NEW_ORDER_CREATED | `contract` | Required | SMART_CONTRACT_NEW_ORDER_CREATED field |
-| BROKER_ORDER_PRE_SUBMITTED | `states` | Required | BROKER_ORDER_PRE_SUBMITTED field |
-| BROKER_ORDER_SUBMITTED | `processing` | Required | BROKER_ORDER_SUBMITTED field |
-| BROKER_ORDER_ACCEPTED | `processing` | Required | BROKER_ORDER_ACCEPTED field |
-| BROKER_ORDER_CANCELED | `broker` | Required | BROKER_ORDER_CANCELED field |
-| BROKER_ORDER_EXPIRED | `it` | Required | BROKER_ORDER_EXPIRED field |
-| SMART_CONTRACT_CANCEL_ORDER_REQUESTED | `scenarios` | Required | SMART_CONTRACT_CANCEL_ORDER_REQUESTED field |
-
-**Use Cases:**
-- Creating new orderstate records
-- Retrieving orderstate information
-- Updating orderstate data
-
-**Important Notes:**
-- This message provides the orderstate representation
 
 ### Enums
 
