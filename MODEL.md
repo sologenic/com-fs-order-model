@@ -38,7 +38,7 @@
 
 The Order provides a comprehensive data structure for managing order within the system. This model supports metadata and audit: includes metadata and audit trails for tracking changes, pagination support: provides offset-based pagination for collections, identification: provides unique identifiers for order, and more. 
 
-Key features of the {model_name.lower()} model include:
+Key features of the order model include:
 - **Metadata and Audit**: Includes metadata and audit trails for tracking changes
 - **Pagination Support**: Provides offset-based pagination for collections
 - **Identification**: Provides unique identifiers for order
@@ -69,10 +69,10 @@ The `Attestation` message provides attestation data and operations.
 | Network | `metadata.Network` | Required | Metadata information including network and version details |
 | SmartContractAddr | `string` | Required | SmartContractAddr value |
 | Denom | `string` | Required | Denom value |
-| BrokerQuantity | `decimal.Decimal` | Optional | BrokerQuantity field |
-| ChainQuantity | `decimal.Decimal` | Required | ChainQuantity field |
+| BrokerQuantity | `decimal.Decimal` | Optional | Decimal information |
+| ChainQuantity | `decimal.Decimal` | Required | Decimal information |
 | BlockHeight | `int64` | Required | BlockHeight field |
-| Timestamp | `google.protobuf.Timestamp` | Required | Timestamp field |
+| Timestamp | `google.protobuf.Timestamp` | Required | Timestamp information |
 | ReattestationBlockHeight | `int64` | Optional | ReattestationBlockHeight field |
 
 **Use Cases:**
@@ -127,40 +127,40 @@ The `BrokerOrderDetails` message contains all the core information about a broke
 |------------|------|-------------------|-------------|
 | BrokerAssignedID | `string` | Required | auto generated ID from the broker |
 | ClientOrderID | `ClientOrderID` | Required | unique identifier for the order in message to the broker, value is from the key function |
-| SubmittedAt | `google.protobuf.Timestamp` | Required | SubmittedAt field |
-| FilledAt | `google.protobuf.Timestamp` | Optional | FilledAt field |
-| ExpiredAt | `google.protobuf.Timestamp` | Optional | ExpiredAt field |
-| CancelledAt | `google.protobuf.Timestamp` | Optional | CancelledAt field |
-| FailedAt | `google.protobuf.Timestamp` | Optional | FailedAt field |
+| SubmittedAt | `google.protobuf.Timestamp` | Required | Timestamp information |
+| FilledAt | `google.protobuf.Timestamp` | Optional | Timestamp information |
+| ExpiredAt | `google.protobuf.Timestamp` | Optional | Timestamp information |
+| CancelledAt | `google.protobuf.Timestamp` | Optional | Timestamp information |
+| FailedAt | `google.protobuf.Timestamp` | Optional | Timestamp information |
 | AssetID | `string` | Required | Unique identifier for the asset |
 | Symbol | `string` | Required | Symbol value |
 | AssetClass | `asset.AssetType` | Required | Also called AssetType in the asset model |
 | OrderClass | `OrderClass` | Required | OrderClass field |
 | Type | `TradeType` | Required | Type classification for this item (see related enum) |
 | Side | `orderproperties.OrderType` | Required | Unique identifier for the side |
-| TimeInForce | `orderproperties.TimeInForce` | Required | TimeInForce field |
-| Notional | `decimal.Decimal` | Optional | Notional field |
-| OrderQty | `decimal.Decimal` | Optional | OrderQty field |
+| TimeInForce | `orderproperties.TimeInForce` | Required | TimeInForce information |
+| Notional | `decimal.Decimal` | Optional | Decimal information |
+| OrderQty | `decimal.Decimal` | Optional | Decimal information |
 | FilledQty | `decimal.Decimal` | Required | defaults to 0, updated as previous `FilledQty` + `PartialQty` |
-| FilledAvgPrice | `decimal.Decimal` | Optional | FilledAvgPrice field |
-| LimitPrice | `decimal.Decimal` | Optional | LimitPrice field |
-| StopPrice | `decimal.Decimal` | Optional | StopPrice field |
-| TrailPrice | `decimal.Decimal` | Optional | TrailPrice field |
-| TrailPercent | `decimal.Decimal` | Optional | TrailPercent field |
+| FilledAvgPrice | `decimal.Decimal` | Optional | Decimal information |
+| LimitPrice | `decimal.Decimal` | Optional | Decimal information |
+| StopPrice | `decimal.Decimal` | Optional | Decimal information |
+| TrailPrice | `decimal.Decimal` | Optional | Decimal information |
+| TrailPercent | `decimal.Decimal` | Optional | Decimal information |
 | HWM | `decimal.Decimal` | Optional | High Water Mark, used for trailing stop orders |
 | ExtendedHours | `bool` | Required | defaults to false, High Water Mark is used for trailing stop orders |
-| CreatedAt | `google.protobuf.Timestamp` | Required | CreatedAt field |
-| UpdatedAt | `google.protobuf.Timestamp` | Optional | UpdatedAt field |
+| CreatedAt | `google.protobuf.Timestamp` | Required | Timestamp information |
+| UpdatedAt | `google.protobuf.Timestamp` | Optional | Timestamp information |
 | Status | `BrokerOrderStatus` | Required | status of the order in exchange |
-| TotalPosition | `decimal.Decimal` | Optional | TotalPosition field |
-| PartialPrice | `decimal.Decimal` | Optional | PartialPrice field |
-| PartialQty | `decimal.Decimal` | Optional | PartialQty field |
-| ProcessInfo | `orderproperties.ProcessInfo` | Optional | ProcessInfo field |
+| TotalPosition | `decimal.Decimal` | Optional | Decimal information |
+| PartialPrice | `decimal.Decimal` | Optional | Decimal information |
+| PartialQty | `decimal.Decimal` | Optional | Decimal information |
+| ProcessInfo | `orderproperties.ProcessInfo` | Optional | ProcessInfo information |
 | InstanceID | `string` | Optional | ID used by logs to identify the instance where the log was created/ processed |
 | ClearingBroker | `orderproperties.ClearingBroker` | Required | Broker that cleared the order, e.g. Alpaca, RQD, etc. |
 | EventID | `string` | Optional | ULID generated by broker |
-| EventTime | `google.protobuf.Timestamp` | Optional | EventTime field |
-| CommissionSettings | `commission.CommissionSettings` | Optional | CommissionSettings field |
+| EventTime | `google.protobuf.Timestamp` | Optional | Timestamp information |
+| CommissionSettings | `commission.CommissionSettings` | Optional | CommissionSettings information |
 
 **Use Cases:**
 - Creating new brokerorder records with complete information
@@ -237,19 +237,19 @@ The `Order` message provides order data and operations.
 | Network | `metadata.Network` | Required | Metadata information including network and version details |
 | SmartContractAddr | `string` | Required | SmartContractAddr value |
 | Instruction | `OrderInstruction` | Required | Snapshot of the order in the smart contract |
-| CreatedAt | `google.protobuf.Timestamp` | Required | CreatedAt field |
-| UpdatedAt | `google.protobuf.Timestamp` | Required | UpdatedAt field |
+| CreatedAt | `google.protobuf.Timestamp` | Required | Timestamp information |
+| UpdatedAt | `google.protobuf.Timestamp` | Required | Timestamp information |
 | TransactionType | `TransactionType` | Required | Type classification for this item (see related enum) |
 | TXID | `string` | Required | Unique Key in the datastore |
 | GasFee | `int64` | Required | GasFee field |
 | GasFeeUSD | `double` | Optional | GasFeeUSD field |
-| DetectedAt | `google.protobuf.Timestamp` | Required | DetectedAt field |
+| DetectedAt | `google.protobuf.Timestamp` | Required | Timestamp information |
 | Height | `int64` | Required | Height field |
 | InternalOrderState | `InternalOrderState` | Required | InternalOrderState field |
 | BrokerOrderDetails | `BrokerOrderDetails` | Optional | Matches data on SmartContractAddr, orderdetails.OrderID and network |
-| ProcessInfo | `orderproperties.ProcessInfo` | Optional | ProcessInfo field |
+| ProcessInfo | `orderproperties.ProcessInfo` | Optional | ProcessInfo information |
 | InstanceID | `string` | Optional | ID used by logs to identify the instance where the log was created/ processed |
-| BlockTime | `google.protobuf.Timestamp` | Required | BlockTime field |
+| BlockTime | `google.protobuf.Timestamp` | Required | Timestamp information |
 | Sequence | `int64` | Required | Sequence |
 | OrganizationID | `string` | Required | UUID of the organization this item belongs to |
 | UserID | `string` | Required | Unique identifier for the user |
@@ -295,7 +295,7 @@ The `OrderInstruction` message provides orderinstruction data and operations.
 | UsedFundsAmountExp | `int32` | Optional | UsedFundsAmountExp field |
 | Costs | `int64` | Optional | Costs field |
 | CostsExp | `int32` | Optional | CostsExp field |
-| TimeInForce | `orderproperties.TimeInForce` | Optional | TimeInForce field |
+| TimeInForce | `orderproperties.TimeInForce` | Optional | TimeInForce information |
 | LimitPriceFloat | `double` | Optional | Direct float price from smart contract (e.g., 26.25) |
 | Receiver | `Receiver` | Optional | The address of the receiver, used for sending of funds. Receiver can also be an email address, tx address or blockchain addres from another blockchain. |
 
@@ -553,8 +553,8 @@ The `LockLogRecord` message provides locklogrecord data and operations.
 | Field Name | Type | Required/Optional | Description |
 |------------|------|-------------------|-------------|
 | Key | `string` | Required | Key value |
-| MustHaveState | `orderproperties.ProcessState` | Optional | MustHaveState field |
-| TargetState | `orderproperties.ProcessState` | Required | TargetState field |
+| MustHaveState | `orderproperties.ProcessState` | Optional | ProcessState information |
+| TargetState | `orderproperties.ProcessState` | Required | ProcessState information |
 
 **Use Cases:**
 - Creating new locklogrecord records
