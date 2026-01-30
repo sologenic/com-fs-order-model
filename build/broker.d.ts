@@ -1,7 +1,7 @@
 import _m0 from "protobufjs/minimal";
 import { AssetType } from "./sologenic/com-fs-asset-model/asset";
-import { Decimal } from "./sologenic/com-fs-utils-lib/go/decimal/decimal";
 import { CommissionSettings } from "./sologenic/com-fs-utils-lib/models/commission/commission";
+import { Decimal } from "./sologenic/com-fs-utils-lib/models/decimal/decimal";
 import { Network } from "./sologenic/com-fs-utils-lib/models/metadata/metadata";
 import { ClearingBroker, OrderType, ProcessInfo, TimeInForce } from "./sologenic/com-fs-utils-lib/models/order-properties/order-properties";
 export declare const protobufPackage = "order";

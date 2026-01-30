@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/sologenic/com-fs-utils-lib/go/logger"
+	"github.com/sologenic/com-fs-utils-internal-lib/go/logger"
 )
 
 // Client represents an RQD API client

@@ -7,7 +7,7 @@ import (
 
 	ordergrpc "github.com/sologenic/com-fs-order-model"
 	ordergrpcdmn "github.com/sologenic/com-fs-order-model/domain"
-	utilsdecimal "github.com/sologenic/com-fs-utils-lib/go/decimal"
+	utilsdecimal "github.com/sologenic/com-fs-utils-lib/models/decimal"
 	"github.com/sologenic/com-fs-utils-lib/models/metadata"
 	orderproperties "github.com/sologenic/com-fs-utils-lib/models/order-properties"
 	"google.golang.org/protobuf/types/known/timestamppb"

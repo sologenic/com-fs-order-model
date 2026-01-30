@@ -6,7 +6,7 @@ option go_package = "github.com/sologenic/com-fs-order-model;order";
 
 import "google/protobuf/timestamp.proto";
 import "sologenic/com-fs-utils-lib/models/order-properties/order-properties.proto";
-import "sologenic/com-fs-utils-lib/go/decimal/decimal.proto";
+import "sologenic/com-fs-utils-lib/models/decimal/decimal.proto";
 import "sologenic/com-fs-utils-lib/models/metadata/metadata.proto";
 import "sologenic/com-fs-asset-model/asset.proto";
 import "sologenic/com-fs-utils-lib/models/commission/commission.proto";

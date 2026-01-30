@@ -596,63 +596,63 @@ export declare const Order: {
             } & {
                 Value?: number | undefined;
                 Exp?: number | undefined;
-            } & { [K_6 in Exclude<keyof I["BrokerOrderDetails"]["Notional"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+            } & { [K_6 in Exclude<keyof I["BrokerOrderDetails"]["Notional"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
             OrderQty?: ({
                 Value?: number | undefined;
                 Exp?: number | undefined;
             } & {
                 Value?: number | undefined;
                 Exp?: number | undefined;
-            } & { [K_7 in Exclude<keyof I["BrokerOrderDetails"]["OrderQty"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+            } & { [K_7 in Exclude<keyof I["BrokerOrderDetails"]["OrderQty"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
             FilledQty?: ({
                 Value?: number | undefined;
                 Exp?: number | undefined;
             } & {
                 Value?: number | undefined;
                 Exp?: number | undefined;
-            } & { [K_8 in Exclude<keyof I["BrokerOrderDetails"]["FilledQty"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+            } & { [K_8 in Exclude<keyof I["BrokerOrderDetails"]["FilledQty"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
             FilledAvgPrice?: ({
                 Value?: number | undefined;
                 Exp?: number | undefined;
             } & {
                 Value?: number | undefined;
                 Exp?: number | undefined;
-            } & { [K_9 in Exclude<keyof I["BrokerOrderDetails"]["FilledAvgPrice"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+            } & { [K_9 in Exclude<keyof I["BrokerOrderDetails"]["FilledAvgPrice"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
             LimitPrice?: ({
                 Value?: number | undefined;
                 Exp?: number | undefined;
             } & {
                 Value?: number | undefined;
                 Exp?: number | undefined;
-            } & { [K_10 in Exclude<keyof I["BrokerOrderDetails"]["LimitPrice"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+            } & { [K_10 in Exclude<keyof I["BrokerOrderDetails"]["LimitPrice"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
             StopPrice?: ({
                 Value?: number | undefined;
                 Exp?: number | undefined;
             } & {
                 Value?: number | undefined;
                 Exp?: number | undefined;
-            } & { [K_11 in Exclude<keyof I["BrokerOrderDetails"]["StopPrice"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+            } & { [K_11 in Exclude<keyof I["BrokerOrderDetails"]["StopPrice"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
             TrailPrice?: ({
                 Value?: number | undefined;
                 Exp?: number | undefined;
             } & {
                 Value?: number | undefined;
                 Exp?: number | undefined;
-            } & { [K_12 in Exclude<keyof I["BrokerOrderDetails"]["TrailPrice"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+            } & { [K_12 in Exclude<keyof I["BrokerOrderDetails"]["TrailPrice"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
             TrailPercent?: ({
                 Value?: number | undefined;
                 Exp?: number | undefined;
             } & {
                 Value?: number | undefined;
                 Exp?: number | undefined;
-            } & { [K_13 in Exclude<keyof I["BrokerOrderDetails"]["TrailPercent"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+            } & { [K_13 in Exclude<keyof I["BrokerOrderDetails"]["TrailPercent"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
             HWM?: ({
                 Value?: number | undefined;
                 Exp?: number | undefined;
             } & {
                 Value?: number | undefined;
                 Exp?: number | undefined;
-            } & { [K_14 in Exclude<keyof I["BrokerOrderDetails"]["HWM"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+            } & { [K_14 in Exclude<keyof I["BrokerOrderDetails"]["HWM"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
             ExtendedHours?: boolean | undefined;
             CreatedAt?: Date | undefined;
             UpdatedAt?: Date | undefined;
@@ -663,21 +663,21 @@ export declare const Order: {
             } & {
                 Value?: number | undefined;
                 Exp?: number | undefined;
-            } & { [K_15 in Exclude<keyof I["BrokerOrderDetails"]["TotalPosition"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+            } & { [K_15 in Exclude<keyof I["BrokerOrderDetails"]["TotalPosition"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
             PartialPrice?: ({
                 Value?: number | undefined;
                 Exp?: number | undefined;
             } & {
                 Value?: number | undefined;
                 Exp?: number | undefined;
-            } & { [K_16 in Exclude<keyof I["BrokerOrderDetails"]["PartialPrice"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+            } & { [K_16 in Exclude<keyof I["BrokerOrderDetails"]["PartialPrice"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
             PartialQty?: ({
                 Value?: number | undefined;
                 Exp?: number | undefined;
             } & {
                 Value?: number | undefined;
                 Exp?: number | undefined;
-            } & { [K_17 in Exclude<keyof I["BrokerOrderDetails"]["PartialQty"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+            } & { [K_17 in Exclude<keyof I["BrokerOrderDetails"]["PartialQty"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
             ProcessInfo?: ({
                 ProcessState?: import("./sologenic/com-fs-utils-lib/models/order-properties/order-properties").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
@@ -702,7 +702,7 @@ export declare const Order: {
                 } & {
                     Value?: number | undefined;
                     Exp?: number | undefined;
-                } & { [K_19 in Exclude<keyof I["BrokerOrderDetails"]["CommissionSettings"]["Commission"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+                } & { [K_19 in Exclude<keyof I["BrokerOrderDetails"]["CommissionSettings"]["Commission"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
                 CommissionType?: import("./sologenic/com-fs-utils-lib/models/commission/commission").CommissionType | undefined;
             } & { [K_20 in Exclude<keyof I["BrokerOrderDetails"]["CommissionSettings"], keyof import("./sologenic/com-fs-utils-lib/models/commission/commission").CommissionSettings>]: never; }) | undefined;
         } & { [K_21 in Exclude<keyof I["BrokerOrderDetails"], keyof BrokerOrderDetails>]: never; }) | undefined;
@@ -1083,63 +1083,63 @@ export declare const Order: {
             } & {
                 Value?: number | undefined;
                 Exp?: number | undefined;
-            } & { [K_30 in Exclude<keyof I_1["BrokerOrderDetails"]["Notional"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+            } & { [K_30 in Exclude<keyof I_1["BrokerOrderDetails"]["Notional"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
             OrderQty?: ({
                 Value?: number | undefined;
                 Exp?: number | undefined;
             } & {
                 Value?: number | undefined;
                 Exp?: number | undefined;
-            } & { [K_31 in Exclude<keyof I_1["BrokerOrderDetails"]["OrderQty"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+            } & { [K_31 in Exclude<keyof I_1["BrokerOrderDetails"]["OrderQty"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
             FilledQty?: ({
                 Value?: number | undefined;
                 Exp?: number | undefined;
             } & {
                 Value?: number | undefined;
                 Exp?: number | undefined;
-            } & { [K_32 in Exclude<keyof I_1["BrokerOrderDetails"]["FilledQty"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+            } & { [K_32 in Exclude<keyof I_1["BrokerOrderDetails"]["FilledQty"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
             FilledAvgPrice?: ({
                 Value?: number | undefined;
                 Exp?: number | undefined;
             } & {
                 Value?: number | undefined;
                 Exp?: number | undefined;
-            } & { [K_33 in Exclude<keyof I_1["BrokerOrderDetails"]["FilledAvgPrice"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+            } & { [K_33 in Exclude<keyof I_1["BrokerOrderDetails"]["FilledAvgPrice"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
             LimitPrice?: ({
                 Value?: number | undefined;
                 Exp?: number | undefined;
             } & {
                 Value?: number | undefined;
                 Exp?: number | undefined;
-            } & { [K_34 in Exclude<keyof I_1["BrokerOrderDetails"]["LimitPrice"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+            } & { [K_34 in Exclude<keyof I_1["BrokerOrderDetails"]["LimitPrice"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
             StopPrice?: ({
                 Value?: number | undefined;
                 Exp?: number | undefined;
             } & {
                 Value?: number | undefined;
                 Exp?: number | undefined;
-            } & { [K_35 in Exclude<keyof I_1["BrokerOrderDetails"]["StopPrice"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+            } & { [K_35 in Exclude<keyof I_1["BrokerOrderDetails"]["StopPrice"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
             TrailPrice?: ({
                 Value?: number | undefined;
                 Exp?: number | undefined;
             } & {
                 Value?: number | undefined;
                 Exp?: number | undefined;
-            } & { [K_36 in Exclude<keyof I_1["BrokerOrderDetails"]["TrailPrice"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+            } & { [K_36 in Exclude<keyof I_1["BrokerOrderDetails"]["TrailPrice"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
             TrailPercent?: ({
                 Value?: number | undefined;
                 Exp?: number | undefined;
             } & {
                 Value?: number | undefined;
                 Exp?: number | undefined;
-            } & { [K_37 in Exclude<keyof I_1["BrokerOrderDetails"]["TrailPercent"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+            } & { [K_37 in Exclude<keyof I_1["BrokerOrderDetails"]["TrailPercent"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
             HWM?: ({
                 Value?: number | undefined;
                 Exp?: number | undefined;
             } & {
                 Value?: number | undefined;
                 Exp?: number | undefined;
-            } & { [K_38 in Exclude<keyof I_1["BrokerOrderDetails"]["HWM"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+            } & { [K_38 in Exclude<keyof I_1["BrokerOrderDetails"]["HWM"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
             ExtendedHours?: boolean | undefined;
             CreatedAt?: Date | undefined;
             UpdatedAt?: Date | undefined;
@@ -1150,21 +1150,21 @@ export declare const Order: {
             } & {
                 Value?: number | undefined;
                 Exp?: number | undefined;
-            } & { [K_39 in Exclude<keyof I_1["BrokerOrderDetails"]["TotalPosition"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+            } & { [K_39 in Exclude<keyof I_1["BrokerOrderDetails"]["TotalPosition"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
             PartialPrice?: ({
                 Value?: number | undefined;
                 Exp?: number | undefined;
             } & {
                 Value?: number | undefined;
                 Exp?: number | undefined;
-            } & { [K_40 in Exclude<keyof I_1["BrokerOrderDetails"]["PartialPrice"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+            } & { [K_40 in Exclude<keyof I_1["BrokerOrderDetails"]["PartialPrice"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
             PartialQty?: ({
                 Value?: number | undefined;
                 Exp?: number | undefined;
             } & {
                 Value?: number | undefined;
                 Exp?: number | undefined;
-            } & { [K_41 in Exclude<keyof I_1["BrokerOrderDetails"]["PartialQty"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+            } & { [K_41 in Exclude<keyof I_1["BrokerOrderDetails"]["PartialQty"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
             ProcessInfo?: ({
                 ProcessState?: import("./sologenic/com-fs-utils-lib/models/order-properties/order-properties").ProcessState | undefined;
                 ProcessedAt?: Date | undefined;
@@ -1189,7 +1189,7 @@ export declare const Order: {
                 } & {
                     Value?: number | undefined;
                     Exp?: number | undefined;
-                } & { [K_43 in Exclude<keyof I_1["BrokerOrderDetails"]["CommissionSettings"]["Commission"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+                } & { [K_43 in Exclude<keyof I_1["BrokerOrderDetails"]["CommissionSettings"]["Commission"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
                 CommissionType?: import("./sologenic/com-fs-utils-lib/models/commission/commission").CommissionType | undefined;
             } & { [K_44 in Exclude<keyof I_1["BrokerOrderDetails"]["CommissionSettings"], keyof import("./sologenic/com-fs-utils-lib/models/commission/commission").CommissionSettings>]: never; }) | undefined;
         } & { [K_45 in Exclude<keyof I_1["BrokerOrderDetails"], keyof BrokerOrderDetails>]: never; }) | undefined;
@@ -2060,63 +2060,63 @@ export declare const Orders: {
                 } & {
                     Value?: number | undefined;
                     Exp?: number | undefined;
-                } & { [K_6 in Exclude<keyof I["Orders"][number]["BrokerOrderDetails"]["Notional"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+                } & { [K_6 in Exclude<keyof I["Orders"][number]["BrokerOrderDetails"]["Notional"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
                 OrderQty?: ({
                     Value?: number | undefined;
                     Exp?: number | undefined;
                 } & {
                     Value?: number | undefined;
                     Exp?: number | undefined;
-                } & { [K_7 in Exclude<keyof I["Orders"][number]["BrokerOrderDetails"]["OrderQty"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+                } & { [K_7 in Exclude<keyof I["Orders"][number]["BrokerOrderDetails"]["OrderQty"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
                 FilledQty?: ({
                     Value?: number | undefined;
                     Exp?: number | undefined;
                 } & {
                     Value?: number | undefined;
                     Exp?: number | undefined;
-                } & { [K_8 in Exclude<keyof I["Orders"][number]["BrokerOrderDetails"]["FilledQty"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+                } & { [K_8 in Exclude<keyof I["Orders"][number]["BrokerOrderDetails"]["FilledQty"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
                 FilledAvgPrice?: ({
                     Value?: number | undefined;
                     Exp?: number | undefined;
                 } & {
                     Value?: number | undefined;
                     Exp?: number | undefined;
-                } & { [K_9 in Exclude<keyof I["Orders"][number]["BrokerOrderDetails"]["FilledAvgPrice"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+                } & { [K_9 in Exclude<keyof I["Orders"][number]["BrokerOrderDetails"]["FilledAvgPrice"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
                 LimitPrice?: ({
                     Value?: number | undefined;
                     Exp?: number | undefined;
                 } & {
                     Value?: number | undefined;
                     Exp?: number | undefined;
-                } & { [K_10 in Exclude<keyof I["Orders"][number]["BrokerOrderDetails"]["LimitPrice"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+                } & { [K_10 in Exclude<keyof I["Orders"][number]["BrokerOrderDetails"]["LimitPrice"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
                 StopPrice?: ({
                     Value?: number | undefined;
                     Exp?: number | undefined;
                 } & {
                     Value?: number | undefined;
                     Exp?: number | undefined;
-                } & { [K_11 in Exclude<keyof I["Orders"][number]["BrokerOrderDetails"]["StopPrice"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+                } & { [K_11 in Exclude<keyof I["Orders"][number]["BrokerOrderDetails"]["StopPrice"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
                 TrailPrice?: ({
                     Value?: number | undefined;
                     Exp?: number | undefined;
                 } & {
                     Value?: number | undefined;
                     Exp?: number | undefined;
-                } & { [K_12 in Exclude<keyof I["Orders"][number]["BrokerOrderDetails"]["TrailPrice"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+                } & { [K_12 in Exclude<keyof I["Orders"][number]["BrokerOrderDetails"]["TrailPrice"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
                 TrailPercent?: ({
                     Value?: number | undefined;
                     Exp?: number | undefined;
                 } & {
                     Value?: number | undefined;
                     Exp?: number | undefined;
-                } & { [K_13 in Exclude<keyof I["Orders"][number]["BrokerOrderDetails"]["TrailPercent"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+                } & { [K_13 in Exclude<keyof I["Orders"][number]["BrokerOrderDetails"]["TrailPercent"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
                 HWM?: ({
                     Value?: number | undefined;
                     Exp?: number | undefined;
                 } & {
                     Value?: number | undefined;
                     Exp?: number | undefined;
-                } & { [K_14 in Exclude<keyof I["Orders"][number]["BrokerOrderDetails"]["HWM"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+                } & { [K_14 in Exclude<keyof I["Orders"][number]["BrokerOrderDetails"]["HWM"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
                 ExtendedHours?: boolean | undefined;
                 CreatedAt?: Date | undefined;
                 UpdatedAt?: Date | undefined;
@@ -2127,21 +2127,21 @@ export declare const Orders: {
                 } & {
                     Value?: number | undefined;
                     Exp?: number | undefined;
-                } & { [K_15 in Exclude<keyof I["Orders"][number]["BrokerOrderDetails"]["TotalPosition"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+                } & { [K_15 in Exclude<keyof I["Orders"][number]["BrokerOrderDetails"]["TotalPosition"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
                 PartialPrice?: ({
                     Value?: number | undefined;
                     Exp?: number | undefined;
                 } & {
                     Value?: number | undefined;
                     Exp?: number | undefined;
-                } & { [K_16 in Exclude<keyof I["Orders"][number]["BrokerOrderDetails"]["PartialPrice"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+                } & { [K_16 in Exclude<keyof I["Orders"][number]["BrokerOrderDetails"]["PartialPrice"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
                 PartialQty?: ({
                     Value?: number | undefined;
                     Exp?: number | undefined;
                 } & {
                     Value?: number | undefined;
                     Exp?: number | undefined;
-                } & { [K_17 in Exclude<keyof I["Orders"][number]["BrokerOrderDetails"]["PartialQty"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+                } & { [K_17 in Exclude<keyof I["Orders"][number]["BrokerOrderDetails"]["PartialQty"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
                 ProcessInfo?: ({
                     ProcessState?: import("./sologenic/com-fs-utils-lib/models/order-properties/order-properties").ProcessState | undefined;
                     ProcessedAt?: Date | undefined;
@@ -2166,7 +2166,7 @@ export declare const Orders: {
                     } & {
                         Value?: number | undefined;
                         Exp?: number | undefined;
-                    } & { [K_19 in Exclude<keyof I["Orders"][number]["BrokerOrderDetails"]["CommissionSettings"]["Commission"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+                    } & { [K_19 in Exclude<keyof I["Orders"][number]["BrokerOrderDetails"]["CommissionSettings"]["Commission"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
                     CommissionType?: import("./sologenic/com-fs-utils-lib/models/commission/commission").CommissionType | undefined;
                 } & { [K_20 in Exclude<keyof I["Orders"][number]["BrokerOrderDetails"]["CommissionSettings"], keyof import("./sologenic/com-fs-utils-lib/models/commission/commission").CommissionSettings>]: never; }) | undefined;
             } & { [K_21 in Exclude<keyof I["Orders"][number]["BrokerOrderDetails"], keyof BrokerOrderDetails>]: never; }) | undefined;
@@ -2994,63 +2994,63 @@ export declare const Orders: {
                 } & {
                     Value?: number | undefined;
                     Exp?: number | undefined;
-                } & { [K_32 in Exclude<keyof I_1["Orders"][number]["BrokerOrderDetails"]["Notional"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+                } & { [K_32 in Exclude<keyof I_1["Orders"][number]["BrokerOrderDetails"]["Notional"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
                 OrderQty?: ({
                     Value?: number | undefined;
                     Exp?: number | undefined;
                 } & {
                     Value?: number | undefined;
                     Exp?: number | undefined;
-                } & { [K_33 in Exclude<keyof I_1["Orders"][number]["BrokerOrderDetails"]["OrderQty"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+                } & { [K_33 in Exclude<keyof I_1["Orders"][number]["BrokerOrderDetails"]["OrderQty"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
                 FilledQty?: ({
                     Value?: number | undefined;
                     Exp?: number | undefined;
                 } & {
                     Value?: number | undefined;
                     Exp?: number | undefined;
-                } & { [K_34 in Exclude<keyof I_1["Orders"][number]["BrokerOrderDetails"]["FilledQty"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+                } & { [K_34 in Exclude<keyof I_1["Orders"][number]["BrokerOrderDetails"]["FilledQty"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
                 FilledAvgPrice?: ({
                     Value?: number | undefined;
                     Exp?: number | undefined;
                 } & {
                     Value?: number | undefined;
                     Exp?: number | undefined;
-                } & { [K_35 in Exclude<keyof I_1["Orders"][number]["BrokerOrderDetails"]["FilledAvgPrice"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+                } & { [K_35 in Exclude<keyof I_1["Orders"][number]["BrokerOrderDetails"]["FilledAvgPrice"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
                 LimitPrice?: ({
                     Value?: number | undefined;
                     Exp?: number | undefined;
                 } & {
                     Value?: number | undefined;
                     Exp?: number | undefined;
-                } & { [K_36 in Exclude<keyof I_1["Orders"][number]["BrokerOrderDetails"]["LimitPrice"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+                } & { [K_36 in Exclude<keyof I_1["Orders"][number]["BrokerOrderDetails"]["LimitPrice"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
                 StopPrice?: ({
                     Value?: number | undefined;
                     Exp?: number | undefined;
                 } & {
                     Value?: number | undefined;
                     Exp?: number | undefined;
-                } & { [K_37 in Exclude<keyof I_1["Orders"][number]["BrokerOrderDetails"]["StopPrice"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+                } & { [K_37 in Exclude<keyof I_1["Orders"][number]["BrokerOrderDetails"]["StopPrice"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
                 TrailPrice?: ({
                     Value?: number | undefined;
                     Exp?: number | undefined;
                 } & {
                     Value?: number | undefined;
                     Exp?: number | undefined;
-                } & { [K_38 in Exclude<keyof I_1["Orders"][number]["BrokerOrderDetails"]["TrailPrice"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+                } & { [K_38 in Exclude<keyof I_1["Orders"][number]["BrokerOrderDetails"]["TrailPrice"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
                 TrailPercent?: ({
                     Value?: number | undefined;
                     Exp?: number | undefined;
                 } & {
                     Value?: number | undefined;
                     Exp?: number | undefined;
-                } & { [K_39 in Exclude<keyof I_1["Orders"][number]["BrokerOrderDetails"]["TrailPercent"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+                } & { [K_39 in Exclude<keyof I_1["Orders"][number]["BrokerOrderDetails"]["TrailPercent"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
                 HWM?: ({
                     Value?: number | undefined;
                     Exp?: number | undefined;
                 } & {
                     Value?: number | undefined;
                     Exp?: number | undefined;
-                } & { [K_40 in Exclude<keyof I_1["Orders"][number]["BrokerOrderDetails"]["HWM"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+                } & { [K_40 in Exclude<keyof I_1["Orders"][number]["BrokerOrderDetails"]["HWM"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
                 ExtendedHours?: boolean | undefined;
                 CreatedAt?: Date | undefined;
                 UpdatedAt?: Date | undefined;
@@ -3061,21 +3061,21 @@ export declare const Orders: {
                 } & {
                     Value?: number | undefined;
                     Exp?: number | undefined;
-                } & { [K_41 in Exclude<keyof I_1["Orders"][number]["BrokerOrderDetails"]["TotalPosition"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+                } & { [K_41 in Exclude<keyof I_1["Orders"][number]["BrokerOrderDetails"]["TotalPosition"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
                 PartialPrice?: ({
                     Value?: number | undefined;
                     Exp?: number | undefined;
                 } & {
                     Value?: number | undefined;
                     Exp?: number | undefined;
-                } & { [K_42 in Exclude<keyof I_1["Orders"][number]["BrokerOrderDetails"]["PartialPrice"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+                } & { [K_42 in Exclude<keyof I_1["Orders"][number]["BrokerOrderDetails"]["PartialPrice"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
                 PartialQty?: ({
                     Value?: number | undefined;
                     Exp?: number | undefined;
                 } & {
                     Value?: number | undefined;
                     Exp?: number | undefined;
-                } & { [K_43 in Exclude<keyof I_1["Orders"][number]["BrokerOrderDetails"]["PartialQty"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+                } & { [K_43 in Exclude<keyof I_1["Orders"][number]["BrokerOrderDetails"]["PartialQty"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
                 ProcessInfo?: ({
                     ProcessState?: import("./sologenic/com-fs-utils-lib/models/order-properties/order-properties").ProcessState | undefined;
                     ProcessedAt?: Date | undefined;
@@ -3100,7 +3100,7 @@ export declare const Orders: {
                     } & {
                         Value?: number | undefined;
                         Exp?: number | undefined;
-                    } & { [K_45 in Exclude<keyof I_1["Orders"][number]["BrokerOrderDetails"]["CommissionSettings"]["Commission"], keyof import("./sologenic/com-fs-utils-lib/go/decimal/decimal").Decimal>]: never; }) | undefined;
+                    } & { [K_45 in Exclude<keyof I_1["Orders"][number]["BrokerOrderDetails"]["CommissionSettings"]["Commission"], keyof import("./sologenic/com-fs-utils-lib/models/decimal/decimal").Decimal>]: never; }) | undefined;
                     CommissionType?: import("./sologenic/com-fs-utils-lib/models/commission/commission").CommissionType | undefined;
                 } & { [K_46 in Exclude<keyof I_1["Orders"][number]["BrokerOrderDetails"]["CommissionSettings"], keyof import("./sologenic/com-fs-utils-lib/models/commission/commission").CommissionSettings>]: never; }) | undefined;
             } & { [K_47 in Exclude<keyof I_1["Orders"][number]["BrokerOrderDetails"], keyof BrokerOrderDetails>]: never; }) | undefined;

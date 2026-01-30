@@ -1,20 +1,20 @@
 module github.com/sologenic/com-fs-order-model
 
-go 1.24.4
+go 1.25.5
 
 require (
 	github.com/alpacahq/alpaca-trade-api-go/v3 v3.6.0
 	github.com/google/go-cmp v0.7.0
 	github.com/samber/lo v1.51.0
 	github.com/shopspring/decimal v1.4.0
-	github.com/sologenic/com-fs-asset-model v0.0.0-20251021201834-36ccc38df721
-	github.com/sologenic/com-fs-utils-lib/go/decimal v0.0.0-20251111001333-8b6aaa65fd84
-	github.com/sologenic/com-fs-utils-lib/go/grpc-client v0.0.0-20251111001333-8b6aaa65fd84
-	github.com/sologenic/com-fs-utils-lib/go/logger v0.0.0-20251111001333-8b6aaa65fd84
-	github.com/sologenic/com-fs-utils-lib/go/unittest v0.0.0-20251111001333-8b6aaa65fd84
-	github.com/sologenic/com-fs-utils-lib/models/commission v0.0.0-20251111001333-8b6aaa65fd84
-	github.com/sologenic/com-fs-utils-lib/models/metadata v0.0.0-20251111001333-8b6aaa65fd84
-	github.com/sologenic/com-fs-utils-lib/models/order-properties v0.0.0-20251111001333-8b6aaa65fd84
+	github.com/sologenic/com-fs-asset-model v0.0.0-20260130210654-df8aa22e179d
+	github.com/sologenic/com-fs-utils-internal-lib/go/grpc-client v0.0.0-20260130220814-92401870370c
+	github.com/sologenic/com-fs-utils-internal-lib/go/logger v0.0.0-20260130220814-92401870370c
+	github.com/sologenic/com-fs-utils-internal-lib/go/unittest v0.0.0-20260130220814-92401870370c
+	github.com/sologenic/com-fs-utils-lib/models/commission v0.0.0-20260130210252-132d1307ccf3
+	github.com/sologenic/com-fs-utils-lib/models/decimal v0.0.0-20260130210252-132d1307ccf3
+	github.com/sologenic/com-fs-utils-lib/models/metadata v0.0.0-20260130170755-ffa545a27df1
+	github.com/sologenic/com-fs-utils-lib/models/order-properties v0.0.0-20260130210252-132d1307ccf3
 	github.com/stretchr/testify v1.11.1
 	google.golang.org/grpc v1.75.1
 	google.golang.org/protobuf v1.36.9
@@ -39,7 +39,7 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rs/zerolog v1.34.0 // indirect
-	github.com/sologenic/com-fs-utils-lib/models/audit v0.0.0-20250917193130-a63d775c7b6d // indirect
+	github.com/sologenic/com-fs-utils-lib/models/audit v0.0.0-20260130170755-ffa545a27df1 // indirect
 	go.opentelemetry.io/auto/sdk v1.2.1 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.63.0 // indirect
 	go.opentelemetry.io/otel v1.38.0 // indirect
