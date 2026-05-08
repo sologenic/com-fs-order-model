@@ -7,14 +7,14 @@ require (
 	github.com/google/go-cmp v0.7.0
 	github.com/samber/lo v1.51.0
 	github.com/shopspring/decimal v1.4.0
-	github.com/sologenic/com-fs-asset-model v0.0.0-20260501111049-59b88f94f4b6
+	github.com/sologenic/com-fs-asset-model v0.0.0-20260504130519-c5ba0a5cc05e
 	github.com/sologenic/com-fs-utils-internal-lib/go/grpc-client v0.0.0-20260429144456-e78936df6303
 	github.com/sologenic/com-fs-utils-internal-lib/go/logger v0.0.0-20260429144456-e78936df6303
 	github.com/sologenic/com-fs-utils-internal-lib/go/unittest v0.0.0-20260429144456-e78936df6303
-	github.com/sologenic/com-fs-utils-lib/models/commission v0.0.0-20260425123444-395230fd9312
-	github.com/sologenic/com-fs-utils-lib/models/decimal v0.0.0-20260425123444-395230fd9312
-	github.com/sologenic/com-fs-utils-lib/models/metadata v0.0.0-20260425123444-395230fd9312
-	github.com/sologenic/com-fs-utils-lib/models/order-properties v0.0.0-20260425123444-395230fd9312
+	github.com/sologenic/com-fs-utils-lib/models/commission v0.0.0-20260501113306-8b02db1b65e4
+	github.com/sologenic/com-fs-utils-lib/models/decimal v0.0.0-20260501113306-8b02db1b65e4
+	github.com/sologenic/com-fs-utils-lib/models/metadata v0.0.0-20260501113306-8b02db1b65e4
+	github.com/sologenic/com-fs-utils-lib/models/order-properties v0.0.0-20260501113306-8b02db1b65e4
 	github.com/stretchr/testify v1.11.1
 	google.golang.org/grpc v1.80.0
 	google.golang.org/protobuf v1.36.11
@@ -40,7 +40,7 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rs/zerolog v1.34.0 // indirect
-	github.com/sologenic/com-fs-utils-lib/models/audit v0.0.0-20260425123444-395230fd9312 // indirect
+	github.com/sologenic/com-fs-utils-lib/models/audit v0.0.0-20260501113306-8b02db1b65e4 // indirect
 	go.opentelemetry.io/auto/sdk v1.2.1 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.63.0 // indirect
 	go.opentelemetry.io/otel v1.41.0 // indirect
