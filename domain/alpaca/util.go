@@ -125,11 +125,9 @@ func ParseStrClientOrderIDToInternal(clientOrderIDString string) (*ordergrpc.Cli
 func mapAssetClass(assetClass alpaca.AssetClass) assetgrpc.AssetType {
 	switch assetClass {
 	case alpaca.USEquity:
-		return assetgrpc.AssetType_EQUITY
-	case alpaca.Crypto:
-		return assetgrpc.AssetType_CRYPTO
+		return assetgrpc.AssetType_ASSET_TYPE_SECURITY
 	default:
-		return assetgrpc.AssetType_ASSET_TYPE_DO_NOT_USE
+		return assetgrpc.AssetType_ASSET_TYPE_NONE
 	}
 }
 
